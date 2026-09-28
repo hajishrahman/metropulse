@@ -53,3 +53,7 @@ data/processed/*
 
 data/synthetic/*
 !data/synthetic/.gitkeep
+
+# Synthetic data (generated — commit the generator, not the output)
+data/synthetic/*.csv
+!data/synthetic/.gitkeep
