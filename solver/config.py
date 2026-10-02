@@ -123,7 +123,7 @@ OBJ_SCALE             = 100
 # ===========================================================================
 # SOLVER  [SYNTHETIC]
 # ===========================================================================
-CP_SAT_TIME_LIMIT_SEC = 60   # [SYNTHETIC] V1 single-day scenario
+CP_SAT_TIME_LIMIT_SEC = 300   # [SYNTHETIC] V1 single-day scenario
 CP_SAT_NUM_WORKERS    = 8    # [SYNTHETIC]
 CP_SAT_RANDOM_SEED    = 42   # [SYNTHETIC]
 

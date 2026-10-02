@@ -197,11 +197,11 @@ def write_depot() -> None:
     path = SYNTH_DIR / "depot.csv"
 
     rows = [
-        {"location": "INFO_PARK_2", "capacity": 2, "note": "DPR-stated 2-train stabling"},
-        {"location": "MUTTOM",      "capacity": "", "note": "UNBOUNDED_FOR_V1 — model limitation"},
-    ]
+    {"location": "INFO_PARK_2", "capacity": 2, "note": "DPR-stated 2-train stabling"},
+    {"location": "MUTTOM",      "capacity": "", "note": "UNBOUNDED_FOR_V1 - model limitation"},
+]
 
-    with open(path, "w", newline="") as f:
+    with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
