@@ -40,30 +40,25 @@ Thumbs.db
 # ============================================================
 # Data — GTFS raw feed (large, static, re-downloadable)
 # ============================================================
-# Ignore only .txt files, keep docs & placeholders tracked
 data/raw/*.txt
 !data/raw/.gitkeep
 !data/raw/README.md
 
 # ============================================================
-# Data — Processed / synthetic outputs
+# Data — DPR source (tracked: hourly_service.csv)
 # ============================================================
-data/processed/*
-!data/processed/.gitkeep
-
-data/synthetic/*
-!data/synthetic/.gitkeep
-
-# Synthetic data (generated — commit the generator, not the output)
-# Synthetic data (generated)
-data/synthetic/*.csv
-!data/synthetic/.gitkeep
-
-# DPR data (source — commit the plan, but not generated copies)
 data/dpr/*.csv
 !data/dpr/.gitkeep
 !data/dpr/hourly_service.csv
 
-# Generated outputs
+# ============================================================
+# Data — Synthetic (generated, ignore)
+# ============================================================
+data/synthetic/*.csv
+!data/synthetic/.gitkeep
+
+# ============================================================
+# Data — Processed outputs (generated, ignore)
+# ============================================================
 data/processed/*
 !data/processed/.gitkeep
