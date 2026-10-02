@@ -55,5 +55,15 @@ data/synthetic/*
 !data/synthetic/.gitkeep
 
 # Synthetic data (generated — commit the generator, not the output)
+# Synthetic data (generated)
 data/synthetic/*.csv
 !data/synthetic/.gitkeep
+
+# DPR data (source — commit the plan, but not generated copies)
+data/dpr/*.csv
+!data/dpr/.gitkeep
+!data/dpr/hourly_service.csv
+
+# Generated outputs
+data/processed/*
+!data/processed/.gitkeep
