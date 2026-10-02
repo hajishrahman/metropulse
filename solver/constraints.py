@@ -89,7 +89,7 @@ def create_trip_variables(
         tid = t["trip_id"]
         # Trips must START within their hour. They may end after the hour.
         earliest = (t["hour_start"] - 5) * 60
-        latest   = (t["hour_end"]   - 5) * 60   # start by end of hour
+        latest   = (t["hour_end"]   - 5) * 60 -1  # start by end of hour
 
         start = model.NewIntVar(earliest, latest, f"start_{tid}")
         # End can extend past the hour boundary, but not past midnight (1140)
@@ -289,73 +289,79 @@ def add_r6_turnaround(
     data: ProblemData,
 ) -> None:
     """
-    R6: Between consecutive trips on the same rake, there must be
-    at least TERMINAL_TURNAROUND_MIN minutes of gap.
+    R6: Between consecutive trips on the same rake, gap >= TERMINAL_TURNAROUND_MIN.
 
-    Implementation note:
-      Full pairwise enumeration is O(n^2) ~ 83k pairs at 408 trips —
-      too heavy for 8 GB RAM. We restrict to *trip pairs that could
-      plausibly be consecutive on the same rake*:
+    We don't know the sequence in advance, so we enforce the gap between
+    any two trips whose time windows could conflict:
 
-        - Same direction (a rake typically stays in the same direction
-          for a round trip sequence; cross-direction trips are handled
-          implicitly because each direction's trips are ordered).
+      - Same hour (windows overlap by construction)
+      - Adjacent hour pairs where a's max end could exceed b's min start
+        minus turnaround
 
-        - Neighbors in the sorted-by-hour order within the same direction.
+    Trips 2+ hours apart have enough slack that they can never conflict
+    on turnaround, so we skip them.
 
-    This is a conservative approximation: it prevents the solver from
-    assigning the same rake to two same-direction trips without a
-    turnaround gap. Cross-direction consistency is enforced by R5
-    (AddNoOverlap) and the running-time structure.
+    This is O(n^2) in the worst case but prunes ~85% of pairs.
     """
     turnaround = config.TERMINAL_TURNAROUND_MIN
+    running_min = int(round(config.ONE_WAY_RUNNING_MIN))
 
-    # Group trips by direction
-    by_dir: Dict[str, List[str]] = {}
+    # Precompute each trip's [earliest_start, latest_end] window
+    # (used for pruning)
+    trip_window: Dict[str, Tuple[int, int]] = {}
     for tid, tv in trip_vars.items():
-        by_dir.setdefault(tv["direction"], []).append(tid)
+        # Extract from the CP-SAT var bounds — we stored start/end as
+        # IntVars; get their bounds:
+        earliest = tv["start"].Proto().domain[0]
+        latest_start = tv["start"].Proto().domain[-1]
+        earliest_end = earliest + running_min
+        latest_end = latest_start + running_min
+        trip_window[tid] = (earliest, latest_end)
 
-    for direction, tids in by_dir.items():
-        # Sort by hour_start (then by trip_id for determinism)
-        tids_sorted = sorted(
-            tids, key=lambda t: (trip_vars[t]["hour_start"], t)
-        )
+    # Build candidate pairs, pruned by window overlap
+    tids = list(trip_vars.keys())
+    pairs: List[Tuple[str, str]] = []
+    for i in range(len(tids)):
+        a_id = tids[i]
+        a_e, a_le = trip_window[a_id]
+        for j in range(i + 1, len(tids)):
+            b_id = tids[j]
+            b_e, b_le = trip_window[b_id]
 
-        # Only constrain consecutive trips + one hop
-        # (a rake is unlikely to do trips separated by 2+ hours in V1)
-        window = 3  # look at next 3 same-direction trips
-        for i in range(len(tids_sorted)):
-            for j in range(i + 1, min(i + 1 + window, len(tids_sorted))):
-                tid_a = tids_sorted[i]
-                tid_b = tids_sorted[j]
-                a = trip_vars[tid_a]
-                b = trip_vars[tid_b]
+            # Prune: no conflict possible if a's latest end + turnaround <= b's earliest start
+            if a_le + turnaround <= b_e:
+                continue
+            # Or b's latest end + turnaround <= a's earliest start
+            if b_le + turnaround <= a_e:
+                continue
 
-                for _, r in data.rakes.iterrows():
-                    rid = r["rake_id"]
-                    # Only enforce if this rake is eligible for both trips
-                    # (skip maintenance spares entirely)
-                    if int(r["maintenance_spare"]) == 1:
-                        continue
+            pairs.append((a_id, b_id))
 
-                    both = model.NewBoolVar(
-                        f"both_{rid}_{tid_a}_{tid_b}"
-                    )
-                    model.AddMultiplicationEquality(
-                        both,
-                        [rake_trip[(rid, tid_a)], rake_trip[(rid, tid_b)]],
-                    )
+    print(f"[r6] {len(pairs)} candidate pairs (pruned from {len(tids)*(len(tids)-1)//2})")
 
-                    # If both: either a before b with gap, or b before a with gap
-                    a_first = model.NewBoolVar(
-                        f"a_first_{rid}_{tid_a}_{tid_b}"
-                    )
-                    model.Add(
-                        b["start"] >= a["end"] + turnaround
-                    ).OnlyEnforceIf([both, a_first])
-                    model.Add(
-                        a["start"] >= b["end"] + turnaround
-                    ).OnlyEnforceIf([both, a_first.Not()])
+    # Apply constraint for each pair, only when same rake is assigned
+    for _, r in data.rakes.iterrows():
+        rid = r["rake_id"]
+        if int(r["maintenance_spare"]) == 1:
+            continue
+
+        for tid_a, tid_b in pairs:
+            a = trip_vars[tid_a]
+            b = trip_vars[tid_b]
+
+            both = model.NewBoolVar(f"both_{rid}_{tid_a}_{tid_b}")
+            model.AddMultiplicationEquality(
+                both,
+                [rake_trip[(rid, tid_a)], rake_trip[(rid, tid_b)]],
+            )
+
+            a_first = model.NewBoolVar(f"a_first_{rid}_{tid_a}_{tid_b}")
+            model.Add(
+                b["start"] >= a["end"] + turnaround
+            ).OnlyEnforceIf([both, a_first])
+            model.Add(
+                a["start"] >= b["end"] + turnaround
+            ).OnlyEnforceIf([both, a_first.Not()])
 
 # ===========================================================================
 # R7 — RUNNING TIME  [DERIVED FROM DPR]
