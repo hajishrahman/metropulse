@@ -94,14 +94,33 @@ def solve(data: ProblemData, verbose: bool = False,
     print(f"[solve] elapsed = {elapsed:.2f}s")
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        return {
-            "status": status_name,
-            "elapsed_sec": elapsed,
-            "objective": None,
-            "schedule": None,
-        }
+            return {
+        "status": status_name,
+        "elapsed_sec": elapsed,
+        "objective": obj_value,
+        "best_bound": best_bound,
+        "gap_pct": gap_pct,
+        "num_trips": len(schedule),
+        "schedule": schedule,
+    }
 
     print(f"[solve] objective = {solver.ObjectiveValue()}")
+
+     # Optimality gap
+
+    best_bound = solver.BestObjectiveBound()
+    obj_value = solver.ObjectiveValue()
+    if status == cp_model.OPTIMAL:
+        gap_pct = 0.0
+        print(f"[solve] best_bound = {best_bound}  (PROVEN OPTIMAL)")
+    elif obj_value > 0:
+        gap_pct = (obj_value - best_bound) / obj_value * 100
+        print(f"[solve] best_bound = {best_bound}")
+        print(f"[solve] gap = {gap_pct:.2f}%")
+    else:
+        gap_pct = None
+        print(f"[solve] best_bound = {best_bound}")
+        print(f"[solve] gap = N/A (objective = 0)")
 
     # -------------------------------------------------------------------
     # 6. Extract solution
