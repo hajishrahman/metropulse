@@ -240,7 +240,13 @@ def add_r4_fleet_availability(
         rid = r["rake_id"]
         for tid in trip_vars:
             model.Add(rake_trip[(rid, tid)] == 0)
-
+    # TEST MODE: also block traffic spares (only 15 bare rakes can be used)
+    import os
+    if os.environ.get("TEST_15_RAKES") == "1":
+        for _, r in data.traffic_spares.iterrows():
+            rid = r["rake_id"]
+            for tid in trip_vars:
+                model.Add(rake_trip[(rid, tid)] == 0)
 
 # ===========================================================================
 # R5 — RAKE NON-OVERLAP  [DPR]
