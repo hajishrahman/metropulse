@@ -8,74 +8,75 @@ Progress tracker for the project. Update as phases complete.
 
 - [x] Python 3.11 installed
 - [x] VS Code + Python extension installed
-- [x] Project folder created (`Z:\metropulse`)
-- [x] Virtual environment activated (`venv`)
+- [x] Project folder created
+- [x] Virtual environment activated
 - [x] `requirements.txt` installed
-- [x] `.gitignore` created (Python + GTFS exclusions)
-- [x] `.gitkeep` files added for empty data folders
+- [x] `.gitignore` created
+- [x] `.gitkeep` files added
 - [x] Git initialized + pushed to GitHub
-- [x] GTFS data in `data/raw/` (11 files)
+- [x] GTFS data in `data/raw/`
 - [x] `docs/meeting-log.md` created
 
 ---
 
-## Phase 1 — Data Ingestion & Validation
+## Phase 1 — DPR-Driven Train Scheduling
 
-- [x] KMRL GTFS files copied to `data/raw/`
-- [x] `docs/data-provenance.md` written (source, dates, quirks)
-- [x] `.gitignore` excludes GTFS `.txt` files
-- [x] `data/raw/README.md` documents the source
-- [x] Root `README.md` — setup + common commands
-- [x] `src/loaders/gtfs_loader.py` — loads all 11 tables
-- [x] `src/validation/gtfs_checks.py` — 19 checks, all pass
-- [x] `requirements.txt` curated (direct deps only)
-- [x] Row counts verified against `docs/data-provenance.md`
-
-**Validation results:** 19 passed, 0 warnings, 0 errors.
-
----
-
-## Phase 2 — Mapping & Routing (next)
-
-- [ ] `notebooks/01_map.ipynb` — folium map with stops + shapes
-- [ ] `src/routing/graph.py` — networkx DiGraph from stop_times
-- [ ] `src/routing/planner.py` — journey planner (from, to, time → next trains)
-- [ ] `src/routing/fare.py` — fare lookup from fare_rules
-- [ ] Headway / frequency analysis notebook
+- [x] Lock spec (`docs/constraints-v2.md`)
+- [x] DPR-sourced `solver/config.py`
+- [x] Clean-slate generator (`data/generate_synthetic_v2.py`)
+- [x] DPR hourly plan (`data/dpr/hourly_service.csv`)
+- [x] `ProblemData` loader (`solver/models.py`)
+- [x] CP-SAT constraints R1–R12 (`solver/constraints.py`)
+- [x] CP-SAT solve pipeline (`solver/solve.py`)
+- [x] Full-day solve: 408 trips, FEASIBLE in ~317s
+- [x] Independent validator (`solver/validator.py`)
+- [x] All 7 validator checks PASS
+- [x] DPR reference labels revised (`[DPR reference — unverified]`)
+- [ ] Optimality gap printout in `solve.py` (Step 3)
+- [ ] 15-rake feasibility test (Step 4)
+- [ ] R8/R10/R12 validator checks (Step 5)
 
 ---
 
-## Phase 3 — Simulation
+## Phase 2 — SimPy Validation (Next)
 
-- [ ] `src/simulation/train_sim.py` — SimPy model of train movements
-- [ ] Delay propagation experiments
-- [ ] OR-Tools optimization (headways, dwell times)
-
----
-
-## Phase 4 — UI & Deployment
-
-- [ ] Streamlit dashboard (`src/ui/app.py`)
-- [ ] Interactive map (folium / pydeck)
-- [ ] Multilingual stop names from `translations.txt`
-- [ ] Deploy to Streamlit Cloud
+- [ ] `src/simulation/simpy_runner.py`
+- [ ] `src/simulation/kpis.py`
+- [ ] Delay distribution config in `config.py`
+- [ ] Scenario sweep: std = 0, 60, 120, 300 s
+- [ ] KPI report (`simulation_kpis.json`)
 
 ---
 
-## Data Summary (reference)
+## Phase 3 — Crew Scheduling
 
-| Item | Value |
-|------|-------|
-| Route | R1 — Kochi Metro Line 1 |
-| Stops | 24 |
-| Trips | 252 |
-| Stop times | ~6,300 |
-| Fare slabs | 6 (₹10 → ₹60) |
-| Services | WK (weekday), WE (weekend) |
-| Feed validity | 2024-08-12 → 2025-12-31 |
+- [ ] `data/synthetic/drivers.csv` (60 drivers `[SYNTHETIC]`)
+- [ ] `solver/crew_constraints.py` (C1–C6)
+- [ ] `solver/crew_solve.py`
+- [ ] Fairness objective
 
 ---
 
-## Last Updated
+## Phase 4 — Explainability
 
-2026-09-28
+- [ ] `src/explainability/rule_tracer.py`
+- [ ] Per-trip rationale report
+
+---
+
+## Phase 5 — Near-Real-Time Re-Optimization
+
+- [ ] `src/realtime/warm_start.py`
+- [ ] Target: 1–2 min re-solve
+
+---
+
+## Phase 6 — ML Layer (Optional)
+
+- [ ] `src/ml/train.py` (only if historical data available)
+
+---
+
+## Phase 7 — UI
+
+- [ ] `src/ui/app.py` (Streamlit dashboard)

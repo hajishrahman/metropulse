@@ -13,12 +13,12 @@ Do NOT modify values without updating the spec first.
 """
 
 # ===========================================================================
-# FLEET  [DPR]
+# FLEET  [DPR reference — unverified]
 # ===========================================================================
-BARE_RAKE_REQUIREMENT        = 15          # [DPR]
-TRAFFIC_SPARE                = 1           # [DPR]
-MAINTENANCE_SPARE            = 2           # [DPR]
-RAKE_REQUIREMENT_2043_2048   = 18          # [DPR]  = 15 + 1 + 2
+BARE_RAKE_REQUIREMENT        = 15          # [DPR reference — unverified]
+TRAFFIC_SPARE                = 1           # [DPR reference — unverified]
+MAINTENANCE_SPARE            = 2           # [DPR reference — unverified]
+RAKE_REQUIREMENT_2043_2048   = 18          # [DPR reference — unverified]  = 15 + 1 + 2
 
 # Phase I fleet count — [EXTERNAL, UNVERIFIED], not used in V1
 ACTUAL_FLEET_PHASE_I_II      = 25          # [EXTERNAL — UNVERIFIED]
@@ -28,7 +28,7 @@ ACTUAL_FLEET_PHASE_I_II      = 25          # [EXTERNAL — UNVERIFIED]
 # ===========================================================================
 SECTION_LENGTH_KM            = 10.715      # [DPR]
 SCHEDULE_SPEED_KMH           = 34.0        # [DPR]
-TERMINAL_TURNAROUND_MIN      = 3           # [DPR]
+TERMINAL_TURNAROUND_MIN      = 3           # [DPR reference — unverified]
 MIN_HEADWAY_DESIGN_SEC       = 90          # [DPR] signalling design headway
 SUSTAINED_HEADWAY_MIN        = 2.0         # [DPR] sustained operation up to 2 min
 
@@ -50,7 +50,7 @@ NON_SERVICE_END_HOUR         = 5           # [DPR] 05:00
 # ===========================================================================
 # DEPOT / STABLING
 # ===========================================================================
-INFO_PARK_2_CAPACITY         = 2           # [DPR]
+INFO_PARK_2_CAPACITY         = 2           # [DPR reference — unverified]
 MUTTOM_CAPACITY              = None        # [MODEL LIMITATION] unbounded in V1
 
 # ===========================================================================
@@ -61,7 +61,7 @@ MUTTOM_TO_JLN_DEADHEAD_MIN   = None        # [SYNTHETIC] must be set to enable
 # ===========================================================================
 # MAINTENANCE
 # ===========================================================================
-MAINTENANCE_THRESHOLD_KM     = 1_000_000   # [DPR reference — bogie overhaul]
+MAINTENANCE_THRESHOLD_KM     = 1_000_000   # [DPR reference — unverified]
                                             # Configurable; not statutory
 # NOTE: IOH = 420,000 km was [SYNTHETIC], removed.
 
