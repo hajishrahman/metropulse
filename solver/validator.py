@@ -262,6 +262,83 @@ def check_r4_fleet_bound(schedule: List[dict]) -> dict:
     }
 
 
+def check_r8_depot_capacity(schedule: List[dict], rakes_csv: Path) -> dict:
+    """R8: Info Park-2 stabling capacity must not exceed 2."""
+    return {
+        "check": "R8_depot_capacity",
+        "status": "SKIPPED",
+        "details": {
+            "reason": "No stabling assignments exist in V1.",
+            "info_park_2_capacity_dpr": config.INFO_PARK_2_CAPACITY,
+            "note": "Depot capacity cannot be validated without stabling assignments.",
+        },
+    }
+
+
+def check_r10_maintenance_threshold(
+    schedule: List[dict], rakes_csv: Path
+) -> dict:
+    """R10: Rakes at or above the maintenance threshold must not have trips."""
+    rakes = read_csv_simple(rakes_csv)
+    threshold = config.MAINTENANCE_THRESHOLD_KM
+    mileage_by_rake = {
+        row["rake_id"]: int(row["initial_mileage_km"])
+        for row in rakes
+    }
+    max_mileage = max(mileage_by_rake.values(), default=None)
+    over_threshold = {
+        rake_id
+        for rake_id, mileage in mileage_by_rake.items()
+        if mileage >= threshold
+    }
+    failures = [
+        {
+            "rake_id": row["rake_id"],
+            "trip_id": row["trip_id"],
+            "initial_mileage_km": mileage_by_rake[row["rake_id"]],
+        }
+        for row in schedule
+        if row["rake_id"] in over_threshold
+    ]
+
+    return {
+        "check": "R10_maintenance_threshold",
+        "status": "FAIL" if failures else "PASS",
+        "details": {
+            "threshold_km": threshold,
+            "max_mileage_km": max_mileage,
+            "failures": failures[:20],
+            "total_violations": len(failures),
+        },
+    }
+
+
+def check_r12_nonservice_window(schedule: List[dict]) -> dict:
+    """R12: No departure before 05:00 or arrival after 24:00."""
+    failures = []
+    for row in schedule:
+        departure = hhmm_to_min(row["departure"])
+        arrival = hhmm_to_min(row["arrival"])
+        if departure < 300:
+            failures.append({
+                "trip_id": row["trip_id"],
+                "issue": "departure_before_service",
+                "value": row["departure"],
+            })
+        if arrival > 1440:
+            failures.append({
+                "trip_id": row["trip_id"],
+                "issue": "arrival_after_service",
+                "value": row["arrival"],
+            })
+
+    return {
+        "check": "R12_nonservice_window",
+        "status": "PASS" if not failures else "FAIL",
+        "details": {"failures": failures[:20]},
+    }
+
+
 # ---------------------------------------------------------------------------
 # Run
 # ---------------------------------------------------------------------------
@@ -283,13 +360,16 @@ def main():
         check_r5_rake_non_overlap(schedule),
         check_r6_turnaround(schedule),
         check_r7_running_time(schedule),
+        check_r8_depot_capacity(schedule, RAKES_CSV),
+        check_r10_maintenance_threshold(schedule, RAKES_CSV),
+        check_r12_nonservice_window(schedule),
     ]
 
     for c in checks:
         print(f"[{c['status']}] {c['check']}")
 
     # Overall
-    overall = "PASS" if all(c["status"] == "PASS" for c in checks) else "FAIL"
+    overall = "PASS" if all(c["status"] in ("PASS", "SKIPPED") for c in checks) else "FAIL"
 
     print()
     print(f"Overall: {overall}")

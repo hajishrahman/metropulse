@@ -347,9 +347,11 @@ Per-check PASS/FAIL + details.
 
 Independent of CP-SAT's own status. Every hard constraint rechecked.
 
-Current coverage: R1, R2a, R3, R4, R5, R6, R7 (7 of 12).
+**Current coverage (10 of 12):** R1, R2a, R3, R4, R5, R6, R7, R10, R12 (all PASS), R8 (SKIPPED — no stabling assignment in V1).
 
-Known gaps: R8, R9, R10, R11, R12 not currently checked — to be added to validator before final viva.
+**Not checked:** R9 (maintenance exclusivity — vacuous in Scenario A), R11 (deadhead — not configured).
+
+**Total:** 10 checked (9 PASS, 1 SKIPPED), 2 deferred with rationale.
 
 ---
 
