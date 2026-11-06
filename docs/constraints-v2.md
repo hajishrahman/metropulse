@@ -356,25 +356,17 @@ Known gaps: R8, R9, R10, R11, R12 not currently checked — to be added to valid
 ## 10. Model Limitations (V1)
 
 1. Muttom depot capacity — unbounded in V1
-
 2. Deadhead — not configured
+3. **Optimality gap is reported.** `solve.py` prints objective, best bound, and gap percentage after every solve. Claims about "optimized" now cite the actual gap value.
+4. Crew scheduling — deferred to Phase 3
+5. ML/XGBoost — deferred, no dependency
+6. Passenger demand — no demand model; O1 uses headway-based proxy
+7. UP/DOWN meaning — our interpretation, subject to DPR verification
+8. 25-rake fleet — [EXTERNAL, unverified], not used
+9. Traffic spare — currently used as 16th rake. Phase 1.5 refinement: add per-hour `activated_traffic_reserve[h]` variable, penalize via O7
+10. DPR page/table references — 4 values unverified against original document
+11. 15-rake feasibility — untested. Before final viva, solve with `SERVICE_RAKES = 15` and seconds-based running time (18.91 min) to determine if 16th rake is genuinely needed
 
-3. Crew scheduling — deferred to Phase 3
-
-4. ML/XGBoost — deferred, no dependency
-
-5. Passenger demand — no demand model; O1 uses headway-based proxy
-
-6. UP/DOWN meaning — our interpretation, subject to DPR verification
-
-7. 25-rake fleet — [EXTERNAL, unverified], not used
-
-8. Traffic spare — currently used as 16th rake. Phase 1.5 refinement:   add per-hour activated_traffic_reserve[h] variable, penalize via O7
-
-9. DPR page/table references — 4 values unverified against original document
-
-10. 15-rake feasibility — untested. Before final viva, solve with SERVICE_RAKES = 15 and seconds-based running time (18.91 min) to determine if 16th rake is genuinely needed
----
 ## 11. Scenario Roadmap
 
 Scenario	Status	Focus
