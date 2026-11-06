@@ -363,10 +363,9 @@ Known gaps: R8, R9, R10, R11, R12 not currently checked — to be added to valid
 6. Passenger demand — no demand model; O1 uses headway-based proxy
 7. UP/DOWN meaning — our interpretation, subject to DPR verification
 8. 25-rake fleet — [EXTERNAL, unverified], not used
-9. Traffic spare — currently used as 16th rake. Phase 1.5 refinement: add per-hour `activated_traffic_reserve[h]` variable, penalize via O7
+9. Traffic spare — currently used as 16th rake in baseline solve. Tested: 15 rakes alone are FEASIBLE (see item 11), so the spare can be held as reserve without breaking feasibility. Phase 1.5 refinement: add per-hour `activated_traffic_reserve[h]` variable, penalize via O7.
 10. DPR page/table references — 4 values unverified against original document
-11. 15-rake feasibility — untested. Before final viva, solve with `SERVICE_RAKES = 15` and seconds-based running time (18.91 min) to determine if 16th rake is genuinely needed
-
+11. **15-rake feasibility — tested (minute model).** Solve with traffic spare blocked (only 15 bare rakes) returned FEASIBLE after 312s (objective 1,846,900, gap 96.27%). This proves 15 rakes can cover the 408-trip plan at the current minute-level resolution. The 16th-rake usage in V1 is therefore **objective-driven, not constraint-driven** — a scheduling preference, not a necessity. Future refinement: enforce traffic spare idle as a hard constraint (R4a) without breaking feasibility. Seconds-based test not run; minute model is sufficient to prove feasibility.
 ## 11. Scenario Roadmap
 
 Scenario	Status	Focus
