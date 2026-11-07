@@ -39,74 +39,70 @@ RakeTripVars = Dict[Tuple[str, str], cp_model.IntVar]  # (rake_id, trip_id) -> B
 # TRIP GENERATION
 # ===========================================================================
 def generate_required_trips(data: ProblemData) -> List[dict]:
-    """
-    Build the list of trips that MUST be scheduled, based on R1 coverage.
-
-    Each trip is one-way (UP or DOWN). We don't yet assign departure times —
-    CP-SAT will decide those within each hour window.
-    """
+    """Build required trips from hourly service CSV (250 trips, 06:00-23:00)."""
     trips = []
     trip_idx = 0
 
     for _, row in data.hourly_service.iterrows():
-        h_start = int(row["hour_start"])
-        h_end = int(row["hour_end"])
-        direction = row["direction"]
-        required = int(row["required_departures"])
-        target_headway = float(row["target_headway_min"])
+        hour_str = row["hour"]  # "06:00-07:00"
+        hour_start = int(hour_str.split(":")[0])
+        hour_end = hour_start + 1
 
-        for i in range(required):
+        up_count = int(row["up_trips"])
+        down_count = int(row["down_trips"])
+
+        for _ in range(up_count):
             trips.append({
                 "trip_id": f"T{trip_idx:04d}",
-                "hour_start": h_start,
-                "hour_end": h_end,
-                "direction": direction,
-                "target_headway_min": target_headway,
+                "hour_start": hour_start,
+                "hour_end": hour_end,
+                "direction": "UP",
+                "target_headway_min": 60.0 / max(up_count, 1),
+            })
+            trip_idx += 1
+
+        for _ in range(down_count):
+            trips.append({
+                "trip_id": f"T{trip_idx:04d}",
+                "hour_start": hour_start,
+                "hour_end": hour_end,
+                "direction": "DOWN",
+                "target_headway_min": 60.0 / max(down_count, 1),
             })
             trip_idx += 1
 
     return trips
 
-
 # ===========================================================================
 # DECISION VARIABLES
 # ===========================================================================
-def create_trip_variables(
-    model: cp_model.CpModel,
-    trips: List[dict],
-) -> TripVars:
+def create_trip_variables(model, trips):
     """
-    For each trip:
-      - start var (minutes from 05:00)
-      - end var = start + one_way_running
-      - interval var for NoOverlap
+    Seconds-based version. Trips modeled in minutes since OPERATING_START_HOUR.
     """
-    running_min = int(round(config.ONE_WAY_RUNNING_MIN))
+    running_min = int(round(config.ONE_WAY_RUNNING_MIN))  # 50
+    base_hour = config.OPERATING_START_HOUR               # 6
 
     trip_vars: TripVars = {}
 
     for t in trips:
         tid = t["trip_id"]
-        # Trips must START within their hour. They may end after the hour.
-        earliest = (t["hour_start"] - 5) * 60
-        latest   = (t["hour_end"]   - 5) * 60 -1  # start by end of hour
+        earliest = (t["hour_start"] - base_hour) * 60
+        latest = (t["hour_end"] - base_hour) * 60 - 1
 
         start = model.NewIntVar(earliest, latest, f"start_{tid}")
-        # End can extend past the hour boundary, but not past midnight (1140)
-        end = model.NewIntVar(
-            earliest + running_min,
-            min(latest + running_min, (config.OPERATING_END_HOUR - 5) * 60),
-            f"end_{tid}",
-        )
-        model.Add(end == start + running_min)
+        end = model.NewIntVar(earliest + running_min,
+                              latest + running_min, f"end_{tid}")
+       
 
         interval = model.NewIntervalVar(
             start, running_min, end, f"interval_{tid}"
         )
+
         trip_vars[tid] = {
             "start": start,
             "end": end,
-            "running_min": running_min,   # ← ADD THIS
+            "running_min": running_min,
             "interval": interval,
             "direction": t["direction"],
             "hour_start": t["hour_start"],
@@ -191,26 +187,16 @@ def add_r2a_design_headway(
 # ===========================================================================
 # R3 — OPERATING WINDOW  [DPR]
 # ===========================================================================
-def add_r3_operating_window(
-    model: cp_model.CpModel,
-    trip_vars: TripVars,
-) -> None:
-    """
-    Trip start >= 05:00 (= minute 0 from our base) and trip end <= 24:00
-    (= 19*60 = 1140 minutes from base of 05:00).
-
-    Already encoded via variable bounds in create_trip_variables, but
-    reasserted here for clarity and independent verification.
-    """
-    base_hour = config.OPERATING_START_HOUR       # 5
-    end_hour = config.OPERATING_END_HOUR          # 24
-    window_minutes = (end_hour - base_hour) * 60  # 19 * 60 = 1140
-
-    running_min = int(round(config.ONE_WAY_RUNNING_MIN))
+def add_r3_operating_window(model, trip_vars):
+    """Departures within 06:00-23:00. Arrivals can extend past 23:00."""
+    base_hour = config.OPERATING_START_HOUR
+    end_hour = config.OPERATING_END_HOUR
+    window_minutes = (end_hour - base_hour) * 60 
 
     for tid, tv in trip_vars.items():
         model.Add(tv["start"] >= 0)
-        model.Add(tv["end"] <= window_minutes)
+        # Departure must be before 23:00
+        model.Add(tv["start"] <= window_minutes)
 
 
 # ===========================================================================
@@ -222,28 +208,21 @@ def add_r4_fleet_availability(
     rake_trip: RakeTripVars,
     data: ProblemData,
 ) -> None:
-    """
-    R4a: maintenance spares are never activated in V1.
-    R4b: traffic reserve — per-hour activation, penalized in O7.
-          Implementation: for each hour, active rakes <= 15 (+1 if reserve
-          activated). We model activation as implied by usage rather than an
-          explicit variable in this simplified version.
-    R4c: each rake can only do trips whose total count is within cap.
+    """R4: Only rakes with status='service' can be assigned trips."""
 
-    For V1 we simplify:
-      - maintenance spares: blocked entirely
-      - bare rakes: can work any number of trips per day
-      - traffic spare: allowed to work only if the schedule requires it
-    """
-    # R4a: maintenance spares never get trips
-    for _, r in data.maintenance_spares.iterrows():
+    for _, r in data.rakes.iterrows():
         rid = r["rake_id"]
-        for tid in trip_vars:
-            model.Add(rake_trip[(rid, tid)] == 0)
+
+        if r["status"] != "service":
+            for tid in trip_vars:
+                model.Add(rake_trip[(rid, tid)] == 0)
+
     # TEST MODE: also block traffic spares (only 15 bare rakes can be used)
     import os
     if os.environ.get("TEST_15_RAKES") == "1":
-        for _, r in data.traffic_spares.iterrows():
+        standby_rakes = data.rakes[data.rakes["status"] == "standby"]
+        
+        for _, r in standby_rakes.iterrows():
             rid = r["rake_id"]
             for tid in trip_vars:
                 model.Add(rake_trip[(rid, tid)] == 0)
@@ -269,7 +248,7 @@ def add_r5_rake_non_overlap(
         rid = r["rake_id"]
 
         # Skip maintenance spares entirely — they never get trips in V1
-        if int(r["maintenance_spare"]) == 1:
+        if r["status"] != "service":
             continue
 
         intervals = []
@@ -288,6 +267,7 @@ def add_r5_rake_non_overlap(
 # ===========================================================================
 # R6 — TERMINAL TURNAROUND  [DPR]
 # ===========================================================================
+
 def add_r6_turnaround(
     model: cp_model.CpModel,
     trip_vars: TripVars,
@@ -296,78 +276,84 @@ def add_r6_turnaround(
 ) -> None:
     """
     R6: Between consecutive trips on the same rake, gap >= TERMINAL_TURNAROUND_MIN.
-
-    We don't know the sequence in advance, so we enforce the gap between
-    any two trips whose time windows could conflict:
-
-      - Same hour (windows overlap by construction)
-      - Adjacent hour pairs where a's max end could exceed b's min start
-        minus turnaround
-
-    Trips 2+ hours apart have enough slack that they can never conflict
-    on turnaround, so we skip them.
-
-    This is O(n^2) in the worst case but prunes ~85% of pairs.
     """
     turnaround = config.TERMINAL_TURNAROUND_MIN
     running_min = int(round(config.ONE_WAY_RUNNING_MIN))
 
-    # Precompute each trip's [earliest_start, latest_end] window
-    # (used for pruning)
+    # Precompute each trip's time window
     trip_window: Dict[str, Tuple[int, int]] = {}
+
     for tid, tv in trip_vars.items():
-        # Extract from the CP-SAT var bounds — we stored start/end as
-        # IntVars; get their bounds:
         earliest = tv["start"].Proto().domain[0]
         latest_start = tv["start"].Proto().domain[-1]
+
         earliest_end = earliest + running_min
         latest_end = latest_start + running_min
+
         trip_window[tid] = (earliest, latest_end)
 
-    # Build candidate pairs, pruned by window overlap
+    # Build candidate pairs
     tids = list(trip_vars.keys())
     pairs: List[Tuple[str, str]] = []
+
     for i in range(len(tids)):
         a_id = tids[i]
         a_e, a_le = trip_window[a_id]
+
         for j in range(i + 1, len(tids)):
             b_id = tids[j]
             b_e, b_le = trip_window[b_id]
 
-            # Prune: no conflict possible if a's latest end + turnaround <= b's earliest start
+            # TEMPORARILY DISABLED FOR TESTING
             if a_le + turnaround <= b_e:
-                continue
-            # Or b's latest end + turnaround <= a's earliest start
+                 continue
             if b_le + turnaround <= a_e:
                 continue
 
             pairs.append((a_id, b_id))
 
-    print(f"[r6] {len(pairs)} candidate pairs (pruned from {len(tids)*(len(tids)-1)//2})")
+    print(
+        f"[r6] {len(pairs)} candidate pairs "
+        f"(pruned from {len(tids) * (len(tids) - 1) // 2})"
+    )
 
-    # Apply constraint for each pair, only when same rake is assigned
+   
+
+    # Apply turnaround constraint for each candidate pair
     for _, r in data.rakes.iterrows():
         rid = r["rake_id"]
-        if int(r["maintenance_spare"]) == 1:
+
+        if r["status"] != "service":
             continue
 
         for tid_a, tid_b in pairs:
             a = trip_vars[tid_a]
             b = trip_vars[tid_b]
 
-            both = model.NewBoolVar(f"both_{rid}_{tid_a}_{tid_b}")
-            model.AddMultiplicationEquality(
-                both,
-                [rake_trip[(rid, tid_a)], rake_trip[(rid, tid_b)]],
+            both = model.NewBoolVar(
+                f"both_{rid}_{tid_a}_{tid_b}"
             )
 
-            a_first = model.NewBoolVar(f"a_first_{rid}_{tid_a}_{tid_b}")
+            model.AddMultiplicationEquality(
+                both,
+                [
+                    rake_trip[(rid, tid_a)],
+                    rake_trip[(rid, tid_b)],
+                ],
+            )
+
+            a_first = model.NewBoolVar(
+                f"a_first_{rid}_{tid_a}_{tid_b}"
+            )
+
             model.Add(
                 b["start"] >= a["end"] + turnaround
             ).OnlyEnforceIf([both, a_first])
+
             model.Add(
                 a["start"] >= b["end"] + turnaround
             ).OnlyEnforceIf([both, a_first.Not()])
+
 
 # ===========================================================================
 # R7 — RUNNING TIME  [DERIVED FROM DPR]
@@ -583,7 +569,9 @@ def add_obj6_rake_balance(
     O6: balance trips across rakes. Minimize variance in trip counts.
     """
     terms: List[cp_model.LinearExpr] = []
-    n_rakes = len(data.bare_rakes)   # bare rakes only — spares are treated separately
+
+    bare_rakes = data.rakes[data.rakes["status"] == "service"]
+    n_rakes = len(bare_rakes)   # bare rakes only — spares are treated separately
 
     if n_rakes == 0:
         return terms
@@ -591,7 +579,7 @@ def add_obj6_rake_balance(
     total_trips = len(trip_vars)
     target = total_trips // max(n_rakes, 1)
 
-    for _, r in data.bare_rakes.iterrows():
+    for _, r in bare_rakes.iterrows():
         rid = r["rake_id"]
         trips_assigned = sum(rake_trip[(rid, tid)] for tid in trip_vars)
         dev = model.NewIntVar(0, total_trips, f"balance_{rid}")
@@ -615,7 +603,10 @@ def add_obj7_reserve_activation(
     spare rake. Every such trip incurs a unit penalty.
     """
     terms: List[cp_model.LinearExpr] = []
-    for _, r in data.traffic_spares.iterrows():
+
+    standby_rakes = data.rakes[data.rakes["status"] == "standby"]
+
+    for _, r in standby_rakes.iterrows():
         rid = r["rake_id"]
         for tid in trip_vars:
             terms.append(rake_trip[(rid, tid)])

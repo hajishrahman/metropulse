@@ -5,7 +5,7 @@ Re-checks every hard constraint (R1-R12) against the produced schedule
 CSV — does NOT trust the CP-SAT solver's own status.
 
 Inputs:
-    data/dpr/hourly_service.csv
+    data/hourly_service.csv
     data/synthetic/rakes.csv
     data/processed/schedule.csv
 
@@ -28,7 +28,7 @@ from solver import config
 # Paths
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).parent.parent
-DPR_CSV = ROOT / "data" / "dpr" / "hourly_service.csv"
+HOURLY_CSV = ROOT / "data" / "hourly_service.csv"
 RAKES_CSV = ROOT / "data" / "synthetic" / "rakes.csv"
 SCHEDULE_CSV = ROOT / "data" / "processed" / "schedule.csv"
 OUT_JSON = ROOT / "data" / "processed" / "validation.json"
@@ -53,39 +53,46 @@ def read_csv_simple(path: Path) -> List[dict]:
 # ---------------------------------------------------------------------------
 # Checks
 # ---------------------------------------------------------------------------
-def check_r1_service_coverage(schedule: List[dict], dpr: List[dict]) -> dict:
-    """
-    R1: For each (hour_start, direction), the count of trips in the
-    schedule must be >= DPR required_departures.
-    """
-    from collections import defaultdict
-    actual = defaultdict(int)
+def check_r1_service_coverage(schedule: List[dict], hourly_csv: Path) -> dict:
+    """R1: For each hour and direction, schedule trips >= required from hourly CSV."""
+    hourly = read_csv_simple(hourly_csv)
+
+    actual = {}
     for row in schedule:
-        dep_min = hhmm_to_min(row["departure"])
-        hour_start = dep_min // 60
-        actual[(hour_start, row["direction"])] += 1
+        dep_hour = int(row["departure"].split(":")[0])
+        direction = row["direction"]
+        key = (dep_hour, direction)
+        actual[key] = actual.get(key, 0) + 1
 
     failures = []
-    total_checked = 0
-    for d in dpr:
-        h = int(d["hour_start"])
-        direction = d["direction"]
-        required = int(d["required_departures"])
-        got = actual.get((h, direction), 0)
-        total_checked += 1
-        if got < required:
+    for h in hourly:
+        hour_start = int(h["hour"].split(":")[0])
+        up_required = int(h["up_trips"])
+        down_required = int(h["down_trips"])
+
+        up_got = actual.get((hour_start, "UP"), 0)
+        down_got = actual.get((hour_start, "DOWN"), 0)
+
+        if up_got < up_required:
             failures.append({
-                "hour": h, "direction": direction,
-                "required": required, "got": got,
+                "hour": hour_start,
+                "direction": "UP",
+                "required": up_required,
+                "got": up_got,
+            })
+
+        if down_got < down_required:
+            failures.append({
+                "hour": hour_start,
+                "direction": "DOWN",
+                "required": down_required,
+                "got": down_got,
             })
 
     return {
         "check": "R1_service_coverage",
         "status": "PASS" if not failures else "FAIL",
-        "details": {
-            "buckets_checked": total_checked,
-            "failures": failures[:20],
-        },
+        "details": {"failures": failures[:20]},
     }
 
 
@@ -125,15 +132,20 @@ def check_r2a_design_headway(schedule: List[dict]) -> dict:
 
 
 def check_r3_operating_window(schedule: List[dict]) -> dict:
-    """R3: All departures and arrivals within 05:00 – 24:00."""
+    """R3: All departures and arrivals within 06:00-23:00."""
     failures = []
+
     for row in schedule:
         dep = hhmm_to_min(row["departure"])
-        arr = hhmm_to_min(row["arrival"])
-        if not (5 * 60 <= dep < 24 * 60):
-            failures.append({"trip_id": row["trip_id"], "issue": "departure_out_of_window", "value": row["departure"]})
-        if arr > 24 * 60:
-            failures.append({"trip_id": row["trip_id"], "issue": "arrival_after_midnight", "value": row["arrival"]})
+        
+
+        # 06:00 = 360 min, 23:00 = 1380 min
+        if not (360 <= dep < 1380):
+            failures.append({
+                "trip_id": row["trip_id"],
+                "issue": "departure_out_of_window",
+                "value": row["departure"],
+            })
 
     return {
         "check": "R3_operating_window",
@@ -232,32 +244,46 @@ def check_r7_running_time(schedule: List[dict]) -> dict:
 
 
 def check_r4_fleet_bound(schedule: List[dict]) -> dict:
-    """
-    R4: Per-hour concurrent active rakes <= SERVICE_RAKES + 1 (traffic spare).
-    Simplified: per (hour), count distinct rakes used.
-    """
-    from collections import defaultdict
-    hourly_rakes = defaultdict(set)
+    """R4: At any minute, concurrent active rakes <= SERVICE_RAKES."""
+    # Build events: +1 at departure, -1 at arrival
+    events = []
     for row in schedule:
-        h = hhmm_to_min(row["departure"]) // 60
-        hourly_rakes[h].add(row["rake_id"])
+        dep = hhmm_to_min(row["departure"])
+        arr = hhmm_to_min(row["arrival"])
+        events.append((dep, +1, row["rake_id"]))
+        events.append((arr, -1, row["rake_id"]))
 
-    max_bound = config.BARE_RAKE_REQUIREMENT + config.TRAFFIC_SPARE  # 16
-    failures = []
+    # Sort by minute
+    events.sort()
+
+    # Sweep and count concurrent rakes
+    active = set()
     peak = 0
-    for h, rakes in hourly_rakes.items():
-        count = len(rakes)
-        peak = max(peak, count)
-        if count > max_bound:
-            failures.append({"hour": h, "active_rakes": count, "bound": max_bound})
+    peak_at = None
+    failures = []
+
+    for minute, delta, rake_id in events:
+        if delta == +1:
+            active.add(rake_id)
+        else:
+            active.discard(rake_id)
+
+        if len(active) > peak:
+            peak = len(active)
+            peak_at = minute
+
+    max_bound = config.SERVICE_RAKES
+    if peak > max_bound:
+        failures.append({"peak": peak, "bound": max_bound, "peak_at_min": peak_at})
 
     return {
         "check": "R4_fleet_bound",
         "status": "PASS" if not failures else "FAIL",
         "details": {
             "max_bound": max_bound,
-            "peak_active_in_hour": peak,
-            "failures": failures[:20],
+            "peak_simultaneous": peak,
+            "peak_at_hhmm": f"{peak_at // 60:02d}:{peak_at % 60:02d}" if peak_at else None,
+            "failures": failures,
         },
     }
 
@@ -346,14 +372,14 @@ def main():
     print("=== MetroPulse Validator ===\n")
 
     schedule = read_csv_simple(SCHEDULE_CSV)
-    dpr = read_csv_simple(DPR_CSV)
+    hourly = read_csv_simple(HOURLY_CSV)
 
     print(f"Schedule rows:       {len(schedule)}")
-    print(f"DPR rows:            {len(dpr)}")
+    print(f"Hourly rows:         {len(hourly)}")
     print()
 
     checks = [
-        check_r1_service_coverage(schedule, dpr),
+        check_r1_service_coverage(schedule, HOURLY_CSV),
         check_r2a_design_headway(schedule),
         check_r3_operating_window(schedule),
         check_r4_fleet_bound(schedule),
@@ -368,8 +394,9 @@ def main():
     for c in checks:
         print(f"[{c['status']}] {c['check']}")
 
-    # Overall
-    overall = "PASS" if all(c["status"] in ("PASS", "SKIPPED") for c in checks) else "FAIL"
+    overall = "PASS" if all(
+        c["status"] in ("PASS", "SKIPPED") for c in checks
+    ) else "FAIL"
 
     print()
     print(f"Overall: {overall}")
@@ -378,12 +405,20 @@ def main():
         "overall": overall,
         "num_trips": len(schedule),
         "checks": checks,
+    
+        
     }
+    
+
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_JSON, "w") as f:
         json.dump(result, f, indent=2)
+
+
     print(f"\nWritten: {OUT_JSON}")
 
 
 if __name__ == "__main__":
     main()
+
+    

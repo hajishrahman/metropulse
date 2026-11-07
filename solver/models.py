@@ -1,9 +1,10 @@
+
 """
 MetroPulse solver — problem data loader.
 
-Loads DPR service plan and synthetic scenario data into a single
+Loads GTFS hourly service and synthetic scenario data into a single
 ProblemData object. Reads from:
-    data/dpr/hourly_service.csv
+    data/hourly_service.csv
     data/synthetic/rakes.csv
     data/synthetic/terminals.csv
     data/synthetic/maintenance.csv
@@ -35,6 +36,7 @@ def _read(path: Path, **kwargs) -> pd.DataFrame:
 @dataclass
 class ProblemData:
     """All inputs required by the CP-SAT model."""
+
     hourly_service: pd.DataFrame
     rakes: pd.DataFrame
     terminals: pd.DataFrame
@@ -47,54 +49,60 @@ class ProblemData:
     # -----------------------------------------------------------------------
     @property
     def num_hours(self) -> int:
-        """Number of distinct hourly periods (should be 19)."""
-        return self.hourly_service["hour_start"].nunique()
+        """Number of hourly periods."""
+        return len(self.hourly_service)
 
     @property
     def total_required_departures(self) -> int:
         """Total UP + DOWN departures across all hours."""
-        return int(self.hourly_service["required_departures"].sum())
+        return int(self.hourly_service["total_trips"].sum())
 
+    @property
+    def service_rakes(self) -> pd.DataFrame:
+        """Rakes with status='service' (available for trips)."""
+        return self.rakes[self.rakes["status"] == "service"]
+
+    @property
+    def standby_rakes(self) -> pd.DataFrame:
+        """Rakes with status='standby' (reserved for disruptions)."""
+        return self.rakes[self.rakes["status"] == "standby"]
+
+    @property
+    def maintenance_rakes(self) -> pd.DataFrame:
+        """Rakes with status='maintenance' (under maintenance)."""
+        return self.rakes[self.rakes["status"] == "maintenance"]
+
+    # Backwards compatibility alias
     @property
     def bare_rakes(self) -> pd.DataFrame:
-        """Rakes where both traffic_spare and maintenance_spare are 0."""
-        return self.rakes[
-            (self.rakes["traffic_spare"] == 0)
-            & (self.rakes["maintenance_spare"] == 0)
-        ]
-
-    @property
-    def traffic_spares(self) -> pd.DataFrame:
-        return self.rakes[self.rakes["traffic_spare"] == 1]
-
-    @property
-    def maintenance_spares(self) -> pd.DataFrame:
-        return self.rakes[self.rakes["maintenance_spare"] == 1]
+        """DEPRECATED: use service_rakes."""
+        return self.service_rakes
 
     # -----------------------------------------------------------------------
     # Loading
     # -----------------------------------------------------------------------
     @classmethod
-    def load(cls, root: Optional[Path] = None,
-             scenario: str = "DPR_2043_2048") -> "ProblemData":
+    def load(
+        cls,
+        root: Optional[Path] = None,
+        scenario: str = "DPR_2043_2048",
+    ) -> "ProblemData":
         base = Path(root) if root else DEFAULT_ROOT
-
-        dpr_dir = base / "dpr"
         synth_dir = base / "synthetic"
 
         files = {
-            "hourly_service": dpr_dir / "hourly_service.csv",
-            "rakes":          synth_dir / "rakes.csv",
-            "terminals":      synth_dir / "terminals.csv",
-            "maintenance":    synth_dir / "maintenance.csv",
-            "depot":          synth_dir / "depot.csv",
+            "hourly_service": base / "hourly_service.csv",
+            "rakes": synth_dir / "rakes.csv",
+            "terminals": synth_dir / "terminals.csv",
+            "maintenance": synth_dir / "maintenance.csv",
+            "depot": synth_dir / "depot.csv",
         }
 
         missing = [str(p) for p in files.values() if not p.exists()]
         if missing:
             raise FileNotFoundError(
-                "Missing data files:\n  - " + "\n  - ".join(missing) +
-                "\n\nRun: python data/generate_synthetic_v2.py"
+                "Missing data files:\n  - " + "\n  - ".join(missing)
+                + "\n\nRun: python data/generate_synthetic_v2.py"
             )
 
         hourly_service = _read(files["hourly_service"])
@@ -122,9 +130,9 @@ class ProblemData:
             f"Total departures:   {self.total_required_departures} "
             f"(UP+DOWN)\n"
             f"Rakes (total):      {len(self.rakes)} "
-            f"({len(self.bare_rakes)} bare + "
-            f"{len(self.traffic_spares)} traffic + "
-            f"{len(self.maintenance_spares)} maintenance)\n"
+            f"({len(self.service_rakes)} service + "
+            f"{len(self.standby_rakes)} standby + "
+            f"{len(self.maintenance_rakes)} maintenance)\n"
             f"Terminals:          {len(self.terminals)}\n"
             f"Maintenance blocks: {len(self.maintenance)}\n"
             f"Depot locations:    {len(self.depot)}"

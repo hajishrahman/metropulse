@@ -94,14 +94,14 @@ def solve(data: ProblemData, verbose: bool = False,
     print(f"[solve] elapsed = {elapsed:.2f}s")
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-            return {
+        return {
         "status": status_name,
         "elapsed_sec": elapsed,
-        "objective": obj_value,
-        "best_bound": best_bound,
-        "gap_pct": gap_pct,
-        "num_trips": len(schedule),
-        "schedule": schedule,
+        "objective": None,
+        "best_bound": None,
+        "gap_pct": None,
+        "num_trips": 0,
+        "schedule": [],
     }
 
     print(f"[solve] objective = {solver.ObjectiveValue()}")
