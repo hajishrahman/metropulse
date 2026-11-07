@@ -1,368 +1,1077 @@
 # MetroPulse — Complete Phase Plan
 
-**Project:** DPR-driven train scheduling & optimization for Kochi Metro Rail Limited (KMRL) Phase-II
-**Method:** Google OR-Tools CP-SAT
-**Version:** 2 (V1 complete, Phase 2 next)
-**Last updated:** 2026-11-06
+**Project:** AI-Driven Train Induction Planning and Scheduling System for Kochi Metro Rail Limited (KMRL)  
+**Scheduling Engine:** OR-Tools CP-SAT  
+**Simulation Engine:** SimPy  
+**Version:** 2.2  
+**Last Updated:** 08 November 2026
 
 ---
 
-## Phase Overview
+# 1. Project Overview
 
-| Phase | Name | Status | Deliverable |
-|-------|------|--------|-------------|
-| **0** | Setup | ✅ Complete | Venv, Git, folder structure |
-| **1** | Train Scheduling (CP-SAT) | ✅ Complete | 408-trip valid schedule, 10/10 validator checks |
-| **1.5** | Model Refinements | 🟡 Optional | R13 cleaning, R14 stabling, traffic spare activation |
-| **2** | SimPy Validation | ⏳ Next | Robustness KPIs under stochastic delays |
-| **3** | Crew Scheduling | ⏳ Later | 60 drivers assigned to 408 fixed trips |
-| **4** | Explainability | ⏳ Later | Human-readable decision rationale |
-| **5** | Near-Real-Time Re-Optimization | ⏳ Later | Warm-start re-solve in 1–2 min |
-| **6** | ML Layer (optional) | ⏳ If data | XGBoost running-time prediction |
-| **7** | UI + Demo | ⏳ Later | Streamlit dashboard |
+MetroPulse is an AI-driven train induction planning and scheduling system designed for Kochi Metro Rail Limited (KMRL).
+
+The system aims to generate feasible train schedules, allocate available rakes, simulate operational delays, assign drivers, and eventually support near-real-time rescheduling.
+
+### Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core development |
+| Pandas | Data processing |
+| NetworkX | Network and route analysis |
+| OR-Tools CP-SAT | Train and crew scheduling |
+| SimPy | Operational simulation |
+| XGBoost | Optional delay prediction |
+| Streamlit | Dashboard and visualization |
+
+### Data Sources
+
+| Source | Purpose |
+|---|---|
+| KMRL Static GTFS 2024–25 | Timetable and trip information |
+| KMRL Annual Report 2024–25 | Route length and operating information |
+| 2026 news report | Updated fleet information |
+| Synthetic data | Missing operational information and assumptions |
+
+**Important:** The GTFS feed is static data valid from 12 August 2024 to 31 December 2025. It is not a live 2026 timetable.
 
 ---
 
-## Phase 0 — Setup ✅
+# 2. Phase Overview
 
-**Deliverables:**
-- Virtual environment (`venv/`)
-- Git repository on GitHub
-- Folder structure (`data/`, `solver/`, `src/`, `docs/`, `notebooks/`, `tests/`)
-- `.gitignore` for GTFS and generated outputs
-- `.gitattributes` for line-ending consistency
-- `requirements.txt` (ortools, pandas, numpy)
+| Phase | Description | Status |
+|---|---|---|
+| Phase 0 | Project Setup | Completed |
+| Phase 1 | Train Scheduling using CP-SAT | Completed |
+| Phase 2 | Operational Simulation using SimPy | Next |
+| Phase 3 | Crew Scheduling | Pending |
+| Phase 4 | Explainability and Constraint Analysis | Pending |
+| Phase 5 | Near-Real-Time Rescheduling | Pending |
+| Phase 6 | Machine Learning Delay Prediction | Optional |
+| Phase 7 | Dashboard and Visualization | Pending |
 
 ---
 
-## Phase 1 — Train Scheduling (CP-SAT) ✅
+# Phase 0 — Project Setup
 
-**Purpose:** Given DPR hourly service plan + 18-rake fleet, produce a valid 408-trip daily schedule satisfying 12 hard constraints and minimizing 7 soft objectives.
+**Status: Completed**
 
-### Delivered
+## Objectives
 
-**Data:**
-- `data/raw/` — GTFS feed (11 tables, 24 stops, 252 trips) `[DPR-adjacent real data]` — used for validation only, not V1 scheduler input
-- `data/dpr/hourly_service.csv` — DPR hourly plan (38 rows)
-- `data/synthetic/rakes.csv` — 18 rakes (15 bare + 1 traffic + 2 maintenance)
-- `data/synthetic/terminals.csv` — 2 terminals, 3-min turnaround
-- `data/synthetic/maintenance.csv` — empty (Scenario A)
-- `data/synthetic/depot.csv` — Info Park-2 = 2, Muttom unbounded
-- `data/generate_synthetic_v2.py` — deterministic generator
+- Set up the Python development environment.
+- Create the project folder structure.
+- Install required libraries.
+- Configure Git and GitHub.
 
-**Solver:**
-- `solver/config.py` — all constants, source-tagged
-- `solver/models.py` — `ProblemData` loader
-- `solver/constraints.py` — R1–R12 + O1–O7
-- `solver/solve.py` — orchestrator with optimality gap printout
-- `solver/validator.py` — independent verification (10 of 12 constraints)
+## Technology Stack
 
-**Results:**
-- 408 trips scheduled (204 UP + 204 DOWN)
-- 16 rakes used (R001–R016)
-- Solve time: ~317s (FEASIBLE, gap varies)
-- Validator: 9 PASS + 1 SKIPPED, Overall PASS
-- 15-rake test: FEASIBLE (proves traffic spare not required)
+- Python
+- Pandas
+- NetworkX
+- SimPy
+- OR-Tools
+- Streamlit
+- Git and GitHub
 
-### How to Run
+## Deliverables
+
+- Python virtual environment.
+- GitHub repository.
+- Project folder structure.
+- `.gitignore`
+- `.gitattributes`
+- `requirements.txt`
+
+---
+
+# Phase 1 — Train Scheduling using CP-SAT
+
+**Status: Completed**
+
+## 1.1 Objective
+
+Generate a feasible daily train schedule using the KMRL GTFS timetable and available rake information.
+
+The scheduler assigns trips to available rakes while satisfying the configured operational constraints.
+
+## 1.2 Data Configuration
+
+### GTFS Data
+
+| Parameter | Value |
+|---|---:|
+| GTFS feed validity | 12 Aug 2024 – 31 Dec 2025 |
+| Weekday trips in GTFS | 255 |
+| Trips selected for the model | 250 |
+| Operating window | 06:00–23:00 |
+| Hourly buckets | 17 |
+| Median one-way running time | 50.47 minutes |
+| Integer running time used by solver | 50 minutes |
+| Route length | 28.144 km |
+
+Five GTFS trips were excluded because their departures fall outside the selected 06:00–23:00 model window.
+
+The 250 trips represent the selected model trips, not the total number of weekday trips in GTFS.
+
+### Fleet Data
+
+| Parameter | Value |
+|---|---:|
+| Total rakes | 25 |
+| Service rakes | 18 |
+| Maintenance rakes | 7 |
+| Separate standby rakes | 0 |
+| Turnaround time | 5 minutes |
+
+The fleet information is based on a 2026 news report.
+
+The KMRL Annual Report 2024–25 reports 15 operating trains. This difference in reporting periods must be acknowledged when describing the fleet configuration.
+
+### Synthetic Assumptions
+
+| Parameter | Value |
+|---|---:|
+| Turnaround time | 5 minutes |
+| Maintenance threshold | 1,000,000 km |
+| Info Park-2 capacity | 2 rakes |
+| Initial rake mileage | 20,000–200,000 km |
+
+These values are synthetic assumptions because verified operational data is unavailable.
+
+## 1.3 Data Files
+
+| File | Purpose |
+|---|---|
+| `data/raw/` | Original GTFS files |
+| `data/hourly_service.csv` | Extracted hourly service information |
+| `data/synthetic/rakes.csv` | Synthetic rake information |
+| `data/synthetic/terminals.csv` | Terminal configuration |
+| `data/synthetic/maintenance.csv` | Maintenance information |
+| `data/synthetic/depot.csv` | Depot capacity information |
+| `data/extract_gtfs_hourly.py` | Extracts hourly GTFS information |
+| `data/generate_synthetic_v2.py` | Generates synthetic operational data |
+
+Confirm synthetic file paths against the actual loader configuration before running the project.
+
+## 1.4 Solver Implementation
+
+| File | Responsibility |
+|---|---|
+| `solver/config.py` | Solver configuration |
+| `solver/models.py` | Loads and prepares problem data |
+| `solver/constraints.py` | Defines scheduling constraints and objectives |
+| `solver/solve.py` | Executes the CP-SAT solver |
+| `solver/validator.py` | Independently validates the generated schedule |
+
+The solver uses the R1–R12 constraint framework.
+
+The current validator checks R1, R2a, R3, R4, R5, R6, R7, R10, and R12 (9 PASS).
+
+R8 is present in the validator but SKIPPED because V1 does not contain stabling assignments. R9 and R11 are not included in the current validation results.
+
+
+
+## 1.5 Phase 1 Results
+
+| Metric | Result |
+|---|---:|
+| Selected trips | 250 |
+| Configured service rakes | 18 |
+| Solver status | FEASIBLE |
+| Solver wall-clock time | Approximately 306 seconds |
+| Solver time limit | 300 seconds |
+| Objective value | 1,102,800 |
+| Optimality gap | 93.40% |
+| Consecutive same-rake trip pairs checked | 232 |
+| Minimum turnaround requirement | 5 minutes |
+
+All 232 checked consecutive same-rake trip pairs satisfy the 5-minute turnaround requirement.
+
+### Validator Results
+
+| Result | Count |
+|---|---:|
+| PASS | 9 |
+| SKIPPED | 1 |
+| FAIL | 0 |
+
+**Overall validator status: PASS**
+
+Important limitations:
+
+- R8 is skipped because stabling assignments are not implemented in V1.
+- R9 and R11 are not included in the current validation results.
+- FEASIBLE does not mean OPTIMAL.
+- Eighteen is the configured number of service rakes. Do not claim all 18 were used unless confirmed from the generated schedule.
+
+## 1.6 How to Run Phase 1
 
 ```powershell
 cd Z:\metropulse
+
 .\venv\Scripts\Activate.ps1
+
+# Regenerate hourly service data only when required
+python data\extract_gtfs_hourly.py
+
+# Generate synthetic operational data
 python data\generate_synthetic_v2.py
-python -m solver.solve        # ~5 min
-python -m solver.validator    # 10 checks
+
+# Run the scheduler
+python -m solver.solve
+
+# Validate the generated schedule
+python -m solver.validator
 ```
 
----
+The GTFS extraction step requires the original GTFS files in `data/raw/`. Skip it if `data/hourly_service.csv` is already generated and up to date.
 
-## Phase 1.5 — Model Refinements (Optional) 🟡
+### Expected Outputs
 
-**Purpose:** Close gaps in V1's coverage of the original six constraints. Both additions are [SYNTHETIC].
-
-### R13 — Cleaning Interval
-
-    Every rake cleaned ≤ every 24h (interior) or 72h (exterior) [SYNTHETIC]
-
-    Cleaning bay capacity = 3 [SYNTHETIC]
-
-    Requires last_cleaned_hours_ago field in rakes.csv
-
-    Effort: ~1 day
-
-### R14 — Muttom Stabling Depth
-
-    Assume 4 lines × 4 depth = 16 slots [SYNTHETIC]
-
-    Depth-d rakes only leave when shallower ones go
-
-    Requires stabling_line, stabling_position in rakes.csv
-
-    Effort: ~1 day
-
-### Traffic Spare Activation (R4a refinement)
-
-    Add explicit activated_traffic_reserve[h] BoolVar per hour
-
-    Constraint: active_rakes[h] ≤ 15 + activated[h]
-
-    Penalize in O7
-
-    15-rake test confirms this will remain feasible
-
-    Effort: ~2 hours
-
-Result after 1.5: 5/6 original constraints partially covered (job cards + branding still deferred).
-
-Decision: Skip if timeline tight. Do if 3–5 extra days and stronger defensibility needed.
+- `schedule.csv`
+- `solution.json`
+- `validation.json`
 
 ---
 
-## Phase 2 — SimPy Validation ⏳ NEXT
+# Phase 2 — Operational Simulation using SimPy
 
-**Purpose:** Replay the Phase 1 schedule under stochastic delays. Measure how the schedule holds up. This is the "digital twin" differentiator.
+**Status: Next**
 
-### Design (from constraints-v2.md)
+## 2.1 Objective
 
-Delay model [SYNTHETIC]:
+Simulate the Phase 1 schedule under different delay conditions.
+
+The purpose is to understand how delays affect:
+
+- Train departure times.
+- Train arrival times.
+- Rake availability.
+- Subsequent trips assigned to the same rake.
+- Overall timetable reliability.
+
+The simulation will use the schedule generated by CP-SAT.
+
+## 2.2 Simulation Design
+
+### Input
+
+- `schedule.csv`
+- Rake assignments from Phase 1.
+- Running time: 50 minutes.
+- Turnaround time: 5 minutes.
+
+The 50-minute running time is the integer value used by the solver, rounded from the GTFS-derived median of 50.47 minutes.
+
+### Delay Distribution
+
+**Synthetic assumption:**
 
 ```python
 DELAY_DISTRIBUTION_TYPE = "clipped_normal"
-DELAY_DISTRIBUTION_MEAN_SEC = -48
+
+DELAY_DISTRIBUTION_MEAN_SEC = -48  # Pre-clip mean
 DELAY_DISTRIBUTION_STD_SEC = 60
+
 DELAY_DISTRIBUTION_MIN_SEC = 0
 DELAY_DISTRIBUTION_MAX_SEC = 300
 ```
 
-Propagation rule (Option A):
+The distribution is clipped between 0 and 300 seconds.
+
+The mean of -48 seconds is the pre-clipping mean. It is not the resulting mean delay after clipping.
+
+## 2.3 Delay Propagation Logic
+
+Use the following propagation approach.
 
 ```python
-early_dep[i]      = sched_dep[i] + own_delay[i]
-propagated_dep[i] = actual_arr[p] + 3 min
-actual_dep[i]     = max(early_dep[i], propagated_dep[i])
-actual_arr[i]     = actual_dep[i] + 19 min
-propagated_delay[i] = max(0, propagated_dep[i] - early_dep[i])
+early_dep[i] = sched_dep[i] + own_delay[i]
+
+propagated_dep[i] = actual_arr[p] + 5_minutes
+
+actual_dep[i] = max(
+    early_dep[i],
+    propagated_dep[i]
+)
+
+actual_arr[i] = actual_dep[i] + 50_minutes
+
+propagated_delay[i] = max(
+    0,
+    propagated_dep[i] - early_dep[i]
+)
 ```
 
-First-of-rake trips have no predecessor: actual_dep = early_dep, propagated_delay = 0.
+Where:
 
-Headline KPIs (schedule-dependent):
+- `i` = Current trip.
+- `p` = Immediately preceding trip assigned to the same rake, ordered by scheduled departure.
+- `actual_arr[p]` = Actual arrival time of the preceding trip.
+- 5 minutes = Synthetic turnaround time.
 
-    Propagated delay minutes = sum(propagated_delay[i])
+For the first trip assigned to a rake:
 
-    Share delayed by propagation = count(propagated_delay[i] > 0) / (408 − first-of-rake trips)
+```python
+actual_dep[i] = early_dep[i]
+propagated_delay[i] = 0
+```
 
-Supplementary KPIs:
+There is no preceding trip for the first trip assigned to a rake.
 
-    On-time ±5 min (headline among on-time metrics)
+## 2.4 Simulation KPIs
 
-    On-time ±3 min
+### Primary KPIs
 
-    On-time ±1 min (distribution readout)
+| KPI | Description |
+|---|---|
+| Total propagated delay | Sum of additional delay caused by previous trips |
+| Propagation percentage | Percentage of eligible trips affected by propagated delay |
+| On-time performance | Percentage of trips departing within the defined on-time tolerance |
 
-    Headway violations
+For propagation percentage:
 
-    Max delay propagated
+```python
+propagation_percentage = (
+    trips_with_propagated_delay /
+    eligible_trips
+) * 100
+```
 
-    Trips completed
+Eligible trips exclude the first trip assigned to each rake because those trips have no preceding trip.
 
-Sweep: Std = 0, 60, 120, 300 s. Mean fixed at -48 s.
+### Supplementary KPIs
 
-### Files to Create
+- On-time performance within ±5 minutes.
+- On-time performance within ±3 minutes.
+- On-time performance within ±1 minute.
+- Maximum departure delay.
+- Total trips completed.
+- Headway violations.
 
-src/simulation/
-├── __init__.py
-├── simpy_runner.py       ← loads schedule.csv, runs simulation
-└── kpis.py               ← KPI computation
+**Proposed on-time definition:** A trip is on time if its actual departure is within ±5 minutes of its scheduled departure.
 
-data/processed/
-├── simulation_kpis.json
-└── simulation_timeline.csv
+Use this definition consistently in the simulation and reporting.
 
-### Dependencies
+## 2.5 Experiment Design
 
+Run the simulation with different standard deviation values.
+
+| Experiment | Standard Deviation |
+|---|---:|
+| E1 | 0 seconds |
+| E2 | 60 seconds |
+| E3 | 120 seconds |
+| E4 | 300 seconds |
+
+Keep the pre-clipping mean fixed at -48 seconds.
+
+Compare the resulting KPIs to understand how increasing delay variability affects the timetable.
+
+The zero-standard-deviation experiment is the baseline scenario. With no additional disruptions, it is expected to show no delay variability, subject to the implemented simulation logic.
+
+## 2.6 Files to Create
+
+```text
+src/
+└── simulation/
+    ├── __init__.py
+    ├── simpy_runner.py
+    └── kpis.py
+```
+
+### Output Files
+
+```text
+data/
+└── processed/
+    ├── simulation_kpis.json
+    └── simulation_timeline.csv
+```
+
+### Installation
+
+```powershell
 pip install simpy
-
-### How to Run (after Phase 2 built)
-
-python -m src.simulation.simpy_runner
-
-Runtime: ~30 sec (much faster than solve).
-
-### Deliverable
-
-"The schedule produced by CP-SAT maintains X% on-time (±5 min) up to Y minutes of std delay, and degrades to Z% at W minutes."
-
----
-
-## Phase 3 — Crew Scheduling ⏳
-
-**Purpose:** Given fixed 408-trip schedule, assign 60 drivers to trips respecting duty-hour, rest, and weekly rest rules.
-
-### Data
-
-    data/synthetic/drivers.csv — 60 drivers [SYNTHETIC]
-
-### Constraints (C1–C6, all [SYNTHETIC])
-
-ID	Rule
-C1	All Blue Line qualified
-C2	Max duty 8 hours/day
-C3	Min rest 12 hours
-C4	Max continuous driving 4 hours
-C5	Weekly rest ≤ 6 working days
-C6	No driver overlap
-
-### Approach
-
-Once trips are fixed, crew assignment is a smaller subproblem. ~21 drivers minimum (408 trips / 20 trips per driver), 60 available gives slack.
-
-### Files
-
-solver/crew_models.py
-solver/crew_constraints.py
-solver/crew_solve.py
-solver/crew_validator.py
-data/synthetic/drivers.csv
-
-Note: 60 drivers is ~3× the minimum. Phase 3 becomes fairness optimization, not feasibility. Consider reducing pool to ~30 for a more interesting problem.
-
----
-
-## Phase 4 — Explainability ⏳
-
-**Purpose:** Translate CP-SAT decisions into human-readable rationale. Why did the solver choose rake R007 for trip T0012?
-
-### Approach
-
-For each assignment, identify binding constraints (which would be violated if changed) and emit rationale.
-
-### Files
-
-src/explainability/
-├── rule_tracer.py
-└── report.py
-
-### Deliverable
-
-Per-trip rationale report showing which constraint drove each assignment.
-
----
-
-## Phase 5 — Near-Real-Time Re-Optimization ⏳
-
-**Purpose:** Re-solve in 1–2 min (not 5) when disruption occurs.
-
-### Honest Scope
-
-Real-time (< 30s) requires decomposition beyond project scope. Near-real-time (1–2 min) is achievable via warm-start.
-
-### Approach
-
-    Feed previous FEASIBLE solution as hint
-
-    Add constraint: minimize deviation from previous schedule
-
-    Compare new vs old
-
-### Files
-
-src/realtime/
-├── event_bus.py
-├── warm_start.py
-└── compare.py
-
-### Deliverable
-
-"Given a mid-day disruption, produce a new schedule in ≤2 min that completes remaining trips with minimal deviation."
-
----
-
-## Phase 6 — ML Layer (Optional) ⏳
-
-**Purpose:** Predict running times from historical data, feed into CP-SAT. NOT mandatory.
-
-### Scope
-
-Only if historical KMRL delay data available. Predicts running time / delay, not demand.
-
-### Files
-
-src/ml/
-├── train.py
-└── predict.py
-
-Per requirement doc: "ML forecasting is NOT a prerequisite." CP-SAT works without it. XGBoost is a refinement.
-
----
-
-## Phase 7 — UI + Demo ⏳
-
-**Purpose:** Streamlit dashboard for demo.
-
-### Files
-
-src/ui/
-└── app.py
-
-### Screens
-
-    Schedule view (408 trips)
-
-    KPI cards (on-time %, violations)
-
-    Robustness chart (delay sweep)
-
-    Rake utilization bar chart
-
-### Dependencies
-
-pip install streamlit
+```
 
 ### Run
 
-streamlit run src/ui/app.py
+```powershell
+python -m src.simulation.simpy_runner
+```
+
+### Deliverables
+
+- SimPy simulation engine.
+- Delay propagation model.
+- KPI calculation module.
+- Simulation results for all four experiments.
+- Comparison of timetable performance under different delay conditions.
 
 ---
 
-## Dependencies Between Phases
+# Phase 3 — Crew Scheduling
 
-Phase 0 (setup) ✅
-    ↓
-Phase 1 (train scheduling) ✅
-    ↓
-    ├── Phase 1.5 (refinements) [optional]
-    ↓
-Phase 2 (SimPy validation) ← NEXT
-    ↓
-Phase 3 (crew scheduling)
-    ↓
-Phase 4 (explainability)
-    ↓
-Phase 5 (near-real-time)
-    ↓
-Phase 6 (ML, optional)
-    ↓
-Phase 7 (UI)
+**Status: Pending**
 
-Critical path: 1 → 2 → 3 → 4 → 5. Phases 6 and 7 are parallel branches.
+## 3.1 Objective
 
-## Summary Table
+Assign drivers to the trips generated in Phase 1 while satisfying crew duty and rest requirements.
 
-| Phase | Content | Duration | Key Deliverable |
-|-------|---------|----------|-----------------|
-| 0 | Setup | 2 days | Venv, Git, folder structure |
-| 1 | Train scheduling | 2 weeks | 408-trip valid schedule |
-| 1.5 | Refinements | 3–5 days | R13, R14, traffic spare activation |
-| 2 | SimPy validation | 1 week | Robustness KPIs |
-| 3 | Crew scheduling | 1 week | 60 drivers on 408 trips |
-| 4 | Explainability | 1 week | Per-trip rationale |
-| 5 | Near-real-time | 1 week | Warm-start re-optimize |
-| 6 | ML (optional) | 1 week | XGBoost predictions |
-| 7 | UI | 3–5 days | Streamlit dashboard |
+The Phase 1 train schedule will remain fixed initially.
 
-**Full project:** ~2 months. **Minimum viable (1+2):** ~3 weeks.
+## 3.2 Crew Data
 
-## Handoff Prompt (for new chat)
+Create synthetic driver information.
 
-> *"I'm working on MetroPulse, a DPR-driven CP-SAT scheduler for KMRL Phase-II. Phase 1 is complete — 408-trip valid schedule with 10/10 validator checks. See docs/constraints-v2.md for the spec and docs/phases.md for the roadmap. I want to work on Phase 2 (SimPy validation). Read constraints-v2.md §11 for the full Phase 2 design. The src/simulation/ folder is empty — that's where Phase 2 goes. Ask me clarifying questions before writing code."*
+```text
+data/
+└── synthetic/
+    └── drivers.csv
+```
+
+Suggested fields:
+
+- `driver_id`
+- `qualification`
+- `availability`
+- `shift_preference`
+- `weekly_availability`
+
+All synthetic driver information must be clearly identified as assumed data.
+
+## 3.3 Crew Constraints
+
+| Constraint | Description |
+|---|---|
+| C1 | Driver must be qualified for the Blue Line |
+| C2 | Maximum duty time of 8 hours per day |
+| C3 | Minimum rest period of 12 hours |
+| C4 | Maximum continuous driving time of 4 hours |
+| C5 | Maximum 6 consecutive working days before weekly rest |
+| C6 | A driver cannot be assigned overlapping trips |
+
+These are initial model constraints. They must be checked against verified KMRL crew rules before being presented as official operating rules.
+
+## 3.4 Driver Pool
+
+An initial estimate of approximately 13 drivers can be obtained by dividing 250 trips by an assumed 20 trips per driver.
+
+However, 20 trips per driver is only a planning assumption. It does not establish the minimum number of drivers required.
+
+Use a synthetic driver pool of approximately 20–30 drivers for initial experiments.
+
+Actual feasibility depends on:
+
+- Trip timing.
+- Duty duration.
+- Rest requirements.
+- Driver availability.
+- Trip overlap.
+- Shift allocation.
+
+## 3.5 Scheduling Approach
+
+Use OR-Tools CP-SAT to assign drivers to the fixed train schedule.
+
+The model should:
+
+1. Load the Phase 1 schedule.
+2. Load synthetic driver information.
+3. Create driver assignment variables.
+4. Apply crew constraints.
+5. Solve the assignment problem.
+6. Validate the generated assignments.
+
+## 3.6 Files to Create
+
+```text
+solver/
+├── crew_models.py
+├── crew_constraints.py
+├── crew_solve.py
+└── crew_validator.py
+
+data/
+└── synthetic/
+    └── drivers.csv
+```
+
+### Deliverables
+
+- Synthetic driver dataset.
+- Crew scheduling model.
+- Crew constraint implementation.
+- Driver assignment output.
+- Independent crew schedule validator.
+- Driver utilization report.
+
+---
+
+# Phase 4 — Explainability and Constraint Analysis
+
+**Status: Pending**
+
+## 4.1 Objective
+
+Make the scheduling results understandable and explain why the solver generated a particular schedule.
+
+The system should provide useful explanations rather than only showing the final timetable.
+
+## 4.2 Features
+
+### Constraint Status
+
+Show the status of each implemented constraint.
+
+Example:
+
+| Constraint | Description | Status |
+|---|---|---|
+| R1 | Service coverage | PASS |
+| R2a | Minimum headway | PASS |
+| R3 | Operating window | PASS |
+| R4 | Fleet availability | PASS |
+| R5 | Rake non-overlap | PASS |
+| R6 | Turnaround time | PASS |
+| R7 | Running time | PASS |
+| R8 | Depot capacity | SKIPPED |
+
+The displayed results must come from the actual validator output. Do not display unvalidated constraints as PASS.
+
+### Scheduling Explanation
+
+For each trip, show:
+
+- Assigned rake.
+- Scheduled departure.
+- Scheduled arrival.
+- Previous trip assigned to the same rake.
+- Available turnaround time.
+- Reason for the assignment, where supported by the solver data.
+
+### Conflict Explanation
+
+When the solver cannot find a feasible solution, identify:
+
+- Conflicting constraints, where diagnosable.
+- Trips involved in the conflict.
+- Rake availability issues.
+- Timing conflicts.
+- Resource shortages.
+
+Use solver diagnostics and controlled relaxation tests. Do not claim that a particular constraint caused infeasibility unless the analysis supports it.
+
+## 4.3 Deliverables
+
+- Constraint status report.
+- Trip-level assignment explanation.
+- Rake utilization report.
+- Conflict analysis.
+- Human-readable scheduling summary.
+
+---
+
+# Phase 5 — Near-Real-Time Rescheduling
+
+**Status: Pending**
+
+## 5.1 Objective
+
+Allow MetroPulse to regenerate or adjust schedules when operational conditions change.
+
+Instead of rebuilding the entire schedule from scratch, the system should attempt to preserve existing assignments wherever possible.
+
+## 5.2 Possible Inputs
+
+- Train delays.
+- Rake breakdowns.
+- Rake unavailability.
+- Temporary service disruptions.
+- Changes in operating conditions.
+- Updated trip requirements.
+
+These inputs will initially be simulated unless verified operational data becomes available.
+
+## 5.3 Rescheduling Approach
+
+Use OR-Tools CP-SAT with the current schedule as the starting reference.
+
+The rescheduling process should:
+
+1. Load the existing schedule.
+2. Receive an operational disruption.
+3. Update affected trip and rake availability information.
+4. Recalculate the affected scheduling decisions.
+5. Generate a revised schedule.
+6. Validate the revised schedule.
+7. Compare the revised schedule with the original.
+
+### Important Considerations
+
+- Preserve unaffected assignments where possible.
+- Avoid unnecessary changes to the existing schedule.
+- Respect all active hard constraints.
+- Minimize schedule disruption.
+- Record the reason for each rescheduling decision.
+
+A warm-start or solution-hint approach can be explored to help the solver reuse the previous solution.
+
+## 5.4 Files to Create
+
+Possible implementation structure:
+
+```text
+solver/
+├── reschedule.py
+└── reschedule_validator.py
+
+src/
+└── disruption/
+    ├── __init__.py
+    └── disruption_handler.py
+```
+
+Confirm the final structure when implementing the phase.
+
+### Deliverables
+
+- Disruption input handler.
+- Rescheduling model.
+- Previous-schedule comparison.
+- Revised schedule output.
+- Rescheduling validation.
+- Schedule change report.
+
+---
+
+# Phase 6 — Machine Learning Delay Prediction
+
+**Status: Optional / Pending**
+
+## 6.1 Objective
+
+Predict possible train delays using historical operational data.
+
+The prediction model can provide delay estimates to the scheduling system.
+
+**Important:** This phase depends on obtaining suitable historical delay data. Synthetic data can be used for experimentation, but it must not be presented as real KMRL prediction performance.
+
+## 6.2 Proposed Model
+
+**Algorithm:** XGBoost Regressor
+
+### Possible Input Features
+
+- Hour of the day.
+- Day of the week.
+- Month.
+- Previous trip delay.
+- Previous trip running time.
+- Historical average delay.
+- Route direction.
+- Weather information, if reliable data is available.
+- Operational disruption indicators.
+
+### Target
+
+Predicted delay in minutes or seconds.
+
+The final target definition must be established from the available dataset.
+
+## 6.3 Training Process
+
+1. Collect and inspect historical delay data.
+2. Clean and preprocess the data.
+3. Create time-based features.
+4. Create training and testing datasets.
+5. Train the XGBoost model.
+6. Evaluate prediction performance.
+7. Generate delay predictions.
+8. Pass predictions to the scheduling system.
+
+Use a time-based train/test split to avoid data leakage.
+
+## 6.4 Evaluation Metrics
+
+- MAE
+- RMSE
+- R²
+- Actual vs predicted delay chart.
+
+## 6.5 Integration
+
+The proposed integration flow is:
+
+```text
+Historical Data
+      |
+      v
+Data Preprocessing
+      |
+      v
+XGBoost Delay Prediction
+      |
+      v
+Predicted Delay Values
+      |
+      v
+OR-Tools CP-SAT
+      |
+      v
+Updated Train Schedule
+      |
+      v
+SimPy Validation
+```
+
+The predicted delays may be used as scheduling inputs or objective weights, depending on the final model design.
+
+### Deliverables
+
+- Historical delay dataset.
+- Data preprocessing pipeline.
+- XGBoost model.
+- Model evaluation report.
+- Prediction output.
+- Integration with the scheduling system.
+
+---
+
+# Phase 7 — Dashboard and Visualization
+
+**Status: Pending**
+
+## 7.1 Objective
+
+Build a dashboard to display scheduling, simulation, crew allocation, and rescheduling results.
+
+**Technology:** Streamlit
+
+## 7.2 Dashboard Sections
+
+### 1. Overview
+
+Display:
+
+- Total trips.
+- Available rakes.
+- Scheduled trips.
+- Solver status.
+- Validation status.
+- Overall schedule utilization.
+
+### 2. Train Schedule
+
+Display:
+
+- Trip ID.
+- Direction.
+- Departure time.
+- Arrival time.
+- Assigned rake.
+- Trip status.
+
+### 3. Rake Utilization
+
+Display:
+
+- Rake-wise trip assignments.
+- Total operating time.
+- Idle time.
+- Turnaround time.
+- Utilization percentage.
+
+### 4. Simulation Results
+
+Display:
+
+- Delay distribution.
+- Total propagated delay.
+- On-time performance.
+- Maximum delay.
+- Headway violations.
+- Comparison of simulation experiments.
+
+### 5. Crew Schedule
+
+Display:
+
+- Driver assignments.
+- Duty hours.
+- Rest periods.
+- Weekly working days.
+- Driver utilization.
+
+### 6. Rescheduling
+
+Display:
+
+- Original schedule.
+- Disruption details.
+- Updated schedule.
+- Changed assignments.
+- Reason for changes.
+
+### 7. Constraint Validation
+
+Display:
+
+- Constraint name.
+- Description.
+- PASS / FAIL / SKIPPED status.
+- Validation details.
+
+## 7.3 Deliverables
+
+- Streamlit dashboard.
+- Schedule visualization.
+- Rake utilization charts.
+- Simulation KPI charts.
+- Crew allocation view.
+- Rescheduling comparison.
+- Constraint validation report.
+
+---
+
+# 3. Critical Development Order
+
+The main implementation sequence is:
+
+```text
+Phase 0: Project Setup
+        |
+        v
+Phase 1: CP-SAT Train Scheduling
+        |
+        v
+Phase 2: SimPy Operational Simulation
+        |
+        v
+Phase 3: Crew Scheduling
+        |
+        v
+Phase 4: Explainability
+        |
+        v
+Phase 5: Near-Real-Time Rescheduling
+        |
+        v
+Phase 7: Dashboard
+```
+
+Phase 6 (Machine Learning) is optional and can be developed separately once suitable historical delay data is available.
+
+The dashboard can also be developed incrementally alongside the other phases.
+
+---
+
+# 4. Final Expected Project Structure
+
+The following is the intended structure. Existing files should be retained, and new files should be added as their phases are implemented.
+
+```text
+MetroPulse/
+│
+├── data/
+│   ├── raw/
+│   ├── synthetic/
+│   ├── processed/
+│   ├── extract_gtfs_hourly.py
+│   ├── generate_synthetic_v2.py
+│   └── hourly_service.csv
+│
+├── solver/
+│   ├── config.py
+│   ├── models.py
+│   ├── constraints.py
+│   ├── solve.py
+│   ├── validator.py
+│   ├── crew_models.py
+│   ├── crew_constraints.py
+│   ├── crew_solve.py
+│   ├── crew_validator.py
+│   ├── reschedule.py
+│   └── reschedule_validator.py
+│
+├── src/
+│   ├── simulation/
+│   │   ├── __init__.py
+│   │   ├── simpy_runner.py
+│   │   └── kpis.py
+│   │
+│   └── disruption/
+│       ├── __init__.py
+│       └── disruption_handler.py
+│
+├── dashboard/
+│   └── app.py
+│
+├── docs/
+│   ├── phases.md
+│   ├── project-status.md
+│   ├── meeting-log.md
+│   ├── data-provenance.md
+│   └── constraints-v2.md
+│
+├── tests/
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+# 5. Estimated Timeline
+
+These are planning estimates, not confirmed completion dates.
+
+| Phase | Estimated Duration |
+|---|---|
+| Phase 0 | Completed |
+| Phase 1 | Completed |
+| Phase 2 | 1–2 weeks |
+| Phase 3 | 1–2 weeks |
+| Phase 4 | 3–5 days |
+| Phase 5 | 1–2 weeks |
+| Phase 6 | Depends on historical data availability |
+| Phase 7 | 1–2 weeks |
+
+**MVP target:** Phase 1 + Phase 2, approximately 3 weeks of development.
+
+The complete implementation may take approximately 2 months, depending on testing, data availability, and integration complexity.
+
+---
+
+# 6. Current Project Status
+
+As of 08 November 2026:
+
+### Completed
+
+- Project setup.
+- GTFS ingestion and analysis.
+- GTFS validation.
+- Data provenance review.
+- Synthetic rake data generation.
+- CP-SAT train scheduling.
+- Rake allocation.
+- Independent schedule validation.
+- Phase 1 documentation.
+
+### Current Phase 1 Result
+
+- 250 selected trips.
+- 18 configured service rakes.
+- 50.47-minute GTFS median running time.
+- 50-minute integer running time used by solver.
+- 5-minute synthetic turnaround.
+- Solver status: FEASIBLE.
+- Solver wall-clock time: approximately 306 seconds.
+- Objective value: 1,102,800.
+- Optimality gap: 93.40%.
+- Validator: 9 PASS + 1 SKIPPED.
+- Overall validator status: PASS.
+- R8 skipped; R9 and R11 not included in current validation results.
+
+### Next Immediate Task
+
+Start **Phase 2 — Operational Simulation using SimPy**.
+
+The first step is to inspect the existing project structure, generated schedule, rake assignments, and output schema before writing simulation code.
+
+---
+
+# 7. Handoff Prompt for the Next Development Session
+
+Use the following prompt when continuing development:
+
+```text
+We are continuing development of MetroPulse, an AI-driven train
+induction planning and scheduling system for Kochi Metro Rail Limited.
+
+Current project status:
+
+PHASE 1 — COMPLETED
+
+- Static KMRL GTFS 2024–25 is used.
+- The GTFS contains 255 weekday trips.
+- 250 trips are selected within the 06:00–23:00 model window.
+- Median one-way running time is 50.47 minutes.
+- The CP-SAT model uses 50 minutes as its integer running time.
+- Route length is 28.144 km from the KMRL Annual Report 2024–25.
+- Fleet configuration: 25 total rakes, 18 service and 7 maintenance.
+- Turnaround time: 5 minutes (synthetic assumption).
+- Solver status: FEASIBLE.
+- Solver wall-clock time: approximately 306 seconds.
+- Solver time limit: 300 seconds.
+- Objective value: 1,102,800.
+- Optimality gap: 93.40%.
+- 232 consecutive same-rake trip pairs were checked.
+- All 232 satisfy the 5-minute turnaround requirement.
+- Validator: 9 PASS + 1 SKIPPED.
+- Overall validator status: PASS.
+- R8 is skipped because V1 has no stabling assignments.
+- R9 and R11 are not included in the current validation results.
+
+IMPORTANT DATA RULES:
+
+- Do not reintroduce the old DPR-based assumptions.
+- Distinguish verified data from synthetic assumptions.
+- The GTFS feed is static 2024–25 data, not a live 2026 timetable.
+- Do not claim all 18 configured service rakes were used unless
+  confirmed from the generated schedule.
+- Do not describe the validator as 10/10 PASS.
+- Do not claim R9 and R11 passed validation.
+
+DOCUMENTATION TO READ:
+
+1. docs/constraints-v2.md
+2. docs/project-status.md
+3. docs/data-provenance.md
+4. docs/meeting-log.md
+5. docs/phases.md
+
+NEXT TASK:
+
+Start Phase 2 — Operational Simulation using SimPy.
+
+Before writing code:
+
+1. Inspect the existing project folder structure.
+2. Inspect the Phase 1 schedule output.
+3. Inspect the rake assignment format.
+4. Check the existing Python modules and dependencies.
+5. Confirm how trip times and rake assignments are represented.
+6. Identify any missing information required by the simulation.
+
+Then design the simulation implementation.
+
+The simulation must:
+
+- Read the CP-SAT-generated schedule.
+- Replay trips assigned to each rake.
+- Model stochastic departure delays.
+- Model delay propagation between consecutive trips assigned
+  to the same rake.
+- Respect the 5-minute synthetic turnaround time.
+- Use the 50-minute solver running time.
+- Calculate the planned simulation KPIs.
+- Run experiments with standard deviations of 0, 60, 120,
+  and 300 seconds.
+- Save simulation results to the planned output files.
+
+Do not assume file paths or column names without inspecting
+the existing project.
+
+Review the implementation plan before making changes.
+Ask for clarification if essential information is missing.
+```
+
+---
+
+**End of Phase Plan — Version 2.2**
