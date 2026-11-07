@@ -19,32 +19,50 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 1 — DPR-Driven Train Scheduling
+## Phase 1 — Train Scheduling (CP-SAT) ✅ COMPLETE
 
-- [x] Lock spec (`docs/constraints-v2.md`)
-- [x] DPR-sourced `solver/config.py`
-- [x] Clean-slate generator (`data/generate_synthetic_v2.py`)
-- [x] DPR hourly plan (`data/dpr/hourly_service.csv`)
-- [x] `ProblemData` loader (`solver/models.py`)
+### Source of Truth
+- Real data from **GTFS** (2024-25 feed) + **KMRL Annual Report 2024-25** + **news article 2026**
+- DPR values removed (10.715 km, 18.91 min, 408 trips) — replaced with verified sources
+
+### Data pipeline
+- [x] GTFS hourly extraction (`data/extract_gtfs_hourly.py`) → 250 weekday trips, 06:00–23:00
+- [x] GTFS-derived running time: **50.47 min** (median of 412 trips)
+- [x] Route length: **28.144 km** (Annual Report)
+- [x] Synthetic generator (`data/generate_synthetic_v2.py`) → 25 rakes (18 service + 7 maintenance)
+
+### Model
+- [x] Config with verified sources (`solver/config.py`)
+- [x] ProblemData loader (`solver/models.py`)
 - [x] CP-SAT constraints R1–R12 (`solver/constraints.py`)
-- [x] CP-SAT solve pipeline (`solver/solve.py`)
-- [x] Full-day solve: 408 trips, FEASIBLE in ~317s
-- [x] Independent validator (`solver/validator.py`)
-- [x] All 7 validator checks PASS
-- [x] DPR reference labels revised (`[DPR reference — unverified]`)
-- [ ] Optimality gap printout in `solve.py` (Step 3)
-- [ ] 15-rake feasibility test (Step 4)
-- [x] R8/R10/R12 validator checks (Step 5) — 10 of 12 constraints covered (9 PASS + 1 SKIPPED)
+- [x] CP-SAT solve pipeline with optimality gap printout (`solver/solve.py`)
+- [x] Independent validator (`solver/validator.py`) — 10 checks
+
+### Results
+- [x] Full-day solve: **250 trips, FEASIBLE, ~306s**
+- [x] Validator: **9 PASS + 1 SKIPPED, Overall PASS**
+- [x] Optimality gap reported
+- [x] 15-rake feasibility test: **FEASIBLE** (proved traffic spare not required — now folded into 18 service rakes)
+- [x] R8/R10/R12 validator checks added (10 of 12 constraints covered)
+
+### Cleanup
+- [x] Removed DPR hourly CSV (`data/dpr/hourly_service.csv`)
+- [x] GTFS validator module (`src/gtfs_validation.py`) — validates DPR-adjacent values against real GTFS
+- [x] Committed 250-trip schedule for Phase 2
 
 ---
 
-## Phase 2 — SimPy Validation (Next)
+## Phase 2 — SimPy Validation (NEXT)
 
+- [ ] `src/simulation/__init__.py`
 - [ ] `src/simulation/simpy_runner.py`
 - [ ] `src/simulation/kpis.py`
-- [ ] Delay distribution config in `config.py`
+- [ ] Install simpy
+- [ ] Delay distribution: clipped normal (mean -48s pre-clip, std 60s, clipped [0, 300s])
+- [ ] Propagation: Option A (waits for previous trip + 5-min turnaround)
+- [ ] KPIs: propagated delay minutes, share delayed by propagation, on-time % at ±1/±3/±5, headway violations
 - [ ] Scenario sweep: std = 0, 60, 120, 300 s
-- [ ] KPI report (`simulation_kpis.json`)
+- [ ] Outputs: `simulation_kpis.json`, `simulation_timeline.csv`
 
 ---
 
