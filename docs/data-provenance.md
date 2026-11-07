@@ -41,6 +41,22 @@ Optional:
 - GTFS `.txt` files are **excluded from Git** (see `.gitignore`)
 - Source and setup instructions live in `data/raw/README.md`
 - Rationale: feed is static, re-downloadable, and versioned externally by KMRL
+
+## Fleet Sizing — Two Different Numbers
+
+KMRL has TWO valid fleet figures. They are not contradictory; they describe different operational contexts.
+
+| Context | Fleet Total | In Service | Traffic Spares | Maintenance Reserve | Source |
+|---------|------------|-----------|----------------|--------------------|--------|
+| KMRL Phase I (current operations) | 25 | 15 | 3 | 7 | [EXTERNAL — UNVERIFIED] |
+| DPR Phase II (2043/2048 plan) | 18 | 15 | 1 | 2 | [DPR reference — unverified] |
+
+**V2 models the 18-rake Phase-II scenario.** This is what the CP-SAT solver uses.
+
+**The 25-rake Phase-I figure** is real KMRL fleet but represents current operations. It is documented here for context, not used in V1.
+
+If a future phase models current operations, it would use the 25-rake figure.
+
 ## Synthetic Data Calibration
 
 Synthetic operations data (`data/synthetic/`) is calibrated to publicly
@@ -51,9 +67,6 @@ industry norms and mark them as assumptions.
 
 | Field | Value | Source |
 |-------|-------|--------|
-| Fleet size | 25 rakes | KMRL Phase I procurement |
-| Rakes in service | 18 | KMRL operations |
-| Rakes in maintenance | 7 | KMRL operations |
 | Manufacturer | Alstom Metropolis | KMRL rolling stock |
 | Coaches per rake | 3 (DM-TC-DM) | KMRL fleet spec |
 | Driver workforce | 60 | KMRL HR |
@@ -106,3 +119,15 @@ industry norms and mark them as assumptions.
 - `routes.csv`: replaced 3 fake routes with 1 real Blue Line
 - `advertisers.csv`: **deleted**
 - Static constants moved to `solver/config.py`
+
+## GTFS — Role in the Project
+
+GTFS data is ingested and validated in `src/loaders/gtfs_loader.py` and `src/validation/gtfs_checks.py` (from Phase 1 v1). It contains real KMRL operations data: 24 stops, 252 trips, 19 validated checks.
+
+**GTFS is NOT used by V1's CP-SAT scheduler.** The scheduler operates on the DPR hourly plan (future scenario, 408 trips/day), not current GTFS trips (252 trips/day).
+
+GTFS serves two roles in this project:
+1. **Validation** — GTFS-derived running time, turnaround, and headway are compared to DPR-derived values (see `src/gtfs_validation.py`). If within ±10%, the DPR values are validated against real operations.
+2. **Future scenarios** — GTFS can model current-ops baseline alongside DPR scenarios (Phase 5+).
+
+For V1, GTFS is validation-only, not a scheduling input.

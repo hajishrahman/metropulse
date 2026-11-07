@@ -34,7 +34,7 @@ Progress tracker for the project. Update as phases complete.
 - [x] DPR reference labels revised (`[DPR reference — unverified]`)
 - [ ] Optimality gap printout in `solve.py` (Step 3)
 - [ ] 15-rake feasibility test (Step 4)
-- [ ] R8/R10/R12 validator checks (Step 5)
+- [x] R8/R10/R12 validator checks (Step 5) — 10 of 12 constraints covered (9 PASS + 1 SKIPPED)
 
 ---
 

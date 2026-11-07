@@ -42,6 +42,7 @@
 ### Delivered
 
 **Data:**
+- `data/raw/` — GTFS feed (11 tables, 24 stops, 252 trips) `[DPR-adjacent real data]` — used for validation only, not V1 scheduler input
 - `data/dpr/hourly_service.csv` — DPR hourly plan (38 rows)
 - `data/synthetic/rakes.csv` — 18 rakes (15 bare + 1 traffic + 2 maintenance)
 - `data/synthetic/terminals.csv` — 2 terminals, 3-min turnaround
