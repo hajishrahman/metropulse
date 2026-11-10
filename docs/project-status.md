@@ -104,3 +104,23 @@ The FEASIBLE result does not mean the solution is proven optimal.
 - `data/processed/schedule.csv` — generated schedule
 - `data/processed/solution.json` — solver result
 - `data/processed/validation.json` — validation result
+
+## GIVE THIS TO CHAT 
+I am continuing development of MetroPulse, an AI-driven train induction planning and scheduling system for Kochi Metro Rail Limited (KMRL).
+
+I have provided the project documentation, source code, data scripts and latest outputs.
+
+Before suggesting changes or writing code:
+
+1. Read all the provided documentation.
+2. Inspect the existing source code.
+3. Understand the current architecture and implementation.
+4. Understand the completed phases and pending phases.
+5. Check the actual implementation against the documentation.
+6. Do not assume file paths, variable names or data formats.
+7. Do not reintroduce superseded DPR-based assumptions.
+8. Preserve existing working functionality.
+
+Use the provided files as the primary source of truth. If something is missing or inconsistent, identify it instead of guessing.
+
+First, summarize your understanding of the project and its current status. Do not modify any files until I give you the next task.

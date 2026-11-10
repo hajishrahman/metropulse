@@ -63,3 +63,7 @@ data/synthetic/*.csv
 data/processed/*
 !data/processed/.gitkeep
 !data/processed/schedule.csv
+.pytest_tmp/
+
+# Local AI instructions
+AGENTS.md
