@@ -3,8 +3,8 @@
 **Project:** AI-Driven Train Induction Planning and Scheduling System for Kochi Metro Rail Limited (KMRL)  
 **Scheduling Engine:** OR-Tools CP-SAT  
 **Simulation Engine:** SimPy  
-**Version:** 2.2  
-**Last Updated:** 08 November 2026
+**Version:** 2.3  
+**Last Updated:** 11 November 2026
 
 ---
 
@@ -45,8 +45,8 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 |---|---|---|
 | Phase 0 | Project Setup | Completed |
 | Phase 1 | Train Scheduling using CP-SAT | Completed |
-| Phase 2 | Operational Simulation using SimPy | Next |
-| Phase 3 | Crew Scheduling | Pending |
+| Phase 2 | Operational Simulation using SimPy | Completed |
+| Phase 3 | Crew Scheduling | Next |
 | Phase 4 | Explainability and Constraint Analysis | Pending |
 | Phase 5 | Near-Real-Time Rescheduling | Pending |
 | Phase 6 | Machine Learning Delay Prediction | Optional |
@@ -238,7 +238,7 @@ The GTFS extraction step requires the original GTFS files in `data/raw/`. Skip i
 
 # Phase 2 — Operational Simulation using SimPy
 
-**Status: Next**
+**Status: Completed**
 
 ## 2.1 Objective
 
@@ -399,8 +399,8 @@ pip install simpy
 
 ### Run
 
-```powershell
-python -m src.simulation.simpy_runner
+```
+python -m src.simulation.experiments
 ```
 
 ### Deliverables
@@ -410,6 +410,67 @@ python -m src.simulation.simpy_runner
 - KPI calculation module.
 - Simulation results for all four experiments.
 - Comparison of timetable performance under different delay conditions.
+
+## 2.7 Phase 2 Results
+
+### Files delivered
+
+| File | Purpose |
+|---|---|
+| `src/simulation/__init__.py` | Package marker |
+| `src/simulation/schedule_loader.py` | Strict CSV loader with parsing guards and count cross-check |
+| `src/simulation/reference.py` | Closed-form recurrence; correctness baseline for SimPy |
+| `src/simulation/simpy_runner.py` | SimPy per-rake process |
+| `src/simulation/kpis.py` | Pure KPI functions (no SimPy import) |
+| `src/simulation/experiments.py` | E1–E4 and Monte Carlo runner |
+| `src/simulation/preflight.py` | Read-only continuity / slack / headway analysis |
+| `src/simulation/check_terminals.py` | Read-only terminal check helper |
+
+### Tests
+
+| File | Count |
+|---|---:|
+| `tests/test_reference.py` | 8 |
+| `tests/test_schedule_loader.py` | 24 |
+| `tests/test_simpy_matches_reference.py` | 9 |
+| `tests/test_kpis.py` | 14 |
+| **Total** | **55** |
+
+All 55 pass. The parity test asserts that SimPy output equals the closed-form reference bit-for-bit across all four std values.
+
+### Headline results (seed 42)
+
+| Experiment | std (s) | On-time ±5 | Propagation % | Total propagated (min) | Headway violations (actual) |
+|---|---:|---:|---:|---:|---:|
+| E1 | 0 | 100.00% | 0.00% | 0.0 | 0 |
+| E2 | 60 | 100.00% | 3.88% | 2.4 | 12 |
+| E3 | 120 | 100.00% | 7.76% | 19.3 | 21 |
+| E4 | 300 | 100.00% | 11.64% | 63.2 | 30 |
+
+### 100-seed Monte Carlo aggregate
+
+| Experiment | On-time ±5 (mean) | On-time ±3 (mean) | On-time ±1 (mean) | Propagation % (mean; p5–p95) |
+|---|---:|---:|---:|---:|
+| E1 | 100.00% | 100.00% | 100.00% | 0.00% (0.00–0.00) |
+| E2 | 100.00% | 100.00% | 95.26% | 6.34% (4.31–8.62) |
+| E3 | 100.00% | 96.15% | 76.59% | 9.81% (6.90–12.07) |
+| E4 | 100.00% | 71.57% | 55.81% | 13.12% (10.34–15.95) |
+
+Scheduled same-direction headway violations = **0** at every std (R2a holds across 100 seeds). Actual-gap violations rise with std as departures bunch under delay.
+
+### Key findings
+
+1. **±5 on-time is structurally protected under this model.** Own delay is capped at 300 s (= 5 min inclusive), and the measured slack distribution keeps cumulative delay below the cap. **This is a model property, not an operational guarantee.** Scenarios with a higher delay cap or tighter slack would show ±5 degradation. Do not report "KMRL is 100% reliable at ±5."
+2. **±3 and ±1 are where delay impact appears.** At E4: 71.57% and 55.81% on-time respectively. The headline seed sits slightly below the 100-seed mean — treat the mean as the expected value.
+3. **Propagation % rises non-linearly with std** (0 → 6.3 → 9.8 → 13.1 mean). Total propagated delay rises faster (0 → 8.6 → 31.1 → 81.4 min mean) because more trips break slack at high std.
+4. **Scheduled headway is clean; actual headway degrades.** R2a holds in the schedule (0 scheduled violations). Actual-gap violations grow from 0 (E1) to 33.3 mean (E4) as delays reorder departures.
+5. **Max single propagated delay saturates at 300 s at E4** (the own-delay cap). Some trips carry the full cap.
+
+### Known limitations
+
+- **Terminal continuity is not verifiable from Phase 1 outputs.** The schedule stores internal trip IDs (`Txxxx`) with no mapping back to GTFS trip IDs. 127 of 232 pairs show non-alternating UP/DOWN direction. Cannot distinguish real modeling gap from labeling artifact. Phase 2 models delay flow, not physical route movement. Deadhead is not modeled (R11 not configured). Deferred to Phase 4/5 where terminal awareness matters.
+- **Delay model is `[SYNTHETIC]`.** All numbers describe model behaviour under a synthetic delay assumption, not real KMRL performance.
+- **R9 and R11 remain outside Phase 1 validator results.** Unchanged by Phase 2.
 
 ---
 
@@ -949,7 +1010,7 @@ The complete implementation may take approximately 2 months, depending on testin
 
 # 6. Current Project Status
 
-As of 08 November 2026:
+As of 11 November 2026:
 
 ### Completed
 
@@ -962,11 +1023,14 @@ As of 08 November 2026:
 - Rake allocation.
 - Independent schedule validation.
 - Phase 1 documentation.
+- SimPy operational simulation (Phase 2).
+- Simulation KPIs, Monte Carlo, and outputs.
+- 55 tests passing across four test files.
 
-### Current Phase 1 Result
+### Phase 1 Result (unchanged)
 
 - 250 selected trips.
-- 18 configured service rakes.
+- 18 configured service rakes (all 18 used — confirmed from `schedule.csv`).
 - 50.47-minute GTFS median running time.
 - 50-minute integer running time used by solver.
 - 5-minute synthetic turnaround.
@@ -978,11 +1042,21 @@ As of 08 November 2026:
 - Overall validator status: PASS.
 - R8 skipped; R9 and R11 not included in current validation results.
 
+### Phase 2 Result
+
+- 250 trips, 18 rakes, 232 eligible trips.
+- 4 experiments (std 0/60/120/300 s) + 100-seed Monte Carlo per std.
+- Headline (seed 42): ±5 on-time 100% throughout; propagation 0 → 3.88 → 7.76 → 11.64%.
+- 100-seed mean at E4: propagation 13.12% (p5–p95: 10.3–15.9%); ±3 on-time 71.57%; ±1 on-time 55.81%.
+- Scheduled headway violations 0 at all stds; actual-gap violations rise 0 → 33.3 mean.
+- ±5 on-time structurally protected under the model — model property, not operational guarantee.
+- Terminal continuity not verifiable from Phase 1 outputs; documented limitation.
+
 ### Next Immediate Task
 
-Start **Phase 2 — Operational Simulation using SimPy**.
+Start **Phase 3 — Crew Scheduling**.
 
-The first step is to inspect the existing project structure, generated schedule, rake assignments, and output schema before writing simulation code.
+The first step is to design the synthetic driver dataset and the C1–C6 crew constraints against the fixed Phase 1 schedule.
 
 ---
 
@@ -1074,4 +1148,4 @@ Ask for clarification if essential information is missing.
 
 ---
 
-**End of Phase Plan — Version 2.2**
+**End of Phase Plan — Version 2.3**

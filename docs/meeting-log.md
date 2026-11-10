@@ -184,7 +184,48 @@
 - No DPR-based values remain
 - GTFS feed is static and represents the 2024–25 data vintage, not a live 2026 timetable.
 
-**Next Meeting:** Phase 2 kickoff
+
+---
+
+## Meeting 9 — 2026-11-11
+**Attendees:** [Names]
+**Duration:** ~90 min (across two sessions)
+**Agenda:** Phase 2 — SimPy operational simulation complete
+
+**Decisions:**
+- Delay model: clipped normal, pre-clip mean **−48 s**, std swept **0 / 60 / 120 / 300 s**, clip **[0, 300 s]** `[SYNTHETIC]`
+- Rounding rule: **clip-then-round** (Python `round`, half-to-even). One shared function used in experiments and tests.
+- Propagation: Option A — next trip waits for previous arrival + 5-min turnaround
+- Common random numbers: one `z` per trip, drawn once with seed 42 in sorted `trip_id` order, shared across all stds
+- Monte Carlo: 100 seeds (42–141), same seed list for every std. Report mean + p5–p95.
+- On-time metric: dual denominator — 250 (headline, operational) and 232 eligible (secondary, isolates propagation). One-sided: "late by at most N", since delays are never negative.
+- Headway violations: same-direction gaps strictly < 120 s. Report actual-gap violations separately from scheduled-gap violations.
+- Run entry point: `python -m src.simulation.experiments` (not `simpy_runner.py` as originally planned)
+- Pre-flight limitation accepted: terminal continuity cannot be verified from Phase 1 outputs (no GTFS↔`Txxxx` map). Phase 2 models delay flow, not physical route movement. Documented as a known limitation.
+
+**Action Items:**
+- [x] `src/simulation/schedule_loader.py` — strict loader with parsing guards, count cross-check
+- [x] `src/simulation/reference.py` — closed-form recurrence (correctness baseline)
+- [x] `src/simulation/simpy_runner.py` — SimPy per-rake process, output matches reference bit-for-bit
+- [x] `src/simulation/kpis.py` — pure KPI functions, no SimPy import
+- [x] `src/simulation/experiments.py` — E1–E4 + Monte Carlo runner
+- [x] `src/simulation/preflight.py` — read-only continuity/slack/headway analysis
+- [x] 55 tests passing across 4 test files
+- [x] Outputs written: `data/processed/simulation_kpis.json`, `simulation_timeline.csv`
+- [ ] Next: Phase 3 — Crew Scheduling
+
+**Notes:**
+- Headline (seed 42) results: E1 0% propagation; E2 3.88%; E3 7.76%; E4 11.64%. Total propagated delay at E4 = 63.2 min.
+- 100-seed Monte Carlo at E4: propagation mean **13.12%** (p5–p95: 10.3–15.9%). Seed 42 sits below the mean — treat the mean as the expected value.
+- **±5 on-time = 100% across all experiments and all 100 seeds.** Structural, not lucky: own delay is capped at 300 s, ±5 is inclusive, and measured slack keeps cumulative delay below the cap. **Model property, not operational guarantee.** Scenarios with a higher delay cap or tighter slack would show ±5 degradation.
+- Scheduled headway violations = 0 at every std (R2a holds). Actual-gap violations rise with std (E1: 0 → E4: 33.3 mean), reflecting departure bunching under delay.
+- R9 and R11 remain outside the Phase 1 validator results — unchanged from Meeting 8. Phase 2 does not touch R1–R12.
+- Terminal continuity: 127 of 232 pairs broken by direction alternation. Cannot distinguish real gap from labeling artifact — no GTFS↔`Txxxx` map exists in Phase 1 outputs. Deferred to Phase 4/5 where terminal awareness matters.
+- `solver/` stays at project root (Phase 1 legacy); `src/simulation/` sits under `src/` as planned. Asymmetry is historical, harmless, noted here.
+- All Phase 2 work is committed and pushed to GitHub.
+
+**Next Meeting:** Phase 3 kickoff
+
 
 ---
 

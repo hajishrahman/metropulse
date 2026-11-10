@@ -54,16 +54,50 @@ Progress tracker for the project. Update as phases complete.
 
 ## Phase 2 — SimPy Validation (NEXT)
 
-- [ ] `src/simulation/__init__.py`
-- [ ] `src/simulation/simpy_runner.py`
-- [ ] `src/simulation/kpis.py`
-- [ ] Install simpy
-- [ ] Delay distribution: clipped normal (mean -48s pre-clip, std 60s, clipped [0, 300s])
-- [ ] Propagation: Option A (waits for previous trip + 5-min turnaround)
-- [ ] KPIs: propagated delay minutes, share delayed by propagation, on-time % at ±1/±3/±5, headway violations
-- [ ] Scenario sweep: std = 0, 60, 120, 300 s
-- [ ] Outputs: `simulation_kpis.json`, `simulation_timeline.csv`
+## Phase 2 — SimPy Validation ✅ COMPLETE
 
+### Pre-flight
+- [x] Schedule inspected: 250 trips, 18 rakes, 232 eligible trips
+- [x] Preflight check (`src/simulation/preflight.py`) — continuity, slack, headways
+- [x] Known limitation: terminal continuity not verifiable (no GTFS↔`Txxxx` map); Phase 2 models delay flow, not physical route movement
+
+### Code
+- [x] `src/simulation/__init__.py`
+- [x] `src/simulation/schedule_loader.py` — strict CSV loader (parsing guards, count cross-check)
+- [x] `src/simulation/reference.py` — closed-form recurrence (correctness baseline)
+- [x] `src/simulation/simpy_runner.py` — SimPy per-rake process
+- [x] `src/simulation/kpis.py` — pure KPI functions (no SimPy import)
+- [x] `src/simulation/experiments.py` — E1–E4 + Monte Carlo runner
+- [x] Install simpy (4.1.1)
+
+### Model
+- [x] Delay distribution: clipped normal (mean −48s pre-clip, std swept, clip [0, 300s])
+- [x] Rounding rule: clip-then-round (documented, one shared function)
+- [x] Propagation: Option A (wait for previous + 5-min turnaround)
+- [x] Common random numbers: one `z` per trip, seed 42, same draws across stds
+- [x] Monte Carlo: 100 seeds (42–141), mean + p5–p95 band
+- [x] KPIs: on-time % at ±1/±3/±5 (dual denominator 250 / 232), propagation %, total propagated delay, headway violations (actual + scheduled)
+
+### Tests
+- [x] `tests/test_reference.py` — 8 tests
+- [x] `tests/test_schedule_loader.py` — 24 tests
+- [x] `tests/test_simpy_matches_reference.py` — 9 tests (parity proof, all 4 stds)
+- [x] `tests/test_kpis.py` — 14 tests
+- [x] **Total: 55 tests passing**
+
+### Results (headline seed 42)
+- [x] E1: 100% on-time, 0% propagation
+- [x] E2: 100% on-time ±5, 3.88% propagation, 2.4 min total propagated
+- [x] E3: 100% on-time ±5, 7.76% propagation, 19.3 min total propagated
+- [x] E4: 100% on-time ±5, 11.64% propagation, 63.2 min total propagated
+- [x] 100-seed Monte Carlo: E4 mean propagation 13.12% (p5–p95: 10.3–15.9%)
+- [x] Scheduled headway violations = 0 at every std (R2a holds)
+- [x] ±5 on-time structurally protected under the model (own-delay cap + slack); **not** an operational guarantee
+
+### Outputs
+- [x] `data/processed/simulation_kpis.json` (headline + 100-seed aggregate + metadata)
+- [x] `data/processed/simulation_timeline.csv` (1000 rows: 4 experiments × 250 trips)
+- [x] All delay values tagged `[SYNTHETIC]` in metadata
 ---
 
 ## Phase 3 — Crew Scheduling

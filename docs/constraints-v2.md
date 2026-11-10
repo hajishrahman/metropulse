@@ -361,7 +361,7 @@ Independent of CP-SAT's own status. Every hard constraint is rechecked from the 
 | A — Baseline (current GTFS ops) | **V1 (current)** | Feasible 250-trip schedule |
 | B — Peak-stress | Planned | Higher hourly demand |
 | C — Maintenance-stress | Planned | More rakes in maintenance |
-| D — Delay stress | Planned | SimPy with high delay |
+| D — Delay stress | **Delivered (Phase 2)** | SimPy delay sweep (std 0/60/120/300s) |
 
 ---
 
