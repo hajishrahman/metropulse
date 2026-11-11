@@ -1,16 +1,14 @@
-
 """
-MetroPulse solver — problem data loader.
+MetroPulse problem data loader.
 
-Loads GTFS hourly service and synthetic scenario data into a single
-ProblemData object. Reads from:
-    data/hourly_service.csv
-    data/synthetic/rakes.csv
+Reads:
+    data/trips_all.csv               (solver input — 232 full + 18 partial = 250 trips)
+    data/synthetic/rakes.csv         (fleet)
     data/synthetic/terminals.csv
     data/synthetic/maintenance.csv
     data/synthetic/depot.csv
 
-Spec: docs/constraints-v2.md
+hourly_service.csv is kept on disk for reconciliation only, not loaded here.
 """
 from __future__ import annotations
 
@@ -21,141 +19,99 @@ from typing import Optional
 import pandas as pd
 
 
-# Default root — overridable for testing
 DEFAULT_ROOT = Path(__file__).parent.parent / "data"
 
 
 def _read(path: Path, **kwargs) -> pd.DataFrame:
-    """Read CSV as UTF-8; fall back to latin-1 for legacy files."""
     try:
         return pd.read_csv(path, encoding="utf-8", **kwargs)
     except UnicodeDecodeError:
         return pd.read_csv(path, encoding="latin-1", **kwargs)
 
 
+def _time_to_sec(t: str) -> int:
+    try:
+        h, m, s = (int(part) for part in t.split(":"))
+    except (AttributeError, ValueError) as exc:
+        raise ValueError(f"Invalid GTFS time: {t!r}") from exc
+    if h < 0 or not 0 <= m < 60 or not 0 <= s < 60:
+        raise ValueError(f"Invalid GTFS time: {t!r}")
+    return h * 3600 + m * 60 + s
+
+
 @dataclass
 class ProblemData:
-    """All inputs required by the CP-SAT model."""
-
-    hourly_service: pd.DataFrame
+    trips: pd.DataFrame
     rakes: pd.DataFrame
     terminals: pd.DataFrame
     maintenance: pd.DataFrame
     depot: pd.DataFrame
-    scenario: str = "DPR_2043_2048"
-
-    # -----------------------------------------------------------------------
-    # Convenience accessors
-    # -----------------------------------------------------------------------
-    @property
-    def num_hours(self) -> int:
-        """Number of hourly periods."""
-        return len(self.hourly_service)
+    scenario: str = "V1_baseline_250_merged"
 
     @property
-    def total_required_departures(self) -> int:
-        """Total UP + DOWN departures across all hours."""
-        return int(self.hourly_service["total_trips"].sum())
+    def num_trips(self) -> int:
+        return len(self.trips)
 
     @property
     def service_rakes(self) -> pd.DataFrame:
-        """Rakes with status='service' (available for trips)."""
         return self.rakes[self.rakes["status"] == "service"]
 
     @property
-    def standby_rakes(self) -> pd.DataFrame:
-        """Rakes with status='standby' (reserved for disruptions)."""
-        return self.rakes[self.rakes["status"] == "standby"]
-
-    @property
     def maintenance_rakes(self) -> pd.DataFrame:
-        """Rakes with status='maintenance' (under maintenance)."""
         return self.rakes[self.rakes["status"] == "maintenance"]
 
-    # Backwards compatibility alias
-    @property
-    def bare_rakes(self) -> pd.DataFrame:
-        """DEPRECATED: use service_rakes."""
-        return self.service_rakes
-
-    # -----------------------------------------------------------------------
-    # Loading
-    # -----------------------------------------------------------------------
     @classmethod
-    def load(
-        cls,
-        root: Optional[Path] = None,
-        scenario: str = "DPR_2043_2048",
-    ) -> "ProblemData":
+    def load(cls, root: Optional[Path] = None,
+             scenario: str = "V1_baseline_250_merged") -> "ProblemData":
         base = Path(root) if root else DEFAULT_ROOT
-        synth_dir = base / "synthetic"
+        synth = base / "synthetic"
 
         files = {
-            "hourly_service": base / "hourly_service.csv",
-            "rakes": synth_dir / "rakes.csv",
-            "terminals": synth_dir / "terminals.csv",
-            "maintenance": synth_dir / "maintenance.csv",
-            "depot": synth_dir / "depot.csv",
+            "trips": base / "trips_all.csv",
+            "rakes": synth / "rakes.csv",
+            "terminals": synth / "terminals.csv",
+            "maintenance": synth / "maintenance.csv",
+            "depot": synth / "depot.csv",
         }
 
         missing = [str(p) for p in files.values() if not p.exists()]
         if missing:
             raise FileNotFoundError(
                 "Missing data files:\n  - " + "\n  - ".join(missing)
-                + "\n\nRun: python data/generate_synthetic_v2.py"
             )
 
-        hourly_service = _read(files["hourly_service"])
-        rakes = _read(files["rakes"])
-        terminals = _read(files["terminals"])
-        maintenance = _read(files["maintenance"])
-        depot = _read(files["depot"], keep_default_na=False)
+        trips = _read(files["trips"])
+        missing_columns = {"trip_id", "departure_time", "arrival_time"} - set(trips.columns)
+        if missing_columns:
+            raise ValueError(f"trips_all.csv missing columns: {sorted(missing_columns)}")
+        if trips["trip_id"].isna().any() or trips["trip_id"].eq("").any():
+            raise ValueError("trips_all.csv contains an empty trip_id")
+        if trips["trip_id"].duplicated().any():
+            raise ValueError("trips_all.csv contains duplicate trip_id values")
+
+        # Precompute seconds for convenience
+        trips["dep_sec"] = trips["departure_time"].apply(_time_to_sec)
+        trips["arr_sec"] = trips["arrival_time"].apply(_time_to_sec)
+        if (trips["arr_sec"] <= trips["dep_sec"]).any():
+            raise ValueError("trips_all.csv contains non-positive trip durations")
 
         return cls(
-            hourly_service=hourly_service,
-            rakes=rakes,
-            terminals=terminals,
-            maintenance=maintenance,
-            depot=depot,
+            trips=trips,
+            rakes=_read(files["rakes"]),
+            terminals=_read(files["terminals"]),
+            maintenance=_read(files["maintenance"]),
+            depot=_read(files["depot"], keep_default_na=False),
             scenario=scenario,
         )
 
-    # -----------------------------------------------------------------------
-    # Summary
-    # -----------------------------------------------------------------------
     def summary(self) -> str:
         return (
-            f"Scenario:           {self.scenario}\n"
-            f"Hours:              {self.num_hours}\n"
-            f"Total departures:   {self.total_required_departures} "
-            f"(UP+DOWN)\n"
-            f"Rakes (total):      {len(self.rakes)} "
+            f"Scenario:        {self.scenario}\n"
+            f"Trips:           {self.num_trips}\n"
+            f"Rakes total:     {len(self.rakes)} "
             f"({len(self.service_rakes)} service + "
-            f"{len(self.standby_rakes)} standby + "
             f"{len(self.maintenance_rakes)} maintenance)\n"
-            f"Terminals:          {len(self.terminals)}\n"
-            f"Maintenance blocks: {len(self.maintenance)}\n"
-            f"Depot locations:    {len(self.depot)}"
+            f"Terminals:       {len(self.terminals)}\n"
+            f"Maintenance:     {len(self.maintenance)}\n"
+            f"Depot:           {len(self.depot)}"
         )
-
-
-# ---------------------------------------------------------------------------
-# CLI test
-# ---------------------------------------------------------------------------
-if __name__ == "__main__":
-    print("Loading ProblemData from data/...\n")
-    data = ProblemData.load()
-    print("=== Summary ===")
-    print(data.summary())
-
-    print("\n=== Hourly service (first 5 rows) ===")
-    print(data.hourly_service.head().to_string(index=False))
-
-    print("\n=== Rakes (first 5 rows) ===")
-    print(data.rakes.head().to_string(index=False))
-
-    print("\n=== Terminals ===")
-    print(data.terminals.to_string(index=False))
-
-    print("\n=== Depot ===")
-    print(data.depot.to_string(index=False))

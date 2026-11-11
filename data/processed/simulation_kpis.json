@@ -1,0 +1,589 @@
+{
+  "metadata": {
+    "generated_at_utc": "2026-11-10T20:17:50.305679+00:00",
+    "schedule_file": "data/processed/schedule.csv",
+    "trips_total": 250,
+    "rakes": 18,
+    "eligible_trips": 232,
+    "running_time_sec": 3000,
+    "turnaround_sec": 300,
+    "delay_model": {
+      "type": "clipped_normal",
+      "preclip_mean_sec": -48.0,
+      "std_sweep_sec": [
+        0.0,
+        60.0,
+        120.0,
+        300.0
+      ],
+      "clip_min_sec": 0.0,
+      "clip_max_sec": 300.0,
+      "rounding_rule": "clip-then-round (Python round, half-to-even)"
+    },
+    "experiments": [
+      "E1",
+      "E2",
+      "E3",
+      "E4"
+    ],
+    "n_seeds_monte_carlo": 100,
+    "seed_list": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141
+    ],
+    "headline_seed": 42,
+    "headway_threshold_sec": 120,
+    "on_time_tolerances_sec": [
+      300,
+      180,
+      60
+    ],
+    "provenance_note": "All delay values are [SYNTHETIC]. Schedule is from synthetic fleet assumptions. Terminal continuity and deadhead are not verified (constraints-v2 R11 not configured). Results describe model behaviour, not real KMRL prediction."
+  },
+  "headline_seed_run": {
+    "E1": {
+      "on_time_5min": {
+        "tolerance_sec": 300,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_3min": {
+        "tolerance_sec": 180,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_1min": {
+        "tolerance_sec": 60,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "propagation": {
+        "trips_with_propagation": 0,
+        "trips_eligible": 232,
+        "trips_total": 250,
+        "propagation_pct": 0.0
+      },
+      "total_propagated_delay": {
+        "total_propagated_delay_sec": 0,
+        "total_propagated_delay_min": 0.0,
+        "max_single_propagated_delay_sec": 0,
+        "max_single_propagated_delay_min": 0.0
+      },
+      "headway": {
+        "threshold_sec": 120,
+        "actual_violations": 0,
+        "actual_min_gap_sec": 120,
+        "scheduled_violations": 0,
+        "scheduled_min_gap_sec": 120
+      }
+    },
+    "E2": {
+      "on_time_5min": {
+        "tolerance_sec": 300,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_3min": {
+        "tolerance_sec": 180,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_1min": {
+        "tolerance_sec": 60,
+        "on_time_250_pct": 96.4,
+        "on_time_250_count": 241,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 96.12,
+        "on_time_232_eligible_count": 223,
+        "trips_eligible": 232
+      },
+      "propagation": {
+        "trips_with_propagation": 9,
+        "trips_eligible": 232,
+        "trips_total": 250,
+        "propagation_pct": 3.88
+      },
+      "total_propagated_delay": {
+        "total_propagated_delay_sec": 145,
+        "total_propagated_delay_min": 2.4,
+        "max_single_propagated_delay_sec": 51,
+        "max_single_propagated_delay_min": 0.8
+      },
+      "headway": {
+        "threshold_sec": 120,
+        "actual_violations": 12,
+        "actual_min_gap_sec": 40,
+        "scheduled_violations": 0,
+        "scheduled_min_gap_sec": 120
+      }
+    },
+    "E3": {
+      "on_time_5min": {
+        "tolerance_sec": 300,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_3min": {
+        "tolerance_sec": 180,
+        "on_time_250_pct": 97.2,
+        "on_time_250_count": 243,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 96.98,
+        "on_time_232_eligible_count": 225,
+        "trips_eligible": 232
+      },
+      "on_time_1min": {
+        "tolerance_sec": 60,
+        "on_time_250_pct": 83.2,
+        "on_time_250_count": 208,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 82.76,
+        "on_time_232_eligible_count": 192,
+        "trips_eligible": 232
+      },
+      "propagation": {
+        "trips_with_propagation": 18,
+        "trips_eligible": 232,
+        "trips_total": 250,
+        "propagation_pct": 7.76
+      },
+      "total_propagated_delay": {
+        "total_propagated_delay_sec": 1157,
+        "total_propagated_delay_min": 19.3,
+        "max_single_propagated_delay_sec": 180,
+        "max_single_propagated_delay_min": 3.0
+      },
+      "headway": {
+        "threshold_sec": 120,
+        "actual_violations": 21,
+        "actual_min_gap_sec": 12,
+        "scheduled_violations": 0,
+        "scheduled_min_gap_sec": 120
+      }
+    },
+    "E4": {
+      "on_time_5min": {
+        "tolerance_sec": 300,
+        "on_time_250_pct": 100.0,
+        "on_time_250_count": 250,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 100.0,
+        "on_time_232_eligible_count": 232,
+        "trips_eligible": 232
+      },
+      "on_time_3min": {
+        "tolerance_sec": 180,
+        "on_time_250_pct": 78.8,
+        "on_time_250_count": 197,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 78.88,
+        "on_time_232_eligible_count": 183,
+        "trips_eligible": 232
+      },
+      "on_time_1min": {
+        "tolerance_sec": 60,
+        "on_time_250_pct": 61.6,
+        "on_time_250_count": 154,
+        "trips_total": 250,
+        "on_time_232_eligible_pct": 61.64,
+        "on_time_232_eligible_count": 143,
+        "trips_eligible": 232
+      },
+      "propagation": {
+        "trips_with_propagation": 27,
+        "trips_eligible": 232,
+        "trips_total": 250,
+        "propagation_pct": 11.64
+      },
+      "total_propagated_delay": {
+        "total_propagated_delay_sec": 3793,
+        "total_propagated_delay_min": 63.2,
+        "max_single_propagated_delay_sec": 300,
+        "max_single_propagated_delay_min": 5.0
+      },
+      "headway": {
+        "threshold_sec": 120,
+        "actual_violations": 30,
+        "actual_min_gap_sec": 0,
+        "scheduled_violations": 0,
+        "scheduled_min_gap_sec": 120
+      }
+    }
+  },
+  "monte_carlo_aggregate": {
+    "E1": {
+      "n_seeds": 100,
+      "on_time_5min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_5min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_1min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_1min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "propagation_pct": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      },
+      "total_propagated_delay_sec": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      },
+      "total_propagated_delay_min": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      },
+      "max_single_propagated_delay_sec": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      },
+      "headway_actual_violations": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      },
+      "headway_scheduled_violations": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      }
+    },
+    "E2": {
+      "n_seeds": 100,
+      "on_time_5min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_5min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_1min_250_pct": {
+        "mean": 95.256,
+        "p5": 91.98,
+        "p95": 97.62
+      },
+      "on_time_1min_232_pct": {
+        "mean": 95.0899,
+        "p5": 91.3585,
+        "p95": 97.84
+      },
+      "propagation_pct": {
+        "mean": 6.341,
+        "p5": 4.31,
+        "p95": 8.62
+      },
+      "total_propagated_delay_sec": {
+        "mean": 518.5,
+        "p5": 252.25,
+        "p95": 822.6
+      },
+      "total_propagated_delay_min": {
+        "mean": 8.643,
+        "p5": 4.19,
+        "p95": 13.725
+      },
+      "max_single_propagated_delay_sec": {
+        "mean": 82.53,
+        "p5": 46.95,
+        "p95": 125.15
+      },
+      "headway_actual_violations": {
+        "mean": 15.39,
+        "p5": 10.0,
+        "p95": 21.0
+      },
+      "headway_scheduled_violations": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      }
+    },
+    "E3": {
+      "n_seeds": 100,
+      "on_time_5min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_5min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_250_pct": {
+        "mean": 96.152,
+        "p5": 93.6,
+        "p95": 98.8
+      },
+      "on_time_3min_232_pct": {
+        "mean": 96.0126,
+        "p5": 93.1,
+        "p95": 98.71
+      },
+      "on_time_1min_250_pct": {
+        "mean": 76.588,
+        "p5": 72.36,
+        "p95": 81.2
+      },
+      "on_time_1min_232_pct": {
+        "mean": 76.2757,
+        "p5": 71.5285,
+        "p95": 81.052
+      },
+      "propagation_pct": {
+        "mean": 9.8056,
+        "p5": 6.9,
+        "p95": 12.07
+      },
+      "total_propagated_delay_sec": {
+        "mean": 1865.98,
+        "p5": 1163.65,
+        "p95": 2580.8
+      },
+      "total_propagated_delay_min": {
+        "mean": 31.095,
+        "p5": 19.395,
+        "p95": 43.015
+      },
+      "max_single_propagated_delay_sec": {
+        "mean": 212.47,
+        "p5": 152.45,
+        "p95": 299.05
+      },
+      "headway_actual_violations": {
+        "mean": 25.87,
+        "p5": 18.0,
+        "p95": 32.05
+      },
+      "headway_scheduled_violations": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      }
+    },
+    "E4": {
+      "n_seeds": 100,
+      "on_time_5min_250_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_5min_232_pct": {
+        "mean": 100.0,
+        "p5": 100.0,
+        "p95": 100.0
+      },
+      "on_time_3min_250_pct": {
+        "mean": 71.568,
+        "p5": 65.6,
+        "p95": 75.66
+      },
+      "on_time_3min_232_pct": {
+        "mean": 71.1468,
+        "p5": 65.09,
+        "p95": 75.903
+      },
+      "on_time_1min_250_pct": {
+        "mean": 55.812,
+        "p5": 50.78,
+        "p95": 61.6
+      },
+      "on_time_1min_232_pct": {
+        "mean": 55.2893,
+        "p5": 50.817,
+        "p95": 61.6615
+      },
+      "propagation_pct": {
+        "mean": 13.1249,
+        "p5": 10.34,
+        "p95": 15.95
+      },
+      "total_propagated_delay_sec": {
+        "mean": 4885.95,
+        "p5": 3710.55,
+        "p95": 5885.8
+      },
+      "total_propagated_delay_min": {
+        "mean": 81.43,
+        "p5": 61.89,
+        "p95": 98.13
+      },
+      "max_single_propagated_delay_sec": {
+        "mean": 299.93,
+        "p5": 300.0,
+        "p95": 300.0
+      },
+      "headway_actual_violations": {
+        "mean": 33.3,
+        "p5": 24.95,
+        "p95": 42.0
+      },
+      "headway_scheduled_violations": {
+        "mean": 0.0,
+        "p5": 0.0,
+        "p95": 0.0
+      }
+    }
+  }
+}

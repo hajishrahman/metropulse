@@ -88,13 +88,15 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 
 # Phase 1 — Train Scheduling using CP-SAT
 
-**Status: Completed**
+**Status: Completed (rebuilt on real GTFS trip records, 2026-11-12)**
 
 ## 1.1 Objective
 
 Generate a feasible daily train schedule using the KMRL GTFS timetable and available rake information.
 
 The scheduler assigns trips to available rakes while satisfying the configured operational constraints.
+
+**Revision note (2026-11-12):** Phase 1 was rebuilt on **real GTFS trip records**, not hourly counts and not synthetic `T0000` trips. The earlier result (FEASIBLE, 306 s, 93.4% gap on 250 synthetic trips) is superseded.
 
 ## 1.2 Data Configuration
 
@@ -104,16 +106,17 @@ The scheduler assigns trips to available rakes while satisfying the configured o
 |---|---:|
 | GTFS feed validity | 12 Aug 2024 – 31 Dec 2025 |
 | Weekday trips in GTFS | 255 |
-| Trips selected for the model | 250 |
-| Operating window | 06:00–23:00 |
-| Hourly buckets | 17 |
-| Median one-way running time | 50.47 minutes |
-| Integer running time used by solver | 50 minutes |
+| Full-route trips (ALVA ↔ TPHT) | 232 |
+| Partial trips (Muttom ↔ terminals) | 18 |
+| Total trips used by solver | 250 |
+| Operating window | 06:00 ≤ departure < 23:00 |
+| Per-trip running time | Real GTFS duration per trip |
+| Median one-way running time (summary only) | 50.47 min |
 | Route length | 28.144 km |
 
-Five GTFS trips were excluded because their departures fall outside the selected 06:00–23:00 model window.
+Of 255 weekday trips in GTFS, **5 depart outside the model window** (`WK_253`, `WK_4`, `WK_256`, `WK_12`, `WK_18`) and are excluded by policy. The remaining **250 trips** are split into 232 full-route and 18 partial trips. **232 + 18 = 250.**
 
-The 250 trips represent the selected model trips, not the total number of weekday trips in GTFS.
+The **solver uses each trip's own GTFS duration**. The 50.47-minute median is a summary statistic only, not a model input.
 
 ### Fleet Data
 
@@ -123,88 +126,105 @@ The 250 trips represent the selected model trips, not the total number of weekda
 | Service rakes | 18 |
 | Maintenance rakes | 7 |
 | Separate standby rakes | 0 |
-| Turnaround time | 5 minutes |
+| Terminal turnaround | 5 min `[SYNTHETIC]` |
+| Terminal ↔ terminal deadhead | 15 min `[SYNTHETIC]` |
+| MUTTOM ↔ terminal deadhead | 8 min `[SYNTHETIC]` |
 
-The fleet information is based on a 2026 news report.
+**Initial position split (fixed, not solver choice):**
 
-The KMRL Annual Report 2024–25 reports 15 operating trains. This difference in reporting periods must be acknowledged when describing the fleet configuration.
+| Location | Service rakes |
+|---|---:|
+| ALVA | 9 |
+| TPHT | 7 |
+| MUTTOM | 2 |
+
+The fleet counts (25 total, 18 service, 7 maintenance) follow the 2026 news article. The KMRL Annual Report 2024–25 reports **15 operating trains**; this is a different reporting period and should be acknowledged when describing the fleet configuration.
+
+The MUTTOM-home rakes are required because 18 partial trips start or end at Muttom. Without them, the 250-trip case is INFEASIBLE.
 
 ### Synthetic Assumptions
 
 | Parameter | Value |
 |---|---:|
-| Turnaround time | 5 minutes |
+| Terminal turnaround | 5 min |
+| Terminal-to-terminal deadhead | 15 min |
+| MUTTOM ↔ terminal deadhead | 8 min |
 | Maintenance threshold | 1,000,000 km |
 | Info Park-2 capacity | 2 rakes |
 | Initial rake mileage | 20,000–200,000 km |
+| Initial rake split | 9 ALVA / 7 TPHT / 2 MUTTOM |
 
-These values are synthetic assumptions because verified operational data is unavailable.
+All the above are `[SYNTHETIC]` because verified operational data is unavailable.
 
 ## 1.3 Data Files
 
 | File | Purpose |
 |---|---|
 | `data/raw/` | Original GTFS files |
-| `data/hourly_service.csv` | Extracted hourly service information |
-| `data/synthetic/rakes.csv` | Synthetic rake information |
+| `data/extract_gtfs_trips.py` | Extracts per-trip GTFS records |
+| `data/trips_full_route.csv` | 232 full-route trips |
+| `data/trips_partial.csv` | 18 partial trips (Muttom ↔ terminals) |
+| `data/stop_sequences_full_route.csv` | Full stop sequences for the 232 |
+| `data/stop_sequences_partial.csv` | Full stop sequences for the 18 |
+| `data/merge_trips.py` | Merges the two into `trips_all.csv` (250) |
+| `data/trips_all.csv` | **Solver input** — 250 real GTFS trips |
+| `data/verify_gtfs_trips.py` | Reconciliation audit; verifies 232 + 18 = 250 against `hourly_service.csv` |
+| `data/hourly_service.csv` | Legacy — reconciliation only; not read by the solver |
+| `data/synthetic/rakes.csv` | Synthetic rake fleet |
 | `data/synthetic/terminals.csv` | Terminal configuration |
-| `data/synthetic/maintenance.csv` | Maintenance information |
-| `data/synthetic/depot.csv` | Depot capacity information |
-| `data/extract_gtfs_hourly.py` | Extracts hourly GTFS information |
-| `data/generate_synthetic_v2.py` | Generates synthetic operational data |
-
-Confirm synthetic file paths against the actual loader configuration before running the project.
+| `data/synthetic/maintenance.csv` | Empty in V1 |
+| `data/synthetic/depot.csv` | Depot capacities |
+| `data/generate_synthetic_v2.py` | Generates the synthetic fleet |
 
 ## 1.4 Solver Implementation
 
 | File | Responsibility |
 |---|---|
 | `solver/config.py` | Solver configuration |
-| `solver/models.py` | Loads and prepares problem data |
-| `solver/constraints.py` | Defines scheduling constraints and objectives |
-| `solver/solve.py` | Executes the CP-SAT solver |
+| `solver/models.py` | Loads `trips_all.csv`, per-trip durations, seconds parsing (supports `>24:00`) |
+| `solver/constraints.py` | Defines constraints R1–R12; R6 per-order gap fix; R11 first-trip home rule with deadhead |
+| `solver/solve.py` | Executes the CP-SAT solver (feasibility probe, no objective) |
 | `solver/validator.py` | Independently validates the generated schedule |
 
-The solver uses the R1–R12 constraint framework.
+The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS) + **R8 SKIPPED** (no stabling in V1). That is **9 PASS + 1 SKIPPED**.
 
-The current validator checks R1, R2a, R3, R4, R5, R6, R7, R10, and R12 (9 PASS).
+`R2` is **not applicable** — trip departure times are fixed by GTFS, so headway is a timetable property, not a scheduling decision. `R9` is **vacuous** — `maintenance.csv` is empty in V1.
 
-R8 is present in the validator but SKIPPED because V1 does not contain stabling assignments. R9 and R11 are not included in the current validation results.
+**Findings from the rebuild:**
 
-
+- `[FINDING]` `add_obj6_rake_balance` makes the model **INFEASIBLE** when `build_objective` is not called. The `o6` call must be commented out in feasibility-probe mode. See `constraints-v2.1` §6/§8.
+- `[FINDING]` R6 must compute `gap_ab` and `gap_ba` **per order**. The earlier one-gap-per-pair rule allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. See `constraints-v2.1` §5 R6.
 
 ## 1.5 Phase 1 Results
 
 | Metric | Result |
 |---|---:|
-| Selected trips | 250 |
-| Configured service rakes | 18 |
-| Solver status | FEASIBLE |
-| Solver wall-clock time | Approximately 306 seconds |
-| Solver time limit | 300 seconds |
-| Objective value | 1,102,800 |
-| Optimality gap | 93.40% |
-| Consecutive same-rake trip pairs checked | 232 |
-| Minimum turnaround requirement | 5 minutes |
-
-All 232 checked consecutive same-rake trip pairs satisfy the 5-minute turnaround requirement.
+| Trips scheduled | **250** (232 full + 18 partial) |
+| Configured service rakes | 18 (9 ALVA / 7 TPHT / 2 MUTTOM) |
+| Solver status | **OPTIMAL** |
+| Solver wall-clock time | **28.73 s** |
+| Solver time limit | 300 s |
+| Objective value | 0.0 (feasibility probe — objective disabled) |
+| Optimality gap | 0.0% (no objective; not a proven bound on a cost) |
+| R6 pruning summary | `same=15636 cross=17633; both_impossible=3540 one_way=27585 both_possible=0` |
 
 ### Validator Results
 
 | Result | Count |
 |---|---:|
-| PASS | 9 |
-| SKIPPED | 1 |
+| PASS | 10 |
+| SKIPPED | 1 (R8) |
 | FAIL | 0 |
 
 **Overall validator status: PASS**
 
-Important limitations:
+Important notes:
 
 - R8 is skipped because stabling assignments are not implemented in V1.
-- R9 and R11 are not included in the current validation results.
-- FEASIBLE does not mean OPTIMAL.
-- Eighteen is the configured number of service rakes. Do not claim all 18 were used unless confirmed from the generated schedule.
+- R9 is vacuous (empty `maintenance.csv`).
+- R11 is **validated** (PASS) — first-trip home rule with deadhead, checked against `rakes.csv`.
+- The objective is disabled because of the `add_obj6` bug. V1 is a feasibility probe.
+- "All 18 service rakes used" is **confirmed** from `schedule_250_trips.csv`.
 
 ## 1.6 How to Run Phase 1
 
@@ -213,8 +233,10 @@ cd Z:\metropulse
 
 .\venv\Scripts\Activate.ps1
 
-# Regenerate hourly service data only when required
-python data\extract_gtfs_hourly.py
+# Regenerate real-GTFS trip files from scratch (only if required)
+python data\extract_gtfs_trips.py
+python data\verify_gtfs_trips.py
+python data\merge_trips.py
 
 # Generate synthetic operational data
 python data\generate_synthetic_v2.py
@@ -225,16 +247,6 @@ python -m solver.solve
 # Validate the generated schedule
 python -m solver.validator
 ```
-
-The GTFS extraction step requires the original GTFS files in `data/raw/`. Skip it if `data/hourly_service.csv` is already generated and up to date.
-
-### Expected Outputs
-
-- `schedule.csv`
-- `solution.json`
-- `validation.json`
-
----
 
 # Phase 2 — Operational Simulation using SimPy
 

@@ -1,13 +1,11 @@
 """
 MetroPulse CP-SAT solver — orchestrator.
 
-Loads ProblemData, builds the model (variables + constraints + objective),
-solves, and writes solution.json + schedule.csv to data/processed/.
-
-Spec: docs/constraints-v2.md
+Builds the model from real GTFS trips, solves, writes solution.json + schedule.csv.
 """
 from __future__ import annotations
 
+import csv
 import json
 import time
 from pathlib import Path
@@ -20,40 +18,32 @@ from solver import constraints as C
 
 
 OUT_DIR = Path(__file__).parent.parent / "data" / "processed"
-BASE_HOUR = config.OPERATING_START_HOUR  # 5
 
 
-# ---------------------------------------------------------------------------
-# Solve
-# ---------------------------------------------------------------------------
+def sec_to_hhmmss(sec: int) -> str:
+    h = sec // 3600
+    m = (sec % 3600) // 60
+    s = sec % 60
+    return f"{h:02d}:{m:02d}:{s:02d}"
+
+
 def solve(data: ProblemData, verbose: bool = False,
           time_limit_sec: int | None = None) -> dict:
-    """
-    Build and solve the CP-SAT model. Returns a result dict.
-    """
-    time_limit = time_limit_sec or config.CP_SAT_TIME_LIMIT_SEC
+    time_limit = config.CP_SAT_TIME_LIMIT_SEC if time_limit_sec is None else time_limit_sec
+    if time_limit <= 0:
+        raise ValueError("time_limit_sec must be positive")
 
-    print(f"[solve] building model...")
+    print("[solve] building model...")
     model = cp_model.CpModel()
 
-    # -------------------------------------------------------------------
-    # 1. Generate required trips (from DPR hourly plan)
-    # -------------------------------------------------------------------
-    trips = C.generate_required_trips(data)
+    trips = C.build_trips(data)
     print(f"[solve] {len(trips)} trips to schedule")
 
-    # -------------------------------------------------------------------
-    # 2. Decision variables
-    # -------------------------------------------------------------------
-    trip_vars = C.create_trip_variables(model, trips)
-    rake_trip = C.create_rake_assignment_variables(model, trips, data)
+    trip_vars = C.create_trip_intervals(model, trips)
+    rake_trip = C.create_rake_assignment_variables(model, trips, data, trip_vars)
 
-    # -------------------------------------------------------------------
-    # 3. Hard constraints R1..R12
-    # -------------------------------------------------------------------
-    print(f"[solve] applying R1..R12")
+    print("[solve] applying constraints")
     C.add_r1_service_coverage(model, trip_vars, rake_trip, data)
-    C.add_r2a_design_headway(model, trip_vars)
     C.add_r3_operating_window(model, trip_vars)
     C.add_r4_fleet_availability(model, trip_vars, rake_trip, data)
     C.add_r5_rake_non_overlap(model, trip_vars, rake_trip, data)
@@ -62,21 +52,14 @@ def solve(data: ProblemData, verbose: bool = False,
     C.add_r8_depot_capacity(model, trip_vars, rake_trip, data)
     C.add_r9_maintenance_exclusivity(model, trip_vars, rake_trip, data)
     C.add_r10_maintenance_threshold(model, trip_vars, rake_trip, data)
-    C.add_r11_deadhead(model, trip_vars, rake_trip, data)
+    C.add_r11_terminal_continuity(model, trip_vars, rake_trip, data)
     C.add_r12_nonservice_window(model, trip_vars)
 
-    # -------------------------------------------------------------------
-    # 4. Soft objectives O1, O6, O7
-    # -------------------------------------------------------------------
-    print(f"[solve] applying objectives")
-    o1 = C.add_obj1_waiting_proxy(model, trip_vars)
-    o6 = C.add_obj6_rake_balance(model, trip_vars, rake_trip, data)
-    o7 = C.add_obj7_reserve_activation(model, trip_vars, rake_trip, data)
-    C.build_objective(model, o1, o6, o7)
-
-    # -------------------------------------------------------------------
-    # 5. Solve
-    # -------------------------------------------------------------------
+    print("[solve] applying objective")
+    # o6 = C.add_obj6_rake_balance(model, trip_vars, rake_trip, data)
+    # FEASIBILITY PROBE (opt3): skip objective to find any valid solution fast.
+# C.build_objective(model, o6)
+    
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit
     solver.parameters.num_search_workers = config.CP_SAT_NUM_WORKERS
@@ -88,121 +71,86 @@ def solve(data: ProblemData, verbose: bool = False,
     t0 = time.time()
     status = solver.Solve(model)
     elapsed = time.time() - t0
-
     status_name = solver.StatusName(status)
-    print(f"[solve] status = {status_name}")
-    print(f"[solve] elapsed = {elapsed:.2f}s")
+    print(f"[solve] status = {status_name}  ({elapsed:.2f}s)")
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return {
-        "status": status_name,
-        "elapsed_sec": elapsed,
-        "objective": None,
-        "best_bound": None,
-        "gap_pct": None,
-        "num_trips": 0,
-        "schedule": [],
-    }
+            "status": status_name,
+            "elapsed_sec": elapsed,
+            "objective": None,
+            "best_bound": None,
+            "gap_pct": None,
+            "num_trips": 0,
+            "schedule": [],
+        }
 
-    print(f"[solve] objective = {solver.ObjectiveValue()}")
-
-     # Optimality gap
-
-    best_bound = solver.BestObjectiveBound()
     obj_value = solver.ObjectiveValue()
+    best_bound = solver.BestObjectiveBound()
     if status == cp_model.OPTIMAL:
         gap_pct = 0.0
-        print(f"[solve] best_bound = {best_bound}  (PROVEN OPTIMAL)")
     elif obj_value > 0:
         gap_pct = (obj_value - best_bound) / obj_value * 100
-        print(f"[solve] best_bound = {best_bound}")
-        print(f"[solve] gap = {gap_pct:.2f}%")
     else:
         gap_pct = None
-        print(f"[solve] best_bound = {best_bound}")
-        print(f"[solve] gap = N/A (objective = 0)")
 
-    # -------------------------------------------------------------------
-    # 6. Extract solution
-    # -------------------------------------------------------------------
+    print(f"[solve] objective = {obj_value}")
+    print(f"[solve] best_bound = {best_bound}")
+    print(f"[solve] gap = {gap_pct}")
+
     schedule = []
+    service_rake_ids = data.service_rakes["rake_id"].tolist()
     for tid, tv in trip_vars.items():
-        # Find the rake that got this trip
         assigned_rake = None
-        for _, r in data.rakes.iterrows():
-            rid = r["rake_id"]
+        for rid in service_rake_ids:
             if solver.Value(rake_trip[(rid, tid)]) == 1:
                 assigned_rake = rid
                 break
-
         if assigned_rake is None:
-            continue   # shouldn't happen
-
-        start_min = solver.Value(tv["start"])
-        end_min = solver.Value(tv["end"])
-
+            raise RuntimeError(f"No service rake assigned to trip {tid}")
         schedule.append({
             "trip_id": tid,
             "rake_id": assigned_rake,
             "direction": tv["direction"],
-            "hour_start": tv["hour_start"],
-            "hour_end": tv["hour_end"],
-            "departure_min_from_base": start_min,
-            "arrival_min_from_base": end_min,
-            "departure": _min_to_hhmm(start_min),
-            "arrival": _min_to_hhmm(end_min),
+            "first_stop": tv["first_stop"],
+            "last_stop": tv["last_stop"],
+            "departure": sec_to_hhmmss(tv["start"]),
+            "arrival": sec_to_hhmmss(tv["end"]),
+            "departure_sec": tv["start"],
+            "arrival_sec": tv["end"],
         })
 
-    # Sort by departure time
-    schedule.sort(key=lambda x: x["departure_min_from_base"])
+    schedule.sort(key=lambda x: x["departure_sec"])
 
     return {
         "status": status_name,
         "elapsed_sec": elapsed,
-        "objective": solver.ObjectiveValue(),
+        "objective": obj_value,
+        "best_bound": best_bound,
+        "gap_pct": gap_pct,
         "num_trips": len(schedule),
         "schedule": schedule,
     }
 
 
-# ---------------------------------------------------------------------------
-# Time helpers
-# ---------------------------------------------------------------------------
-def _min_to_hhmm(min_from_base: int) -> str:
-    """Convert minutes from 05:00 base to 'HH:MM'."""
-    total_min = BASE_HOUR * 60 + min_from_base
-    h = total_min // 60
-    m = total_min % 60
-    return f"{h:02d}:{m:02d}"
-
-
-# ---------------------------------------------------------------------------
-# Output
-# ---------------------------------------------------------------------------
 def write_outputs(result: dict) -> None:
-    """Write solution.json and schedule.csv to data/processed/."""
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     sol_path = OUT_DIR / "solution.json"
-    with open(sol_path, "w") as f:
+    with open(sol_path, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)
     print(f"[solve] wrote {sol_path}")
 
-    if result["schedule"]:
-        csv_path = OUT_DIR / "schedule.csv"
-        with open(csv_path, "w") as f:
-            f.write("trip_id,rake_id,direction,departure,arrival\n")
-            for row in result["schedule"]:
-                f.write(
-                    f"{row['trip_id']},{row['rake_id']},"
-                    f"{row['direction']},{row['departure']},{row['arrival']}\n"
-                )
-        print(f"[solve] wrote {csv_path}")
+    csv_path = OUT_DIR / "schedule.csv"
+    fields = ["trip_id", "rake_id", "direction", "first_stop", "last_stop",
+              "departure", "arrival"]
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(result["schedule"])
+    print(f"[solve] wrote {csv_path}")
 
 
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
 def main():
     print("[main] loading ProblemData...")
     data = ProblemData.load()
@@ -212,15 +160,15 @@ def main():
     result = solve(data)
     write_outputs(result)
 
-    if result["schedule"] is None:
+    if not result["schedule"]:
         print("\nNo feasible schedule found.")
         return
 
-    print(f"\n=== Summary ===")
-    print(f"Status:     {result['status']}")
-    print(f"Objective:  {result['objective']}")
-    print(f"Trips:      {result['num_trips']}")
-    print(f"Elapsed:    {result['elapsed_sec']:.2f}s")
+    print("\n=== Summary ===")
+    print(f"Status:    {result['status']}")
+    print(f"Objective: {result['objective']}")
+    print(f"Trips:     {result['num_trips']}")
+    print(f"Elapsed:   {result['elapsed_sec']:.2f}s")
 
 
 if __name__ == "__main__":

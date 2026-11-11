@@ -248,4 +248,67 @@
 **Notes:**
 - [Anything worth remembering]
 
-**Next Meeting:** YYYY-MM-DD
+
+---
+
+## Meeting 10 — 2026-11-12
+**Attendees:** [Names]
+**Duration:** ~6 hours (across many sessions)
+**Agenda:** Phase 1 rebuild on real GTFS trip records — 232 + 18 partial = 250
+
+**Decisions:**
+- **Phase 1 is rebuilt on real GTFS trip records**, not hourly counts and not synthetic `T0000` trips.
+- Trip input is now `data/trips_all.csv` (232 full-route + 18 partial = 250). Built by `data/extract_gtfs_trips.py` + `data/merge_trips.py`, verified by `data/verify_gtfs_trips.py`.
+- **Per-trip GTFS durations** are used by the solver. The 50.47-min median is now only a summary statistic, not a model input.
+- **Window boundary locked:** `06:00:00 ≤ departure < 23:00:00`. A departure at exactly 23:00:00 is excluded.
+- **Direction rule locked:** UP if last station index > first station index; DOWN otherwise. Station index from stop order (ALVA=0 … TPHT=24). No fallback to `direction_id`.
+- **Initial rake split changed:** 9 ALVA / 7 TPHT / 2 MUTTOM (was 9 / 9 / 0). `[SYNTHETIC]`.
+- **Deadhead modeled:** 15 min terminal↔terminal `[SYNTHETIC]`, 8 min MUTTOM↔terminal `[SYNTHETIC]`.
+- **R11 updated:** first-trip home rule with deadhead allowance. R11 no longer duplicates pair gaps — those are R6's job.
+- **Objective disabled in V1** because `add_obj6_rake_balance` makes the model INFEASIBLE when `build_objective` is not called. V1 is a feasibility probe.
+- **`constraints-v2.1` supersedes `constraints-v2`** (v2 date 2026-11-08, v2.1 date 2026-11-12).
+- **Phase 2 (SimPy) outputs are STALE.** `simulation_kpis.json` and `simulation_timeline.csv` were computed on the pre-rebuild synthetic schedule. They must be regenerated on the new 250-trip real-GTFS schedule.
+
+**Action Items:**
+- [x] `data/extract_gtfs_trips.py` — extracts per-trip GTFS records
+- [x] `data/trips_full_route.csv` (232) and `data/trips_partial.csv` (18)
+- [x] `data/stop_sequences_*` — full stop sequences for audit
+- [x] `data/verify_gtfs_trips.py` — reconciliation: 232 + 18 = 250, all direction and window checks pass
+- [x] `data/merge_trips.py` → `data/trips_all.csv` (250 rows)
+- [x] `solver/models.py` — loads `trips_all.csv`, per-trip durations, seconds parsing supports `>24:00`
+- [x] `solver/constraints.py` — real trip intervals, R6 per-order gap fix, R11 first-trip home rule with deadhead, `add_obj6` disabled
+- [x] `solver/config.py` — new paths, `CP_SAT_NUM_WORKERS=4` (laptop memory), deadhead constants, initial split
+- [x] `solver/solve.py` — feasibility probe, no `o6` call
+- [x] `solver/validator.py` — 10 applicable checks including R6 per-order and R11 first-trip home rule
+- [x] 250-trip solve: **OPTIMAL, 28.73 s**
+- [x] 250-trip validator: **10 PASS + 1 SKIPPED (R8), Overall PASS**
+- [x] Doc pass in progress: `checklist.md`, `constraints-v2.md` (v2.1), `data-provenance.md`
+- [ ] Next: regenerate Phase 2 (SimPy) on the new 250-trip schedule
+- [ ] Next: `project-status.md` update
+
+**Notes:**
+
+- **Diagnosis trail.** 250-trip case initially returned `INFEASIBLE` in 9–17 s repeatedly. Probes isolated two distinct bugs:
+  1. `add_obj6_rake_balance` was called with `build_objective` commented out. The function adds `dev` auxiliary variables that make the model INFEASIBLE when there is no objective to minimize. Fix: do not call `o6` when `build_objective` is off. `[FINDING]`
+  2. R6 used one gap value per pair, chosen by whichever direction was same-terminal. For the 250-trip case, this allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. The validator caught 4 such violations. Fix: compute `gap_ab` and `gap_ba` independently and enforce each in the correct order. `[FINDING]`
+
+- **Fleet-size behaviour observed during diagnosis:**
+  - 232 trips, 18 rakes, 9/9 split → OPTIMAL (~29 s)
+  - 250 trips, 18 rakes, 9/9 split → INFEASIBLE (insufficient MUTT coverage)
+  - 250 trips, 18 rakes, 9/7/2 split → OPTIMAL (~28.7 s)
+  - Adding more rakes (20, 22) does not fix the 250 case if the split does not include MUTTOM-origin rakes.
+
+- **`[FINDING]` for future work:** When the objective is re-enabled, verify that O6 does not have the same side effect. Either restructure `add_obj6_rake_balance` so its auxiliary variables are tied to a minimized objective, or remove the function entirely and implement rake-balance through a different mechanism.
+
+- **Verification commands and file state.**
+  - The 250-trip result on disk: `data/processed/schedule_250_trips.csv`, `solution_250_trips.json`, `validation_250_trips.json` (need to be saved from the current run before the next rebuild).
+  - The 232-trip result is also proven OPTIMAL and can be regenerated any time.
+  - `hourly_service.csv` is kept on disk for reconciliation only; not read by the solver.
+
+- **GTFS data vintage.** Feed is 2024-08-12 to 2025-12-31. It represents the 2024–25 timetable, not current 2026 operations. The 2026 news article provides only the fleet breakdown; it does not update the timetable.
+
+- **No DPR-based values remain.** The 2026-10-15 pivot (Meeting 5) fully removed them. All tags are now EXTERNAL / DERIVED / SYNTHETIC / MODEL LIMITATION.
+
+- **Committed and pushed to GitHub.** All source code, data scripts, and doc updates from this meeting.
+
+**Next Meeting:** Phase 2 rebuild kickoff (SimPy on the new 250-trip schedule).
