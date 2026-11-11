@@ -264,7 +264,7 @@ All weights are `[SYNTHETIC — INITIAL TUNING PARAMETERS]`.
 | O8 | Crew overtime | Disabled (Phase 3) |
 
 ```
-**Overall objective:**
+### Overall objective
 
 ```text
 minimize α·O1 + β·O2 + γ·O3 + δ·O4

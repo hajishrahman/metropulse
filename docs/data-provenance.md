@@ -247,10 +247,7 @@ R019,maintenance,45321,valid,MUTTOM,00:00
 | Maintenance threshold | 1,000,000 km | No verified source |
 | Info Park-2 capacity | 2 rakes | No verified source |
 | Initial mileage | 20,000–200,000 km | Randomized for simulation realism |
-
 | Simulation delay model | clipped normal, mean −48s pre-clip, clip [0, 300s] | No verified source; Phase 2 assumption |
-
-
 
 These values are project assumptions, not confirmed KMRL operational data.
 
@@ -348,7 +345,6 @@ config.py
 7. **GTFS limitations:** GTFS provides scheduled timetable information, not real-time train positions or actual operating delays.
 8. **Schedule optimization:** A feasible CP-SAT result does not necessarily mean an optimal result. Solver status, objective value, best bound, and optimality gap must be reported separately.
 9. **DPR:** DPR-based values have been removed from the current project configuration.
-
 10. **Terminal continuity:** Phase 1 schedule uses internal trip IDs (`Txxxx`) with no mapping back to GTFS trip IDs. Terminal continuity (whether each rake's next trip starts where the previous ended) cannot be verified from Phase 1 outputs. Phase 2 models delay flow, not physical route movement. Deadhead is not modeled (R11 not configured).
 
 ---

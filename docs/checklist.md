@@ -52,9 +52,10 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 2 — SimPy Validation (NEXT)
-
 ## Phase 2 — SimPy Validation ✅ COMPLETE
+
+### Pre-flight
+...
 
 ### Pre-flight
 - [x] Schedule inspected: 250 trips, 18 rakes, 232 eligible trips

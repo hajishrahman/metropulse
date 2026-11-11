@@ -378,8 +378,13 @@ The zero-standard-deviation experiment is the baseline scenario. With no additio
 src/
 └── simulation/
     ├── __init__.py
+    ├── schedule_loader.py
+    ├── reference.py
     ├── simpy_runner.py
-    └── kpis.py
+    ├── kpis.py
+    ├── experiments.py
+    ├── preflight.py
+    └── check_terminals.py
 ```
 
 ### Output Files
@@ -961,8 +966,13 @@ MetroPulse/
 ├── src/
 │   ├── simulation/
 │   │   ├── __init__.py
+│   │   ├── schedule_loader.py
+│   │   ├── reference.py
 │   │   ├── simpy_runner.py
-│   │   └── kpis.py
+│   │   ├── kpis.py
+│   │   ├── experiments.py
+│   │   ├── preflight.py
+│   │   └── check_terminals.py
 │   │
 │   └── disruption/
 │       ├── __init__.py
@@ -979,6 +989,10 @@ MetroPulse/
 │   └── constraints-v2.md
 │
 ├── tests/
+│   ├── test_reference.py
+│   ├── test_schedule_loader.py
+│   ├── test_simpy_matches_reference.py
+│   └── test_kpis.py
 │
 ├── requirements.txt
 ├── .gitignore
@@ -1057,94 +1071,6 @@ As of 11 November 2026:
 Start **Phase 3 — Crew Scheduling**.
 
 The first step is to design the synthetic driver dataset and the C1–C6 crew constraints against the fixed Phase 1 schedule.
-
----
-
-# 7. Handoff Prompt for the Next Development Session
-
-Use the following prompt when continuing development:
-
-```text
-We are continuing development of MetroPulse, an AI-driven train
-induction planning and scheduling system for Kochi Metro Rail Limited.
-
-Current project status:
-
-PHASE 1 — COMPLETED
-
-- Static KMRL GTFS 2024–25 is used.
-- The GTFS contains 255 weekday trips.
-- 250 trips are selected within the 06:00–23:00 model window.
-- Median one-way running time is 50.47 minutes.
-- The CP-SAT model uses 50 minutes as its integer running time.
-- Route length is 28.144 km from the KMRL Annual Report 2024–25.
-- Fleet configuration: 25 total rakes, 18 service and 7 maintenance.
-- Turnaround time: 5 minutes (synthetic assumption).
-- Solver status: FEASIBLE.
-- Solver wall-clock time: approximately 306 seconds.
-- Solver time limit: 300 seconds.
-- Objective value: 1,102,800.
-- Optimality gap: 93.40%.
-- 232 consecutive same-rake trip pairs were checked.
-- All 232 satisfy the 5-minute turnaround requirement.
-- Validator: 9 PASS + 1 SKIPPED.
-- Overall validator status: PASS.
-- R8 is skipped because V1 has no stabling assignments.
-- R9 and R11 are not included in the current validation results.
-
-IMPORTANT DATA RULES:
-
-- Do not reintroduce the old DPR-based assumptions.
-- Distinguish verified data from synthetic assumptions.
-- The GTFS feed is static 2024–25 data, not a live 2026 timetable.
-- Do not claim all 18 configured service rakes were used unless
-  confirmed from the generated schedule.
-- Do not describe the validator as 10/10 PASS.
-- Do not claim R9 and R11 passed validation.
-
-DOCUMENTATION TO READ:
-
-1. docs/constraints-v2.md
-2. docs/project-status.md
-3. docs/data-provenance.md
-4. docs/meeting-log.md
-5. docs/phases.md
-
-NEXT TASK:
-
-Start Phase 2 — Operational Simulation using SimPy.
-
-Before writing code:
-
-1. Inspect the existing project folder structure.
-2. Inspect the Phase 1 schedule output.
-3. Inspect the rake assignment format.
-4. Check the existing Python modules and dependencies.
-5. Confirm how trip times and rake assignments are represented.
-6. Identify any missing information required by the simulation.
-
-Then design the simulation implementation.
-
-The simulation must:
-
-- Read the CP-SAT-generated schedule.
-- Replay trips assigned to each rake.
-- Model stochastic departure delays.
-- Model delay propagation between consecutive trips assigned
-  to the same rake.
-- Respect the 5-minute synthetic turnaround time.
-- Use the 50-minute solver running time.
-- Calculate the planned simulation KPIs.
-- Run experiments with standard deviations of 0, 60, 120,
-  and 300 seconds.
-- Save simulation results to the planned output files.
-
-Do not assume file paths or column names without inspecting
-the existing project.
-
-Review the implementation plan before making changes.
-Ask for clarification if essential information is missing.
-```
 
 ---
 
