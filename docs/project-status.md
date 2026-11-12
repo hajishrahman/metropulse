@@ -52,7 +52,7 @@ pytest tests\ -v
 
 Expected outputs (Phase 1, current state):
 
-python -m solver.solve → Status: OPTIMAL, Trips: 250, elapsed ~28.7 s
+python -m solver.solve → Status: OPTIMAL, Trips: 250, Objective: 4800.0, Gap: 0.0%, elapsed ~11.77 s
 
 python -m solver.validator → Overall: PASS (10 PASS + 1 SKIPPED, R8 skipped)
 
@@ -70,7 +70,7 @@ data/processed/schedule_250_trips.csv — frozen 250-trip baseline
 
 data/processed/solution_250_trips.json
 
-data/processed/validation_250_trips.json
+data/processed/valid(optional) data/processed_backup/ — pre-rerun baseline snapshot (created 2026-11-12 before the objective restore; not part of the active pipeline)ation_250_trips.json
 
 Note on Phase 2: data/processed/simulation_kpis.json and simulation_timeline.csv were regenerated on 2026-11-12 on the 250-trip real-GTFS schedule.
 
@@ -105,13 +105,17 @@ Trips scheduled: 250 (232 full + 18 partial)
 
 Rakes: 18 service (9 ALVA / 7 TPHT / 2 MUTTOM)
 
-Solve time: 28.73 s
+Solve time: 11.77 s
 
 Solver time limit: 300 s
 
-Objective: 0.0 (feasibility probe — objective disabled)
+Objective: 4800.0 (O6 rake balance active — W_RAKE_BALANCE × OBJ_SCALE × Σ dev = 3 × 100 × 16)
 
-Optimality gap: 0.0% (no objective; not a proven bound on a cost)
+Best bound: 4800.0 (proven optimal)
+
+Optimality gap: 0.0%
+
+Rake distribution: 16 rakes × 14 trips, 2 rakes × 13 trips = 250
 
 R6 pruning: same=15636 cross=17633; both_impossible=3540 one_way=27585 both_possible=0
 
@@ -124,7 +128,7 @@ FAIL: 0
 
 Overall: PASS
 ```
-R2 not applicable (fixed trip times). R9 vacuous (empty maintenance.csv). R11 validated.
+R2 not applicable (fixed trip times). R9 vacuous (empty maintenance.csv). R11 validated. Objective O6 active — validator PASS confirms the optimized schedule still satisfies all hard constraints.
 
 
 ## Latest Phase 2 Results (2026-11-12, rebuilt on 250-trip real schedule)
@@ -144,6 +148,8 @@ The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simu
 | E3 | 120 | 100.00 | 100.00 | 4.74 | 4 |
 | E4 | 300 | 100.00 | 100.00 | 7.33 | 4 |
 
+*(These are the values in the current `data/processed/simulation_kpis.json`. If a future rerun produces a different OPTIMAL schedule, the numbers will shift — CP-SAT is non-deterministic with `num_search_workers > 1`. The JSON is authoritative.)*
+
 ### 100-seed Monte Carlo (mean, p5–p95)
 
 | Exp | ±5 | ±3 (mean; p5–p95) | ±1 | Propagation % (mean; p5–p95) |
@@ -152,6 +158,8 @@ The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simu
 | E2 | 100.00 | 100.00 (100.00–100.00) | 96.24 | 1.27 (0.00–2.59) |
 | E3 | 100.00 | 96.93 (94.44–99.20) | 80.13 | 2.91 (1.29–4.74) |
 | E4 | 100.00 | 75.47 (69.60–80.40) | 60.26 | 6.89 (4.31–9.48) |
+
+*(Authoritative source: `data/processed/simulation_kpis.json`. Values are tied to the current schedule; a rerun of `solver.solve` will change the schedule and therefore these KPIs.)*
 
 ### Notes
 

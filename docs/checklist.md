@@ -57,32 +57,30 @@ Progress tracker for the project. Update as phases complete.
   - [x] R10 maintenance threshold
   - [x] R11 terminal continuity — first-trip home rule with deadhead allowance
   - [x] R12 non-service window
-- [x] CP-SAT solve pipeline (`solver/solve.py`) — feasibility probe (objective disabled)
+- [x] CP-SAT solve pipeline (`solver/solve.py`) — O6 rake-balance objective active
 - [x] Independent validator (`solver/validator.py`) — 10 PASS + 1 SKIPPED (R8)
 
-### Results (Phase 1 baseline)
-- [x] Full-day solve: **250 trips, OPTIMAL, 28.73 s**
+### Results (Phase 1, objective active)
+
+- [x] Full-day solve: **250 trips, OPTIMAL, 11.77 s**
+- [x] **Objective = 4800.0** (O6 rake balance, `W_RAKE_BALANCE × OBJ_SCALE × sum(dev) = 3 × 100 × 16`)
+- [x] **Best bound = 4800.0** (proven optimal)
+- [x] **Gap = 0.0%**
+- [x] Rake distribution: 16 rakes × 14 trips, 2 rakes × 13 trips = 250 (sum of |count−13| = 16)
 - [x] `[r6]` pruning: `same=15636 cross=17633 | both_impossible=3540 one_way=27585 both_possible=0`
 - [x] Validator: **10 PASS + 1 SKIPPED (R8), Overall PASS**
 - [x] Both baselines proven OPTIMAL:
-  - [x] **232 full-route only** — OPTIMAL, ~28.7 s
-  - [x] **250 full + partial** — OPTIMAL, 28.73 s (current baseline)
-- [x] Outputs written (per `constraints-v2.1` §8):
+  - [x] **232 full-route only** — OPTIMAL, ~28.7 s (feasibility probe, no objective)
+  - [x] **250 full + partial** — OPTIMAL, 11.77 s with O6 objective active (current baseline)
+- [x] Outputs written:
   - [x] `data/processed/schedule.csv`
   - [x] `data/processed/solution.json`
   - [x] `data/processed/validation.json`
 
-### Tagged synthetic values
-- `[SYNTHETIC]` Terminal turnaround: **5 min**
-- `[SYNTHETIC]` Terminal-to-terminal deadhead: **15 min**
-- `[SYNTHETIC]` MUTTOM ↔ terminal deadhead: **8 min**
-- `[SYNTHETIC]` Initial split: **9 ALVA / 7 TPHT / 2 MUTTOM**
-- `[SYNTHETIC]` Maintenance threshold: **1,000,000 km**
-- `[SYNTHETIC]` Info Park-2 capacity: **2**
-- `[SYNTHETIC]` Initial rake mileage: 20,000–200,000 km
-
 ### Findings (Phase 1 rebuild)
-- `[FINDING]` **`add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled.** With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in 28.73 s. Cause: free auxiliary `dev` variables without an objective. **Never call `add_obj6_rake_balance` without `build_objective`.**
+
+- `[FINDING]` **`add_obj6_rake_balance` must be called alongside `build_objective`.** When both are present, the model is OPTIMAL with objective 4800 in 11.77 s. Earlier attempts to call `add_obj6_rake_balance` without `build_objective` produced mixed results in the prior code state; the exact cause was not conclusively diagnosed. **Current committed code calls both together; this is the correct configuration.**
+
 - `[FINDING]` **R6 requires per-order gap values.** Prior R6 chose one gap per pair (5 min if either order was same-terminal). For the 250-trip case, this allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. The validator caught 4 such violations (R6 FAIL). Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 - `[FINDING]` **Fleet-size behaviour:**
   - 232 trips with 18 rakes, 9 ALVA / 9 TPHT, hard continuity + 15-min terminal deadhead → OPTIMAL
@@ -146,12 +144,12 @@ Progress tracker for the project. Update as phases complete.
 ---
 
 ## Phase 3 — Crew Scheduling
-
-- [ ] `data/synthetic/drivers.csv` (60 drivers `[SYNTHETIC]`)
-- [ ] `solver/crew_constraints.py` (C1–C6)
+- [ ] `data/synthetic/drivers.csv` (55 drivers D001–D055 `[SYNTHETIC]`; solver tests pool sizes 45/50/55)
+- [ ] `solver/crew_config.py` (constants, POOL_SIZES = [45, 50, 55])
+- [ ] `solver/crew_models.py` (crew ProblemData loader)
+- [ ] `solver/crew_constraints.py` (C1–C7)
 - [ ] `solver/crew_solve.py`
-- [ ] Fairness objective
-
+- [ ] `solver/crew_validator.py`
 ---
 
 ## Phase 4 — Explainability

@@ -95,7 +95,7 @@ No fallback to `trips.txt direction_id`. Verified by `data/verify_gtfs_trips.py`
 - The `transfers` column in `fare_attributes.txt` is empty.
 - Fare range: ₹10 (shortest) to ₹60 (Aluva ↔ Tripunithura).
 - The feed ends on 2025-12-31 and represents the 2024–25 timetable, not current 2026 operations.
-- Some `stop_times.txt` entries have departure times ≥ 24:00:00 (e.g., `24:03:45`). These are parsed as `H*3600 + M*60 + S` without a day limit; they are not part of the 250-trip set because their departure is outside the operating window.
+- Some raw `stop_times.txt` entries have times ≥ 24:00:00 (e.g., `24:03:45`), because they belong to the 5 excluded trips. These are parsed as `H*3600 + M*60 + S` without a day limit. Verified: none of the 250 trips in `trips_all.csv` have departure or arrival ≥ 24:00 (checked 2026-11-12).
 
 ### Git Strategy
 
@@ -214,7 +214,8 @@ The following is an **aggregate summary only**. It uses the 50.47-min median as 
 - Available running time: 18 rakes × 17 hours × 60 = 18,360 train-minutes.
 - Estimated utilization: approximately 68.72%, rounded to 69%.
 
-This is a planning estimate, not a proof of feasibility. Actual feasibility is determined by the CP-SAT solver and the independent schedule validator. The empirical result on the 250-trip case is **OPTIMAL** (see `constraints-v2.1` §11 Scenario A').
+This is a planning estimate, not a proof of feasibility. Actual feasibility is determined by the CP-SAT solver and the independent schedule validator. 
+The empirical result on the 250-trip case is **OPTIMAL under the O6 rake-balance objective** (objective 4800, gap 0%, 11.77 s; see constraints-v2.2 §6 and §11 Scenario A').
 
 ---
 
@@ -317,7 +318,7 @@ data/trips_all.csv  (250 = 232 + 18)
 solver/models.py  (ProblemData)
        |
        v
-solver/solve.py  (CP-SAT, feasibility probe)
+solver/solve.py  (CP-SAT, O6 rake balance active)
        |
        v
 data/processed/schedule.csv  (250 scheduled trips)
@@ -371,7 +372,7 @@ Not read by the solver.
 ## 9. Limitations
 
 **GTFS data vintage:** The feed covers 2024–25 and may not represent current 2026 operations.
-- **Fleet discrepancy:** ...
+- **Fleet discrepancy:** Annual Report 2024–25 says 15 trains operating; 2026 news says 18 operating + 7 maintenance. V1 uses 18 service + 7 maintenance (News 2026). The two figures reflect different reporting periods.
 - **Turnaround:** The 5-minute turnaround is `[SYNTHETIC]`; no verified source is available.
 
 Deadhead: Both 15 min (terminal) and 8 min (MUTT) deadhead values are [SYNTHETIC]. No verified KMRL source.
@@ -386,15 +387,19 @@ Crew scheduling: Not included in Phase 1. Planned for Phase 3.
 
 GTFS limitations: GTFS provides scheduled timetable information, not real-time train positions or actual operating delays.
 
-Objective: The O1–O7 soft objectives are currently disabled. add_obj6_rake_balance causes INFEASIBLE if called without build_objective (see constraints-v2.1 Findings). V1 is a feasibility probe only.
+Objective: O6 rake balance is active (§6 of constraints-v2.2). O1–O5 and O7 remain declared but disabled. Result: OPTIMAL, objective 4800 (Σ dev = 16), gap 0%, 11.77 s. V1 is optimization (single-objective), not a feasibility probe.
 
 DPR: DPR-based values have been removed from the current project configuration.
 
 Terminal continuity: The Phase 1 schedule uses real GTFS trip IDs (WK_*). Terminal continuity is validated (R11 PASS). It is not "unverifiable" — that was true of the earlier synthetic-Txxxx schedule and no longer applies.
 
+- **Constraint classification:** R1, R5, R6, R10, R11 are solver-enforced. R3, R7, R12 are guaranteed by `trips_all.csv` being pre-filtered to the operating window and matching GTFS durations — the solver's constraint functions for these are effectively constant checks. R2 is removed from V1 (headway is a property of the fixed GTFS timetable, not a solver decision). R8 is skipped (no stabling). R9 is vacuous (no maintenance windows).
+
 Phase 2 outputs: data/processed/simulation_kpis.json and simulation_timeline.csv were regenerated on 2026-11-12 on the 250-trip real-GTFS schedule.
 
 ## 10. Source References
+
+
 
 ### GTFS Feed
 

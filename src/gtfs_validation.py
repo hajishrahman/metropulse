@@ -23,6 +23,7 @@ def load_gtfs(data_dir: Path = GTFS_DIR) -> dict[str, pd.DataFrame]:
         if not (data_dir / name).is_file()
     ]
     if missing:
+        
         raise FileNotFoundError(
             "Missing required GTFS files:\n  - "
             + "\n  - ".join(str(path) for path in missing)

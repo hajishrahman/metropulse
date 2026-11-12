@@ -183,7 +183,7 @@ All the above are `[SYNTHETIC]` because verified operational data is unavailable
 | `solver/config.py` | Solver configuration |
 | `solver/models.py` | Loads `trips_all.csv`, per-trip durations, seconds parsing (supports `>24:00`) |
 | `solver/constraints.py` | Defines constraints R1–R12; R6 per-order gap fix; R11 first-trip home rule with deadhead |
-| `solver/solve.py` | Executes the CP-SAT solver (feasibility probe, no objective) |
+| `solver/solve.py` | Executes the CP-SAT solver (O6 rake balance objective active) |
 | `solver/validator.py` | Independently validates the generated schedule |
 
 The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS) + **R8 SKIPPED** (no stabling in V1). That is **9 PASS + 1 SKIPPED**. R11 is now validated (PASS) because terminal continuity is checked against `rakes.csv` under the first-trip home rule with deadhead.
@@ -192,8 +192,9 @@ The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS)
 
 **Findings from the rebuild:**
 
-- `[FINDING]` `add_obj6_rake_balance` makes the model **INFEASIBLE** when `build_objective` is not called. The `o6` call must be commented out in feasibility-probe mode. See `constraints-v2.1` §6/§10.
-- `[FINDING]` R6 must compute `gap_ab` and `gap_ba` **per order**. The earlier one-gap-per-pair rule allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. See `constraints-v2.1` §5 R6.
+- `[FINDING]` `add_obj6_rake_balance` must be called alongside `build_objective`. When both are called (current configuration), the model is OPTIMAL with objective 4800 in 11.77 s. Earlier attempts to call `o6` without `build_objective` produced mixed results during the 2026-11-12 rebuild; the precise cause was not conclusively diagnosed. See `constraints-v2.2` §6/§10.
+
+- `[FINDING]` R6 must compute `gap_ab` and `gap_ba` **per order**. The earlier one-gap-per-pair rule allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. See `constraints-v2.2` §5 R6.
 
 ## 1.5 Phase 1 Results
 
@@ -202,10 +203,12 @@ The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS)
 | Trips scheduled | **250** (232 full + 18 partial) |
 | Configured service rakes | 18 (9 ALVA / 7 TPHT / 2 MUTTOM) |
 | Solver status | **OPTIMAL** |
-| Solver wall-clock time | **28.73 s** |
+| Solver wall-clock time | **11.77 s** |
 | Solver time limit | 300 s |
-| Objective value | 0.0 (feasibility probe — objective disabled) |
-| Optimality gap | 0.0% (no objective; not a proven bound on a cost) |
+| Objective value | **4800.0** (O6 rake balance active) |
+| Best bound | **4800.0** (proven optimal) |
+| Optimality gap | **0.0%** (best bound equals objective) |
+| Rake distribution | 16 rakes × 14 trips, 2 rakes × 13 trips = 250 |
 | R6 pruning summary | `same=15636 cross=17633; both_impossible=3540 one_way=27585 both_possible=0` |
 
 ### Validator Results
@@ -223,7 +226,7 @@ Important notes:
 - R8 is skipped because stabling assignments are not implemented in V1.
 - R9 is vacuous (empty `maintenance.csv`).
 - R11 is **validated** (PASS) — first-trip home rule with deadhead, checked against `rakes.csv`.
-- The objective is disabled because of the `add_obj6` bug. V1 is a feasibility probe.
+- The objective is **active** (O6 rake balance). See §1.5 results and `constraints-v2.2` §6. V1 is single-objective optimization, not a feasibility probe.
 - "All 18 service rakes used" is **confirmed** from `schedule.csv`.
 
 ## 1.6 How to Run Phase 1
@@ -443,9 +446,8 @@ Per-trip GTFS durations throughout.
 
 59 tests passing.
 
-E4 (std 300) headline: 100% ±5, 6.47% propagation, 4 actual headway violations (3 structural + 1 delay-induced).
-
-100-seed mean at E4: ±5 100.00%, ±3 75.95%, ±1 60.84%, propagation 5.88%.
+- E4 (std 300) headline numbers are in the table below and in `data/processed/simulation_kpis.json` (authoritative source; if this doc disagrees with the JSON, the JSON is correct).
+- 100-seed mean at E4: ±5 100.00%, ±3 75.95%, ±1 60.84%, propagation 5.88% (per the current `simulation_kpis.json`).
 
 3 scheduled headway violations are a GTFS data fact (R2 removed in v2.1 §5).
 
@@ -507,7 +509,7 @@ Real GTFS schedule has less propagation than the old synthetic schedule (E4 mean
 
 ### Known limitations
 
-Terminal continuity IS validated (R11 PASS on the 250-trip schedule). The old "Txxxx not verifiable" limitation is no longer true and is removed.
+Terminal continuity's first-trip home rule is validated by R11 PASS on the 250-trip schedule; cross-terminal gap consistency is separately confirmed by R6. The old "Txxxx not verifiable" limitation applied to the pre-rebuild synthetic schedule and is removed.
 
 Delay model is [SYNTHETIC] — all numbers describe model behaviour, not real KMRL performance.
 
@@ -1116,7 +1118,7 @@ See docs/project-status.md for the current project state.
 
 phases.md is a phase-planning document — it describes what each phase is and in what order. Current state (last updated, current results, known issues, next task) is kept in project-status.md to avoid duplication.
 
-Last phase completed: Phase 2 (SimPy), rebuilt 2026-11-12 on the 250-trip real-GTFS schedule.
+Last phase completed: Phase 2 (SimPy), rebuilt 2026-11-12 on the 250-trip real-GTFS schedule. Phase 1 objective (O6 rake balance) was restored on 2026-11-12 (Meeting 12): OPTIMAL, objective 4800, gap 0.0%, 11.77 s.
 
 Next: Phase 3 — Crew Scheduling.
 

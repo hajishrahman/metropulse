@@ -46,7 +46,7 @@
 - [x] Write `src/loaders/gtfs_loader.py`
 
 **Notes:**
-- Feed has 24 stops, 1 route, 252 trips, ~6300 stop_times
+- Feed has 24 stops, 1 route, 252 trips, ~6300 stop_times *(pre-audit count; superseded — 25 stations per Annual Report and rebuilt GTFS extraction, see Meeting 10)*
 
 **Next Meeting:** 2026-09-28
 
@@ -219,7 +219,8 @@
 - Headline (seed 42) results: E1 0% propagation; E2 3.88%; E3 7.76%; E4 11.64%. Total propagated delay at E4 = 63.2 min.
 - 100-seed Monte Carlo at E4: propagation mean **13.12%** (p5–p95: 10.3–15.9%). Seed 42 sits below the mean — treat the mean as the expected value.
 - **±5 on-time = 100% across all experiments and all 100 seeds.** Structural, not lucky: own delay is capped at 300 s, ±5 is inclusive, and measured slack keeps cumulative delay below the cap. **Model property, not operational guarantee.** Scenarios with a higher delay cap or tighter slack would show ±5 degradation.
-- Scheduled headway violations = 0 at every std (R2 holds). Actual-gap violations rise with std (E1: 0 → E4: 33.3 mean), reflecting departure bunching under delay.
+- Scheduled headway violations = 0 at every std (R2 holds — R2 was later removed from V1 in constraints-v2.1/2.2; this line records the pre-removal state). Actual-gap violations rise with std (E1: 0 → E4: 33.3 mean), reflecting departure bunching under delay.
+
 - R9 and R11 remain outside the Phase 1 validator results — unchanged from Meeting 8. Phase 2 does not touch R1–R12.
 - Terminal continuity: 127 of 232 pairs broken by direction alternation. Cannot distinguish real gap from labeling artifact — no GTFS↔`Txxxx` map exists in Phase 1 outputs. Deferred to Phase 4/5 where terminal awareness matters. *(This predates the Phase 1 rebuild on real GTFS trips in Meeting 10.)*
 - `solver/` stays at project root (Phase 1 legacy); `src/simulation/` sits under `src/` as planned. Asymmetry is historical, harmless, noted here.
@@ -319,6 +320,8 @@
 
 **Notes:**
 
+- **Authoritative source for current KPI values:** `data/processed/simulation_kpis.json`. Numbers quoted below are snapshots; if that JSON disagrees with this log, the JSON is correct.
+
 - **Real schedule KPIs (seed 42, 250 trips, current `schedule.csv`):**
   - E1 (std 0): 100% ±5, 0.00% propagation, 3 scheduled headway violations
   - E2 (std 60): 100% ±5, 1.72% propagation
@@ -336,6 +339,32 @@
 **Next Meeting:** Phase 3 kickoff (Crew Scheduling).
 
 ---
+
+## Meeting 12 — 2026-11-12
+**Attendees:** [Names]
+**Duration:** ~1 hour
+**Agenda:** Phase 1 objective restored — O6 rake balance active
+
+**Decisions:**
+- `solver/solve.py` now calls `add_obj6_rake_balance` + `build_objective`. The objective is active.
+- Phase 1 is **real optimization**, not a feasibility probe.
+- `constraints-v2.1` → `constraints-v2.2` (objective status updated, `add_obj6` finding corrected).
+
+**Action Items:**
+- [x] `solver/solve.py` — insert `o6 = C.add_obj6_rake_balance(...)` + `C.build_objective(model, o6)` before solver construction
+- [x] Re-run `python -m solver.solve` — OPTIMAL, 11.77 s
+- [x] Re-run `python -m solver.validator` — 10 PASS + 1 SKIPPED, Overall PASS
+- [x] Verify rake distribution matches objective math
+- [x] Update `constraints-v2.2`, `project-status.md`, `checklist.md`, `data-provenance.md`
+
+**Notes:**
+- **Result:** status = OPTIMAL, objective = 4800.0, best_bound = 4800.0, gap = 0.0%, elapsed = 11.77 s.
+- **Objective interpretation:** O6 rake balance only (`W_RAKE_BALANCE × OBJ_SCALE × Σ dev` = 3 × 100 × 16). Target per rake = floor(250/18) = 13. Sum of absolute deviations = 16. Rake distribution: 16 rakes × 14 trips, 2 rakes × 13 trips = 250.
+- **Corrected [FINDING]:** The Meeting 10 claim that `add_obj6_rake_balance` alone (without `build_objective`) causes INFEASIBLE is **not proven**. The cause of the earlier INFEASIBLE was not conclusively diagnosed. The current committed configuration calls both together, and this works reliably across reruns.
+- Validator output identical to Meeting 10 (same 10 PASS + 1 SKIP, Overall PASS) — objective change does not affect constraint satisfaction.
+- `constraints-v2.2` §6 documents the active objective; §8.1 shows the updated `solution.json` shape; §10 carries the corrected finding.
+
+**Next Meeting:** Phase 3 kickoff (Crew Scheduling).
 
 ## Meeting Template (for future meetings)
 

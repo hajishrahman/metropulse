@@ -1,0 +1,86 @@
+{
+  "overall": "PASS",
+  "num_trips": 250,
+  "checks": [
+    {
+      "check": "R1_service_coverage",
+      "status": "PASS",
+      "details": {
+        "required": 250,
+        "scheduled": 250,
+        "failures": []
+      }
+    },
+    {
+      "check": "R3_operating_window",
+      "status": "PASS",
+      "details": {
+        "failures": []
+      }
+    },
+    {
+      "check": "R4_fleet_availability",
+      "status": "PASS",
+      "details": {
+        "bad_rakes": []
+      }
+    },
+    {
+      "check": "R5_rake_non_overlap",
+      "status": "PASS",
+      "details": {
+        "failures": [],
+        "total": 0
+      }
+    },
+    {
+      "check": "R6_turnaround",
+      "status": "PASS",
+      "details": {
+        "same_terminal_pairs": 178,
+        "cross_terminal_pairs": 54,
+        "failures": []
+      }
+    },
+    {
+      "check": "R7_running_time",
+      "status": "PASS",
+      "details": {
+        "failures": []
+      }
+    },
+    {
+      "check": "R8_depot_capacity",
+      "status": "SKIPPED",
+      "details": {
+        "reason": "No stabling assignment in V1.",
+        "info_park_2_capacity": 2
+      }
+    },
+    {
+      "check": "R10_maintenance_threshold",
+      "status": "PASS",
+      "details": {
+        "threshold_km": 1000000,
+        "max_mileage_km": 199479,
+        "rakes_over_threshold": [],
+        "failures": []
+      }
+    },
+    {
+      "check": "R11_terminal_continuity",
+      "status": "PASS",
+      "details": {
+        "cross_terminal_switches": 54,
+        "failures": []
+      }
+    },
+    {
+      "check": "R12_nonservice_window",
+      "status": "PASS",
+      "details": {
+        "failures": []
+      }
+    }
+  ]
+}

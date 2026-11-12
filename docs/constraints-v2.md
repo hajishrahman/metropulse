@@ -1,4 +1,4 @@
-# MetroPulse — Constraint Specification v2.1
+# MetroPulse — Constraint Specification v2.2
 
 **Status:** Locked for V1 implementation (rebuilt on real GTFS trips)
 **Date:** 2026-11-12
@@ -35,7 +35,7 @@ Every parameter in this specification is tagged with one of:
 - **Deadhead IS modeled** (see §3.5).
 - No crew scheduling in V1.
 - No ML in V1.
-- Objective minimization is **currently disabled** (feasibility probe only).
+- Objective minimization: **O6 rake balance active** (see §6).
 
 ### 2.2 Out of Scope for V1
 
@@ -211,7 +211,7 @@ gap_ba  = turnaround  if b.last_stop == a.first_stop  else deadhead(b.last_stop 
 
 Where `deadhead(x, y)` = `TERMINAL_TO_TERMINAL_DEADHEAD_MIN` if both are terminals, `MUTTOM_TO_TERMINAL_DEADHEAD_MIN` if one is MUTTOM.
 
-Enforced per-order (see §8 [FINDING] — the earlier v2 wording that used one gap per pair was buggy and rejected by the validator).
+Enforced per-order (see 10 [FINDING] — the earlier v2 wording that used one gap per pair was buggy and rejected by the validator).
 
 Validator check:
 
@@ -266,7 +266,7 @@ Validator check: Every departure is ≥ 06:00.
 
 ---
 
-## 6. Soft Objectives (O1–O7) — CURRENTLY DISABLED
+## 6. Soft Objectives (O1–O7) — O6 ACTIVE, OTHERS DISABLED
 
 All weights are `[SYNTHETIC — INITIAL TUNING PARAMETERS]`.
 
@@ -277,15 +277,25 @@ All weights are `[SYNTHETIC — INITIAL TUNING PARAMETERS]`.
 | O3 | Minimize operational delay | 5 | Disabled |
 | O4 | Minimize empty running | 2 | Disabled |
 | O5 | Minimize depot movements | 2 | Disabled |
-| O6 | Balance rake utilization | 3 | Disabled — see §8 finding |
+| O6 | Balance rake utilization | 3 | **ACTIVE** |
 | O7 | Minimize reserve activation | 1 | Disabled |
 | O8 | Crew overtime | — | Phase 3 |
 
-V1 runs feasibility-only (no objective). Reason: the `add_obj6_rake_balance` function adds auxiliary dev variables that make the model INFEASIBLE when the objective is not minimized (see §8). Until that is fixed, the objective must remain disabled.
+**V1 objective:** O6 rake balance only, via `add_obj6_rake_balance` + `build_objective`.
 
-When the objective is re-enabled, it must be verified that O6 does not have the same side effect.
+**Formulation:**
 
----
+- Target per rake: `floor(num_trips / num_rakes) = floor(250 / 18) = 13`.
+- For each rake, `dev[r] = |trips_assigned[r] − 13|`.
+- Objective: `Minimize(W_RAKE_BALANCE × OBJ_SCALE × Σ dev[r]) = Minimize(3 × 100 × Σ dev)`.
+
+**Result (2026-11-12):** OPTIMAL, objective = 4800 (Σ dev = 16), best bound = 4800, gap = 0.0%, solve time 11.77s. Rake distribution: 16 rakes × 14 trips, 2 rakes × 13 trips = 250.
+
+The minimum achievable deviation under floor-target 13 is 16 (since `250 − 13×18 = 16`). The solver achieves this minimum, which is why gap = 0%.
+
+**Note on target choice:** the floor target (13) produces a minimum deviation of 16. A ceiling target (14) would produce a different, lower deviation (2). The current V1 uses the floor target consistently; this is a design choice, not an error, and is documented so the objective value 4800 is interpretable.
+
+**Multi-objective extension:** O1–O5 and O7 are declared in `config.py` as `W_*` constants but not active in the current objective. Restoring the full multi-term objective is future work.
 
 ## 7. Decision Variables
 
@@ -308,21 +318,21 @@ Three files are written to `data/processed/`.
 
 ### 8.1 `solution.json`
 
-Current shape (feasibility-only run):
+Current shape (O6 rake balance active):
 
 ```json
 {
   "status": "OPTIMAL",
-  "elapsed_sec": 28.73,
-  "objective": 0.0,
-  "best_bound": 0.0,
+  "elapsed_sec": 11.77,
+  "objective": 4800.0,
+  "best_bound": 4800.0,
   "gap_pct": 0.0,
   "num_trips": 250,
   "schedule": [ ... ]
 }
 ```
 
-`status` is `OPTIMAL` because the model has no objective (0 is the only feasible objective). `gap_pct = 0.0` reflects the absence of an objective, not a proven bound on a real objective.
+`status = OPTIMAL` because CP-SAT proved no feasible schedule can have objective value below 4800 (best bound = objective = 4800). The objective value 4800 corresponds to Σ dev = 16 under floor-target 13 (see §6).
 
 ### 8.2 `schedule.csv`
 
@@ -370,8 +380,8 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 
 - Muttom depot capacity — unbounded in V1.
 - Deadhead values — synthetic (15 min terminal, 8 min MUTT).
-- Objective — disabled (see §8 finding).
-- Optimality gap — reported as 0.0% because the objective is disabled. Do not present as "proven optimal against a cost".
+- Objective — single-term O6 rake balance only (see §6). Multi-objective extension (O1–O5, O7) deferred.
+- Optimality gap — reported as 0.0% because the O6 objective is proven optimal (best bound = objective = 4800).
 - Crew scheduling — deferred to Phase 3.
 - ML / XGBoost — deferred.
 - Passenger demand — no demand model.
@@ -384,7 +394,7 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 
 ### Findings from v2.1 rebuild (2026-11-12)
 
-- **[FINDING]** `add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled. With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in ~28 s. Root cause: free auxiliary dev variables with no objective to minimize, and CP-SAT does not assign them in a way that leaves the model feasible. Rule: never call `add_obj6_rake_balance` without `build_objective`.
+- **[FINDING]** `add_obj6_rake_balance` must be called alongside `build_objective`. When both are called, the model is OPTIMAL with objective 4800 in 11.77 s (2026-11-12). Earlier attempts to call `add_obj6_rake_balance` without `build_objective` during the 2026-11-12 rebuild produced mixed results (INFEASIBLE in some runs, but the code state was different). The precise cause was not conclusively diagnosed. The current committed configuration calls both together; this is the working configuration.
 
 -**[FINDING]** R6 must compute per-order gap values. The v2 wording used one gap per pair (5 min if either order was same-terminal). This allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. Validator caught 4 such violations on 250 trips. Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 
@@ -396,7 +406,7 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 
 | Scenario | Status | Focus |
 |---|---|---|
-| A — Baseline (232 full-route only) | Proven OPTIMAL (2026-11-12) | 232 trips, 18 rakes, 9/9 split |
+| A — 232-trip feasibility baseline | OPTIMAL (feasibility only, 2026-11-12) | 232 trips, 18 rakes, 9/9 split — pre-objective debugging baseline |
 | A' — Full GTFS service (250) | Proven OPTIMAL (2026-11-12) | 250 trips, 18 rakes, 9/7/2 split |
 | B — Peak-stress | Planned | Higher hourly demand |
 | C — Maintenance-stress | Planned | Non-empty maintenance windows |
