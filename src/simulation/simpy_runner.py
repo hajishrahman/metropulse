@@ -47,6 +47,11 @@ def run_simpy(
             f"rake set mismatch: grouped={sorted(grouped)},"
             f" delays={sorted(own_delay_sec_by_rake)}"
         )
+    if turnaround_sec < 0:
+        raise ValueError("turnaround_sec must be >= 0")
+    if running_sec is not None and running_sec < 0:
+        raise ValueError("running_sec must be >= 0 when provided")
+
     for rake, trips in grouped.items():
         if len(trips) != len(own_delay_sec_by_rake[rake]):
             raise ValueError(
@@ -72,8 +77,8 @@ def run_simpy(
     results: dict[str, list[dict]] = {rake: [] for rake in grouped}
 
     def rake_process(rake: str, trips: list[dict], delays: list[int]):
-         prev_actual_arr = None
-         for trip, own in zip(trips, delays):
+        prev_actual_arr = None
+        for trip, own in zip(trips, delays):
             sched_dep = trip["dep_sec"]
             sched_arr = trip["arr_sec"]
             early_dep = sched_dep + own

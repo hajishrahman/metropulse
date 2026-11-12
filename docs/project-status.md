@@ -140,23 +140,23 @@ The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simu
 | Exp | std (s) | ±5 on-time 250 | ±5 on-time 232 | Propagation % | HW actual |
 |---|---:|---:|---:|---:|---:|
 | E1 | 0 | 100.00 | 100.00 | 0.00 | 3 |
-| E2 | 60 | 100.00 | 100.00 | 0.86 | 3 |
-| E3 | 120 | 100.00 | 100.00 | 3.02 | 4 |
-| E4 | 300 | 100.00 | 100.00 | 6.47 | 4 |
+| E2 | 60 | 100.00 | 100.00 | 1.72 | 3 |
+| E3 | 120 | 100.00 | 100.00 | 4.74 | 4 |
+| E4 | 300 | 100.00 | 100.00 | 7.33 | 4 |
 
 ### 100-seed Monte Carlo (mean, p5–p95)
 
 | Exp | ±5 | ±3 (mean; p5–p95) | ±1 | Propagation % (mean; p5–p95) |
 |---|---:|---|---:|---:|
 | E1 | 100.00 | 100.00 (100.00–100.00) | 100.00 | 0.00 (0.00–0.00) |
-| E2 | 100.00 | 100.00 (100.00–100.00) | 96.29 | 1.10 (0.00–2.16) |
-| E3 | 100.00 | 97.00 (94.80–98.80) | 80.45 | 2.43 (1.27–3.88) |
-| E4 | 100.00 | 75.95 (70.40–80.40) | 60.84 | 5.88 (3.88–8.19) |
+| E2 | 100.00 | 100.00 (100.00–100.00) | 96.24 | 1.27 (0.00–2.59) |
+| E3 | 100.00 | 96.93 (94.44–99.20) | 80.13 | 2.91 (1.29–4.74) |
+| E4 | 100.00 | 75.47 (69.60–80.40) | 60.26 | 6.89 (4.31–9.48) |
 
 ### Notes
 
 - **3 scheduled same-direction pairs at 0 s gap** in the raw GTFS timetable (06:15, 08:00, 08:21). Each is a full trip (TPHT→ALVA) and a partial trip (MUTT→ALVA) departing the same minute on different rakes. Not a solver or simulation bug. R2a removed in v2.1 §5 because departure times are fixed by GTFS.
 - E3/E4 show 4 actual violations (3 structural + 1 delay-induced).
-- **Real GTFS schedule shows less propagation than the old synthetic one** (E4 mean 5.88% vs 11.64% before) because real slack is larger.
+- **Real GTFS schedule shows less propagation than the old synthetic one** (E4 mean 6.89% vs 11.64% before) because real slack is larger.
 - All Phase 2 delay values are `[SYNTHETIC]`. Results describe model behaviour, not real KMRL performance.
 

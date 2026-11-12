@@ -17,58 +17,14 @@ Provenance tags:
 """
 
 from __future__ import annotations
-
-import csv
 from collections import defaultdict
+
 from pathlib import Path
 
+from src.simulation.reference import TURNAROUND_SEC
+from src.simulation.schedule_loader import group_by_rake, load_schedule
+
 SCHEDULE_PATH = Path("data/processed/schedule.csv")
-
-# [SYNTHETIC] — project assumption, no verified source (constraints-v2 R6)
-TURNAROUND_SEC = 300
-
-# [DERIVED] — integer running time used by solver (constraints-v2 R7)
-RUNNING_SEC = 3000
-
-
-def parse_hhmm_to_sec(s: str) -> int:
-    """Parse 'HH:MM' or 'HH:MM:SS' -> integer seconds since midnight."""
-    parts = s.strip().split(":")
-    if len(parts) == 2:
-        hh, mm = parts
-        ss = "0"
-    elif len(parts) == 3:
-        hh, mm, ss = parts
-    else:
-        raise ValueError(f"bad time format (expected HH:MM or HH:MM:SS): {s!r}")
-    return int(hh) * 3600 + int(mm) * 60 + int(ss)
-
-
-def load_schedule(path: Path) -> list[dict]:
-    """Load schedule.csv, parse times to int seconds. Sorts nothing."""
-    rows = []
-    with path.open(newline="") as f:
-        for r in csv.DictReader(f):
-            rows.append(
-                {
-                    "trip_id": r["trip_id"],
-                    "rake_id": r["rake_id"],
-                    "direction": r["direction"],
-                    "dep_sec": parse_hhmm_to_sec(r["departure"]),
-                    "arr_sec": parse_hhmm_to_sec(r["arrival"]),
-                }
-            )
-    return rows
-
-
-def group_by_rake(rows: list[dict]) -> dict[str, list[dict]]:
-    """Group trips by rake, sorted by (dep_sec, trip_id)."""
-    by_rake: dict[str, list[dict]] = defaultdict(list)
-    for r in rows:
-        by_rake[r["rake_id"]].append(r)
-    for rake in by_rake:
-        by_rake[rake].sort(key=lambda t: (t["dep_sec"], t["trip_id"]))
-    return dict(by_rake)
 
 
 def continuity_report(by_rake: dict[str, list[dict]]) -> dict:
@@ -186,7 +142,7 @@ def scheduled_headway_report(rows: list[dict], min_headway_sec: int = 120) -> di
 
 
 def main() -> None:
-    if not SCHEDULE_PATH.exists():
+    if not SCHEDULE_PATH.is_file():
         raise SystemExit(f"ERROR: {SCHEDULE_PATH} not found")
 
     rows = load_schedule(SCHEDULE_PATH)

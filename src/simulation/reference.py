@@ -84,6 +84,11 @@ def propagate(
             raise ValueError(
                 f"trip {t.get('trip_id')!r}: missing or invalid duration_sec={d!r}"
             )
+        if t["arr_sec"] - t["dep_sec"] != d:
+            raise ValueError(
+                f"trip {t['trip_id']!r}: arr - dep = "
+                f"{t['arr_sec'] - t['dep_sec']}s does not match duration_sec={d}s"
+            )
 
     results = []
     prev_actual_arr = None

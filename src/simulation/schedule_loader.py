@@ -66,7 +66,7 @@ def parse_hhmm_to_sec(value: str) -> int:
 
 def load_schedule(path: Path = SCHEDULE_PATH) -> list[dict]:
     """Load schedule.csv -> list of trip dicts (unsorted)."""
-    if not path.exists():
+    if not path.is_file():
         raise FileNotFoundError(f"schedule not found: {path}")
 
     rows: list[dict] = []
@@ -89,8 +89,8 @@ def load_schedule(path: Path = SCHEDULE_PATH) -> list[dict]:
             seen_ids.add(tid)
 
             try:
-                dep_sec = parse_hhmm_to_sec(row["departure"])
-                arr_sec = parse_hhmm_to_sec(row["arrival"])
+                dep_sec = parse_hhmm_to_sec(values["departure"])
+                arr_sec = parse_hhmm_to_sec(values["arrival"])
             except ValueError as exc:
                 raise ValueError(f"line {line_no}: {exc}") from exc
 
@@ -131,15 +131,20 @@ def load_schedule_grouped(
 ) -> dict[str, list[dict]]:
     """Load + group. Cross-checks trip count against solution.json if present."""
     rows = load_schedule(path)
-    if solution_path.exists():
+    if solution_path.is_file():
         with solution_path.open() as f:
             sol = json.load(f)
+        if not isinstance(sol, dict):
+            raise ValueError("solution.json must contain a JSON object")
         expected = sol.get("num_trips")
-        if expected is not None and expected != len(rows):
-            raise ValueError(
-                f"trip count mismatch: schedule.csv has {len(rows)},"
-                f" solution.json says {expected}"
-            )
+        if expected is not None:
+            if isinstance(expected, bool) or not isinstance(expected, int) or expected < 0:
+                raise ValueError("solution.json num_trips must be a non-negative integer")
+            if expected != len(rows):
+                raise ValueError(
+                    f"trip count mismatch: schedule.csv has {len(rows)},"
+                    f" solution.json says {expected}"
+                )
     return group_by_rake(rows)
 
 

@@ -319,12 +319,12 @@
 
 **Notes:**
 
-- **Real schedule KPIs (seed 42, 250 trips):**
+- **Real schedule KPIs (seed 42, 250 trips, current `schedule.csv`):**
   - E1 (std 0): 100% ±5, 0.00% propagation, 3 scheduled headway violations
-  - E2 (std 60): 100% ±5, 0.86% propagation
-  - E3 (std 120): 100% ±5, 3.02% propagation
-  - E4 (std 300): 100% ±5, 6.47% propagation
-- **100-seed Monte Carlo means:** propagation E2 1.10%, E3 2.43%, E4 5.88% — significantly **lower** than the old synthetic numbers (3.88 / 7.76 / 11.64). Real GTFS slack absorbs more delay.
+  - E2 (std 60): 100% ±5, 1.72% propagation
+  - E3 (std 120): 100% ±5, 4.74% propagation
+  - E4 (std 300): 100% ±5, 7.33% propagation
+- The KPI numbers above are from the current `schedule.csv`. A prior run on a different but valid OPTIMAL schedule showed propagation E2 0.86%, E3 3.02%, E4 6.47%. Both are correct for their respective schedules — CP-SAT non-determinism (documented below).
 - ±3/±1 on-time degrade under higher std as expected: E4 mean ±3 75.95%, ±1 60.84%.
 - **3 scheduled same-direction pairs at 0 s gap** in the raw GTFS timetable. Identified as data fact during Phase 2 preflight: each pair is a full trip (TPHT→ALVA) plus a partial trip (MUTT→ALVA) departing the same minute on **different rakes**. Not a solver or simulation error. R2 was removed from V1 in `constraints-v2.1` §5.
 - `metadata.running_time_sec` in the KPI JSON is `"per-trip (GTFS duration_sec)"` (string), not a number. Consumers should not parse it as int.
