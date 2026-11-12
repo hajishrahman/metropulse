@@ -37,8 +37,8 @@
       "check": "R6_turnaround",
       "status": "PASS",
       "details": {
-        "same_terminal_pairs": 164,
-        "cross_terminal_pairs": 68,
+        "same_terminal_pairs": 178,
+        "cross_terminal_pairs": 54,
         "failures": []
       }
     },
@@ -71,7 +71,7 @@
       "check": "R11_terminal_continuity",
       "status": "PASS",
       "details": {
-        "cross_terminal_switches": 68,
+        "cross_terminal_switches": 54,
         "failures": []
       }
     },

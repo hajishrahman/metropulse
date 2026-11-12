@@ -261,8 +261,8 @@
 - [x] 250-trip solve: **OPTIMAL, 28.73 s**
 - [x] 250-trip validator: **10 PASS + 1 SKIPPED (R8), Overall PASS**
 - [x] Doc pass in progress: `checklist.md`, `constraints-v2.md` (v2.1), `data-provenance.md`
-- [ ] Next: regenerate Phase 2 (SimPy) on the new 250-trip schedule
-- [ ] Next: `project-status.md` update
+- [x] Next: regenerate Phase 2 (SimPy) on the new 250-trip schedule — done in Meeting 11
+- [x] Next: `project-status.md` update — done in Meeting 11
 
 **Notes:**
 
@@ -331,6 +331,7 @@
 - ±5 on-time 100% remains a **structural model property** (own-delay cap 300 s = ±5 inclusive), not an operational guarantee.
 - All Phase 2 delay values are `[SYNTHETIC]`. Model behaviour, not real KMRL performance.
 - All work committed. Repo state clean.
+- `[FINDING]` Phase 1 solver is **non-deterministic** when the objective is disabled (feasibility probe mode). A fresh run may produce a different valid rake assignment than `schedule_250_trips.csv`. Both are OPTIMAL under the empty objective and PASS the independent validator. This is normal CP-SAT behaviour with `num_search_workers > 1` and no objective. The frozen baseline is one valid reference solution, not the unique solution.
 
 **Next Meeting:** Phase 3 kickoff (Crew Scheduling).
 

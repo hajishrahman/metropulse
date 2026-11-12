@@ -1,6 +1,6 @@
 {
   "status": "OPTIMAL",
-  "elapsed_sec": 28.731488466262817,
+  "elapsed_sec": 3.4581493999994564,
   "objective": 0.0,
   "best_bound": 0.0,
   "gap_pct": 0.0,
@@ -19,7 +19,7 @@
     },
     {
       "trip_id": "WK_3",
-      "rake_id": "R016",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -30,7 +30,7 @@
     },
     {
       "trip_id": "WK_6",
-      "rake_id": "R014",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -63,7 +63,7 @@
     },
     {
       "trip_id": "WK_8",
-      "rake_id": "R010",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -74,7 +74,7 @@
     },
     {
       "trip_id": "WK_17",
-      "rake_id": "R006",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -85,7 +85,7 @@
     },
     {
       "trip_id": "WK_11",
-      "rake_id": "R007",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -96,7 +96,7 @@
     },
     {
       "trip_id": "WK_20",
-      "rake_id": "R009",
+      "rake_id": "R003",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -107,7 +107,7 @@
     },
     {
       "trip_id": "WK_2",
-      "rake_id": "R017",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -118,7 +118,7 @@
     },
     {
       "trip_id": "WK_5",
-      "rake_id": "R001",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -129,7 +129,7 @@
     },
     {
       "trip_id": "WK_30",
-      "rake_id": "R013",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "MUTT",
       "last_stop": "TPHT",
@@ -140,7 +140,7 @@
     },
     {
       "trip_id": "WK_34",
-      "rake_id": "R005",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "MUTT",
       "last_stop": "ALVA",
@@ -151,7 +151,7 @@
     },
     {
       "trip_id": "WK_7",
-      "rake_id": "R003",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -162,7 +162,7 @@
     },
     {
       "trip_id": "WK_16",
-      "rake_id": "R011",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -173,7 +173,7 @@
     },
     {
       "trip_id": "WK_25",
-      "rake_id": "R014",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -184,7 +184,7 @@
     },
     {
       "trip_id": "WK_33",
-      "rake_id": "R012",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -195,7 +195,7 @@
     },
     {
       "trip_id": "WK_41",
-      "rake_id": "R015",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "MUTT",
       "last_stop": "TPHT",
@@ -206,7 +206,7 @@
     },
     {
       "trip_id": "WK_10",
-      "rake_id": "R008",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -217,7 +217,7 @@
     },
     {
       "trip_id": "WK_19",
-      "rake_id": "R004",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -228,7 +228,7 @@
     },
     {
       "trip_id": "WK_13",
-      "rake_id": "R002",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -239,7 +239,7 @@
     },
     {
       "trip_id": "WK_21",
-      "rake_id": "R009",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -250,7 +250,7 @@
     },
     {
       "trip_id": "WK_49",
-      "rake_id": "R010",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "MUTT",
       "last_stop": "TPHT",
@@ -261,7 +261,7 @@
     },
     {
       "trip_id": "WK_29",
-      "rake_id": "R006",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -272,7 +272,7 @@
     },
     {
       "trip_id": "WK_22",
-      "rake_id": "R007",
+      "rake_id": "R008",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -283,7 +283,7 @@
     },
     {
       "trip_id": "WK_14",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -294,7 +294,7 @@
     },
     {
       "trip_id": "WK_80",
-      "rake_id": "R018",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "MUTT",
       "last_stop": "ALVA",
@@ -305,7 +305,7 @@
     },
     {
       "trip_id": "WK_23",
-      "rake_id": "R005",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -316,7 +316,7 @@
     },
     {
       "trip_id": "WK_24",
-      "rake_id": "R011",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -327,7 +327,7 @@
     },
     {
       "trip_id": "WK_61",
-      "rake_id": "R003",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -338,7 +338,7 @@
     },
     {
       "trip_id": "WK_40",
-      "rake_id": "R013",
+      "rake_id": "R011",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -349,7 +349,7 @@
     },
     {
       "trip_id": "WK_26",
-      "rake_id": "R016",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -360,7 +360,7 @@
     },
     {
       "trip_id": "WK_35",
-      "rake_id": "R012",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -371,7 +371,7 @@
     },
     {
       "trip_id": "WK_81",
-      "rake_id": "R017",
+      "rake_id": "R004",
       "direction": "DOWN",
       "first_stop": "MUTT",
       "last_stop": "ALVA",
@@ -382,7 +382,7 @@
     },
     {
       "trip_id": "WK_27",
-      "rake_id": "R014",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -393,7 +393,7 @@
     },
     {
       "trip_id": "WK_36",
-      "rake_id": "R015",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -404,7 +404,7 @@
     },
     {
       "trip_id": "WK_70",
-      "rake_id": "R008",
+      "rake_id": "R017",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -415,7 +415,7 @@
     },
     {
       "trip_id": "WK_48",
-      "rake_id": "R018",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -426,7 +426,7 @@
     },
     {
       "trip_id": "WK_28",
-      "rake_id": "R002",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -437,7 +437,7 @@
     },
     {
       "trip_id": "WK_37",
-      "rake_id": "R004",
+      "rake_id": "R003",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -448,7 +448,7 @@
     },
     {
       "trip_id": "WK_31",
-      "rake_id": "R006",
+      "rake_id": "R007",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -459,7 +459,7 @@
     },
     {
       "trip_id": "WK_54",
-      "rake_id": "R017",
+      "rake_id": "R001",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -470,7 +470,7 @@
     },
     {
       "trip_id": "WK_32",
-      "rake_id": "R009",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -481,7 +481,7 @@
     },
     {
       "trip_id": "WK_57",
-      "rake_id": "R010",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -492,7 +492,7 @@
     },
     {
       "trip_id": "WK_38",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -503,7 +503,7 @@
     },
     {
       "trip_id": "WK_60",
-      "rake_id": "R005",
+      "rake_id": "R012",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -514,7 +514,7 @@
     },
     {
       "trip_id": "WK_42",
-      "rake_id": "R011",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -525,7 +525,7 @@
     },
     {
       "trip_id": "WK_64",
-      "rake_id": "R003",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -536,7 +536,7 @@
     },
     {
       "trip_id": "WK_44",
-      "rake_id": "R013",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -547,7 +547,7 @@
     },
     {
       "trip_id": "WK_67",
-      "rake_id": "R016",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -558,7 +558,7 @@
     },
     {
       "trip_id": "WK_46",
-      "rake_id": "R012",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -569,7 +569,7 @@
     },
     {
       "trip_id": "WK_69",
-      "rake_id": "R014",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -580,7 +580,7 @@
     },
     {
       "trip_id": "WK_50",
-      "rake_id": "R015",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -591,7 +591,7 @@
     },
     {
       "trip_id": "WK_72",
-      "rake_id": "R008",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -602,7 +602,7 @@
     },
     {
       "trip_id": "WK_52",
-      "rake_id": "R007",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -613,7 +613,7 @@
     },
     {
       "trip_id": "WK_74",
-      "rake_id": "R002",
+      "rake_id": "R004",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -624,7 +624,7 @@
     },
     {
       "trip_id": "WK_55",
-      "rake_id": "R018",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -635,7 +635,7 @@
     },
     {
       "trip_id": "WK_76",
-      "rake_id": "R006",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -646,7 +646,7 @@
     },
     {
       "trip_id": "WK_58",
-      "rake_id": "R017",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -657,7 +657,7 @@
     },
     {
       "trip_id": "WK_39",
-      "rake_id": "R009",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -668,7 +668,7 @@
     },
     {
       "trip_id": "WK_62",
-      "rake_id": "R004",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -679,7 +679,7 @@
     },
     {
       "trip_id": "WK_43",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -690,7 +690,7 @@
     },
     {
       "trip_id": "WK_65",
-      "rake_id": "R005",
+      "rake_id": "R008",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -701,7 +701,7 @@
     },
     {
       "trip_id": "WK_45",
-      "rake_id": "R010",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -712,7 +712,7 @@
     },
     {
       "trip_id": "WK_68",
-      "rake_id": "R003",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -723,7 +723,7 @@
     },
     {
       "trip_id": "WK_47",
-      "rake_id": "R013",
+      "rake_id": "R012",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -734,7 +734,7 @@
     },
     {
       "trip_id": "WK_71",
-      "rake_id": "R014",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -745,7 +745,7 @@
     },
     {
       "trip_id": "WK_51",
-      "rake_id": "R011",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -756,7 +756,7 @@
     },
     {
       "trip_id": "WK_53",
-      "rake_id": "R016",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -767,7 +767,7 @@
     },
     {
       "trip_id": "WK_73",
-      "rake_id": "R008",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -778,7 +778,7 @@
     },
     {
       "trip_id": "WK_75",
-      "rake_id": "R012",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -789,7 +789,7 @@
     },
     {
       "trip_id": "WK_56",
-      "rake_id": "R015",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -800,7 +800,7 @@
     },
     {
       "trip_id": "WK_77",
-      "rake_id": "R002",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -811,7 +811,7 @@
     },
     {
       "trip_id": "WK_59",
-      "rake_id": "R018",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -822,7 +822,7 @@
     },
     {
       "trip_id": "WK_78",
-      "rake_id": "R006",
+      "rake_id": "R007",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -833,7 +833,7 @@
     },
     {
       "trip_id": "WK_63",
-      "rake_id": "R017",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -844,7 +844,7 @@
     },
     {
       "trip_id": "WK_79",
-      "rake_id": "R012",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -855,7 +855,7 @@
     },
     {
       "trip_id": "WK_66",
-      "rake_id": "R005",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -866,7 +866,7 @@
     },
     {
       "trip_id": "WK_109",
-      "rake_id": "R004",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -888,7 +888,7 @@
     },
     {
       "trip_id": "WK_113",
-      "rake_id": "R010",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -899,7 +899,7 @@
     },
     {
       "trip_id": "WK_93",
-      "rake_id": "R007",
+      "rake_id": "R011",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -910,7 +910,7 @@
     },
     {
       "trip_id": "WK_117",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -921,7 +921,7 @@
     },
     {
       "trip_id": "WK_96",
-      "rake_id": "R013",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -932,7 +932,7 @@
     },
     {
       "trip_id": "WK_83",
-      "rake_id": "R009",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -943,7 +943,7 @@
     },
     {
       "trip_id": "WK_99",
-      "rake_id": "R016",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -954,7 +954,7 @@
     },
     {
       "trip_id": "WK_85",
-      "rake_id": "R018",
+      "rake_id": "R017",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -965,7 +965,7 @@
     },
     {
       "trip_id": "WK_102",
-      "rake_id": "R014",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -976,7 +976,7 @@
     },
     {
       "trip_id": "WK_87",
-      "rake_id": "R002",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -987,7 +987,7 @@
     },
     {
       "trip_id": "WK_105",
-      "rake_id": "R012",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -998,7 +998,7 @@
     },
     {
       "trip_id": "WK_89",
-      "rake_id": "R008",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1009,7 +1009,7 @@
     },
     {
       "trip_id": "WK_108",
-      "rake_id": "R015",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1031,7 +1031,7 @@
     },
     {
       "trip_id": "WK_112",
-      "rake_id": "R006",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1042,7 +1042,7 @@
     },
     {
       "trip_id": "WK_94",
-      "rake_id": "R011",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1053,7 +1053,7 @@
     },
     {
       "trip_id": "WK_116",
-      "rake_id": "R001",
+      "rake_id": "R004",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1064,7 +1064,7 @@
     },
     {
       "trip_id": "WK_97",
-      "rake_id": "R017",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1075,7 +1075,7 @@
     },
     {
       "trip_id": "WK_84",
-      "rake_id": "R007",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1086,7 +1086,7 @@
     },
     {
       "trip_id": "WK_100",
-      "rake_id": "R005",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1097,7 +1097,7 @@
     },
     {
       "trip_id": "WK_86",
-      "rake_id": "R010",
+      "rake_id": "R001",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1108,7 +1108,7 @@
     },
     {
       "trip_id": "WK_103",
-      "rake_id": "R004",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1119,7 +1119,7 @@
     },
     {
       "trip_id": "WK_88",
-      "rake_id": "R016",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1130,7 +1130,7 @@
     },
     {
       "trip_id": "WK_106",
-      "rake_id": "R018",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1141,7 +1141,7 @@
     },
     {
       "trip_id": "WK_90",
-      "rake_id": "R009",
+      "rake_id": "R015",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1152,7 +1152,7 @@
     },
     {
       "trip_id": "WK_110",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1163,7 +1163,7 @@
     },
     {
       "trip_id": "WK_92",
-      "rake_id": "R008",
+      "rake_id": "R012",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1174,7 +1174,7 @@
     },
     {
       "trip_id": "WK_114",
-      "rake_id": "R015",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1185,7 +1185,7 @@
     },
     {
       "trip_id": "WK_95",
-      "rake_id": "R002",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1196,7 +1196,7 @@
     },
     {
       "trip_id": "WK_118",
-      "rake_id": "R001",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1207,7 +1207,7 @@
     },
     {
       "trip_id": "WK_98",
-      "rake_id": "R011",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1218,7 +1218,7 @@
     },
     {
       "trip_id": "WK_120",
-      "rake_id": "R012",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1229,7 +1229,7 @@
     },
     {
       "trip_id": "WK_101",
-      "rake_id": "R017",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1240,7 +1240,7 @@
     },
     {
       "trip_id": "WK_122",
-      "rake_id": "R006",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1251,7 +1251,7 @@
     },
     {
       "trip_id": "WK_104",
-      "rake_id": "R014",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1262,7 +1262,7 @@
     },
     {
       "trip_id": "WK_124",
-      "rake_id": "R005",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1273,7 +1273,7 @@
     },
     {
       "trip_id": "WK_107",
-      "rake_id": "R007",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1284,7 +1284,7 @@
     },
     {
       "trip_id": "WK_126",
-      "rake_id": "R003",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1295,7 +1295,7 @@
     },
     {
       "trip_id": "WK_111",
-      "rake_id": "R018",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1306,7 +1306,7 @@
     },
     {
       "trip_id": "WK_128",
-      "rake_id": "R008",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1317,7 +1317,7 @@
     },
     {
       "trip_id": "WK_115",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1328,7 +1328,7 @@
     },
     {
       "trip_id": "WK_130",
-      "rake_id": "R016",
+      "rake_id": "R017",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1339,7 +1339,7 @@
     },
     {
       "trip_id": "WK_119",
-      "rake_id": "R010",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1350,7 +1350,7 @@
     },
     {
       "trip_id": "WK_132",
-      "rake_id": "R009",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1361,7 +1361,7 @@
     },
     {
       "trip_id": "WK_121",
-      "rake_id": "R002",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1372,7 +1372,7 @@
     },
     {
       "trip_id": "WK_134",
-      "rake_id": "R015",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1383,7 +1383,7 @@
     },
     {
       "trip_id": "WK_123",
-      "rake_id": "R004",
+      "rake_id": "R003",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1394,7 +1394,7 @@
     },
     {
       "trip_id": "WK_136",
-      "rake_id": "R017",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1405,7 +1405,7 @@
     },
     {
       "trip_id": "WK_125",
-      "rake_id": "R001",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1427,7 +1427,7 @@
     },
     {
       "trip_id": "WK_127",
-      "rake_id": "R006",
+      "rake_id": "R012",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1438,7 +1438,7 @@
     },
     {
       "trip_id": "WK_140",
-      "rake_id": "R012",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1449,7 +1449,7 @@
     },
     {
       "trip_id": "WK_129",
-      "rake_id": "R007",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1460,7 +1460,7 @@
     },
     {
       "trip_id": "WK_142",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1471,7 +1471,7 @@
     },
     {
       "trip_id": "WK_131",
-      "rake_id": "R011",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1482,7 +1482,7 @@
     },
     {
       "trip_id": "WK_144",
-      "rake_id": "R005",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1493,7 +1493,7 @@
     },
     {
       "trip_id": "WK_133",
-      "rake_id": "R008",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1504,7 +1504,7 @@
     },
     {
       "trip_id": "WK_146",
-      "rake_id": "R003",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1515,7 +1515,7 @@
     },
     {
       "trip_id": "WK_135",
-      "rake_id": "R018",
+      "rake_id": "R011",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1526,7 +1526,7 @@
     },
     {
       "trip_id": "WK_148",
-      "rake_id": "R004",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1537,7 +1537,7 @@
     },
     {
       "trip_id": "WK_137",
-      "rake_id": "R010",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1548,7 +1548,7 @@
     },
     {
       "trip_id": "WK_150",
-      "rake_id": "R015",
+      "rake_id": "R007",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1559,7 +1559,7 @@
     },
     {
       "trip_id": "WK_139",
-      "rake_id": "R002",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1570,7 +1570,7 @@
     },
     {
       "trip_id": "WK_152",
-      "rake_id": "R006",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1581,7 +1581,7 @@
     },
     {
       "trip_id": "WK_141",
-      "rake_id": "R014",
+      "rake_id": "R004",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1592,7 +1592,7 @@
     },
     {
       "trip_id": "WK_172",
-      "rake_id": "R016",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "MUTT",
       "last_stop": "TPHT",
@@ -1603,7 +1603,7 @@
     },
     {
       "trip_id": "WK_154",
-      "rake_id": "R017",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1614,7 +1614,7 @@
     },
     {
       "trip_id": "WK_143",
-      "rake_id": "R012",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1625,7 +1625,7 @@
     },
     {
       "trip_id": "WK_156",
-      "rake_id": "R001",
+      "rake_id": "R008",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1636,7 +1636,7 @@
     },
     {
       "trip_id": "WK_145",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1647,7 +1647,7 @@
     },
     {
       "trip_id": "WK_158",
-      "rake_id": "R009",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1658,7 +1658,7 @@
     },
     {
       "trip_id": "WK_147",
-      "rake_id": "R005",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1669,7 +1669,7 @@
     },
     {
       "trip_id": "WK_160",
-      "rake_id": "R008",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1680,7 +1680,7 @@
     },
     {
       "trip_id": "WK_149",
-      "rake_id": "R003",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1691,7 +1691,7 @@
     },
     {
       "trip_id": "WK_161",
-      "rake_id": "R011",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1702,7 +1702,7 @@
     },
     {
       "trip_id": "WK_151",
-      "rake_id": "R007",
+      "rake_id": "R015",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1713,7 +1713,7 @@
     },
     {
       "trip_id": "WK_190",
-      "rake_id": "R010",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1724,7 +1724,7 @@
     },
     {
       "trip_id": "WK_171",
-      "rake_id": "R004",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1735,7 +1735,7 @@
     },
     {
       "trip_id": "WK_162",
-      "rake_id": "R018",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1746,7 +1746,7 @@
     },
     {
       "trip_id": "WK_153",
-      "rake_id": "R015",
+      "rake_id": "R012",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1757,7 +1757,7 @@
     },
     {
       "trip_id": "WK_163",
-      "rake_id": "R002",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1768,7 +1768,7 @@
     },
     {
       "trip_id": "WK_155",
-      "rake_id": "R016",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1779,7 +1779,7 @@
     },
     {
       "trip_id": "WK_164",
-      "rake_id": "R014",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1801,7 +1801,7 @@
     },
     {
       "trip_id": "WK_165",
-      "rake_id": "R006",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1812,7 +1812,7 @@
     },
     {
       "trip_id": "WK_159",
-      "rake_id": "R012",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1823,7 +1823,7 @@
     },
     {
       "trip_id": "WK_166",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1834,7 +1834,7 @@
     },
     {
       "trip_id": "WK_183",
-      "rake_id": "R001",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1845,7 +1845,7 @@
     },
     {
       "trip_id": "WK_167",
-      "rake_id": "R005",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1856,7 +1856,7 @@
     },
     {
       "trip_id": "WK_186",
-      "rake_id": "R008",
+      "rake_id": "R001",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1867,7 +1867,7 @@
     },
     {
       "trip_id": "WK_169",
-      "rake_id": "R009",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1878,7 +1878,7 @@
     },
     {
       "trip_id": "WK_189",
-      "rake_id": "R011",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1889,7 +1889,7 @@
     },
     {
       "trip_id": "WK_173",
-      "rake_id": "R007",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1900,7 +1900,7 @@
     },
     {
       "trip_id": "WK_193",
-      "rake_id": "R010",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1911,7 +1911,7 @@
     },
     {
       "trip_id": "WK_175",
-      "rake_id": "R003",
+      "rake_id": "R007",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1922,7 +1922,7 @@
     },
     {
       "trip_id": "WK_195",
-      "rake_id": "R018",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1933,7 +1933,7 @@
     },
     {
       "trip_id": "WK_177",
-      "rake_id": "R015",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1955,7 +1955,7 @@
     },
     {
       "trip_id": "WK_179",
-      "rake_id": "R016",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -1966,7 +1966,7 @@
     },
     {
       "trip_id": "WK_199",
-      "rake_id": "R014",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1988,7 +1988,7 @@
     },
     {
       "trip_id": "WK_201",
-      "rake_id": "R002",
+      "rake_id": "R003",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -1999,7 +1999,7 @@
     },
     {
       "trip_id": "WK_184",
-      "rake_id": "R012",
+      "rake_id": "R008",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2010,7 +2010,7 @@
     },
     {
       "trip_id": "WK_168",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2021,7 +2021,7 @@
     },
     {
       "trip_id": "WK_187",
-      "rake_id": "R006",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2032,7 +2032,7 @@
     },
     {
       "trip_id": "WK_170",
-      "rake_id": "R005",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2043,7 +2043,7 @@
     },
     {
       "trip_id": "WK_191",
-      "rake_id": "R008",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2054,7 +2054,7 @@
     },
     {
       "trip_id": "WK_174",
-      "rake_id": "R009",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2065,7 +2065,7 @@
     },
     {
       "trip_id": "WK_194",
-      "rake_id": "R011",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2076,7 +2076,7 @@
     },
     {
       "trip_id": "WK_176",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2087,7 +2087,7 @@
     },
     {
       "trip_id": "WK_196",
-      "rake_id": "R010",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2098,7 +2098,7 @@
     },
     {
       "trip_id": "WK_178",
-      "rake_id": "R003",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2109,7 +2109,7 @@
     },
     {
       "trip_id": "WK_198",
-      "rake_id": "R018",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2120,7 +2120,7 @@
     },
     {
       "trip_id": "WK_180",
-      "rake_id": "R015",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2142,7 +2142,7 @@
     },
     {
       "trip_id": "WK_182",
-      "rake_id": "R016",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2153,7 +2153,7 @@
     },
     {
       "trip_id": "WK_202",
-      "rake_id": "R014",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2175,7 +2175,7 @@
     },
     {
       "trip_id": "WK_205",
-      "rake_id": "R002",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2186,7 +2186,7 @@
     },
     {
       "trip_id": "WK_188",
-      "rake_id": "R012",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2197,7 +2197,7 @@
     },
     {
       "trip_id": "WK_206",
-      "rake_id": "R013",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2208,7 +2208,7 @@
     },
     {
       "trip_id": "WK_192",
-      "rake_id": "R006",
+      "rake_id": "R011",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2219,7 +2219,7 @@
     },
     {
       "trip_id": "WK_207",
-      "rake_id": "R005",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2230,7 +2230,7 @@
     },
     {
       "trip_id": "WK_214",
-      "rake_id": "R008",
+      "rake_id": "R001",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2241,7 +2241,7 @@
     },
     {
       "trip_id": "WK_203",
-      "rake_id": "R007",
+      "rake_id": "R006",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2252,7 +2252,7 @@
     },
     {
       "trip_id": "WK_215",
-      "rake_id": "R011",
+      "rake_id": "R009",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2263,7 +2263,7 @@
     },
     {
       "trip_id": "WK_208",
-      "rake_id": "R001",
+      "rake_id": "R015",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2274,7 +2274,7 @@
     },
     {
       "trip_id": "WK_216",
-      "rake_id": "R010",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2285,7 +2285,7 @@
     },
     {
       "trip_id": "WK_209",
-      "rake_id": "R015",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2296,7 +2296,7 @@
     },
     {
       "trip_id": "WK_217",
-      "rake_id": "R009",
+      "rake_id": "R016",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2307,7 +2307,7 @@
     },
     {
       "trip_id": "WK_218",
-      "rake_id": "R003",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2318,7 +2318,7 @@
     },
     {
       "trip_id": "WK_210",
-      "rake_id": "R016",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2329,7 +2329,7 @@
     },
     {
       "trip_id": "WK_211",
-      "rake_id": "R018",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2340,7 +2340,7 @@
     },
     {
       "trip_id": "WK_219",
-      "rake_id": "R004",
+      "rake_id": "R010",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2362,7 +2362,7 @@
     },
     {
       "trip_id": "WK_220",
-      "rake_id": "R014",
+      "rake_id": "R004",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2373,7 +2373,7 @@
     },
     {
       "trip_id": "WK_213",
-      "rake_id": "R002",
+      "rake_id": "R011",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2395,7 +2395,7 @@
     },
     {
       "trip_id": "WK_221",
-      "rake_id": "R013",
+      "rake_id": "R008",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2406,7 +2406,7 @@
     },
     {
       "trip_id": "WK_227",
-      "rake_id": "R018",
+      "rake_id": "R002",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2417,7 +2417,7 @@
     },
     {
       "trip_id": "WK_204",
-      "rake_id": "R007",
+      "rake_id": "R003",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2428,7 +2428,7 @@
     },
     {
       "trip_id": "WK_222",
-      "rake_id": "R006",
+      "rake_id": "R005",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2439,7 +2439,7 @@
     },
     {
       "trip_id": "WK_228",
-      "rake_id": "R011",
+      "rake_id": "R018",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2450,7 +2450,7 @@
     },
     {
       "trip_id": "WK_229",
-      "rake_id": "R008",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2472,7 +2472,7 @@
     },
     {
       "trip_id": "WK_233",
-      "rake_id": "R010",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2483,7 +2483,7 @@
     },
     {
       "trip_id": "WK_224",
-      "rake_id": "R005",
+      "rake_id": "R014",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2494,7 +2494,7 @@
     },
     {
       "trip_id": "WK_235",
-      "rake_id": "R003",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2505,7 +2505,7 @@
     },
     {
       "trip_id": "WK_225",
-      "rake_id": "R012",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2516,7 +2516,7 @@
     },
     {
       "trip_id": "WK_236",
-      "rake_id": "R014",
+      "rake_id": "R009",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2527,7 +2527,7 @@
     },
     {
       "trip_id": "WK_230",
-      "rake_id": "R016",
+      "rake_id": "R013",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2538,7 +2538,7 @@
     },
     {
       "trip_id": "WK_238",
-      "rake_id": "R009",
+      "rake_id": "R004",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2549,7 +2549,7 @@
     },
     {
       "trip_id": "WK_239",
-      "rake_id": "R013",
+      "rake_id": "R012",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2560,7 +2560,7 @@
     },
     {
       "trip_id": "WK_231",
-      "rake_id": "R004",
+      "rake_id": "R017",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2593,7 +2593,7 @@
     },
     {
       "trip_id": "WK_241",
-      "rake_id": "R017",
+      "rake_id": "R008",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2604,7 +2604,7 @@
     },
     {
       "trip_id": "WK_234",
-      "rake_id": "R010",
+      "rake_id": "R018",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2615,7 +2615,7 @@
     },
     {
       "trip_id": "WK_244",
-      "rake_id": "R001",
+      "rake_id": "R003",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2626,7 +2626,7 @@
     },
     {
       "trip_id": "WK_246",
-      "rake_id": "R011",
+      "rake_id": "R001",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2637,7 +2637,7 @@
     },
     {
       "trip_id": "WK_237",
-      "rake_id": "R018",
+      "rake_id": "R011",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2648,7 +2648,7 @@
     },
     {
       "trip_id": "WK_247",
-      "rake_id": "R009",
+      "rake_id": "R010",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2659,7 +2659,7 @@
     },
     {
       "trip_id": "WK_242",
-      "rake_id": "R014",
+      "rake_id": "R006",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2692,7 +2692,7 @@
     },
     {
       "trip_id": "WK_249",
-      "rake_id": "R016",
+      "rake_id": "R014",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2703,7 +2703,7 @@
     },
     {
       "trip_id": "WK_252",
-      "rake_id": "R010",
+      "rake_id": "R016",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "TPHT",
@@ -2714,7 +2714,7 @@
     },
     {
       "trip_id": "WK_245",
-      "rake_id": "R006",
+      "rake_id": "R002",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "ALVA",
@@ -2725,7 +2725,7 @@
     },
     {
       "trip_id": "WK_255",
-      "rake_id": "R007",
+      "rake_id": "R005",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
@@ -2736,7 +2736,7 @@
     },
     {
       "trip_id": "WK_250",
-      "rake_id": "R002",
+      "rake_id": "R007",
       "direction": "DOWN",
       "first_stop": "TPHT",
       "last_stop": "MUTT",
@@ -2747,7 +2747,7 @@
     },
     {
       "trip_id": "WK_254",
-      "rake_id": "R017",
+      "rake_id": "R013",
       "direction": "UP",
       "first_stop": "ALVA",
       "last_stop": "MUTT",
