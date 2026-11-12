@@ -54,7 +54,7 @@ def build_station_index():
 
 
 def hour_of(dep_time):
-    return int(dep_time.split(":")[0])
+    return parse_time_to_sec(dep_time) // 3600
 
 
 def main():
@@ -93,6 +93,8 @@ def main():
     full_ids = {t["trip_id"] for t in full}
     partial_ids = {t["trip_id"] for t in partial}
     bad3 = 0
+    bad3 += len(full) - len(full_ids)
+    bad3 += len(partial) - len(partial_ids)
     for t in full:
         dep = parse_time_to_sec(t["departure_time"])
         if not (6 * 3600 <= dep < 23 * 3600):
@@ -107,7 +109,9 @@ def main():
     # ---- Check 4 ----
     bad4 = 0
     for t in full:
-        if int(t["duration"]) <= 0 or int(t["stop_count"]) < 2:
+        duration = (parse_time_to_sec(t["arrival_time"])
+                    - parse_time_to_sec(t["departure_time"]))
+        if duration <= 0 or duration != int(t["duration"]) or int(t["stop_count"]) < 2:
             bad4 += 1
 
     seq_by_trip = defaultdict(list)
@@ -140,12 +144,18 @@ def main():
     hourly_232 = defaultdict(lambda: {"UP": 0, "DOWN": 0})
     for t in full:
         h = hour_of(t["departure_time"])
-        hourly_232[h][t["direction"]] += 1
+        if t["direction"] not in ("UP", "DOWN"):
+            errors.append(f"[5] Invalid direction for trip {t['trip_id']}: {t['direction']!r}")
+        else:
+            hourly_232[h][t["direction"]] += 1
 
     hourly_18 = defaultdict(lambda: {"UP": 0, "DOWN": 0})
     for t in partial:
         h = hour_of(t["departure_time"])
-        hourly_18[h][t["direction"]] += 1
+        if t["direction"] not in ("UP", "DOWN"):
+            errors.append(f"[5] Invalid direction for trip {t['trip_id']}: {t['direction']!r}")
+        else:
+            hourly_18[h][t["direction"]] += 1
 
     bad5 = 0
     if hourly_seen != set(range(6, 23)):

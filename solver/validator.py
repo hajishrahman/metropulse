@@ -21,21 +21,33 @@ SCHEDULE_CSV = ROOT / "data" / "processed" / "schedule.csv"
 OUT_JSON = ROOT / "data" / "processed" / "validation.json"
 
 
-def read_csv(path: Path):
+def read_csv(path: Path, required_columns=()):
     with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        reader = csv.DictReader(f)
+        missing = set(required_columns) - set(reader.fieldnames or ())
+        if missing:
+            raise ValueError(f"{path} missing columns: {sorted(missing)}")
+        return list(reader)
 
 
 def hhmmss_to_sec(t: str) -> int:
-    h, m, s = t.split(":")
-    return int(h) * 3600 + int(m) * 60 + int(s)
+    try:
+        h, m, s = (int(part) for part in t.split(":"))
+    except (AttributeError, ValueError) as exc:
+        raise ValueError(f"Invalid time: {t!r}") from exc
+    if h < 0 or not 0 <= m < 60 or not 0 <= s < 60:
+        raise ValueError(f"Invalid time: {t!r}")
+    return h * 3600 + m * 60 + s
 
 
 def check_r1_service_coverage(schedule, trips):
     req_ids = {t["trip_id"] for t in trips}
     sch_ids = [s["trip_id"] for s in schedule]
     seen = set(sch_ids)
-    duplicates = sorted({tid for tid in sch_ids if sch_ids.count(tid) > 1})
+    counts = defaultdict(int)
+    for tid in sch_ids:
+        counts[tid] += 1
+    duplicates = sorted(tid for tid, count in counts.items() if count > 1)
     missing = req_ids - seen
     extra = seen - req_ids
     failures = []
@@ -66,9 +78,9 @@ def check_r3_operating_window(schedule):
 
 
 def check_r4_fleet_availability(schedule, rakes):
-    maintenance = {r["rake_id"] for r in rakes if r["status"] != "service"}
+    service = {r["rake_id"] for r in rakes if r["status"] == "service"}
     used = {s["rake_id"] for s in schedule}
-    bad = used & maintenance
+    bad = used - service
     return {
         "check": "R4_fleet_availability",
         "status": "PASS" if not bad else "FAIL",
@@ -244,9 +256,14 @@ def check_r12_nonservice_window(schedule):
 
 def main():
     print("=== MetroPulse Validator ===\n")
-    schedule = read_csv(SCHEDULE_CSV)
-    trips = read_csv(TRIPS_CSV)
-    rakes = read_csv(RAKES_CSV)
+    schedule = read_csv(SCHEDULE_CSV, {
+        "trip_id", "rake_id", "direction", "first_stop", "last_stop",
+        "departure", "arrival",
+    })
+    trips = read_csv(TRIPS_CSV, {"trip_id", "duration"})
+    rakes = read_csv(RAKES_CSV, {
+        "rake_id", "status", "initial_mileage_km", "initial_location",
+    })
     print(f"Schedule rows: {len(schedule)}")
     print(f"GTFS trips:    {len(trips)}")
     print(f"Rakes:         {len(rakes)}")

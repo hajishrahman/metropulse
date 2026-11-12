@@ -384,11 +384,11 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 
 ### Findings from v2.1 rebuild (2026-11-12)
 
-[FINDING] `add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled. With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in ~28 s. Root cause: free auxiliary dev variables with no objective to minimize, and CP-SAT does not assign them in a way that leaves the model feasible. Rule: never call `add_obj6_rake_balance` without `build_objective`.
+- **[FINDING]** `add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled. With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in ~28 s. Root cause: free auxiliary dev variables with no objective to minimize, and CP-SAT does not assign them in a way that leaves the model feasible. Rule: never call `add_obj6_rake_balance` without `build_objective`.
 
-[FINDING] R6 must compute per-order gap values. The v2 wording used one gap per pair (5 min if either order was same-terminal). This allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. Validator caught 4 such violations on 250 trips. Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
+-**[FINDING]** R6 must compute per-order gap values. The v2 wording used one gap per pair (5 min if either order was same-terminal). This allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. Validator caught 4 such violations on 250 trips. Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 
-[FINDING] Fleet-size behaviour: 232 trips, 18 rakes, 9/9 split → OPTIMAL; 250 trips, 18 rakes, 9/9 split → INFEASIBLE (insufficient MUTT coverage); 250 trips, 18 rakes, 9/7/2 split → OPTIMAL. Adding more rakes (20, 22) does not fix the 250 case if the split does not include MUTTOM-origin rakes.
+-**[FINDING]** Fleet-size behaviour: 232 trips, 18 rakes, 9/9 split → OPTIMAL; 250 trips, 18 rakes, 9/9 split → INFEASIBLE (insufficient MUTT coverage); 250 trips, 18 rakes, 9/7/2 split → OPTIMAL. Adding more rakes (20, 22) does not fix the 250 case if the split does not include MUTTOM-origin rakes.
 
 ---
 
@@ -400,7 +400,7 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 | A' — Full GTFS service (250) | Proven OPTIMAL (2026-11-12) | 250 trips, 18 rakes, 9/7/2 split |
 | B — Peak-stress | Planned | Higher hourly demand |
 | C — Maintenance-stress | Planned | Non-empty maintenance windows |
-| D — Delay stress | STALE — needs rebuild | Phase 2 SimPy must be re-run on new schedule |
+| D — Delay stress | **Rebuilt 2026-11-12** | SimPy sweep on 250-trip real schedule (E1–E4 + 100 seeds) |
 
 ---
 

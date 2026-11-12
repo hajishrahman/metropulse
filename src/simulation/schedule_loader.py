@@ -14,7 +14,7 @@ Provenance:
 Guards:
   - bad HH:MM format  -> ValueError with the offending row
   - duplicate trip_id -> ValueError
-  - arr_sec - dep_sec != 3000 -> ValueError (running-time mismatch)
+  - duration outside [MIN_DURATION_SEC, MAX_DURATION_SEC] -> ValueError
   - trip count vs solution.json (if present) -> mismatch raises
 """
 
@@ -28,28 +28,40 @@ from pathlib import Path
 SCHEDULE_PATH = Path("data/processed/schedule.csv")
 SOLUTION_PATH = Path("data/processed/solution.json")
 
-# [DERIVED] 3000 s = 50 min integer running time (constraints-v2 R7)
-EXPECTED_RUNNING_SEC = 3000
+# [DERIVED] Sanity range for per-trip GTFS durations (constraints-v2.1 R7).
+# The old fixed 3000 s constant is removed. Each trip uses its own GTFS
+# duration (arr - dep) as loaded from schedule.csv.
+MIN_DURATION_SEC = 300    # 5 min  (safe lower bound — shortest partial is MUTT→ALVA ~8 min)
+MAX_DURATION_SEC = 4500   # 75 min (safe upper bound — longest full trip ~54 min)
 
 
 def parse_hhmm_to_sec(value: str) -> int:
-    """Parse 'HH:MM' -> integer seconds since midnight.
+    """Parse 'HH:MM' or 'HH:MM:SS' -> integer seconds since midnight.
 
-    Raises ValueError if not in the exact HH:MM form.
+    Accepts both forms. Raises ValueError on malformed input.
+
+    HH may be up to 24 (GTFS allows times past midnight, e.g. 24:03:45).
+    MM and SS must be 0-59.
     """
     if not isinstance(value, str):
-        raise ValueError(f"bad time format (expected HH:MM): {value!r}")
+        raise ValueError(f"bad time format (expected HH:MM or HH:MM:SS): {value!r}")
     parts = value.strip().split(":")
-    if len(parts) != 2 or any(
+    if len(parts) not in (2, 3):
+        raise ValueError(f"bad time format (expected HH:MM or HH:MM:SS): {value!r}")
+    if any(
         len(part) != 2 or not part.isascii() or not part.isdigit()
         for part in parts
     ):
-        raise ValueError(f"bad time format (expected HH:MM): {value!r}")
-    hh, mm = parts
-    h, m = int(hh), int(mm)
-    if not (0 <= h <= 23 and 0 <= m <= 59):
+        raise ValueError(f"bad time format (expected HH:MM or HH:MM:SS): {value!r}")
+    if len(parts) == 2:
+        hh, mm = parts
+        ss = "00"
+    else:
+        hh, mm, ss = parts
+    h, m, s = int(hh), int(mm), int(ss)
+    if not (0 <= h <= 24 and 0 <= m <= 59 and 0 <= s <= 59):
         raise ValueError(f"time out of range: {value!r}")
-    return h * 3600 + m * 60
+    return h * 3600 + m * 60 + s
 
 
 def load_schedule(path: Path = SCHEDULE_PATH) -> list[dict]:
@@ -82,10 +94,11 @@ def load_schedule(path: Path = SCHEDULE_PATH) -> list[dict]:
             except ValueError as exc:
                 raise ValueError(f"line {line_no}: {exc}") from exc
 
-            if arr_sec - dep_sec != EXPECTED_RUNNING_SEC:
+            duration_sec = arr_sec - dep_sec
+            if not (MIN_DURATION_SEC <= duration_sec <= MAX_DURATION_SEC):
                 raise ValueError(
-                    f"trip {tid!r}: arr - dep = {arr_sec - dep_sec}s,"
-                    f" expected {EXPECTED_RUNNING_SEC}s"
+                    f"trip {tid!r}: arr - dep = {duration_sec}s"
+                    f" outside sane range [{MIN_DURATION_SEC}, {MAX_DURATION_SEC}]"
                 )
 
             rows.append(
@@ -95,6 +108,7 @@ def load_schedule(path: Path = SCHEDULE_PATH) -> list[dict]:
                     "direction": values["direction"],
                     "dep_sec": dep_sec,
                     "arr_sec": arr_sec,
+                    "duration_sec": duration_sec,
                 }
             )
 

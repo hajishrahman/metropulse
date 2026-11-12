@@ -48,12 +48,10 @@ def create_trip_intervals(model, trips):
         start = t["dep_sec"]
         end = t["arr_sec"]
         dur = t["duration_sec"]
-        interval = model.NewIntervalVar(start, dur, end, f"interval_{tid}")
         tv[tid] = {
             "start": start,
             "end": end,
             "duration": dur,
-            "interval": interval,
             "direction": t["direction"],
             "first_stop": t["first_stop"],
             "last_stop": t["last_stop"],
@@ -76,6 +74,10 @@ def create_rake_assignment_variables(model, trips, data, trip_vars):
         (tv["start"] for tv in trip_vars.values() if tv["first_stop"] == "TPHT"),
         default=None,
     )
+    earliest_mutt = min(
+        (tv["start"] for tv in trip_vars.values() if tv["first_stop"] == "MUTT"),
+        default=None,
+    )
 
     for _, r in data.service_rakes.iterrows():
         rid = r["rake_id"]
@@ -92,12 +94,8 @@ def create_rake_assignment_variables(model, trips, data, trip_vars):
                 model.Add(var == 0)
                 continue
 
-                        # Home-lock: a rake cannot serve the single earliest trip of the
+            # Home-lock: a rake cannot serve the single earliest trip of the
             # opposite terminal (safe, small block). Now also handles MUTTOM.
-            earliest_mutt = min(
-                (tv["start"] for tv in trip_vars.values() if tv["first_stop"] == "MUTT"),
-                default=None,
-            )
             if home == "ALVA":
                 if earliest_tpht is not None and trip_vars[tid]["start"] == earliest_tpht and trip_vars[tid]["first_stop"] == "TPHT":
                     model.Add(var == 0)
@@ -172,15 +170,9 @@ def add_r6_turnaround(model, trip_vars, rake_trip, data):
     """
     R6 — terminal turnaround + deadhead, applied per ORDER.
 
-    For each pair (a, b), the required gap depends on which order the rake
-    does them:
-        a -> b:  gap >= gap_ab where gap_ab is turnaround if a.last == b.first
-                 else deadhead
-        b -> a:  gap >= gap_ba where gap_ba is turnaround if b.last == a.first
-                 else deadhead
-
-    We enforce both possible orders separately. A pair is forbidden only if
-    BOTH orders are impossible by their own gap.
+    Trip times are fixed, so each pair is either compatible in at least one
+    order or cannot share a rake. Forbid only pairs where neither order has
+    enough turnaround or deadhead time.
     """
     turnaround = config.TERMINAL_TURNAROUND_MIN * 60
     deadhead = config.TERMINAL_TO_TERMINAL_DEADHEAD_MIN * 60
@@ -212,40 +204,15 @@ def add_r6_turnaround(model, trip_vars, rake_trip, data):
             a_b_possible = b["start"] >= a["end"] + gap_ab
             b_a_possible = a["start"] >= b["end"] + gap_ba
 
-            if not a_b_possible and not b_a_possible:
-                # Neither order works; rake cannot do both
+            if a_b_possible and b_a_possible:
+                both_possible += 1
+            elif a_b_possible or b_a_possible:
+                one_way_only += 1
+            else:
+                # Fixed trip times make both orders impossible for this rake.
                 both_impossible += 1
                 for rid in rakes:
                     model.Add(rake_trip[(rid, a_id)] + rake_trip[(rid, b_id)] <= 1)
-            elif a_b_possible and not b_a_possible:
-                # Only a -> b is allowed
-                one_way_only += 1
-                for rid in rakes:
-                    both = model.NewBoolVar(f"r6ab_{rid}_{a_id}_{b_id}")
-                    model.AddMultiplicationEquality(
-                        both, [rake_trip[(rid, a_id)], rake_trip[(rid, b_id)]]
-                    )
-                    model.Add(b["start"] >= a["end"] + gap_ab).OnlyEnforceIf(both)
-            elif not a_b_possible and b_a_possible:
-                # Only b -> a is allowed
-                one_way_only += 1
-                for rid in rakes:
-                    both = model.NewBoolVar(f"r6ba_{rid}_{a_id}_{b_id}")
-                    model.AddMultiplicationEquality(
-                        both, [rake_trip[(rid, a_id)], rake_trip[(rid, b_id)]]
-                    )
-                    model.Add(a["start"] >= b["end"] + gap_ba).OnlyEnforceIf(both)
-            else:
-                # Both orders allowed; enforce the gap in whichever order happens
-                both_possible += 1
-                for rid in rakes:
-                    both = model.NewBoolVar(f"r6both_{rid}_{a_id}_{b_id}")
-                    model.AddMultiplicationEquality(
-                        both, [rake_trip[(rid, a_id)], rake_trip[(rid, b_id)]]
-                    )
-                    a_first = model.NewBoolVar(f"r6first_{rid}_{a_id}_{b_id}")
-                    model.Add(b["start"] >= a["end"] + gap_ab).OnlyEnforceIf([both, a_first])
-                    model.Add(a["start"] >= b["end"] + gap_ba).OnlyEnforceIf([both, a_first.Not()])
 
     print(
         f"[r6] pairs: same={same_pairs} cross={cross_pairs} "

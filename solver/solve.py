@@ -55,11 +55,6 @@ def solve(data: ProblemData, verbose: bool = False,
     C.add_r11_terminal_continuity(model, trip_vars, rake_trip, data)
     C.add_r12_nonservice_window(model, trip_vars)
 
-    print("[solve] applying objective")
-    # o6 = C.add_obj6_rake_balance(model, trip_vars, rake_trip, data)
-    # FEASIBILITY PROBE (opt3): skip objective to find any valid solution fast.
-# C.build_objective(model, o6)
-    
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit
     solver.parameters.num_search_workers = config.CP_SAT_NUM_WORKERS
@@ -68,9 +63,9 @@ def solve(data: ProblemData, verbose: bool = False,
         solver.parameters.log_search_progress = True
 
     print(f"[solve] solving (limit {time_limit}s)...")
-    t0 = time.time()
+    t0 = time.perf_counter()
     status = solver.Solve(model)
-    elapsed = time.time() - t0
+    elapsed = time.perf_counter() - t0
     status_name = solver.StatusName(status)
     print(f"[solve] status = {status_name}  ({elapsed:.2f}s)")
 
@@ -158,11 +153,12 @@ def main():
     print()
 
     result = solve(data)
-    write_outputs(result)
 
     if not result["schedule"]:
         print("\nNo feasible schedule found.")
         return
+
+    write_outputs(result)
 
     print("\n=== Summary ===")
     print(f"Status:    {result['status']}")

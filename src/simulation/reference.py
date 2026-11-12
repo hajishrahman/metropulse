@@ -22,15 +22,20 @@ Known limitation (Phase 2, 2026-11-10):
 
 from __future__ import annotations
 
-TURNAROUND_SEC = 300    # [SYNTHETIC]
-RUNNING_SEC = 3000      # [DERIVED] integer from 50.47 min
+TURNAROUND_SEC = 300    # [SYNTHETIC] same-terminal turnaround
+
+# DEPRECATED — kept so legacy imports do not break.
+# The recurrence itself does NOT use this constant. It uses
+# trip["duration_sec"] per trip (real GTFS durations).
+# Remove once simpy_runner.py and the tests are migrated.
+RUNNING_SEC = 3000      # 50 min integer — legacy only
 
 
 def propagate(
     trips: list[dict],
     own_delay_sec: list[int],
     turnaround_sec: int = TURNAROUND_SEC,
-    running_sec: int = RUNNING_SEC,
+    running_sec: int | None = None,
 ) -> list[dict]:
     """
     Apply the closed-form propagation recurrence.
@@ -69,8 +74,16 @@ def propagate(
         raise ValueError("own_delay_sec must be >= 0 (clip before calling)")
     if turnaround_sec < 0:
         raise ValueError("turnaround_sec must be >= 0")
-    if running_sec < 0:
-        raise ValueError("running_sec must be >= 0")
+    if running_sec is not None and running_sec < 0:
+        raise ValueError("running_sec must be >= 0 when provided")
+
+    # Validate that every trip has a positive duration.
+    for t in trips:
+        d = t.get("duration_sec")
+        if not isinstance(d, int) or d <= 0:
+            raise ValueError(
+                f"trip {t.get('trip_id')!r}: missing or invalid duration_sec={d!r}"
+            )
 
     results = []
     prev_actual_arr = None
@@ -89,7 +102,8 @@ def propagate(
         actual_dep = early_dep if propagated_dep is None else max(
             early_dep, propagated_dep
         )
-        actual_arr = actual_dep + running_sec
+        trip_running = running_sec if running_sec is not None else trip["duration_sec"]
+        actual_arr = actual_dep + trip_running
         dep_delay = actual_dep - trip["dep_sec"]
 
         results.append(

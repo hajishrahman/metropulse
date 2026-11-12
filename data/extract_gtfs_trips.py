@@ -48,6 +48,11 @@ def load_stop_times():
             by_trip[row["trip_id"]].append(row)
     for tid in by_trip:
         by_trip[tid].sort(key=lambda r: int(r["stop_sequence"]))
+        if any(
+            int(previous["stop_sequence"]) == int(current["stop_sequence"])
+            for previous, current in zip(by_trip[tid], by_trip[tid][1:])
+        ):
+            raise ValueError(f"Trip {tid} has duplicate stop_sequence values")
     return by_trip
 
 
@@ -168,10 +173,14 @@ def main():
     out_of_window = []
     unknown = []
 
+    seen_trip_ids = set()
     for trip in trips:
+        tid = trip["trip_id"]
+        if tid in seen_trip_ids:
+            raise ValueError(f"Duplicate trip_id in trips.txt: {tid}")
+        seen_trip_ids.add(tid)
         if trip["service_id"] != "WK":
             continue
-        tid = trip["trip_id"]
         rows = stop_times_by_trip.get(tid)
         if not rows:
             continue

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at_utc": "2026-11-10T20:17:50.305679+00:00",
+    "generated_at_utc": "2026-11-12T09:15:16.644082+00:00",
     "schedule_file": "data/processed/schedule.csv",
     "trips_total": 250,
     "rakes": 18,
@@ -181,10 +181,10 @@
       },
       "headway": {
         "threshold_sec": 120,
-        "actual_violations": 0,
-        "actual_min_gap_sec": 120,
-        "scheduled_violations": 0,
-        "scheduled_min_gap_sec": 120
+        "actual_violations": 3,
+        "actual_min_gap_sec": 0,
+        "scheduled_violations": 3,
+        "scheduled_min_gap_sec": 0
       }
     },
     "E2": {
@@ -208,31 +208,31 @@
       },
       "on_time_1min": {
         "tolerance_sec": 60,
-        "on_time_250_pct": 96.4,
-        "on_time_250_count": 241,
+        "on_time_250_pct": 96.0,
+        "on_time_250_count": 240,
         "trips_total": 250,
-        "on_time_232_eligible_pct": 96.12,
-        "on_time_232_eligible_count": 223,
+        "on_time_232_eligible_pct": 95.69,
+        "on_time_232_eligible_count": 222,
         "trips_eligible": 232
       },
       "propagation": {
-        "trips_with_propagation": 9,
+        "trips_with_propagation": 2,
         "trips_eligible": 232,
         "trips_total": 250,
-        "propagation_pct": 3.88
+        "propagation_pct": 0.86
       },
       "total_propagated_delay": {
-        "total_propagated_delay_sec": 145,
-        "total_propagated_delay_min": 2.4,
-        "max_single_propagated_delay_sec": 51,
-        "max_single_propagated_delay_min": 0.8
+        "total_propagated_delay_sec": 92,
+        "total_propagated_delay_min": 1.5,
+        "max_single_propagated_delay_sec": 64,
+        "max_single_propagated_delay_min": 1.1
       },
       "headway": {
         "threshold_sec": 120,
-        "actual_violations": 12,
-        "actual_min_gap_sec": 40,
-        "scheduled_violations": 0,
-        "scheduled_min_gap_sec": 120
+        "actual_violations": 3,
+        "actual_min_gap_sec": 0,
+        "scheduled_violations": 3,
+        "scheduled_min_gap_sec": 0
       }
     },
     "E3": {
@@ -247,40 +247,40 @@
       },
       "on_time_3min": {
         "tolerance_sec": 180,
-        "on_time_250_pct": 97.2,
-        "on_time_250_count": 243,
+        "on_time_250_pct": 96.8,
+        "on_time_250_count": 242,
         "trips_total": 250,
-        "on_time_232_eligible_pct": 96.98,
-        "on_time_232_eligible_count": 225,
+        "on_time_232_eligible_pct": 96.55,
+        "on_time_232_eligible_count": 224,
         "trips_eligible": 232
       },
       "on_time_1min": {
         "tolerance_sec": 60,
-        "on_time_250_pct": 83.2,
-        "on_time_250_count": 208,
+        "on_time_250_pct": 85.2,
+        "on_time_250_count": 213,
         "trips_total": 250,
-        "on_time_232_eligible_pct": 82.76,
-        "on_time_232_eligible_count": 192,
+        "on_time_232_eligible_pct": 84.48,
+        "on_time_232_eligible_count": 196,
         "trips_eligible": 232
       },
       "propagation": {
-        "trips_with_propagation": 18,
+        "trips_with_propagation": 7,
         "trips_eligible": 232,
         "trips_total": 250,
-        "propagation_pct": 7.76
+        "propagation_pct": 3.02
       },
       "total_propagated_delay": {
-        "total_propagated_delay_sec": 1157,
-        "total_propagated_delay_min": 19.3,
-        "max_single_propagated_delay_sec": 180,
-        "max_single_propagated_delay_min": 3.0
+        "total_propagated_delay_sec": 450,
+        "total_propagated_delay_min": 7.5,
+        "max_single_propagated_delay_sec": 193,
+        "max_single_propagated_delay_min": 3.2
       },
       "headway": {
         "threshold_sec": 120,
-        "actual_violations": 21,
-        "actual_min_gap_sec": 12,
-        "scheduled_violations": 0,
-        "scheduled_min_gap_sec": 120
+        "actual_violations": 4,
+        "actual_min_gap_sec": 0,
+        "scheduled_violations": 3,
+        "scheduled_min_gap_sec": 0
       }
     },
     "E4": {
@@ -295,8 +295,8 @@
       },
       "on_time_3min": {
         "tolerance_sec": 180,
-        "on_time_250_pct": 78.8,
-        "on_time_250_count": 197,
+        "on_time_250_pct": 80.0,
+        "on_time_250_count": 200,
         "trips_total": 250,
         "on_time_232_eligible_pct": 78.88,
         "on_time_232_eligible_count": 183,
@@ -304,31 +304,31 @@
       },
       "on_time_1min": {
         "tolerance_sec": 60,
-        "on_time_250_pct": 61.6,
-        "on_time_250_count": 154,
+        "on_time_250_pct": 64.4,
+        "on_time_250_count": 161,
         "trips_total": 250,
-        "on_time_232_eligible_pct": 61.64,
-        "on_time_232_eligible_count": 143,
+        "on_time_232_eligible_pct": 62.93,
+        "on_time_232_eligible_count": 146,
         "trips_eligible": 232
       },
       "propagation": {
-        "trips_with_propagation": 27,
+        "trips_with_propagation": 15,
         "trips_eligible": 232,
         "trips_total": 250,
-        "propagation_pct": 11.64
+        "propagation_pct": 6.47
       },
       "total_propagated_delay": {
-        "total_propagated_delay_sec": 3793,
-        "total_propagated_delay_min": 63.2,
-        "max_single_propagated_delay_sec": 300,
-        "max_single_propagated_delay_min": 5.0
+        "total_propagated_delay_sec": 1822,
+        "total_propagated_delay_min": 30.4,
+        "max_single_propagated_delay_sec": 284,
+        "max_single_propagated_delay_min": 4.7
       },
       "headway": {
         "threshold_sec": 120,
-        "actual_violations": 30,
+        "actual_violations": 4,
         "actual_min_gap_sec": 0,
-        "scheduled_violations": 0,
-        "scheduled_min_gap_sec": 120
+        "scheduled_violations": 3,
+        "scheduled_min_gap_sec": 0
       }
     }
   },
@@ -386,14 +386,14 @@
         "p95": 0.0
       },
       "headway_actual_violations": {
-        "mean": 0.0,
-        "p5": 0.0,
-        "p95": 0.0
+        "mean": 3.0,
+        "p5": 3.0,
+        "p95": 3.0
       },
       "headway_scheduled_violations": {
-        "mean": 0.0,
-        "p5": 0.0,
-        "p95": 0.0
+        "mean": 3.0,
+        "p5": 3.0,
+        "p95": 3.0
       }
     },
     "E2": {
@@ -419,44 +419,44 @@
         "p95": 100.0
       },
       "on_time_1min_250_pct": {
-        "mean": 95.256,
-        "p5": 91.98,
-        "p95": 97.62
+        "mean": 96.288,
+        "p5": 94.0,
+        "p95": 98.4
       },
       "on_time_1min_232_pct": {
-        "mean": 95.0899,
-        "p5": 91.3585,
-        "p95": 97.84
+        "mean": 96.3182,
+        "p5": 93.53,
+        "p95": 98.28
       },
       "propagation_pct": {
-        "mean": 6.341,
-        "p5": 4.31,
-        "p95": 8.62
+        "mean": 1.0978,
+        "p5": 0.0,
+        "p95": 2.16
       },
       "total_propagated_delay_sec": {
-        "mean": 518.5,
-        "p5": 252.25,
-        "p95": 822.6
+        "mean": 75.04,
+        "p5": 0.0,
+        "p95": 201.05
       },
       "total_propagated_delay_min": {
-        "mean": 8.643,
-        "p5": 4.19,
-        "p95": 13.725
+        "mean": 1.247,
+        "p5": 0.0,
+        "p95": 3.4
       },
       "max_single_propagated_delay_sec": {
-        "mean": 82.53,
-        "p5": 46.95,
-        "p95": 125.15
+        "mean": 42.68,
+        "p5": 0.0,
+        "p95": 92.55
       },
       "headway_actual_violations": {
-        "mean": 15.39,
-        "p5": 10.0,
-        "p95": 21.0
+        "mean": 3.27,
+        "p5": 3.0,
+        "p95": 4.0
       },
       "headway_scheduled_violations": {
-        "mean": 0.0,
-        "p5": 0.0,
-        "p95": 0.0
+        "mean": 3.0,
+        "p5": 3.0,
+        "p95": 3.0
       }
     },
     "E3": {
@@ -472,54 +472,54 @@
         "p95": 100.0
       },
       "on_time_3min_250_pct": {
-        "mean": 96.152,
-        "p5": 93.6,
+        "mean": 97.004,
+        "p5": 94.8,
         "p95": 98.8
       },
       "on_time_3min_232_pct": {
-        "mean": 96.0126,
-        "p5": 93.1,
+        "mean": 97.0249,
+        "p5": 94.4,
         "p95": 98.71
       },
       "on_time_1min_250_pct": {
-        "mean": 76.588,
-        "p5": 72.36,
-        "p95": 81.2
+        "mean": 80.448,
+        "p5": 75.58,
+        "p95": 84.82
       },
       "on_time_1min_232_pct": {
-        "mean": 76.2757,
-        "p5": 71.5285,
-        "p95": 81.052
+        "mean": 80.3409,
+        "p5": 75.4085,
+        "p95": 84.5015
       },
       "propagation_pct": {
-        "mean": 9.8056,
-        "p5": 6.9,
-        "p95": 12.07
+        "mean": 2.428,
+        "p5": 1.2685,
+        "p95": 3.88
       },
       "total_propagated_delay_sec": {
-        "mean": 1865.98,
-        "p5": 1163.65,
-        "p95": 2580.8
+        "mean": 392.4,
+        "p5": 93.8,
+        "p95": 723.1
       },
       "total_propagated_delay_min": {
-        "mean": 31.095,
-        "p5": 19.395,
-        "p95": 43.015
+        "mean": 6.542,
+        "p5": 1.595,
+        "p95": 12.1
       },
       "max_single_propagated_delay_sec": {
-        "mean": 212.47,
-        "p5": 152.45,
-        "p95": 299.05
+        "mean": 141.79,
+        "p5": 49.7,
+        "p95": 244.35
       },
       "headway_actual_violations": {
-        "mean": 25.87,
-        "p5": 18.0,
-        "p95": 32.05
+        "mean": 3.69,
+        "p5": 2.0,
+        "p95": 6.0
       },
       "headway_scheduled_violations": {
-        "mean": 0.0,
-        "p5": 0.0,
-        "p95": 0.0
+        "mean": 3.0,
+        "p5": 3.0,
+        "p95": 3.0
       }
     },
     "E4": {
@@ -535,54 +535,54 @@
         "p95": 100.0
       },
       "on_time_3min_250_pct": {
-        "mean": 71.568,
-        "p5": 65.6,
-        "p95": 75.66
+        "mean": 75.948,
+        "p5": 70.4,
+        "p95": 80.4
       },
       "on_time_3min_232_pct": {
-        "mean": 71.1468,
-        "p5": 65.09,
-        "p95": 75.903
+        "mean": 75.8536,
+        "p5": 70.26,
+        "p95": 80.1915
       },
       "on_time_1min_250_pct": {
-        "mean": 55.812,
-        "p5": 50.78,
-        "p95": 61.6
+        "mean": 60.836,
+        "p5": 55.58,
+        "p95": 66.46
       },
       "on_time_1min_232_pct": {
-        "mean": 55.2893,
-        "p5": 50.817,
-        "p95": 61.6615
+        "mean": 60.6072,
+        "p5": 54.7185,
+        "p95": 67.24
       },
       "propagation_pct": {
-        "mean": 13.1249,
-        "p5": 10.34,
-        "p95": 15.95
+        "mean": 5.8751,
+        "p5": 3.88,
+        "p95": 8.19
       },
       "total_propagated_delay_sec": {
-        "mean": 4885.95,
-        "p5": 3710.55,
-        "p95": 5885.8
+        "mean": 1479.36,
+        "p5": 779.4,
+        "p95": 2129.85
       },
       "total_propagated_delay_min": {
-        "mean": 81.43,
-        "p5": 61.89,
-        "p95": 98.13
+        "mean": 24.656,
+        "p5": 12.99,
+        "p95": 35.515
       },
       "max_single_propagated_delay_sec": {
-        "mean": 299.93,
-        "p5": 300.0,
+        "mean": 274.58,
+        "p5": 200.9,
         "p95": 300.0
       },
       "headway_actual_violations": {
-        "mean": 33.3,
-        "p5": 24.95,
-        "p95": 42.0
+        "mean": 4.81,
+        "p5": 2.0,
+        "p95": 8.0
       },
       "headway_scheduled_violations": {
-        "mean": 0.0,
-        "p5": 0.0,
-        "p95": 0.0
+        "mean": 3.0,
+        "p5": 3.0,
+        "p95": 3.0
       }
     }
   }

@@ -74,14 +74,18 @@ class ProblemData:
             "depot": synth / "depot.csv",
         }
 
-        missing = [str(p) for p in files.values() if not p.exists()]
+        missing = [str(p) for p in files.values() if not p.is_file()]
         if missing:
             raise FileNotFoundError(
                 "Missing data files:\n  - " + "\n  - ".join(missing)
             )
 
         trips = _read(files["trips"])
-        missing_columns = {"trip_id", "departure_time", "arrival_time"} - set(trips.columns)
+        required_columns = {
+            "trip_id", "departure_time", "arrival_time", "duration",
+            "direction", "first_stop", "last_stop",
+        }
+        missing_columns = required_columns - set(trips.columns)
         if missing_columns:
             raise ValueError(f"trips_all.csv missing columns: {sorted(missing_columns)}")
         if trips["trip_id"].isna().any() or trips["trip_id"].eq("").any():
@@ -94,10 +98,27 @@ class ProblemData:
         trips["arr_sec"] = trips["arrival_time"].apply(_time_to_sec)
         if (trips["arr_sec"] <= trips["dep_sec"]).any():
             raise ValueError("trips_all.csv contains non-positive trip durations")
+        try:
+            duration = pd.to_numeric(trips["duration"], errors="raise")
+        except (TypeError, ValueError) as exc:
+            raise ValueError("trips_all.csv contains an invalid duration") from exc
+        if (duration != trips["arr_sec"] - trips["dep_sec"]).any():
+            raise ValueError("trips_all.csv duration does not match departure/arrival times")
+
+        rakes = _read(files["rakes"])
+        missing_columns = {
+            "rake_id", "status", "initial_mileage_km", "initial_location",
+        } - set(rakes.columns)
+        if missing_columns:
+            raise ValueError(f"rakes.csv missing columns: {sorted(missing_columns)}")
+        if rakes["rake_id"].isna().any() or rakes["rake_id"].eq("").any():
+            raise ValueError("rakes.csv contains an empty rake_id")
+        if rakes["rake_id"].duplicated().any():
+            raise ValueError("rakes.csv contains duplicate rake_id values")
 
         return cls(
             trips=trips,
-            rakes=_read(files["rakes"]),
+            rakes=rakes,
             terminals=_read(files["terminals"]),
             maintenance=_read(files["maintenance"]),
             depot=_read(files["depot"], keep_default_na=False),

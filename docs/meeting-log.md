@@ -184,6 +184,7 @@
 - No DPR-based values remain
 - GTFS feed is static and represents the 2024–25 data vintage, not a live 2026 timetable.
 
+**Next Meeting:** 2026-11-11
 
 ---
 
@@ -218,36 +219,13 @@
 - Headline (seed 42) results: E1 0% propagation; E2 3.88%; E3 7.76%; E4 11.64%. Total propagated delay at E4 = 63.2 min.
 - 100-seed Monte Carlo at E4: propagation mean **13.12%** (p5–p95: 10.3–15.9%). Seed 42 sits below the mean — treat the mean as the expected value.
 - **±5 on-time = 100% across all experiments and all 100 seeds.** Structural, not lucky: own delay is capped at 300 s, ±5 is inclusive, and measured slack keeps cumulative delay below the cap. **Model property, not operational guarantee.** Scenarios with a higher delay cap or tighter slack would show ±5 degradation.
-- Scheduled headway violations = 0 at every std (R2a holds). Actual-gap violations rise with std (E1: 0 → E4: 33.3 mean), reflecting departure bunching under delay.
+- Scheduled headway violations = 0 at every std (R2 holds). Actual-gap violations rise with std (E1: 0 → E4: 33.3 mean), reflecting departure bunching under delay.
 - R9 and R11 remain outside the Phase 1 validator results — unchanged from Meeting 8. Phase 2 does not touch R1–R12.
-- Terminal continuity: 127 of 232 pairs broken by direction alternation. Cannot distinguish real gap from labeling artifact — no GTFS↔`Txxxx` map exists in Phase 1 outputs. Deferred to Phase 4/5 where terminal awareness matters.
+- Terminal continuity: 127 of 232 pairs broken by direction alternation. Cannot distinguish real gap from labeling artifact — no GTFS↔`Txxxx` map exists in Phase 1 outputs. Deferred to Phase 4/5 where terminal awareness matters. *(This predates the Phase 1 rebuild on real GTFS trips in Meeting 10.)*
 - `solver/` stays at project root (Phase 1 legacy); `src/simulation/` sits under `src/` as planned. Asymmetry is historical, harmless, noted here.
 - All Phase 2 work is committed and pushed to GitHub.
 
 **Next Meeting:** Phase 3 kickoff
-
-
----
-
-## Meeting Template (for future meetings)
-
-```markdown
-## Meeting N — YYYY-MM-DD
-**Attendees:** [Names]
-**Duration:** XX min
-**Agenda:** [Topic]
-
-**Decisions:**
-- [Decision 1]
-- [Decision 2]
-
-**Action Items:**
-- [ ] Person: Task
-- [ ] Person: Task
-
-**Notes:**
-- [Anything worth remembering]
-
 
 ---
 
@@ -267,7 +245,7 @@
 - **R11 updated:** first-trip home rule with deadhead allowance. R11 no longer duplicates pair gaps — those are R6's job.
 - **Objective disabled in V1** because `add_obj6_rake_balance` makes the model INFEASIBLE when `build_objective` is not called. V1 is a feasibility probe.
 - **`constraints-v2.1` supersedes `constraints-v2`** (v2 date 2026-11-08, v2.1 date 2026-11-12).
-- **Phase 2 (SimPy) outputs are STALE.** `simulation_kpis.json` and `simulation_timeline.csv` were computed on the pre-rebuild synthetic schedule. They must be regenerated on the new 250-trip real-GTFS schedule.
+- **Phase 2 (SimPy) outputs are STALE.** `simulation_kpis.json` and `simulation_timeline.csv` were computed on the pre-rebuild synthetic schedule. They must be regenerated on the new 250-trip real-GTFS schedule. *(Resolved in Meeting 11.)*
 
 **Action Items:**
 - [x] `data/extract_gtfs_trips.py` — extracts per-trip GTFS records
@@ -301,7 +279,7 @@
 - **`[FINDING]` for future work:** When the objective is re-enabled, verify that O6 does not have the same side effect. Either restructure `add_obj6_rake_balance` so its auxiliary variables are tied to a minimized objective, or remove the function entirely and implement rake-balance through a different mechanism.
 
 - **Verification commands and file state.**
-  - The 250-trip result on disk: `data/processed/schedule_250_trips.csv`, `solution_250_trips.json`, `validation_250_trips.json` (need to be saved from the current run before the next rebuild).
+  - The 250-trip result on disk: `data/processed/schedule.csv`, `solution.json`, `validation.json` (saved after the Meeting 10 run).
   - The 232-trip result is also proven OPTIMAL and can be regenerated any time.
   - `hourly_service.csv` is kept on disk for reconciliation only; not read by the solver.
 
@@ -311,4 +289,70 @@
 
 - **Committed and pushed to GitHub.** All source code, data scripts, and doc updates from this meeting.
 
-**Next Meeting:** Phase 2 rebuild kickoff (SimPy on the new 250-trip schedule).
+**Next Meeting:** 2026-11-12 (Phase 2 rebuild)
+
+---
+
+## Meeting 11 — 2026-11-12
+**Attendees:** [Names]
+**Duration:** ~3 hours
+**Agenda:** Phase 2 rebuild on 250-trip real-GTFS schedule
+
+**Decisions:**
+- Phase 2 SimPy was rebuilt on the new 250-trip schedule (232 full + 18 partial).
+- Per-trip GTFS durations replace the old fixed 3000 s constant across loader, reference, SimPy runner, and experiments.
+- `RUNNING_SEC = 3000` is kept in `reference.py` as a **deprecated legacy constant** so old test fixtures still import it. Not used in the recurrence.
+- `schedule_loader` sanity range `[300, 4500]` s allows short partial trips (MUTT→ALVA ~8 min) while rejecting garbage.
+- Old `simulation_kpis.json` and `simulation_timeline.csv` are superseded; regenerated 2026-11-12.
+
+**Action Items:**
+- [x] `schedule_loader.py` — per-trip `duration_sec`, sane range guard
+- [x] `reference.py` — per-trip duration in `propagate()`; `RUNNING_SEC` deprecated
+- [x] `simpy_runner.py` — per-trip `trip_running`; guard updated
+- [x] `experiments.py` — metadata now reflects per-trip durations; docstring corrected (terminal continuity and deadhead now validated)
+- [x] `tests/test_simpy_matches_reference.py` — fixtures now include `duration_sec`; real-schedule test uses real `WK_*` IDs
+- [x] `tests/test_reference.py` — fixtures now include `duration_sec`
+- [x] `tests/test_schedule_loader.py` — refreshed for new loader API; added `HH:MM:SS` and `24:03:45` parsing tests; replaced 3000-s fixed-duration test with three tests: accepts short partial, rejects too-short, rejects too-long
+- [x] **59 tests passing** (up from 55)
+- [x] `simulation_kpis.json` and `simulation_timeline.csv` regenerated
+- [ ] Next: Phase 3 kickoff (Crew Scheduling)
+
+**Notes:**
+
+- **Real schedule KPIs (seed 42, 250 trips):**
+  - E1 (std 0): 100% ±5, 0.00% propagation, 3 scheduled headway violations
+  - E2 (std 60): 100% ±5, 0.86% propagation
+  - E3 (std 120): 100% ±5, 3.02% propagation
+  - E4 (std 300): 100% ±5, 6.47% propagation
+- **100-seed Monte Carlo means:** propagation E2 1.10%, E3 2.43%, E4 5.88% — significantly **lower** than the old synthetic numbers (3.88 / 7.76 / 11.64). Real GTFS slack absorbs more delay.
+- ±3/±1 on-time degrade under higher std as expected: E4 mean ±3 75.95%, ±1 60.84%.
+- **3 scheduled same-direction pairs at 0 s gap** in the raw GTFS timetable. Identified as data fact during Phase 2 preflight: each pair is a full trip (TPHT→ALVA) plus a partial trip (MUTT→ALVA) departing the same minute on **different rakes**. Not a solver or simulation error. R2 was removed from V1 in `constraints-v2.1` §5.
+- `metadata.running_time_sec` in the KPI JSON is `"per-trip (GTFS duration_sec)"` (string), not a number. Consumers should not parse it as int.
+- ±5 on-time 100% remains a **structural model property** (own-delay cap 300 s = ±5 inclusive), not an operational guarantee.
+- All Phase 2 delay values are `[SYNTHETIC]`. Model behaviour, not real KMRL performance.
+- All work committed. Repo state clean.
+
+**Next Meeting:** Phase 3 kickoff (Crew Scheduling).
+
+---
+
+## Meeting Template (for future meetings)
+
+```markdown
+## Meeting N — YYYY-MM-DD
+**Attendees:** [Names]
+**Duration:** XX min
+**Agenda:** [Topic]
+
+**Decisions:**
+- [Decision 1]
+- [Decision 2]
+
+**Action Items:**
+- [ ] Person: Task
+- [ ] Person: Task
+
+**Notes:**
+- [Anything worth remembering]
+
+**Next Meeting:** YYYY-MM-DD

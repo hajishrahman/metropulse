@@ -33,13 +33,14 @@ Progress tracker for the project. Update as phases complete.
   - [x] `data/stop_sequences_full_route.csv` — full stop sequences for those 232
   - [x] `data/trips_partial.csv` — **18** partial trips (Muttom ↔ terminals)
   - [x] `data/stop_sequences_partial.csv` — stop sequences for the 18
-- [x] `data/verify_gtfs_trips.py` — independent audit; all checks pass (232 + 18 = 250 reconcile against old hourly CSV)
+- [x] `data/verify_gtfs_trips.py` — independent audit; reconciles 232 + 18 = 250 against `hourly_service.csv` (reconciliation reference only; not read by the solver)
 - [x] `data/merge_trips.py` — merges the two into `data/trips_all.csv` (**250** trips)
 - [x] Route length: **28.144 km** (Annual Report)
 - [x] Synthetic generator (`data/generate_synthetic_v2.py`) → 25 rakes
   - [x] **18 service** rakes: **9 at ALVA, 7 at TPHT, 2 at MUTTOM** `[SYNTHETIC]`
   - [x] **7 maintenance** rakes at MUTTOM
 - [x] Per-trip GTFS duration used directly by the solver (no fixed 50.47-min constant)
+- [x] `python -m src.simulation.preflight` — 250 trips, 18 rakes, 232 eligible; 67 non-alternating rake pairs (MUTT/partial-trip artefact, not an error); 3 scheduled headway violations (GTFS fact)
 
 ### Model
 - [x] Config with verified sources and synthetic tags (`solver/config.py`)
@@ -52,24 +53,24 @@ Progress tracker for the project. Update as phases complete.
   - [x] R6 turnaround + deadhead — **per-order gap** (same-terminal 5 min; cross-terminal 15 min; **order-aware**, see Findings)
   - [x] R7 running time — real per-trip GTFS duration
   - [x] R8 depot capacity — SKIPPED (no stabling in V1)
-  - [x] R9 maintenance exclusivity — vacuous (maintenance.csv empty)
+  - [x] R9 maintenance exclusivity — vacuous (`maintenance.csv` empty)
   - [x] R10 maintenance threshold
   - [x] R11 terminal continuity — first-trip home rule with deadhead allowance
   - [x] R12 non-service window
 - [x] CP-SAT solve pipeline (`solver/solve.py`) — feasibility probe (objective disabled)
-- [x] Independent validator (`solver/validator.py`) — 10 checks + 1 SKIPPED (R8)
+- [x] Independent validator (`solver/validator.py`) — 10 PASS + 1 SKIPPED (R8)
 
 ### Results (Phase 1 baseline)
 - [x] Full-day solve: **250 trips, OPTIMAL, 28.73 s**
 - [x] `[r6]` pruning: `same=15636 cross=17633 | both_impossible=3540 one_way=27585 both_possible=0`
 - [x] Validator: **10 PASS + 1 SKIPPED (R8), Overall PASS**
 - [x] Both baselines proven OPTIMAL:
-  - [x] **232 full-route only** — OPTIMAL ~29 s
-  - [x] **250 full + partial** — OPTIMAL ~28.7 s (current baseline)
-- [x] Outputs written:
-  - [x] `data/processed/schedule_250_trips.csv`
-  - [x] `data/processed/solution_250_trips.json`
-  - [x] `data/processed/validation_250_trips.json`
+  - [x] **232 full-route only** — OPTIMAL, ~28.7 s
+  - [x] **250 full + partial** — OPTIMAL, 28.73 s (current baseline)
+- [x] Outputs written (per `constraints-v2.1` §8):
+  - [x] `data/processed/schedule.csv`
+  - [x] `data/processed/solution.json`
+  - [x] `data/processed/validation.json`
 
 ### Tagged synthetic values
 - `[SYNTHETIC]` Terminal turnaround: **5 min**
@@ -81,56 +82,66 @@ Progress tracker for the project. Update as phases complete.
 - `[SYNTHETIC]` Initial rake mileage: 20,000–200,000 km
 
 ### Findings (Phase 1 rebuild)
-- `[FINDING]` **`add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled.** With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in 28 s. Cause: free auxiliary `dev` variables without an objective. **Never call `add_obj6_rake_balance` without `build_objective`.**
+- `[FINDING]` **`add_obj6_rake_balance` can make the model INFEASIBLE when the objective is disabled.** With `build_objective` commented out but `add_obj6_rake_balance` still called, the 250-trip case returns INFEASIBLE in ~10–17 s. Commenting out the `o6` call entirely → OPTIMAL in 28.73 s. Cause: free auxiliary `dev` variables without an objective. **Never call `add_obj6_rake_balance` without `build_objective`.**
 - `[FINDING]` **R6 requires per-order gap values.** Prior R6 chose one gap per pair (5 min if either order was same-terminal). For the 250-trip case, this allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. The validator caught 4 such violations (R6 FAIL). Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 - `[FINDING]` **Fleet-size behaviour:**
   - 232 trips with 18 rakes, 9 ALVA / 9 TPHT, hard continuity + 15-min terminal deadhead → OPTIMAL
   - 250 trips with 18 rakes, 9/9 split → INFEASIBLE (needs MUTT-origin coverage)
   - 250 trips with 18 rakes, **9/7/2 split** → OPTIMAL
   - Adding more rakes (20, 22) does **not** fix the 250-trip case if the split does not include MUTTOM-origin rakes.
-- `[FINDING]` **DPR-based values fully removed.** Old 250-trip result (~306 s, FEASIBLE, 93.4% gap) is superseded.
+- `[FINDING]` **DPR-based values fully removed.** The old (pre-rebuild) 250-trip result (~306 s, FEASIBLE, 93.4% gap) is superseded and no longer applies.
 
 ---
 
-## Phase 2 — SimPy Validation ⚠ STALE (needs rebuild on new schedule)
+## Phase 2 — SimPy Validation ✅ COMPLETE (rebuilt 2026-11-12)
 
-The **code** is complete and its **55 tests pass**. The **outputs** were computed on the OLD synthetic 250-trip schedule (trip IDs `T0000…`), not the rebuilt real-GTFS schedule (`WK_*`). They must be regenerated.
-
-### Code (unchanged, still correct)
+### Code
 - [x] `src/simulation/__init__.py`
-- [x] `src/simulation/schedule_loader.py`
-- [x] `src/simulation/reference.py`
-- [x] `src/simulation/simpy_runner.py`
-- [x] `src/simulation/kpis.py`
-- [x] `src/simulation/experiments.py`
-- [x] `src/simulation/preflight.py`
-- [x] SimPy 4.1.1 installed
+- [x] `src/simulation/schedule_loader.py` — strict loader, per-trip `duration_sec`, sane range guard `[300, 4500]` s
+- [x] `src/simulation/reference.py` — closed-form recurrence; per-trip duration; `RUNNING_SEC` kept as deprecated legacy
+- [x] `src/simulation/simpy_runner.py` — SimPy per-rake process, per-trip `duration_sec`
+- [x] `src/simulation/kpis.py` — pure KPI functions
+- [x] `src/simulation/experiments.py` — E1–E4 + Monte Carlo runner; metadata reflects per-trip durations
+- [x] `src/simulation/preflight.py` — read-only continuity/slack/headway analysis
+- [x] `src/simulation/check_terminals.py` — read-only helper
+- [x] SimPy 4.1.1
 
-### Model (unchanged)
-- [x] Delay distribution: clipped normal (pre-clip mean −48 s, std swept, clip [0, 300 s]) `[SYNTHETIC]`
+### Model
+- [x] Delay: clipped normal, pre-clip mean −48 s, std 0/60/120/300 s, clip [0, 300] s `[SYNTHETIC]`
 - [x] Clip-then-round (half-to-even)
 - [x] Propagation: wait for previous trip + 5-min turnaround
 - [x] Common random numbers: one `z` per trip, seed 42
 - [x] Monte Carlo: 100 seeds (42–141)
-- [x] KPIs: on-time ±1/±3/±5 (dual denominator), propagation %, total propagated delay, headway violations
+- [x] KPIs: on-time ±5/±3/±1 (dual denominator 250 / 232), propagation %, total propagated delay, headway violations (actual + scheduled)
 
-### Tests (unchanged)
-- [x] `tests/test_reference.py` — 8
-- [x] `tests/test_schedule_loader.py` — 24
-- [x] `tests/test_simpy_matches_reference.py` — 9
-- [x] `tests/test_kpis.py` — 14
-- [x] **Total: 55 tests passing**
+### Tests (59 total, all pass in 0.69 s)
+- [x] `test_reference.py` — 7
+- [x] `test_schedule_loader.py` — 29
+- [x] `test_simpy_matches_reference.py` — 9
+- [x] `test_kpis.py` — 14
+- [x] **Total: 59 passed**
 
-### STALE outputs (must be regenerated)
-- [ ] `data/processed/simulation_kpis.json` — currently from old 250 synthetic trips; **regenerate**
-- [ ] `data/processed/simulation_timeline.csv` — currently from old synthetic schedule; **regenerate**
-- [ ] Pre-flight limitation "terminal continuity not verifiable" — **no longer true**; real `WK_*` IDs used; R11 validated PASS in Phase 1; update this section after rebuild
+### Headline results (seed 42, 250-trip real schedule)
+- E1: 100% ±5, 0.00% propagation, 3 scheduled headway violations
+- E2: 100% ±5, 0.86% propagation, 3 scheduled headway violations
+- E3: 100% ±5, 3.02% propagation, 4 actual headway violations
+- E4: 100% ±5, 6.47% propagation, 4 actual headway violations
 
-### Rebuild steps (next)
-- [ ] Run `python -m src.simulation.preflight` against `data/processed/schedule.csv` (new 250-trip real-GTFS schedule)
-- [ ] Run `python -m src.simulation.experiments` to regenerate KPIs and timeline
-- [ ] Verify output row count: 4 experiments × 250 trips = 1000 rows
-- [ ] Update results section with new numbers (do not reuse old seed-42 figures)
+### 100-seed Monte Carlo (mean)
+- E1: ±5=100.00, ±3=100.00, ±1=100.00, prop=0.00%
+- E2: ±5=100.00, ±3=100.00, ±1=96.29, prop=1.10%
+- E3: ±5=100.00, ±3=97.00, ±1=80.45, prop=2.43%
+- E4: ±5=100.00, ±3=75.95, ±1=60.84, prop=5.88%
+
+### Outputs
+- [x] `data/processed/simulation_kpis.json` — regenerated 2026-11-12
+- [x] `data/processed/simulation_timeline.csv` — **1000 rows** (250 trips × 4 experiments), regenerated 2026-11-12
+
+### Notes
+- **3 scheduled same-direction pairs at 0 s gap** in raw GTFS (data fact, not bug). R2 removed in v2.1.
+- Real GTFS schedule has **less** propagation than the old synthetic one.
+- ±5 on-time 100% is a **model property** (own-delay cap 300 s, inclusive), not an operational guarantee.
+- All Phase 2 delay values are `[SYNTHETIC]`.
 
 ---
 

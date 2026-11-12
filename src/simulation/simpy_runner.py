@@ -19,14 +19,14 @@ from __future__ import annotations
 
 import simpy
 
-from src.simulation.reference import RUNNING_SEC, TURNAROUND_SEC
+from src.simulation.reference import TURNAROUND_SEC
 
 
 def run_simpy(
     grouped: dict[str, list[dict]],
     own_delay_sec_by_rake: dict[str, list[int]],
     turnaround_sec: int = TURNAROUND_SEC,
-    running_sec: int = RUNNING_SEC,
+    running_sec: int | None = None,
 ) -> dict[str, list[dict]]:
     """
     Run SimPy for all rakes.
@@ -55,8 +55,18 @@ def run_simpy(
             )
         if any(d < 0 for d in own_delay_sec_by_rake[rake]):
             raise ValueError(f"rake {rake}: negative own delay")
-        if any(t["arr_sec"] - t["dep_sec"] != running_sec for t in trips):
-            raise ValueError(f"rake {rake}: running-time mismatch vs argument")
+        for t in trips:
+            if not isinstance(t.get("duration_sec"), int) or t["duration_sec"] <= 0:
+                raise ValueError(
+                    f"rake {rake}: trip {t.get('trip_id')!r} has invalid "
+                    f"duration_sec={t.get('duration_sec')!r}"
+                )
+            if t["arr_sec"] - t["dep_sec"] != t["duration_sec"]:
+                raise ValueError(
+                    f"rake {rake}: trip {t['trip_id']!r}: arr - dep = "
+                    f"{t['arr_sec'] - t['dep_sec']}s does not match "
+                    f"duration_sec={t['duration_sec']}s"
+                )
 
     env = simpy.Environment()
     results: dict[str, list[dict]] = {rake: [] for rake in grouped}
@@ -80,8 +90,11 @@ def run_simpy(
             actual_dep = env.now
             propagated_delay = max(0, actual_dep - early_dep)
 
-            # Run.
-            yield env.timeout(running_sec)
+            # Run — per-trip duration (real GTFS), with optional override.
+            trip_running = (
+                running_sec if running_sec is not None else trip["duration_sec"]
+            )
+            yield env.timeout(trip_running)
             actual_arr = env.now
             prev_actual_arr = actual_arr
 

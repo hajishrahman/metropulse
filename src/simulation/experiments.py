@@ -4,10 +4,11 @@ Phase 2 experiment runner. Runs E1-E4 on the real schedule, writes:
   - data/processed/simulation_kpis.json
   - data/processed/simulation_timeline.csv
 
-All delay values are [SYNTHETIC]. The schedule is from synthetic fleet
-assumptions. Terminal continuity and deadhead are not verified (see
-docs/constraints-v2.md R11). Results describe model behaviour, not
-real KMRL prediction.
+All delay values are [SYNTHETIC] (no verified KMRL delay data). The
+schedule is built from real GTFS trip records and synthetic fleet
+assumptions. Terminal continuity and deadhead ARE validated (Phase 1
+R11 PASS). Results describe model behaviour under a synthetic delay
+assumption, not real KMRL operational prediction.
 
 Run:
   python -m src.simulation.experiments
@@ -317,7 +318,7 @@ def main() -> None:
         "trips_total": n_trips,
         "rakes": n_rakes,
         "eligible_trips": n_eligible,
-        "running_time_sec": 3000,
+        "running_time_sec": "per-trip (GTFS duration_sec)",
         "turnaround_sec": 300,
         "delay_model": {
             "type": "clipped_normal",

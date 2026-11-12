@@ -26,9 +26,6 @@ INITIAL_RAKES_AT_MUTTOM = 2  # [SYNTHETIC] Muttom depot has operating rakes
 SECTION_LENGTH_KM = 28.144          # [EXTERNAL — Annual Report]
 ONE_WAY_RUNNING_MIN = 50.47         # [DERIVED] GTFS median
 TERMINAL_TURNAROUND_MIN = 5         # [SYNTHETIC]
-MIN_HEADWAY_SEC = 120               # [SYNTHETIC] 2 minutes
-MIN_HEADWAY_DESIGN_SEC = 90         # [SYNTHETIC] design minimum
-
 # ===========================================================================
 # OPERATING WINDOW  [EXTERNAL — Annual Report]
 # ===========================================================================
@@ -46,7 +43,6 @@ MUTTOM_CAPACITY = None              # [MODEL LIMITATION] unbounded
 # ===========================================================================
 # DEADHEAD  [SYNTHETIC — NOT CONFIGURED]
 # ===========================================================================
-MUTTOM_TO_JLN_DEADHEAD_MIN = None
 TERMINAL_TO_TERMINAL_DEADHEAD_MIN = 15   # [SYNTHETIC] ALVA <-> TPHT deadhead time
 MUTTOM_TO_TERMINAL_DEADHEAD_MIN = 8      # [SYNTHETIC] MUTTOM <-> ALVA/TPHT deadhead (half of terminal-to-terminal)
 
@@ -62,7 +58,6 @@ DATA_DIR = "data"
 SYNTHETIC_DIR = "data/synthetic"
 GENERATED_DIR = "data/processed"
 
-TRIPS_FULL_ROUTE_CSV = "data/trips_all.csv"   # solver input (232 full + 18 partial)
 HOURLY_SERVICE_CSV = "data/hourly_service.csv"        # reconciliation only
 
 RAKES_CSV = f"{SYNTHETIC_DIR}/rakes.csv"

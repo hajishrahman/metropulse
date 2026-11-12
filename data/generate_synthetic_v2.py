@@ -41,52 +41,18 @@ def write_rakes() -> None:
     """
     path = SYNTH_DIR / "rakes.csv"
     rows = []
-
-    # 9 at ALVA
-    for i in range(1, 10):
+    for i in range(1, 26):
+        service = i <= 18
         rows.append({
             "rake_id": f"R{i:03d}",
-            "status": "service",
+            "status": "service" if service else "maintenance",
             "initial_mileage_km": random.randint(20_000, 200_000),
             "cmrs_status": "valid",
-            "initial_location": "ALVA",
-            "initial_available_time": "06:00",
+            "initial_location": "ALVA" if i <= 9 else "TPHT" if i <= 16 else "MUTTOM",
+            "initial_available_time": "06:00" if service else "00:00",
         })
 
-    # 7 at TPHT
-    for i in range(10, 17):
-        rows.append({
-            "rake_id": f"R{i:03d}",
-            "status": "service",
-            "initial_mileage_km": random.randint(20_000, 200_000),
-            "cmrs_status": "valid",
-            "initial_location": "TPHT",
-            "initial_available_time": "06:00",
-        })
-
-    # 2 at MUTTOM (service)
-    for i in range(17, 19):
-        rows.append({
-            "rake_id": f"R{i:03d}",
-            "status": "service",
-            "initial_mileage_km": random.randint(20_000, 200_000),
-            "cmrs_status": "valid",
-            "initial_location": "MUTTOM",
-            "initial_available_time": "06:00",
-        })
-
-    # 7 maintenance at MUTTOM
-    for i in range(19, 26):
-        rows.append({
-            "rake_id": f"R{i:03d}",
-            "status": "maintenance",
-            "initial_mileage_km": random.randint(20_000, 200_000),
-            "cmrs_status": "valid",
-            "initial_location": "MUTTOM",
-            "initial_available_time": "00:00",
-        })
-
-    with open(path, "w", newline="") as f:
+    with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)

@@ -13,7 +13,7 @@ Every parameter in MetroPulse is sourced and labeled.
 
 ---
 
-## 1. Primary Data Source — GTFS Feed
+## 1. Primary Data Source â€” GTFS Feed
 
 ### Source
 
@@ -24,7 +24,7 @@ Every parameter in MetroPulse is sourced and labeled.
 - **Feed version:** 1.0
 - **Feed validity:** 2024-08-12 to 2025-12-31
 - **Timezone:** Asia/Kolkata
-- **Data vintage:** 2024–25 timetable; not current 2026 operations.
+- **Data vintage:** 2024â€“25 timetable; not current 2026 operations.
 
 ### Files Present (11)
 
@@ -47,14 +47,14 @@ Every parameter in MetroPulse is sourced and labeled.
 
 | Parameter | Value | How Derived |
 |---|---:|---|
-| Weekday trips used (total) | 250 | Filter `service_id=WK`, `06:00 ? departure < 23:00` |
-| Full-route trips (ALVA ? TPHT) | 232 | First/last stop both are terminals |
-| Partial trips (Muttom ? terminals) | 18 | First or last stop is MUTT |
-| UP/DOWN split | 127 UP / 123 DOWN | Station-index from stop order (ALVA=0 … TPHT=24) |
-| Per-trip running time | Real GTFS duration | Arrival ? departure, per trip |
-| One-way running time (median) | 50.47 min | Median over 412 full-route trips — **summary statistic only** |
+| Weekday trips used (total) | 250 | Filter `service_id=WK`, `06:00 â‰¤ departure < 23:00` |
+| Full-route trips (ALVA â†” TPHT) | 232 | First/last stop both are terminals |
+| Partial trips (Muttom â†” terminals) | 18 | First or last stop is MUTT |
+| UP/DOWN split | 127 UP / 123 DOWN | Station-index from stop order (ALVA=0 â€¦ TPHT=24) |
+| Per-trip running time | Real GTFS duration | Arrival âˆ’ departure, per trip |
+| One-way running time (median) | 50.47 min | Median over 412 full-route trips â€” **summary statistic only** |
 | Route distance from GTFS shapes | Approximately 27.87 km | Final distance from `shapes.txt` |
-| Model route length | 28.144 km | KMRL Annual Report 2024–25 |
+| Model route length | 28.144 km | KMRL Annual Report 2024â€“25 |
 | Stations | 25 | Count of distinct `stop_id` values in `stops.txt` |
 | Hourly distribution | `data/hourly_service.csv` | Reconciliation only; not read by solver |
 
@@ -67,23 +67,23 @@ Every parameter in MetroPulse is sourced and labeled.
 
 - **Extraction script:** `data/extract_gtfs_trips.py`
 - **Outputs:**
-  - `data/trips_full_route.csv` — 232 full-route trips
-  - `data/stop_sequences_full_route.csv` — stop sequences for the 232
-  - `data/trips_partial.csv` — 18 partial trips
-  - `data/stop_sequences_partial.csv` — stop sequences for the 18
+  - `data/trips_full_route.csv` â€” 232 full-route trips
+  - `data/stop_sequences_full_route.csv` â€” stop sequences for the 232
+  - `data/trips_partial.csv` â€” 18 partial trips
+  - `data/stop_sequences_partial.csv` â€” stop sequences for the 18
 - **Merge script:** `data/merge_trips.py`
-- **Solver input:** `data/trips_all.csv` — 250 trips (232 + 18)
-- **Audit script:** `data/verify_gtfs_trips.py` — independently verifies the extraction and reconciles 232 + 18 = 250 against the untouched `hourly_service.csv`
+- **Solver input:** `data/trips_all.csv` â€” 250 trips (232 + 18)
+- **Audit script:** `data/verify_gtfs_trips.py` â€” independently verifies the extraction and reconciles 232 + 18 = 250 against the untouched `hourly_service.csv`
 
 **Filtering:** Of 255 weekday trips in `trips.txt`, 5 depart outside the model window:
 
 - `WK_253`, `WK_4`, `WK_256`, `WK_12`, `WK_18`
 
-These 5 trips are excluded by policy as non-passenger movements (times outside `06:00 ? departure < 23:00`).
+These 5 trips are excluded by policy as non-passenger movements (times outside `06:00 â‰¤ departure < 23:00`).
 
 **Direction identification:**
 
-Direction is determined by **station index** from stop order (ALVA = 0 … TPHT = 24):
+Direction is determined by **station index** from stop order (ALVA = 0 â€¦ TPHT = 24):
 
 - `UP` = last station index > first station index
 - `DOWN` = last station index < first station index
@@ -93,9 +93,9 @@ No fallback to `trips.txt direction_id`. Verified by `data/verify_gtfs_trips.py`
 ### Known Quirks
 
 - The `transfers` column in `fare_attributes.txt` is empty.
-- Fare range: ?10 (shortest) to ?60 (Aluva ? Tripunithura).
-- The feed ends on 2025-12-31 and represents the 2024–25 timetable, not current 2026 operations.
-- Some `stop_times.txt` entries have departure times ? 24:00:00 (e.g., `24:03:45`). These are parsed as `H*3600 + M*60 + S` without a day limit; they are not part of the 250-trip set because their departure is outside the operating window.
+- Fare range: â‚¹10 (shortest) to â‚¹60 (Aluva â†” Tripunithura).
+- The feed ends on 2025-12-31 and represents the 2024â€“25 timetable, not current 2026 operations.
+- Some `stop_times.txt` entries have departure times â‰¥ 24:00:00 (e.g., `24:03:45`). These are parsed as `H*3600 + M*60 + S` without a day limit; they are not part of the 250-trip set because their departure is outside the operating window.
 
 ### Git Strategy
 
@@ -105,14 +105,14 @@ No fallback to `trips.txt direction_id`. Verified by `data/verify_gtfs_trips.py`
 
 ---
 
-## 2. Secondary Data Source — KMRL Annual Report 2024–25
+## 2. Secondary Data Source â€” KMRL Annual Report 2024â€“25
 
 **Local copy:**
 
 - `Z:\Hajish College\Major_project\KMRLGTFS2.md` (1.1 MB)
 - Corresponding PDF: `KMRLGTFS2.pdf` (38.9 MB)
 
-The file is named `KMRLGTFS2`, but it contains the **KMRL Annual Report 2024–25**, not GTFS data or a DPR.
+The file is named `KMRLGTFS2`, but it contains the **KMRL Annual Report 2024â€“25**, not GTFS data or a DPR.
 
 ### What It Provides
 
@@ -122,7 +122,7 @@ The file is named `KMRLGTFS2`, but it contains the **KMRL Annual Report 2024–25*
 | Trains operating | 15 | Report states 15 trains operating |
 | Peak headway | 7 min 30 sec | Same source |
 | Stations | 25 | Same source |
-| Operating hours | 06:00–23:00 | KMRL published timetable |
+| Operating hours | 06:00â€“23:00 | KMRL published timetable |
 | Punctuality rate | 99.98% | Annual Report KPIs |
 | Ridership | 35.6 million passengers/year | Annual Report KPIs; reporting period should be confirmed |
 
@@ -134,7 +134,7 @@ These figures refer to different reporting periods and should not be treated as 
 
 ---
 
-## 3. Tertiary Data Source — News Article (2026)
+## 3. Tertiary Data Source â€” News Article (2026)
 
 A 2026 news article reports the following fleet breakdown:
 
@@ -142,11 +142,11 @@ A 2026 news article reports the following fleet breakdown:
 - **Operating:** 18 trains
 - **Maintenance rotation:** 7 trains
 
-**Source:** [The New Indian Express — KMRL fleet and maintenance rotation, August 2026](https://www.newindianexpress.com/amp/story/cities/kochi/2026/Aug/23/kochi-metro-will-need-eight-more-trains-after-pink-line-completion-says-md-loknath-behera)
+**Source:** [The New Indian Express â€” KMRL fleet and maintenance rotation, August 2026](https://www.newindianexpress.com/amp/story/cities/kochi/2026/Aug/23/kochi-metro-will-need-eight-more-trains-after-pink-line-completion-says-md-loknath-behera)
 
 ### Discrepancy Note
 
-- Annual Report 2024–25: 15 trains operating.
+- Annual Report 2024â€“25: 15 trains operating.
 - News article 2026: 18 trains operating and 7 in maintenance.
 
 Both figures may reflect different operating periods.
@@ -159,7 +159,7 @@ The model also supports testing with a reduced service fleet, such as 15 rakes, 
 
 ---
 
-## 4. Removed from Scope — DPR Values
+## 4. Removed from Scope â€” DPR Values
 
 The project initially used values attributed to a DPR (Detailed Project Report). These values were removed because:
 
@@ -175,7 +175,7 @@ The project initially used values attributed to a DPR (Detailed Project Report).
 | 18.91 min running time | GTFS median | 50.47 min |
 | 408 trips/day | GTFS weekday data | 250 trips (232 full-route + 18 partial) |
 | 18 rakes (15 + 1 + 2) | News article 2026 | 25 total (18 service + 7 maintenance) |
-| 05:00–24:00 operating window | KMRL timetable | 06:00–23:00 |
+| 05:00â€“24:00 operating window | KMRL timetable | 06:00â€“23:00 |
 | 3-min turnaround | Project assumption | 5 min `[SYNTHETIC]` |
 | 420,000 km IOH threshold | Unverified | Removed |
 | 1,000,000 km bogie threshold | Unverified | Retained as `[SYNTHETIC]` |
@@ -191,9 +191,9 @@ The project initially used values attributed to a DPR (Detailed Project Report).
 
 | Metric | Value | Source |
 |---|---:|---|
-| Total fleet | 25 rakes | `[EXTERNAL — News 2026]` |
-| Service rakes | 18 | `[EXTERNAL — News 2026]` |
-| Maintenance rakes | 7 | `[EXTERNAL — News 2026]` |
+| Total fleet | 25 rakes | `[EXTERNAL â€” News 2026]` |
+| Service rakes | 18 | `[EXTERNAL â€” News 2026]` |
+| Maintenance rakes | 7 | `[EXTERNAL â€” News 2026]` |
 | Separate standby rakes | 0 | No separate standby category in the synthetic fleet |
 
 **Initial position split (fixed, not solver choice):**
@@ -210,11 +210,11 @@ The MUTTOM assignment is required because 18 partial trips start or end at Mutto
 
 The following is an **aggregate summary only**. It uses the 50.47-min median as a rough per-trip figure. The model itself uses per-trip GTFS durations.
 
-- Required running time (rough estimate): 250 trips × 50.47 min = 12,617.5 train-minutes.
-- Available running time: 18 rakes × 17 hours × 60 = 18,360 train-minutes.
+- Required running time (rough estimate): 250 trips Ã— 50.47 min = 12,617.5 train-minutes.
+- Available running time: 18 rakes Ã— 17 hours Ã— 60 = 18,360 train-minutes.
 - Estimated utilization: approximately 68.72%, rounded to 69%.
 
-This is a planning estimate, not a proof of feasibility. Actual feasibility is determined by the CP-SAT solver and the independent schedule validator. The empirical result on the 250-trip case is **OPTIMAL** (see `constraints-v2.1` §11 Scenario A').
+This is a planning estimate, not a proof of feasibility. Actual feasibility is determined by the CP-SAT solver and the independent schedule validator. The empirical result on the 250-trip case is **OPTIMAL** (see `constraints-v2.1` Â§11 Scenario A').
 
 ---
 
@@ -249,51 +249,55 @@ R018,service,<mileage>,valid,MUTTOM,06:00
 R019,maintenance,<mileage>,valid,MUTTOM,00:00
 ...
 R025,maintenance,<mileage>,valid,MUTTOM,00:00
+```
+### Rake Distribution
 
-Rake Distribution
-9 rakes: service, home ALVA
+- **9 rakes:** service, home ALVA
+- **7 rakes:** service, home TPHT
+- **2 rakes:** service, home MUTTOM
+- **7 rakes:** maintenance, at MUTTOM
+- **Total:** 25 rakes
+- **Initial mileage:** Randomized between 20,000 and 200,000 km
 
-7 rakes: service, home TPHT
+### Synthetic Assumptions
 
-2 rakes: service, home MUTTOM
+| Field | Assumed Value | Rationale |
+|---|---|---|
+| Terminal turnaround | 5 min | No verified source; project assumption |
+| Terminal-to-terminal deadhead (ALVA â†” TPHT) | 15 min | No verified source; project assumption |
+| MUTTOM â†” terminal deadhead | 8 min | No verified source; project assumption; used for R11 first-trip deadhead |
+| Maintenance threshold | 1,000,000 km | No verified source |
+| Info Park-2 capacity | 2 rakes | No verified source |
+| Initial mileage | 20,000â€“200,000 km | Randomized for realism |
+| Initial rake split | 9 ALVA / 7 TPHT / 2 MUTTOM | Fixed; required for 250-trip feasibility |
+| Simulation delay model | clipped normal, mean âˆ’48 s pre-clip, clip [0, 300 s] | No verified source; Phase 2 assumption |
 
-7 rakes: maintenance, at MUTTOM
-
-Total: 25 rakes
-
-Initial mileage: Randomized between 20,000 and 200,000 km
-
-Synthetic Assumptions
-Field	Assumed Value	Rationale
-Terminal turnaround	5 min	No verified source; project assumption
-Terminal-to-terminal deadhead (ALVA ? TPHT)	15 min	No verified source; project assumption
-MUTTOM ? terminal deadhead	8 min	No verified source; project assumption; used for R11 first-trip deadhead
-Maintenance threshold	1,000,000 km	No verified source
-Info Park-2 capacity	2 rakes	No verified source
-Initial mileage	20,000–200,000 km	Randomized for realism
-Initial rake split	9 ALVA / 7 TPHT / 2 MUTTOM	Fixed; required for 250-trip feasibility
-Simulation delay model	clipped normal, mean ?48 s pre-clip, clip [0, 300 s]	No verified source; Phase 2 assumption
 These values are project assumptions, not confirmed KMRL operational data.
 
-The Phase 2 delay model is documented in full in docs/phases.md (Phase 2) and in data/processed/simulation_kpis.json (metadata section). Note: Phase 2 outputs are stale — they were computed on the pre-rebuild synthetic schedule and must be regenerated on the new 250-trip real-GTFS schedule.
+The Phase 2 delay model is documented in full in docs/phases.md (Phase 2) and in data/processed/simulation_kpis.json (metadata section). Phase 2 outputs were regenerated on 2026-11-12 on the new 250-trip real-GTFS schedule.
 
-7. GTFS Consistency Check (optional module)
-File: src/gtfs_validation.py
+## 7. GTFS Consistency Check (optional module)
+
+**File:** `src/gtfs_validation.py`
 
 An optional, non-pipeline consistency check. It is not part of the scheduling pipeline. It compares selected GTFS-derived values with model values for sanity.
 
-Check	GTFS-Derived Value	Model Value	Status
-Running time	Approximately 50.47 min (median)	Per-trip GTFS duration	INFO — model uses per-trip values
-Turnaround	Not measurable (no block_id)	5 min	WARN — unvalidated
-Peak headway	Varies (5–10 min)	No direct GTFS-matched value	WARN
-Purpose
+| Check | GTFS-Derived Value | Model Value | Status |
+|---|---|---|---|
+| Running time | Approximately 50.47 min (median) | Per-trip GTFS duration | INFO â€” model uses per-trip values |
+| Turnaround | Not measurable (no block_id) | 5 min | WARN â€” unvalidated |
+| Peak headway | Varies (5â€“10 min) | No direct GTFS-matched value | WARN |
+
+### Purpose
 The module exists to spot obvious inconsistencies. It is not required for the solver or validator. The main scheduling pipeline is:
 
-extract_gtfs_trips.py ? trips_full_route.csv + trips_partial.csv ? merge_trips.py ? trips_all.csv ? solver ? validator.
+extract_gtfs_trips.py â†’ trips_full_route.csv + trips_partial.csv â†’ merge_trips.py â†’ trips_all.csv â†’ solver â†’ validator.
 
-8. Data Flow Summary
-Main Scheduling Pipeline
-text
+## 8. Data Flow Summary
+
+### Main Scheduling Pipeline
+``` text 
+
 GTFS (data/raw/)
        |
        v
@@ -324,8 +328,9 @@ solver/validator.py  (Independent verification)
        v
 data/processed/validation.json
 (10 PASS + 1 SKIPPED, Overall PASS)
-Supporting Data Flow
-text
+
+## Supporting Data Flow
+
 KMRL Annual Report
        |
        v
@@ -347,9 +352,10 @@ The solver uses per-trip GTFS durations, not this constant.
 Initial rake split (9 / 7 / 2)
        |
        v
-data/generate_synthetic_v2.py ? rakes.csv
-Reconciliation Check
-text
+data/generate_synthetic_v2.py â†’ rakes.csv
+
+## Reconciliation Check
+
 data/hourly_service.csv  (legacy, 250 counts)
        |
        v
@@ -359,12 +365,14 @@ data/verify_gtfs_trips.py
 Verifies: hourly(250) == hourly(232) + hourly(18)
 Kept on disk for reconciliation only.
 Not read by the solver.
-9. Limitations
-GTFS data vintage: The feed covers 2024–25 and may not represent current 2026 operations.
 
-Fleet discrepancy: The Annual Report says 15 operating trains, while the 2026 news article reports 18 operating trains. V1 uses the 18-service-rake configuration.
+```
 
-Turnaround: The 5-minute turnaround is [SYNTHETIC]; no verified source is available.
+## 9. Limitations
+
+**GTFS data vintage:** The feed covers 2024â€“25 and may not represent current 2026 operations.
+- **Fleet discrepancy:** ...
+- **Turnaround:** The 5-minute turnaround is `[SYNTHETIC]`; no verified source is available.
 
 Deadhead: Both 15 min (terminal) and 8 min (MUTT) deadhead values are [SYNTHETIC]. No verified KMRL source.
 
@@ -378,39 +386,36 @@ Crew scheduling: Not included in Phase 1. Planned for Phase 3.
 
 GTFS limitations: GTFS provides scheduled timetable information, not real-time train positions or actual operating delays.
 
-Objective: The O1–O7 soft objectives are currently disabled. add_obj6_rake_balance causes INFEASIBLE if called without build_objective (see constraints-v2.1 Findings). V1 is a feasibility probe only.
+Objective: The O1â€“O7 soft objectives are currently disabled. add_obj6_rake_balance causes INFEASIBLE if called without build_objective (see constraints-v2.1 Findings). V1 is a feasibility probe only.
 
 DPR: DPR-based values have been removed from the current project configuration.
 
-Terminal continuity: The Phase 1 schedule uses real GTFS trip IDs (WK_*). Terminal continuity is validated (R11 PASS). It is not "unverifiable" — that was true of the earlier synthetic-Txxxx schedule and no longer applies.
+Terminal continuity: The Phase 1 schedule uses real GTFS trip IDs (WK_*). Terminal continuity is validated (R11 PASS). It is not "unverifiable" â€” that was true of the earlier synthetic-Txxxx schedule and no longer applies.
 
-Phase 2 outputs stale: data/processed/simulation_kpis.json and simulation_timeline.csv were computed on the old synthetic 250-trip schedule. They must be regenerated on the new real-GTFS schedule.
+Phase 2 outputs: data/processed/simulation_kpis.json and simulation_timeline.csv were regenerated on 2026-11-12 on the 250-trip real-GTFS schedule.
 
-10. Source References
-GTFS Feed
-Provider: Kochi Metro Rail Limited.
+## 10. Source References
 
-Website: https://kochimetro.org/
+### GTFS Feed
 
-Validity: 2024-08-12 to 2025-12-31.
+- Provider: Kochi Metro Rail Limited.
+- Website: https://kochimetro.org/
+- Validity: 2024-08-12 to 2025-12-31.
+- Local location: `data/raw/`
 
-Local location: data/raw/
+### KMRL Annual Report 2024â€“25
 
-KMRL Annual Report 2024–25
-Local Markdown copy: Z:\Hajish College\Major_project\KMRLGTFS2.md
+- Local Markdown copy: `Z:\Hajish College\Major_project\KMRLGTFS2.md`
+- Local PDF copy: `Z:\Hajish College\Major_project\KMRLGTFS2.pdf`
 
-Local PDF copy: Z:\Hajish College\Major_project\KMRLGTFS2.pdf
+### News Article â€” 2026
 
-News Article — 2026
-Publisher: The New Indian Express.
+- Publisher: The New Indian Express.
+- Date: August 23, 2026.
+- Article: Kochi Metro will need eight more trains after Pink Line completion, says MD Loknath Behera
 
-Date: August 23, 2026.
+### KMRL Official Timetable
 
-Article: Kochi Metro will need eight more trains after Pink Line completion, says MD Loknath Behera
-
-KMRL Official Timetable
-URL: https://kochimetro.org/train-time-table/
-
-Operating hours used: 06:00–23:00.
-
-Reported peak headway: 7 minutes 30 seconds.
+- URL: https://kochimetro.org/train-time-table/
+- Operating hours used: 06:00â€“23:00.
+- Reported peak headway: 7 minutes 30 seconds.

@@ -32,9 +32,16 @@ RUNNING_SEC = 3000
 
 
 def parse_hhmm_to_sec(s: str) -> int:
-    """Parse 'HH:MM' -> integer seconds since midnight."""
-    hh, mm = s.strip().split(":")
-    return int(hh) * 3600 + int(mm) * 60
+    """Parse 'HH:MM' or 'HH:MM:SS' -> integer seconds since midnight."""
+    parts = s.strip().split(":")
+    if len(parts) == 2:
+        hh, mm = parts
+        ss = "0"
+    elif len(parts) == 3:
+        hh, mm, ss = parts
+    else:
+        raise ValueError(f"bad time format (expected HH:MM or HH:MM:SS): {s!r}")
+    return int(hh) * 3600 + int(mm) * 60 + int(ss)
 
 
 def load_schedule(path: Path) -> list[dict]:

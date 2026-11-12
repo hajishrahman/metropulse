@@ -10,6 +10,18 @@ from src.simulation.schedule_loader import load_schedule_grouped
 from src.simulation.simpy_runner import run_simpy
 
 
+def _trip(trip_id, rake_id, direction, dep_sec, duration_sec=RUNNING_SEC):
+    """Build a trip dict with a per-trip duration_sec."""
+    return {
+        "trip_id": trip_id,
+        "rake_id": rake_id,
+        "direction": direction,
+        "dep_sec": dep_sec,
+        "arr_sec": dep_sec + duration_sec,
+        "duration_sec": duration_sec,
+    }
+
+
 def _assert_match(grouped, delays, sim_out):
     assert sim_out == {
         rake: propagate(trips, delays[rake]) for rake, trips in grouped.items()
@@ -22,14 +34,11 @@ def _assert_match(grouped, delays, sim_out):
 def test_match_small_hand_built():
     grouped = {
         "R1": [
-            {"trip_id": "A", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 21600 + RUNNING_SEC},
-            {"trip_id": "B", "rake_id": "R1", "direction": "DOWN",
-             "dep_sec": 24900, "arr_sec": 24900 + RUNNING_SEC},
+            _trip("A", "R1", "UP", 21600),
+            _trip("B", "R1", "DOWN", 24900),
         ],
         "R2": [
-            {"trip_id": "C", "rake_id": "R2", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 21600 + RUNNING_SEC},
+            _trip("C", "R2", "UP", 21600),
         ],
     }
     delays = {"R1": [600, 0], "R2": [120]}
@@ -44,13 +53,12 @@ def test_match_exact_slack_boundary():
     With own delay 300 on A: A arrives 300s late, next dep must wait exactly,
     then B propagates. Tests the boundary of 'slack >= delay vs slack < delay'.
     """
-    # A: dep 21600, arr 24600. B: dep 24900 (= 24600 + 300 exactly).
+    # A: dep 21600, arr 24600 (duration 3000, fixed in the fixture).
+    # B: dep 24900 (= 24600 + 300 exactly).
     grouped = {
         "R1": [
-            {"trip_id": "A", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 24600},
-            {"trip_id": "B", "rake_id": "R1", "direction": "DOWN",
-             "dep_sec": 24900, "arr_sec": 24900 + RUNNING_SEC},
+            _trip("A", "R1", "UP", 21600, duration_sec=3000),
+            _trip("B", "R1", "DOWN", 24900),
         ],
     }
     # Case 1: no delay — no propagation.
@@ -69,12 +77,9 @@ def test_match_three_trip_chain():
     """
     grouped = {
         "R1": [
-            {"trip_id": "A", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 24600},
-            {"trip_id": "B", "rake_id": "R1", "direction": "DOWN",
-             "dep_sec": 24900, "arr_sec": 24900 + RUNNING_SEC},
-            {"trip_id": "C", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 28200, "arr_sec": 28200 + RUNNING_SEC},
+            _trip("A", "R1", "UP", 21600, duration_sec=3000),
+            _trip("B", "R1", "DOWN", 24900),
+            _trip("C", "R1", "UP", 28200),
         ],
     }
     delays = {"R1": [600, 0, 0]}  # A delayed 600s, others on time
@@ -92,10 +97,8 @@ def test_match_own_delay_larger_than_carried():
     """
     grouped = {
         "R1": [
-            {"trip_id": "A", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 24600},
-            {"trip_id": "B", "rake_id": "R1", "direction": "DOWN",
-             "dep_sec": 28800, "arr_sec": 28800 + RUNNING_SEC},
+            _trip("A", "R1", "UP", 21600, duration_sec=3000),
+            _trip("B", "R1", "DOWN", 28800),
         ],
     }
     delays = {"R1": [0, 300]}
@@ -117,7 +120,10 @@ def test_match_real_schedule_all_stds(std: float):
     z_all = rng.standard_normal(n_total)
 
     all_trip_ids = sorted(t["trip_id"] for trips in grouped.values() for t in trips)
-    assert all_trip_ids == [f"T{i:04d}" for i in range(n_total)]
+    # Real GTFS trip IDs (WK_*), not synthetic T0000. Sanity check: unique,
+    # count matches n_total.
+    assert len(all_trip_ids) == n_total
+    assert len(set(all_trip_ids)) == n_total
     z_by_trip = dict(zip(all_trip_ids, z_all))
 
     mean = -48.0

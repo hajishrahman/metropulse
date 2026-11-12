@@ -9,7 +9,8 @@ from pathlib import Path
 import pytest
 
 from src.simulation.schedule_loader import (
-    EXPECTED_RUNNING_SEC,
+    MAX_DURATION_SEC,
+    MIN_DURATION_SEC,
     group_by_rake,
     load_schedule,
     load_schedule_grouped,
@@ -29,14 +30,22 @@ def _write_csv(path: Path, rows: list[dict]) -> None:
 
 @pytest.mark.parametrize(
     ("value", "seconds"),
-    [("00:00", 0), ("06:00", 21_600), ("06:50", 24_600), ("23:00", 82_800)],
+    [
+        ("00:00", 0),
+        ("06:00", 21_600),
+        ("06:50", 24_600),
+        ("23:00", 82_800),
+        ("06:00:00", 21_600),
+        ("06:50:14", 24_614),
+        ("24:03:45", 86_625),
+    ],
 )
 def test_parse_hhmm(value: str, seconds: int):
     assert parse_hhmm_to_sec(value) == seconds
 
 
 @pytest.mark.parametrize(
-    "value", ["", "6:00", "06:5", "6:00:00", "0600", "aa:bb", "25:00", "06:99"]
+    "value", ["", "6:00", "06:5", "0600", "aa:bb", "25:00", "06:99", "06:99:00"]
 )
 def test_parse_hhmm_rejects_invalid_values(value: str):
     with pytest.raises(ValueError):
@@ -62,6 +71,7 @@ def test_load_schedule_minimal(tmp_path: Path):
             "direction": "UP",
             "dep_sec": 21_600,
             "arr_sec": 24_600,
+            "duration_sec": 3000,
         },
         {
             "trip_id": "T2",
@@ -69,9 +79,11 @@ def test_load_schedule_minimal(tmp_path: Path):
             "direction": "DOWN",
             "dep_sec": 24_900,
             "arr_sec": 27_900,
+            "duration_sec": 3000,
         },
     ]
-    assert rows[0]["arr_sec"] - rows[0]["dep_sec"] == EXPECTED_RUNNING_SEC
+    for r in rows:
+        assert r["duration_sec"] == r["arr_sec"] - r["dep_sec"]
 
 
 def test_load_schedule_duplicate_id(tmp_path: Path):
@@ -89,16 +101,45 @@ def test_load_schedule_duplicate_id(tmp_path: Path):
         load_schedule(p)
 
 
-def test_load_schedule_running_time_mismatch(tmp_path: Path):
+def test_load_schedule_accepts_short_partial_duration(tmp_path: Path):
+    """Real GTFS has partial trips (e.g. MUTT->ALVA) as short as ~8 min."""
+    p = tmp_path / "schedule.csv"
+    _write_csv(
+        p,
+        [
+            {"trip_id": "T1", "rake_id": "R1", "direction": "DOWN",
+             "departure": "06:15:00", "arrival": "06:23:40"},  # 520 s
+        ],
+    )
+    rows = load_schedule(p)
+    assert rows[0]["duration_sec"] == 520
+
+
+def test_load_schedule_rejects_absurdly_short_trip(tmp_path: Path):
+    """Duration below MIN_DURATION_SEC must be rejected as bad data."""
     p = tmp_path / "schedule.csv"
     _write_csv(
         p,
         [
             {"trip_id": "T1", "rake_id": "R1", "direction": "UP",
-             "departure": "06:00", "arrival": "06:40"},  # 40 min, wrong
+             "departure": "06:00", "arrival": "06:00:30"},  # 30 s — absurd
         ],
     )
-    with pytest.raises(ValueError, match="expected"):
+    with pytest.raises(ValueError, match="outside sane range"):
+        load_schedule(p)
+
+
+def test_load_schedule_rejects_absurdly_long_trip(tmp_path: Path):
+    """Duration above MAX_DURATION_SEC must be rejected as bad data."""
+    p = tmp_path / "schedule.csv"
+    _write_csv(
+        p,
+        [
+            {"trip_id": "T1", "rake_id": "R1", "direction": "UP",
+             "departure": "06:00", "arrival": "09:00:00"},  # 180 min — absurd
+        ],
+    )
+    with pytest.raises(ValueError, match="outside sane range"):
         load_schedule(p)
 
 
@@ -169,17 +210,18 @@ def test_total_trips_real_schedule():
     assert len(grouped) == 18
     for trips in grouped.values():
         assert trips == sorted(trips, key=lambda t: (t["dep_sec"], t["trip_id"]))
+
+
 def test_shuffle_does_not_change_grouping():
     """Loader must sort by (dep_sec, trip_id), independent of input row order."""
     import random
-    from src.simulation.schedule_loader import load_schedule, group_by_rake
 
     rows = load_schedule()
     base = group_by_rake(rows)
 
     shuffled = rows[:]
     random.Random(0).shuffle(shuffled)
-    assert shuffled != rows  # shuffle actually changed order
+    assert shuffled != rows
     shuffled_grouped = group_by_rake(shuffled)
 
     assert set(shuffled_grouped) == set(base)
@@ -194,7 +236,7 @@ def test_one_trip_rake_has_zero_eligible():
     grouped = {
         "R1": [
             {"trip_id": "A", "rake_id": "R1", "direction": "UP",
-             "dep_sec": 21600, "arr_sec": 24600},
+             "dep_sec": 21600, "arr_sec": 24600, "duration_sec": 3000},
         ],
     }
     total = sum(len(v) for v in grouped.values())
