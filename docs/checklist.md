@@ -143,13 +143,57 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 3 — Crew Scheduling
-- [ ] `data/synthetic/drivers.csv` (55 drivers D001–D055 `[SYNTHETIC]`; solver tests pool sizes 45/50/55)
-- [ ] `solver/crew_config.py` (constants, POOL_SIZES = [45, 50, 55])
-- [ ] `solver/crew_models.py` (crew ProblemData loader)
-- [ ] `solver/crew_constraints.py` (C1–C7)
-- [ ] `solver/crew_solve.py`
-- [ ] `solver/crew_validator.py`
+## Phase 3 — Crew Scheduling ✅ COMPLETE (2026-11-13)
+
+### Code (new files only — Phase 1 and Phase 2 untouched)
+- [x] `data/generate_drivers.py` — generates 55 synthetic drivers `[SYNTHETIC]`
+- [x] `data/synthetic/drivers.csv` — **55 drivers D001–D055**, `driver_id` column only in V1 (qualification / availability / shift_preference / weekly_availability **deferred to V2** — same honesty pattern as C5)
+- [x] `solver/crew_config.py` — constants, `POOL_SIZES = [45, 50, 55]`, all `[EXTERNAL]`/`[DERIVED]`/`[SYNTHETIC]` tagged
+- [x] `solver/crew_models.py` — `CrewProblemData` loader (reads `schedule.csv` + `drivers.csv`)
+- [x] `solver/crew_constraints.py` — C1–C4 hard, C6 state-machine soft, C7 soft
+- [x] `solver/crew_solve.py` — CP-SAT, loops over `POOL_SIZES`, writes both outputs
+- [x] `solver/crew_validator.py` — independent C1–C4 + C7 checks per pool
+- [x] `solver/crew_diag.py` — temporary diagnostic (delete after Phase 3 sign-off)
+
+### Constraints
+- [x] C1 no overlap (arrival + 5-min turnaround ≤ next departure)
+- [x] C2 max active duty (`last_arr − first_dep ≤ 28,800 s`)
+- [x] C3 sign-on / sign-off buffers (≥ 900 s each side)
+- [x] C4 full coverage (250/250 trips assigned exactly once)
+- [x] C5 min rest 12 h — **DEFERRED, not exercised in single-day V1**; no code, no validator check
+- [x] C6 continuous driving ≤ 5 h (soft) — state-machine, spec-compliant, 6 vars per `(d,i)`; break threshold reuses `MIN_TURNAROUND_SEC` `[DERIVED from C1]`
+- [x] C7 reserve ≥ 5 drivers (soft) — penalize use > `pool_size − 5` drivers; validator WARNs if exceeded
+
+### Results (all three pool sizes OPTIMAL)
+- [x] **pool=45:** OPTIMAL, 57.25 s, **active=40, reserve=5**, objective=0.0, gap=0.0%
+- [x] **pool=50:** OPTIMAL, 58.80 s, **active=45, reserve=5**, objective=0.0, gap=0.0%
+- [x] **pool=55:** OPTIMAL, 64.34 s, **active=50, reserve=5**, objective=0.0, gap=0.0%
+- [x] C6 penalty = 0 across all pools (no driver exceeded 5 h continuous driving)
+- [x] C7 penalty = 0 across all pools (reserve held at 5 everywhere)
+- [x] CP-SAT non-determinism note: with `num_search_workers = 4`, solve results may vary between runs. Documented, not hidden.
+
+### Validator (independent of solver)
+- [x] **pool=45:** C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- [x] **pool=50:** C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- [x] **pool=55:** C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- [x] **Overall: PASS**
+
+### Outputs
+- [x] `data/processed/crew_schedule.csv` — 750 rows (250 trips × 3 pools); columns: `trip_id, driver_id, sign_on, sign_off, pool_size`
+- [x] `data/processed/crew_solution.json` — all 3 runs keyed by `"45"` / `"50"` / `"55"`
+- [x] `data/processed/crew_validation.json` — per-pool checks + `overall: PASS`
+
+### Bugs found and fixed during the build
+- `[FINDING]` **C6 first formulation was O(n²)** (~3.4M vars). Caught before writing. Reworked to state-machine (6 vars per `(d,i)` ≈ 82,500 total new vars).
+- `[FINDING]` **C6 chain-continuity bug** — initial state machine used `x[d,i−1] AND gap_ok`, which broke chains across trips assigned to other drivers. Reworked to `last_arr` carry-forward + `has_prev` bool.
+- `[FINDING]` **C1 solver bug** — dead branches in `add_c1_no_overlap` forced "if first trip assigned, next trip not assigned" for *every* non-overlapping pair. Made model INFEASIBLE at all pools. Fixed to the single condition `if a.arr + turnaround > b.dep: x[a] + x[b] ≤ 1`.
+- `[FINDING]` **C6 `new_chain = 0` bug** — gap constraint fired even when driver had no prior assignment, making full model INFEASIBLE. Fixed with `has_prev` bool guard.
+- `[FINDING]` **Validator C1 bug** — compared driver-level `sign_on`/`sign_off` (constant per driver) instead of per-trip times, so C1 FAILed on every pair. Fixed by joining `crew_schedule.csv` trip_ids with `schedule.csv` to get per-trip departure/arrival.
+- `[FINDING]` **Diagnostic-driven debugging** — `solver/crew_diag.py` isolated each constraint individually (C4-only, C4+C1, etc.) and caught both INFEASIBLE causes without guessing.
+
+### Notes
+- Handoff trust rule honored: Phase 1 docs treated as historical context only; actual code (`crew_*.py`) and actual data (`schedule.csv`, `drivers.csv`, `crew_*.json/csv`) are authoritative for this section.
+- Do not reintroduce DPR values (10.715 km, 18.91 min, 408 trips, 3-min turnaround) — none present in Phase 3.
 ---
 
 ## Phase 4 — Explainability

@@ -1,0 +1,149 @@
+{
+  "overall": "PASS",
+  "pools": {
+    "45": {
+      "checks": [
+        {
+          "check": "C1_no_overlap",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C2_max_duty",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C3_sign_buffers",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C4_coverage",
+          "status": "PASS",
+          "details": {
+            "required": 250,
+            "scheduled": 250,
+            "failures": []
+          }
+        },
+        {
+          "check": "C7_reserve",
+          "status": "PASS",
+          "details": {
+            "pool_size": 45,
+            "active": 40,
+            "reserve": 5,
+            "min_reserve": 5
+          }
+        }
+      ],
+      "pool_status": "PASS"
+    },
+    "50": {
+      "checks": [
+        {
+          "check": "C1_no_overlap",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C2_max_duty",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C3_sign_buffers",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C4_coverage",
+          "status": "PASS",
+          "details": {
+            "required": 250,
+            "scheduled": 250,
+            "failures": []
+          }
+        },
+        {
+          "check": "C7_reserve",
+          "status": "PASS",
+          "details": {
+            "pool_size": 50,
+            "active": 45,
+            "reserve": 5,
+            "min_reserve": 5
+          }
+        }
+      ],
+      "pool_status": "PASS"
+    },
+    "55": {
+      "checks": [
+        {
+          "check": "C1_no_overlap",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C2_max_duty",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C3_sign_buffers",
+          "status": "PASS",
+          "details": {
+            "failures": [],
+            "total": 0
+          }
+        },
+        {
+          "check": "C4_coverage",
+          "status": "PASS",
+          "details": {
+            "required": 250,
+            "scheduled": 250,
+            "failures": []
+          }
+        },
+        {
+          "check": "C7_reserve",
+          "status": "PASS",
+          "details": {
+            "pool_size": 55,
+            "active": 50,
+            "reserve": 5,
+            "min_reserve": 5
+          }
+        }
+      ],
+      "pool_status": "PASS"
+    }
+  }
+}

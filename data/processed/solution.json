@@ -1,6 +1,6 @@
 {
   "status": "OPTIMAL",
-  "elapsed_sec": 11.769542699999874,
+  "elapsed_sec": 12.635324399998353,
   "objective": 4800.0,
   "best_bound": 4800.0,
   "gap_pct": 0.0,

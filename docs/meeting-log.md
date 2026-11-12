@@ -366,6 +366,73 @@
 
 **Next Meeting:** Phase 3 kickoff (Crew Scheduling).
 
+---
+
+## Meeting 13 — 2026-11-13
+**Attendees:** [Names]
+**Duration:** ~5 hours (across many sessions)
+**Agenda:** Phase 3 — Crew Scheduling (CP-SAT)
+
+**Decisions:**
+- **Phase 3 is complete.** Crew scheduling assigns all 250 Phase 1 trips to SC/TO drivers.
+- **Solver:** OR-Tools CP-SAT, looping over `POOL_SIZES = [45, 50, 55]`.
+- **Inputs:** `data/processed/schedule.csv` (Phase 1 output, read-only) and `data/synthetic/drivers.csv` (55 synthetic drivers, `driver_id` only in V1). The 55 count is `[SYNTHETIC]` — KMRL has 60 SC/TO operators `[EXTERNAL]`, and the 55-driver roster is a controlled test pool, not a claim about real KMRL staffing.
+- **`drivers.csv` schema (V1):** `driver_id` only. **Driver qualifications, availability, shift preferences, and weekly availability are deferred to V2** — same honesty pattern as C5.
+- **Constraints:**
+  - **C1** no overlap (`arr + 300 s ≤ next dep`) — hard
+  - **C2** max active duty (`last_arr − first_dep ≤ 28,800 s`) — hard
+  - **C3** sign-on / sign-off buffers (≥ 900 s each side) — hard
+  - **C4** full coverage (250 / 250 trips) — hard
+  - **C5** min rest 12 h — **DEFERRED, not exercised in single-day V1.** No solver constraint, no validator check.
+  - **C6** continuous driving ≤ 5 h — **soft**, weight 10. Break threshold = `MIN_TURNAROUND_SEC` (300 s) `[DERIVED from C1]`. Implemented as a **state machine** (6 vars per `(d, i)`, ~82,500 new vars) because the earlier O(n²) run-enumeration approach was rejected at ~3.4M vars.
+  - **C7** reserve buffer ≥ 5 drivers — **soft**, weight 15. Validator WARNs if `active > pool_size − 5`; FAILs if `active > pool_size`.
+- **C5 is documented as deferred**, not silently dropped. Same honesty pattern as Phase 1 R8 (SKIPPED).
+- **No DPR values reintroduced.** No invented thresholds. The C6 break threshold is the C1 turnaround reused, not an invented 30 min.
+- **CP-SAT non-determinism with `num_search_workers = 4`** is expected and documented, not hidden.
+
+**Action Items:**
+- [x] `data/generate_drivers.py` — generates 55 drivers `D001`–`D055`
+- [x] `data/synthetic/drivers.csv` — 55 rows, `driver_id` only
+- [x] `solver/crew_config.py` — constants, all tagged
+- [x] `solver/crew_models.py` — `CrewProblemData` loader (reads `schedule.csv` + `drivers.csv`)
+- [x] `solver/crew_constraints.py` — C1–C4 hard, C6 state-machine soft, C7 soft
+- [x] `solver/crew_solve.py` — loops over 45/50/55, writes both output files
+- [x] `solver/crew_validator.py` — independent C1–C4 + C7 checks per pool
+- [x] `solver/crew_diag.py` — temporary diagnostic (to delete after Phase 3 sign-off)
+- [x] 250-trip solve at pool=45: **OPTIMAL, 57.25 s**, active=40, reserve=5, objective=0.0, gap=0.0%
+- [x] 250-trip solve at pool=50: **OPTIMAL, 58.80 s**, active=45, reserve=5, objective=0.0, gap=0.0%
+- [x] 250-trip solve at pool=55: **OPTIMAL, 64.34 s**, active=50, reserve=5, objective=0.0, gap=0.0%
+- [x] Validator at all 3 pools: **C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → Overall PASS**
+- [x] Outputs written: `data/processed/crew_schedule.csv` (750 rows), `crew_solution.json`, `crew_validation.json`
+- [x] Docs updated: `checklist.md` §Phase 3, `constraints-v2.2` §12 (internal version label fix), `constraints-crew-v1.md` (new file), `data-provenance.md` §6/§9, `meeting-log.md` (this meeting)
+- [ ] Delete `solver/crew_diag.py` after all docs are signed off
+- [ ] Update `phases.md` §Phase 3 (pending)
+
+**Notes:**
+
+- **Diagnostic-driven debugging.** `solver/crew_diag.py` was created as a temporary file to isolate constraint infeasibility. It ran C4-only, C4+C1, C4+C2, C4+C3, C4+C1+C2, and C4+C1+C2+C3 in sequence. This caught two distinct INFEASIBLE bugs without guessing. All hard constraints C1–C4 are jointly satisfiable at pools 45/50/55.
+
+- **Bugs found and fixed during Phase 3:**
+  1. `[FINDING]` **C6 first formulation was O(n²)** — enumerated every run over the 250-trip global list, ~3.4M booleans. Caught before writing. Reworked to a state machine (6 vars per `(d, i)`).
+  2. `[FINDING]` **C6 chain-continuity bug** — initial state machine defined "continue chain" as `x[d, i−1] AND gap_ok[i−1]`, which broke chains across trips assigned to other drivers. Reworked to `last_arr` carry-forward + `has_prev` bool.
+  3. `[FINDING]` **C1 solver bug** — dead branches in `add_c1_no_overlap` forced "if first trip assigned, next trip not assigned" for **every** non-overlapping pair. This made the model INFEASIBLE at all pools. Fixed to the single condition `if a.arr + turnaround > b.dep: x[a] + x[b] ≤ 1`.
+  4. `[FINDING]` **C6 `new_chain = 0` bug** — gap constraint fired even when driver had no prior assignment, making the full model INFEASIBLE. Fixed with `has_prev` bool guard.
+  5. `[FINDING]` **Validator C1 bug** — compared driver-level `sign_on`/`sign_off` (constant per driver) instead of per-trip times, so C1 FAILed on every pair. Fixed by joining `crew_schedule.csv` trip_ids with `schedule.csv` to get per-trip departure/arrival.
+
+- **Objective = 0 at all pools.** The solver found schedules with **zero C6 and C7 penalty**. This does not prove that no driver neared the 5 h chain limit — it proves the penalty term is zero. Individual chain lengths are in `crew_solution.json` under `assignments` if inspected.
+
+- **Pool-size observation.** At each pool, exactly `pool_size − 5` drivers are active (reserve held at 5 everywhere). So pool=45 uses 40 drivers, pool=50 uses 45, pool=55 uses 50. This is the C7 optimum — no more drivers than needed after preserving 5-reserve. It does not mean pool=55 is strictly "better"; it means more slack, more reserve, at higher pool sizes.
+
+- **Handoff deviation noted.** The new `docs/constraints-crew-v1.md` was created at user request and is a **stylistic companion** to `phases.md §Phase 3`, not a replacement. The handoff §6/§10 intended C1–C7 detail for `phases.md §Phase 3`. Both are kept; `phases.md` is the canonical summary. This deviation is flagged in `constraints-crew-v1.md` §10 and recorded here.
+
+- **Doc trust rule honored.** Per handoff: "Do not read [project docs] unless the user tells you to." The user did not instruct reading during coding; the docs were only opened after validation PASS and with explicit permission, and treated as historical context where relevant. Code and data files were the source of truth during Phase 3 build.
+
+- **No DPR-based values.** 10.715 km, 18.91 min, 408 trips, 3-min turnaround — none present anywhere in Phase 3 code or docs.
+
+- **Temporary diagnostic file.** `solver/crew_diag.py` is not part of the Phase 3 deliverable. Delete it after all docs are signed off.
+
+**Next Meeting:** Phase 4 — Explainability (or Phase 3 retrospective, if requested).
+
 ## Meeting Template (for future meetings)
 
 ```markdown

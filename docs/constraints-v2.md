@@ -39,7 +39,7 @@ Every parameter in this specification is tagged with one of:
 
 ### 2.2 Out of Scope for V1
 
-- Crew rostering (Phase 3).
+- Crew rostering (Phase 3). **Phase 3 is now complete (2026-11-13) — see `docs/phases.md` §Phase 3 for the C1–C7 crew constraint spec. This file covers the train layer only; crew constraints are not duplicated here.**
 - XGBoost / ML predictions (optional, Phase 6).
 - Stochastic SimPy feedback to CP-SAT.
 - Muttom depot finite capacity.
@@ -382,7 +382,7 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 - Deadhead values — synthetic (15 min terminal, 8 min MUTT).
 - Objective — single-term O6 rake balance only (see §6). Multi-objective extension (O1–O5, O7) deferred.
 - Optimality gap — reported as 0.0% because the O6 objective is proven optimal (best bound = objective = 4800).
-- Crew scheduling — deferred to Phase 3.
+- Crew scheduling — out of scope for this train-layer file. **Phase 3 complete (2026-11-13); see `docs/phases.md` §Phase 3 and `docs/constraints-crew-v1.md`.**
 - ML / XGBoost — deferred.
 - Passenger demand — no demand model.
 - Maintenance windows — `maintenance.csv` empty; R9 vacuous.
@@ -416,10 +416,12 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 
 ## 12. Sign-Off
 
-This specification is v2.1, dated 2026-11-12. It supersedes v2 (2026-11-08).
+This specification is **v2.2**, dated 2026-11-12 (rebuilt on real GTFS trips). It supersedes v2 (2026-11-08).
+
+**Note:** an earlier revision of this file was labelled v2.1 in this section while the header said v2.2. That inconsistency was corrected on 2026-11-13; the correct label is **v2.2** (matches the file header and the Phase 1 rebuild date).
 
 Any change to constraints, parameters, or architecture requires:
 
 1. Update to this document.
-2. Version bump (v2.1 → v2.2 → v3).
+2. Version bump (v2.2 → v2.3 → v3).
 3. Explicit re-approval.

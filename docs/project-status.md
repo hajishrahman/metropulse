@@ -1,6 +1,6 @@
 # MetroPulse — Current Project Status
 
-**Last Updated:** 2026-11-12
+**Last Updated:** 2026-11-13
 
 ## Current Project Direction
 
@@ -47,6 +47,15 @@ python -m solver.validator
 python -m src.simulation.preflight
 python -m src.simulation.experiments
 
+# Phase 3 — generate drivers (one-time; deterministic)
+python -m data.generate_drivers
+
+# Phase 3 — solve all three pool sizes
+python -m solver.crew_solve
+
+# Phase 3 — validate crew assignments
+python -m solver.crew_validator
+
 # Tests
 pytest tests\ -v
 
@@ -61,16 +70,18 @@ pytest tests\ -v → 59 passed
 Output files:
 
 data/processed/schedule.csv — 250 scheduled trips
-
 data/processed/solution.json — solver result
-
 data/processed/validation.json — validator checks
-
 data/processed/schedule_250_trips.csv — frozen 250-trip baseline
-
 data/processed/solution_250_trips.json
+data/processed/validation_250_trips.json
+data/processed_backup/ — pre-rerun baseline snapshot (created 2026-11-12 before the objective restore; not part of the active pipeline)
 
-data/processed/valid(optional) data/processed_backup/ — pre-rerun baseline snapshot (created 2026-11-12 before the objective restore; not part of the active pipeline)ation_250_trips.json
+Phase 3 output files:
+
+data/processed/crew_schedule.csv — 750 rows (250 trips × 3 pools)
+data/processed/crew_solution.json — all 3 runs keyed by "45" / "50" / "55"
+data/processed/crew_validation.json — per-pool checks + overall PASS
 
 Note on Phase 2: data/processed/simulation_kpis.json and simulation_timeline.csv were regenerated on 2026-11-12 on the 250-trip real-GTFS schedule.
 
@@ -167,4 +178,69 @@ The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simu
 - E3/E4 show 4 actual violations (3 structural + 1 delay-induced).
 - **Real GTFS schedule shows less propagation than the old synthetic one** (E4 mean 6.89% vs 11.64% before) because real slack is larger.
 - All Phase 2 delay values are `[SYNTHETIC]`. Results describe model behaviour, not real KMRL performance.
+
+## Latest Phase 3 Results (2026-11-13)
+
+Phase 3 crew scheduling is **complete**. All 250 Phase 1 trips are assigned to SC/TO drivers at three pool sizes (45 / 50 / 55).
+
+### Inputs
+
+- `data/processed/schedule.csv` — 250 trips (Phase 1 output, read-only)
+- `data/synthetic/drivers.csv` — 55 synthetic drivers `D001`–`D055`, `driver_id` column only `[SYNTHETIC]`
+
+Fields `qualification`, `availability`, `shift_preference`, `weekly_availability` are **deferred to V2** — same honesty pattern as C5 (min rest).
+
+### Constraints
+
+- **C1** no overlap (`arr + 300 s ≤ next dep`) — hard
+- **C2** max active duty (`last_arr − first_dep ≤ 28,800 s`) — hard
+- **C3** sign-on / sign-off (≥ 900 s each side) — hard
+- **C4** full coverage (250 / 250 trips) — hard
+- **C5** min rest 12 h — **DEFERRED to V2**, no solver constraint, no validator check
+- **C6** continuous driving ≤ 5 h — **soft**, weight 10; break threshold = `MIN_TURNAROUND_SEC` (300 s) `[DERIVED from C1]`
+- **C7** reserve ≥ 5 drivers — **soft**, weight 15
+
+### Results
+
+| Pool | Status | Time | Active | Reserve | Objective | Gap |
+|---|---|---:|---:|---:|---:|---:|
+| 45 | **OPTIMAL** | 57.25 s | 40 | 5 | 0.0 | 0.0% |
+| 50 | **OPTIMAL** | 58.80 s | 45 | 5 | 0.0 | 0.0% |
+| 55 | **OPTIMAL** | 64.34 s | 50 | 5 | 0.0 | 0.0% |
+
+### Validator (independent of solver)
+
+- pool=45: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- pool=50: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- pool=55: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
+- **Overall: PASS**
+
+### Notes
+
+- **Objective = 0 at all pools.** The solver found schedules with zero C6 and C7 penalty. This proves the penalty term is zero; it does not prove no driver neared the 5-h chain limit. Individual chain lengths are in `crew_solution.json` under `assignments`.
+- **C6 is implemented as a state machine** (6 vars per driver-trip pair, ~82,500 new vars total). An earlier O(n²) run-enumeration approach was rejected at ~3.4M vars.
+- **CP-SAT is non-deterministic** with `num_search_workers = 4` — results may vary between runs. Documented, not hidden.
+- **Handoff §8 success criteria — all met:** (1) all three pools FEASIBLE/OPTIMAL with 250 trips, (2) C1–C4 PASS independent validation, (3) sensitivity table across pool sizes reported, (4) all docs updated.
+
+### Bugs found and fixed during Phase 3
+
+1. `[FINDING]` **C6 first formulation was O(n²)** (~3.4M vars). Reworked to state machine.
+2. `[FINDING]` **C6 chain-continuity bug** — initial version broke chains across trips assigned to other drivers. Reworked to `last_arr` carry-forward + `has_prev` bool.
+3. `[FINDING]` **C1 solver bug** — dead branches forced wrong non-overlap rule, making model INFEASIBLE at all pools. Fixed to the single condition `if a.arr + turnaround > b.dep: x[a] + x[b] ≤ 1`.
+4. `[FINDING]` **C6 `new_chain = 0` bug** — gap constraint fired with no prior assignment, making full model INFEASIBLE. Fixed with `has_prev` bool guard.
+5. `[FINDING]` **Validator C1 bug** — compared driver-level sign-on/sign-off (constant per driver) instead of per-trip times. Fixed by joining `crew_schedule.csv` trip_ids with `schedule.csv`.
+
+All five were caught by `solver/crew_diag.py` (temporary diagnostic) and by the independent validator — not by guesswork.
+
+### Outputs
+
+- `data/processed/crew_schedule.csv` — 750 rows (250 trips × 3 pools)
+- `data/processed/crew_solution.json` — all 3 runs keyed by `"45"` / `"50"` / `"55"`
+- `data/processed/crew_validation.json` — per-pool checks + `overall: PASS`
+
+See `docs/phases.md` §Phase 3 for the full spec and `docs/constraints-crew-v1.md` for the detailed C1–C7 crew constraint spec.
+
+### Next
+
+Phase 4 — Explainability and Constraint Analysis.
 
