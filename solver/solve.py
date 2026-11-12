@@ -55,6 +55,10 @@ def solve(data: ProblemData, verbose: bool = False,
     C.add_r11_terminal_continuity(model, trip_vars, rake_trip, data)
     C.add_r12_nonservice_window(model, trip_vars)
 
+    print("[solve] applying objective")
+    o6 = C.add_obj6_rake_balance(model, trip_vars, rake_trip, data)
+    C.build_objective(model, o6)
+
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit
     solver.parameters.num_search_workers = config.CP_SAT_NUM_WORKERS
