@@ -47,7 +47,7 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 | Phase 1 | Train Scheduling using CP-SAT | Completed (rebuilt 2026-11-12 on real GTFS trips) |
 | Phase 2 | Operational Simulation using SimPy | Completed (rebuilt 2026-11-12 on 250-trip real schedule) |
 | Phase 3 | Crew Scheduling | Completed (2026-11-13) |
-| Phase 4 | Explainability and Constraint Analysis | Pending |
+| Phase 4 | Explainability Report | Completed (2026-11-13) |
 | Phase 5 | Near-Real-Time Rescheduling | Pending |
 | Phase 6 | Machine Learning Delay Prediction | Optional |
 | Phase 7 | Dashboard and Visualization | Pending |
@@ -649,72 +649,55 @@ python -m solver.crew_validator
 
 **Expected wall clock:** ~3–5 minutes (60 s per pool, plus validation).
 
-# Phase 4 — Explainability and Constraint Analysis
+# Phase 4 — Explainability Report
 
-Status: Pending
+**Status: Completed (2026-11-13)**
+
+> **Revision note (2026-11-13):** Phase 4 was rebuilt as a **reporting layer only**. It reads the seven Phase 1/2/3 output files and generates one Markdown report and one machine-readable stats file. The original plan (per-trip assignment explanation, conflict analysis) was **not built** because CP-SAT returns a global solution (no per-trip reasons) and the solver returns OPTIMAL in every phase (no infeasibility to analyze). See §4.2 for the actual scope.
 
  ## 4.1 Objective
-Make the scheduling results understandable and explain why the solver generated a particular schedule.
 
-The system should provide useful explanations rather than only showing the final timetable.
+Generate a single human-readable report that documents the Phase 1/2/3 outputs, the constraint status at each phase, and the utilization statistics of the schedule — **without claiming per-trip solver reasoning**.
 
-## 4.2 Features
-Constraint Status
-Show the status of each implemented constraint.
+Phase 4 is a **reporting layer**, not an analyzer. Every number in the report traces to a source file in `data/processed/`; no numbers are hardcoded. CP-SAT returns a global solution, not per-assignment reasons, so explanations are framed as **context + consistency** ("R008 was assigned 14 trips, consistent with the balance objective"), not **reason** ("R008 was chosen because…").
 
-Example:
+The solver returns **OPTIMAL in every phase** (Phase 1 objective 4800 gap 0.0%; Phase 3 all pools objective 0.0 gap 0.0%). There is no infeasibility to analyze, so Phase 4 does **not** include a conflict analyzer.
 
-### Constraint	Description	Status
-R1	Service coverage	PASS
-R2	Minimum headway	N/A (removed in v2.1)
-R3	Operating window	PASS
-R4	Fleet availability	PASS
-R5	Rake non-overlap	PASS
-R6	Turnaround time	PASS
-R7	Running time	PASS
-R8	Depot capacity	SKIPPED
-The displayed results must come from the actual validator output. Do not display unvalidated constraints as PASS.
+## 4.2 Features (as built)
 
-### Scheduling Explanation
-For each trip, show:
+Phase 4 produced **one module** (`src/explainability/report_generator.py`) that generates **one report** (`data/processed/explainability_report.md`) with seven sections, plus **one stats file** (`data/processed/utilization_stats.json`).
 
-Assigned rake.
+**Report sections:**
 
-Scheduled departure.
+1. **Executive Summary** — total trips scheduled, total rakes used, active drivers per pool, and a plain-English statement. Explicitly states that Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives are declared but disabled in V1.
+2. **Phase 1 Constraint Status (R1–R12)** — from `validation.json`; R2 removed, R8 SKIPPED, R9 vacuous.
+3. **Phase 3 Constraint Status (C1–C7, per pool)** — from `crew_validation.json`; C5 deferred, C6 soft-objective.
+4. **Rake Utilization** — from `schedule.csv`; `utilization_pct = busy_sec / span_sec × 100`, defined before the table.
+5. **Driver Utilization** — from `crew_schedule.csv` + `crew_solution.json`; `total_depot_hours = (max sign_off − min sign_on)/3600` per driver per pool, documented as **total depot time including 900 s buffers**, not the C2 `duty` variable.
+6. **Simulation Results** — from `simulation_kpis.json`; headline + 100-seed Monte Carlo; ±5 = 100% stated as a **model property** (300 s own-delay cap + inclusive ±5), not an operational guarantee.
+7. **Sensitivity Analysis & Honest Limitations** — pool-size table (45/50/55) presented as-is; no recommendation drawn.
 
-Scheduled arrival.
+**What Phase 4 does NOT do:**
 
-Previous trip assigned to the same rake.
+- ❌ **No conflict analyzer.** The solver returns OPTIMAL in every phase; there is no infeasibility to analyze. The original plan's "Conflict Explanation" feature is dropped because it would be ~300 lines of dead code.
+- ❌ **No per-trip "why" explanations.** CP-SAT does not produce per-trip reasoning. The report frames assignments as "context + consistency," not "reason."
+- ❌ **No hardcoded numbers.** Every value in the report traces to one of the seven source files, cited below each table.
+- ❌ **No modularization.** One module, one report — not `rule_tracer.py`, `conflict_analyzer.py`, `trip_explainer.py`, `utilization_analyzer.py`, or `constraint_reporter.py`.
 
-Available turnaround time.
+## 4.3 Deliverables (as built)
 
-Reason for the assignment, where supported by the solver data.
+- ✅ `src/explainability/__init__.py` — one-line package docstring
+- ✅ `src/explainability/report_generator.py` — ~27.7 KB, runs clean
+- ✅ `data/processed/explainability_report.md` — seven sections, all sources cited
+- ✅ `data/processed/utilization_stats.json` — machine-readable stats, derivation formulas restated for reproducibility
 
-### Conflict Explanation
-When the solver cannot find a feasible solution, identify:
+**Not built (and why):**
 
-Conflicting constraints, where diagnosable.
+- ❌ **Trip-level assignment explanation** — CP-SAT produces no per-trip reasons. Explanations are "context + consistency."
+- ❌ **Conflict analysis** — solver returns OPTIMAL in every phase; no infeasibility to analyze.
+- ❌ **Standalone rake utilization report** — utilization is Section 4 of the main report, not a separate file.
 
-Trips involved in the conflict.
-
-Rake availability issues.
-
-Timing conflicts.
-
-Resource shortages.
-
-Use solver diagnostics and controlled relaxation tests. Do not claim that a particular constraint caused infeasibility unless the analysis supports it.
-
-## 4.3 Deliverables
-Constraint status report.
-
-Trip-level assignment explanation.
-
-Rake utilization report.
-
-Conflict analysis.
-
-Human-readable scheduling summary.
+**Verification:** every number in the report traced to `validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, or `crew_schedule.csv`. Audit clean — no hardcoded numbers, no per-trip "why" claims.
 
 # Phase 5 — Near-Real-Time Rescheduling
 Status: Pending
@@ -1126,7 +1109,7 @@ Phase 0	Completed
 Phase 1	Completed
 Phase 2	Completed
 Phase 3	Completed (2026-11-13; ~5 hours across sessions)
-Phase 4	3–5 days
+Phase 4 Completed (2026-11-13; ~4 hours across sessions)
 Phase 5	1–2 weeks
 Phase 6	Depends on historical data availability
 Phase 7	1–2 weeks
@@ -1139,9 +1122,9 @@ See docs/project-status.md for the current project state.
 
 phases.md is a phase-planning document — it describes what each phase is and in what order. Current state (last updated, current results, known issues, next task) is kept in project-status.md to avoid duplication.
 
-Last phase completed: **Phase 3 (Crew Scheduling), 2026-11-13.** All three pool sizes (45/50/55) OPTIMAL; independent validator PASS at all pools (C1–C4 + C7). Phase 1 (O6 rake balance active): OPTIMAL, objective 4800, gap 0.0%, 11.77 s. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
+Last phase completed: **Phase 4 (Explainability Report), 2026-11-13.** One reporting module (`src/explainability/report_generator.py`) reads Phase 1/2/3 outputs and generates `data/processed/explainability_report.md` (7 sections) + `data/processed/utilization_stats.json`. Audit clean — every number traces to a source file, no per-trip reasoning, no conflict analyzer. Phase 3 (Crew Scheduling): all three pool sizes OPTIMAL; independent validator PASS at all pools (C1–C4 + C7). Phase 1 (O6 rake balance active): OPTIMAL, objective 4800, gap 0.0%, 11.77 s. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
 
-Next: Phase 4 — Explainability.
+Next: Phase 5 — Near-Real-Time Rescheduling.
 
 ---
 

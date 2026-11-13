@@ -431,7 +431,38 @@
 
 - **Temporary diagnostic file.** `solver/crew_diag.py` is not part of the Phase 3 deliverable. Delete it after all docs are signed off.
 
-**Next Meeting:** Phase 4 — Explainability (or Phase 3 retrospective, if requested).
+**Next Meeting:** Phase 5 — Near-Real-Time Re-Optimization (Phase 4 — Explainability completed 2026-11-13; see Meeting 14).
+
+## Meeting 14 — 2026-11-13
+**Attendees:** [Names]
+**Duration:** [Duration]
+**Agenda:** Phase 4 — Explainability (report generation)
+
+**Decisions:**
+- **Phase 4 is complete.** One reporting module reads Phase 1/2/3 outputs and generates one Markdown report and one stats file.
+- **One module only:** `src/explainability/report_generator.py`. The handoff explicitly forbids modularizing into `rule_tracer.py`, `conflict_analyzer.py`, `trip_explainer.py`, `utilization_analyzer.py`, or `constraint_reporter.py`.
+- **No per-trip "why" claims.** CP-SAT returns a global solution, not per-assignment reasons. The report frames explanations as "context + consistency," not "reason."
+- **No conflict analyzer.** The solver returns OPTIMAL in all phases (Phase 1 objective 4800 gap 0.0%; Phase 3 all pools objective 0.0 gap 0.0%). There is no infeasibility to analyze.
+- **Every number traces to a source file.** No hardcoded numbers in the module.
+
+**Action Items:**
+- [x] `src/explainability/__init__.py` — one-line package docstring
+- [x] `src/explainability/report_generator.py` — ~27.7 KB, runs clean
+- [x] Seven report sections implemented (Executive Summary; Phase 1 R1–R12; Phase 3 C1–C7 per pool; Rake Utilization; Driver Utilization; Simulation Results; Sensitivity & Limitations)
+- [x] `data/processed/explainability_report.md` written
+- [x] `data/processed/utilization_stats.json` written
+- [x] Docs updated: `checklist.md` §Phase 4
+- [x] Audit: every number in the report traced to `validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, or `crew_schedule.csv`
+
+**Notes:**
+
+- **What "OPTIMAL" means in the report.** Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives are declared in `config.py` but disabled in V1. The report states this explicitly.
+- **What "100% ±5 on-time" means in the report.** A model property — own-delay cap is 300 s and ±5 is inclusive — not an operational guarantee. The `simulation_kpis.json` `metadata.provenance_note` is echoed verbatim.
+- **Metric definitions documented before computation.** `utilization_pct = busy_sec / span_sec × 100`; `total_depot_hours = (max sign_off − min sign_on)/3600` per driver per pool. Both definitions appear in the report before the tables.
+- **No Phase 1/2/3 files modified.** Phase 4 reads the seven output files read-only.
+- **All source citations present.** Below every table in the report.
+
+**Next Meeting:** Phase 5 — Near-Real-Time Re-Optimization (or Phase 4 retrospective, if requested).
 
 ## Meeting Template (for future meetings)
 

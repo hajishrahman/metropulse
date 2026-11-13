@@ -390,6 +390,23 @@ Verifies: hourly(250) == hourly(232) + hourly(18)
 Kept on disk for reconciliation only.
 Not read by the solver.
 
+## Phase 4 — Explainability (reads Phase 1/2/3 outputs, writes two new files)
+
+Phase 1 outputs                     Phase 2 output         Phase 3 outputs
+-----------------                   ---------------        ---------------
+validation.json                     simulation_kpis.json   crew_solution.json
+solution.json                                              crew_validation.json
+schedule.csv                                               crew_schedule.csv
+       \                                   |                    /
+        \                                  |                   /
+         \                                 v                  /
+          +-----> src/explainability/report_generator.py <----+
+                              |
+                              +---> data/processed/explainability_report.md
+                              +---> data/processed/utilization_stats.json
+
+Read-only: Phase 4 does not modify any Phase 1/2/3 output.
+
 ```
 
 ## 9. Limitations
@@ -407,6 +424,8 @@ Depot capacity: Info Park-2 capacity of 2 is [SYNTHETIC]. R8 not enforced in V1.
 Initial rake split: 9 ALVA / 7 TPHT / 2 MUTTOM is [SYNTHETIC].
 
 Crew scheduling: **Phase 3 complete (2026-11-13).** Crew solver reads `data/processed/schedule.csv` (Phase 1 output, read-only) and `data/synthetic/drivers.csv` (55 synthetic drivers). Assigns all 250 trips to SC/TO drivers at pool sizes 45/50/55; all three pools OPTIMAL with independent validator PASS. See `docs/constraints-crew-v1.md` for C1–C7 crew spec and `docs/phases.md` §Phase 3 for results. C5 (12 h rest) deferred to V2; driver qualifications / availability / shift preferences / weekly availability deferred to V2.
+
+Explainability: **Phase 4 complete (2026-11-13).** Phase 4 is a reporting layer only — it reads the seven Phase 1/2/3 output files (`validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, `crew_schedule.csv`) and writes two new files (`explainability_report.md`, `utilization_stats.json`). Phase 4 introduces **no new data sources** and modifies **no Phase 1/2/3 outputs**. See `docs/phases.md` §Phase 4 for the report structure and `src/explainability/report_generator.py` for the implementation.
 
 GTFS limitations: GTFS provides scheduled timetable information, not real-time train positions or actual operating delays.
 

@@ -196,10 +196,42 @@ Progress tracker for the project. Update as phases complete.
 - Do not reintroduce DPR values (10.715 km, 18.91 min, 408 trips, 3-min turnaround) — none present in Phase 3.
 ---
 
-## Phase 4 — Explainability
+## Phase 4 — Explainability ✅ COMPLETE (2026-11-13)
 
-- [ ] `src/explainability/rule_tracer.py`
-- [ ] Per-trip rationale report
+### What Phase 4 is (and is not)
+- A **reporting layer** that reads Phase 1/2/3 outputs and generates one Markdown report. Not an optimizer, not a simulator, not a per-trip "reasoning engine."
+- **One module.** The handoff explicitly forbids modularizing into `rule_tracer.py`, `conflict_analyzer.py`, `trip_explainer.py`, `utilization_analyzer.py`, or `constraint_reporter.py`.
+- **No per-trip "why" claims.** CP-SAT returns a global solution, not per-assignment reasons. Explanations are framed as "context + consistency," not "reason."
+
+### Code (new files only — Phase 1/2/3 untouched)
+- [x] `src/explainability/__init__.py` — one-line package docstring
+- [x] `src/explainability/report_generator.py` — ~27.7 KB, `ast.parse` → `SYNTAX OK`, runs clean
+- [x] One `main()` per module, `[report] ...` print prefix, mirrors `solver/solve.py` and `solver/validator.py` conventions
+- [x] Reads all 7 input files via explicit `FileNotFoundError` / `ValueError` handling
+- [x] No imports of `solver` or `src.simulation` — Phase 4 is standalone
+- [x] No modification of any Phase 1/2/3 file
+
+### Report sections (7, all present)
+- [x] 1. Executive Summary — states OPTIMAL is under O6 only, other objectives disabled in V1
+- [x] 2. Phase 1 Constraint Status (R1–R12) — from `validation.json`; R2 removed, R8 SKIPPED, R9 vacuous
+- [x] 3. Phase 3 Constraint Status (C1–C7, per pool) — from `crew_validation.json`; C5 deferred, C6 soft-objective
+- [x] 4. Rake Utilization — from `schedule.csv`; `utilization_pct = busy_sec / span_sec × 100` defined before the table
+- [x] 5. Driver Utilization — from `crew_schedule.csv` + `crew_solution.json`; `total_depot_hours = (max sign_off − min sign_on)/3600` per driver per pool, documented as total depot time including 900 s buffers (not C2 `duty`)
+- [x] 6. Simulation Results — from `simulation_kpis.json`; headline + 100-seed Monte Carlo; ±5 = 100% stated as model property (300 s cap + inclusive tolerance), not operational guarantee
+- [x] 7. Sensitivity Analysis & Honest Limitations — pool-size table presented as-is; no recommendation drawn
+
+### Outputs
+- [x] `data/processed/explainability_report.md` — 7 sections, every table cites its source file below it
+- [x] `data/processed/utilization_stats.json` — machine-readable stats, derivation formulas restated for reproducibility
+
+### Discipline
+- [x] Every number traces to `validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, or `crew_schedule.csv` — verified by audit
+- [x] No hardcoded numbers anywhere in the module
+- [x] No conflict analyzer built (solver returns OPTIMAL in all phases; no infeasibility to analyze)
+- [x] No per-trip "why" claims anywhere in the report
+
+### Setup note
+- Phase 4 edits done in VS Code with `Render Whitespace: all` and `Format On Save`; a temporary sequence of indentation errors from pasting into Notepad was fully resolved before sign-off. Recommend VS Code for any future edits.
 
 ---
 

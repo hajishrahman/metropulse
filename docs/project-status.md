@@ -109,7 +109,7 @@ Maintenance threshold	1,000,000 km [SYNTHETIC]
 Info Park-2 capacity	2 [SYNTHETIC]
 Initial rake mileage	20,000–200,000 km [SYNTHETIC]
 Timezone	Asia/Kolkata
-Latest Phase 1 Results (2026-11-12)
+## Latest Phase 1 Results (2026-11-12)
 Solver status: OPTIMAL
 
 Trips scheduled: 250 (232 full + 18 partial)
@@ -240,7 +240,51 @@ All five were caught by `solver/crew_diag.py` (temporary diagnostic) and by the 
 
 See `docs/phases.md` §Phase 3 for the full spec and `docs/constraints-crew-v1.md` for the detailed C1–C7 crew constraint spec.
 
+## Latest Phase 4 Results (2026-11-13)
+
+Phase 4 **Explainability Report** is **complete**. One reporting module reads the seven Phase 1/2/3 output files and generates one Markdown report plus one machine-readable stats file.
+
+### Scope
+
+Phase 4 is a **reporting layer only** — not an optimizer, not a simulator, not a conflict analyzer, not a per-trip reasoning engine.
+
+- ❌ **No conflict analyzer.** The solver returns OPTIMAL in every phase (Phase 1 objective 4800 gap 0.0%; Phase 3 all pools objective 0.0 gap 0.0%). There is no infeasibility to analyze.
+- ❌ **No per-trip "why" claims.** CP-SAT returns a global solution, not per-assignment reasons. The report frames explanations as "context + consistency," not "reason."
+- ❌ **No hardcoded numbers.** Every number traces to one of the seven source files, cited below each table.
+
+### Code
+
+- `src/explainability/__init__.py` — one-line package docstring
+- `src/explainability/report_generator.py` — ~27.7 KB, runs clean (`python -m src.explainability.report_generator`)
+- Mirror `solver/solve.py` / `solver/validator.py` conventions: `Path(__file__).parent.parent...`, `[report]` print prefix, one `main()`, explicit `FileNotFoundError` / `ValueError`
+- No imports of `solver` or `src.simulation` — Phase 4 is standalone
+
+### Report sections (7, all present)
+
+1. **Executive Summary** — total trips (250), total rakes (18), active drivers per pool. States that Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives disabled in V1.
+2. **Phase 1 Constraint Status (R1–R12)** — from `validation.json`; R2 removed, R8 SKIPPED, R9 vacuous.
+3. **Phase 3 Constraint Status (C1–C7, per pool)** — from `crew_validation.json`; C5 deferred, C6 soft-objective.
+4. **Rake Utilization** — from `schedule.csv`; `utilization_pct = busy_sec / span_sec × 100`, defined before the table.
+5. **Driver Utilization** — from `crew_schedule.csv` + `crew_solution.json`; `total_depot_hours = (max sign_off − min sign_on)/3600` per driver per pool, documented as total depot time including 900 s buffers (not C2 `duty`).
+6. **Simulation Results** — from `simulation_kpis.json`; headline + 100-seed Monte Carlo. ±5 = 100% stated as **model property** (300 s cap + inclusive tolerance), not operational guarantee.
+7. **Sensitivity Analysis & Honest Limitations** — pool-size table (45/50/55) presented as-is; no recommendation drawn.
+
+### Outputs
+
+- `data/processed/explainability_report.md` — 7 sections, sources cited below every table
+- `data/processed/utilization_stats.json` — machine-readable stats, derivation formulas restated for reproducibility
+
+### Audit
+
+- ✅ Every number in the report traced to `validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, or `crew_schedule.csv`
+- ✅ No hardcoded numbers anywhere in the module
+- ✅ No conflict analyzer built (solver OPTIMAL in all phases)
+- ✅ No per-trip "why" claims anywhere in the report
+- ✅ No Phase 1/2/3 source file modified — Phase 4 reads them read-only
+
+See `docs/phases.md` §Phase 4 for the full scope and rationale for what was and was not built. See `src/explainability/report_generator.py` for the implementation.
+
 ### Next
 
-Phase 4 — Explainability and Constraint Analysis.
+Phase 5 — Near-Real-Time Rescheduling.
 

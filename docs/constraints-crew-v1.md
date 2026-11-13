@@ -239,3 +239,5 @@ Any change requires:
 3. Explicit re-approval.
 
 **Deviation note:** this file was created at user's request on 2026-11-13. The handoff `6/10` did not list a separate crew-constraint spec; C1–C7 detail was intended for `phases.md` `Phase 3`. This file is a **stylistic companion**, not a replacement for the `phases.md` `Phase 3` update. Both are kept; `phases.md` is the canonical summary.
+
+**Downstream phases:** Phase 4 (Explainability) is complete as of 2026-11-13. Its outputs (`data/processed/explainability_report.md`, `data/processed/utilization_stats.json`) read from this phase's outputs (`crew_solution.json`, `crew_validation.json`, `crew_schedule.csv`) without modifying them. Phase 4 did not change any constraint, result, or number in this document.
