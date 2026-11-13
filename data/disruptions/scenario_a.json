@@ -1,0 +1,6 @@
+{
+  "scenario_id": "a",
+  "description": "Single rake breakdown at 18:00 — evening-peak happy path",
+  "rakes_down": ["R008"],
+  "disruption_time": "18:00:00"
+}

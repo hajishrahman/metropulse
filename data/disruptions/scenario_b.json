@@ -1,0 +1,6 @@
+{
+  "scenario_id": "b",
+  "description": "Five rake breakdowns at 07:00 — morning-peak capacity-constrained",
+  "rakes_down": ["R008", "R013", "R015", "R002", "R007"],
+  "disruption_time": "07:00:00"
+}

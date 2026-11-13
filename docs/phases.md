@@ -12,7 +12,7 @@
 
 MetroPulse is an AI-driven train induction planning and scheduling system designed for Kochi Metro Rail Limited (KMRL).
 
-The system aims to generate feasible train schedules, allocate available rakes, simulate operational delays, assign drivers, and eventually support near-real-time rescheduling.
+The system aims to generate feasible train schedules, allocate available rakes, simulate operational delays, assign drivers, and respond to planned disruptions by re-optimizing the schedule when rakes become unavailable.
 
 ### Technology Stack
 
@@ -48,7 +48,7 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 | Phase 2 | Operational Simulation using SimPy | Completed (rebuilt 2026-11-12 on 250-trip real schedule) |
 | Phase 3 | Crew Scheduling | Completed (2026-11-13) |
 | Phase 4 | Explainability Report | Completed (2026-11-13) |
-| Phase 5 | Near-Real-Time Rescheduling | Pending |
+| Phase 5 | Disruption Response | Completed (2026-11-14) |
 | Phase 6 | Machine Learning Delay Prediction | Optional |
 | Phase 7 | Dashboard and Visualization | Pending |
 
@@ -699,88 +699,139 @@ Phase 4 produced **one module** (`src/explainability/report_generator.py`) that 
 
 **Verification:** every number in the report traced to `validation.json`, `solution.json`, `schedule.csv`, `simulation_kpis.json`, `crew_solution.json`, `crew_validation.json`, or `crew_schedule.csv`. Audit clean — no hardcoded numbers, no per-trip "why" claims.
 
-# Phase 5 — Near-Real-Time Rescheduling
-Status: Pending
+# Phase 5 — Disruption Response
+
+**Status: Completed (2026-11-14)**
+
+> **Revision note (2026-11-14):** Phase 5 was built as a **planned disruption response engine**, not a near-real-time rescheduling system. The earlier plan (warm-start, sub-second control) is superseded. What was actually built: full CP-SAT re-solve from scratch (~80–115 s per scenario), two scenarios (A = single-rake failure, B = mass morning-peak failure), parallel fleet file (Phase 1 untouched), a drop-aware R1 with a synthetic drop penalty. No warm-start, no passenger-flow simulator, no cascading-delay modeling. See §5.3 for the actual scope.
 
 ## 5.1 Objective
-Allow MetroPulse to regenerate or adjust schedules when operational conditions change.
 
-Instead of rebuilding the entire schedule from scratch, the system should attempt to preserve existing assignments wherever possible.
+Re-optimize the Phase 1 schedule when one or more rakes become unavailable, producing a new feasible schedule that minimizes dropped trips subject to the fleet capacity that remains after the disruption and after activating reactivatable maintenance rakes.
 
-## 5.2 Possible Inputs
-Train delays.
+**What Phase 5 is:**
 
-Rake breakdowns.
+- A **planned disruption response engine** — dispatcher has minutes to decide, not sub-second control.
+- Full CP-SAT re-solve from scratch (no warm-start).
+- Two scenarios demonstrating the system at both extremes: A = easy evening failure (happy path), B = severe morning-peak failure (capacity-constrained).
 
-Rake unavailability.
+**What Phase 5 is NOT:**
 
-Temporary service disruptions.
+- A warm-start optimizer (warm-start is future work).
+- A real-time control system.
+- A passenger-flow simulator.
+- A cascading-delay simulator.
+- A modification of Phase 1's solver or data.
 
-Changes in operating conditions.
+## 5.2 Data Strategy — parallel fleet file (Phase 1 untouched)
 
-Updated trip requirements.
+Phase 1's `data/synthetic/rakes.csv` is verified and locked. Phase 5 adds a **parallel file** `data/synthetic/rakes_phase5.csv` with the same 25 rakes plus two new columns:
 
-These inputs will initially be simulated unless verified operational data becomes available.
+| Column | Values |
+|---|---|
+| `km_since_last_maintenance` (int, km) | `[SYNTHETIC]` — 0 for unscheduled_repair; 2,100–7,200 for scheduled; 3,600–6,700 for service |
+| `maintenance_type` (string) | `service` (18) / `scheduled` (5) / `unscheduled_repair` (2) |
 
-## 5.3 Rescheduling Approach
-Use OR-Tools CP-SAT with the current schedule as the starting reference.
+**Maintenance split (derived from D2's rule applied to actual `rakes.csv`):**
 
-The rescheduling process should:
+- **Unscheduled repair (blocked):** R020 (176,838 km), R023 (199,479 km) — the 2 highest-mileage maintenance rakes.
+- **Scheduled (reactivatable):** R019 (4,200 km-since), R021 (6,800), R022 (2,100), R024 (3,500), R025 (7,200).
 
-Load the existing schedule.
+**D3 correction note:** The original Phase 5 handoff listed R019–R023 as "scheduled" — this contradicted D2's "2 highest-mileage = unscheduled" rule. Applied D2 to real data: R020/R023 are unscheduled; R022/R024 are the lowest-km scheduled rakes and are the ones activated. Heuristic: **lowest `km_since_last_maintenance` among scheduled rakes** (ascending) — synthetic proxy for "closest to release / safest for short-term rescue."
 
-Receive an operational disruption.
+## 5.3 Disruption Scenarios (actual runs)
 
-Update affected trip and rake availability information.
+| | Scenario A | Scenario B |
+|---|---|---|
+| Disruption time | **18:00** (evening peak) | **07:00** (morning peak) |
+| Rakes down | R008 | R008, R013, R015, R002, R007 |
+| Rakes activated | R022 (2,100 km-since) | R022 + R024 (2,100 + 3,500) |
+| Active rakes after response | 18 | 15 |
+| Trips withdrawn from downed rakes | 4 | 69 |
+| Recovered by reassignment | 4 (100%) | 55 (79.7%) |
+| **Dropped** | **0** | **14** |
+| Solver status | OPTIMAL | OPTIMAL |
+| Objective | 4,800.0 | 1,401,200.0 |
+| Gap | 0.0% | 0.0% |
+| Elapsed | ~80–92 s | ~90–115 s |
 
-Recalculate the affected scheduling decisions.
+**Scenario A** is the happy path: one rake fails late evening, only 4 trips are at risk, all 4 reassigned, 0 dropped. Demonstrates that the system preserves full service under a manageable disruption.
 
-Generate a revised schedule.
+**Scenario B** is the capacity-constrained case: 5 rakes fail at morning-peak start, 69 future trips become at-risk, solver recovers 55 (79.7%) and drops 14. **Capacity floor** = 14 drops is the irreducible gap at 15 active rakes under R5/R6/R11. Dropped trip IDs are stable across all runs: `WK_40, WK_44, WK_47, WK_61, WK_64, WK_68, WK_160, WK_165, WK_186, WK_191, WK_201, WK_203, WK_205, WK_214`.
 
-Validate the revised schedule.
+**Why 18:00 for A, 07:00 for B:** peak-hour analysis of `schedule.csv` showed 07:00 is the operational worst case (a downed rake still has all its future trips ahead; withdrawal count peaks). 18:00 is the contrast case (fewest future trips at risk). The two scenarios together demonstrate the system across the full severity spectrum.
 
-Compare the revised schedule with the original.
+## 5.4 Withdrawal Rule — wall-clock cutoff (D5, option i)
 
-### Important Considerations
-Preserve unaffected assignments where possible.
+**Rule:** A downed rake is unavailable for any trip whose `departure ≥ disruption_time`. Trips already departed complete normally.
 
-Avoid unnecessary changes to the existing schedule.
+**Consequences:**
 
-Respect all active hard constraints.
+- **No mid-trip abort** — passengers on board ride to the terminal; the in-progress trip completes normally.
+- **In-progress trips disclosed per rake** in `reschedule_summary.md`. Example (Scenario A): *"R008: WK_189 in-progress (departed 17:14:30, arrives 18:04:55) — completes normally."* Scenario B: 3 of 5 downed rakes were between trips at 07:00, 2 were mid-trip.
+- **Withdrawn trips are re-assignable** to any other active rake, or may be dropped (decided by the solver, not by the withdrawal rule itself).
 
-Minimize schedule disruption.
+## 5.5 Objective — drop penalty (D7)
 
-Record the reason for each rescheduling decision.
+Minimize:
 
-A warm-start or solution-hint approach can be explored to help the solver reuse the previous solution.
+`W_RAKE_BALANCE × OBJ_SCALE × Σ rake_balance_devs + W_DROP × OBJ_SCALE × Σ dropped_trips`
 
-## 5.4 Files to Create
-Possible implementation structure:
+- `W_DROP = 1000` (before `OBJ_SCALE = 100`) → 100,000 objective units per dropped trip.
+- **Empirically verified load-bearing:** with `W_DROP = 0`, solver drops 12 trips at 17 rakes (objective 0); with `W_DROP = 1000`, solver covers all 250 trips at 17 rakes (objective 3,600). The penalty is the reason drops are minimized.
 
-```text
-solver/
-├── reschedule.py
-└── reschedule_validator.py
+## 5.6 Solver approach
 
-src/
-└── disruption/
-    ├── __init__.py
-    └── disruption_handler.py
+**Full re-solve from scratch, no warm-start.** Solver params mirror Phase 1: `num_search_workers = 4`, `random_seed = 42`, time limit 300 s per scenario. Each scenario runs independently. Non-determinism between runs is expected (flat regions of the objective) and documented — objective, status, and dropped-trip set are stable across runs; the specific assignment of a small number of trips may vary.
+
+## 5.7 Code & files (all new — Phase 1/2/3/4 untouched)
+
+| File | Purpose |
+|---|---|
+| `data/synthetic/rakes_phase5.csv` | 25 rakes + 2 new columns |
+| `data/disruptions/scenario_a.json` | R008 @ 18:00:00 |
+| `data/disruptions/scenario_b.json` | 5 rakes @ 07:00:00 |
+| `solver/reschedule_config.py` | Phase-5-local constants; imports shared from `solver.config` |
+| `solver/reschedule_models.py` | `RescheduleProblemData` self-contained loader (reads `schedule.csv` + `rakes_phase5.csv`) |
+| `solver/reschedule_constraints.py` | Copy of `constraints.py` with drop-aware R1 + `W_DROP` penalty |
+| `solver/reschedule_diff.py` | Library module: `compute_diff`, `write_diff_json`, `write_summary_md` (no CLI) |
+| `solver/reschedule_solve.py` | Orchestrator: `run_scenario`, `write_scenario_csv`, `main()` |
+
+**Not built (and why):**
+
+- ❌ `src/realtime/warm_start.py` — warm-start is future work, not built.
+- ❌ `src/disruption/disruption_handler.py` — no dynamic disruption source exists; the two scenario JSONs are the only inputs.
+- ❌ `solver/reschedule_validator.py` — no separate validator was built; the diff JSON (`compute_diff`) performs the equivalent integrity checks, and Phase 5's schedule CSVs are re-checked for per-rake non-overlap and coverage in-memory.
+
+## 5.8 Outputs
+
+- `data/processed/reschedule_scenario_a.csv` — 250 rows, 7 columns, 0 DROPPED
+- `data/processed/reschedule_scenario_b.csv` — 250 rows, 7 columns, 14 DROPPED rows with empty departure/arrival
+- `data/processed/reschedule_diff.json` — D10 schema, all values computed, plus `trips_withdrawn` and `in_progress` fields
+- `data/processed/reschedule_summary.md` — D11 template, corrected narrative, per-rake in-progress disclosure, honest limitations
+
+All four CSVs, JSON, and MD are **computed from actual solve output**. No numbers are hardcoded.
+
+## 5.9 How to run Phase 5
+
+```powershell
+cd Z:\metropulse
+.\venv\Scripts\Activate.ps1
+
+# Run both scenarios and write all four outputs
+python -m solver.reschedule_solve
 ```
-Confirm the final structure when implementing the phase.
 
-### Deliverables
-Disruption input handler.
+**Expected wall clock:** ~3–4 minutes (approx. 80–115 s per scenario, plus diff/summary write).
 
-Rescheduling model.
+## 5.10 Honest limitations (documented in `reschedule_summary.md`)
 
-Previous-schedule comparison.
-
-Revised schedule output.
-
-Rescheduling validation.
-
-Schedule change report.
+1. **Full re-solve (~80–115 s), not warm-start.** Warm-start optimization is future work.
+2. **No mid-trip abort** — rake completes its in-progress trip before withdrawal; passengers are not deboarded.
+3. **No cascading delay modeling.** Phase 2 integration is future work.
+4. **Not real-time** — this is planned disruption response, not sub-second control.
+5. **Synthetic `km_since_last_maintenance`** — a SYNTHETIC proxy for reliability; not a live fleet-management feed.
+6. **"Dropped" ≠ "delayed."** Dropped means the trip does not operate (cancelled). The "45–90 min wait" framing describes the passenger *experience* of a dropped trip, not a rescheduled delay. Both are true; never conflated.
 
 # Phase 6 — Machine Learning Delay Prediction
 Status: Optional / Pending
@@ -1025,7 +1076,7 @@ Phase 3: Crew Scheduling
 Phase 4: Explainability
         |
         v
-Phase 5: Near-Real-Time Rescheduling
+Phase 5: Disruption Response
         |
         v
 Phase 7: Dashboard
@@ -1044,6 +1095,7 @@ MetroPulse/
 │   ├── raw/
 │   ├── synthetic/
 │   ├── processed/
+│   ├── disruptions/
 │   ├── extract_gtfs_trips.py
 │   ├── merge_trips.py
 │   ├── verify_gtfs_trips.py
@@ -1063,12 +1115,14 @@ MetroPulse/
 │   ├── crew_constraints.py
 │   ├── crew_solve.py
 │   ├── crew_validator.py
-│   ├── reschedule.py
-│   └── reschedule_validator.py
+│   ├── reschedule_config.py
+│   ├── reschedule_models.py
+│   ├── reschedule_constraints.py
+│   ├── reschedule_diff.py
+│   └── reschedule_solve.py
 │
 ├── src/
 │   ├── simulation/
-│   │   ├── __init__.py
 │   │   ├── schedule_loader.py
 │   │   ├── reference.py
 │   │   ├── simpy_runner.py
@@ -1077,9 +1131,13 @@ MetroPulse/
 │   │   ├── preflight.py
 │   │   └── check_terminals.py
 │   │
-│   └── disruption/
-│       ├── __init__.py
-│       └── disruption_handler.py
+│   └── explainability/
+│   │   ├── __init__.py
+│   │   └── report_generator.py
+│   │
+│   └──loaders/
+│         ├──__init__.py
+│         └──gtfs_loader.py
 │
 ├── dashboard/
 │   └── app.py
@@ -1110,7 +1168,7 @@ Phase 1	Completed
 Phase 2	Completed
 Phase 3	Completed (2026-11-13; ~5 hours across sessions)
 Phase 4 Completed (2026-11-13; ~4 hours across sessions)
-Phase 5	1–2 weeks
+Phase 5	Completed (2026-11-14; ~4 hours across sessions)
 Phase 6	Depends on historical data availability
 Phase 7	1–2 weeks
 MVP target: Phase 1 + Phase 2, completed 2026-11-12.
@@ -1122,10 +1180,6 @@ See docs/project-status.md for the current project state.
 
 phases.md is a phase-planning document — it describes what each phase is and in what order. Current state (last updated, current results, known issues, next task) is kept in project-status.md to avoid duplication.
 
-Last phase completed: **Phase 4 (Explainability Report), 2026-11-13.** One reporting module (`src/explainability/report_generator.py`) reads Phase 1/2/3 outputs and generates `data/processed/explainability_report.md` (7 sections) + `data/processed/utilization_stats.json`. Audit clean — every number traces to a source file, no per-trip reasoning, no conflict analyzer. Phase 3 (Crew Scheduling): all three pool sizes OPTIMAL; independent validator PASS at all pools (C1–C4 + C7). Phase 1 (O6 rake balance active): OPTIMAL, objective 4800, gap 0.0%, 11.77 s. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
+Last phase completed: **Phase 5 (Disruption Response), 2026-11-14.** A planned disruption response engine that re-optimizes the Phase 1 schedule when rakes become unavailable. Two scenarios: **A = R008 fails @ 18:00** (single-rake evening-peak happy path: 4 withdrawn → 4 recovered (100%) → 0 dropped, OPTIMAL, obj 4,800.0); **B = 5 rakes fail @ 07:00** (mass morning-peak failure, capacity-constrained: 69 withdrawn → 55 recovered (79.7%) → 14 dropped, OPTIMAL, obj 1,401,200.0). Full re-solve (~80–115 s per scenario), not warm-start. Drop penalty `W_DROP = 1000` empirically verified load-bearing. Parallel fleet file (`rakes_phase5.csv`); Phase 1's `rakes.csv`, `constraints.py`, `models.py`, `solve.py`, `config.py` untouched. Phase 4 (Explainability): one reporting module, 7 sections, audit clean. Phase 3 (Crew): all 3 pool sizes OPTIMAL, validator PASS at all pools. Phase 1 (O6 active): OPTIMAL, objective 4800, gap 0.0%, 11.77 s. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
 
-Next: Phase 5 — Near-Real-Time Rescheduling.
-
----
-
-**End of Phase Plan — Version 2.5**
+Next: Phase 7 — Dashboard (or Phase 6 ML if historical delay data becomes available).

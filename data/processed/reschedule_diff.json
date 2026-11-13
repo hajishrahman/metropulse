@@ -1,0 +1,2426 @@
+{
+  "scenario_a": {
+    "scenario_id": "a",
+    "disruption": {
+      "rakes_down": [
+        "R008"
+      ],
+      "time": "18:00:00"
+    },
+    "rakes_activated": [
+      "R022"
+    ],
+    "rakes_activated_reason": "lowest km_since_last_maintenance among scheduled",
+    "rakes_active_count": 18,
+    "solver_status": "OPTIMAL",
+    "objective": 4800.0,
+    "gap_pct": 0.0,
+    "elapsed_sec": 91.615,
+    "trips_withdrawn": 4,
+    "in_progress": {
+      "R008": [
+        {
+          "trip_id": "WK_189",
+          "departure": "17:14:30",
+          "arrival": "18:04:55"
+        }
+      ]
+    },
+    "trips_unchanged": 7,
+    "trips_reassigned": 243,
+    "trips_dropped": 0,
+    "dropped_trip_ids": [],
+    "reassignments": [
+      {
+        "trip_id": "WK_1",
+        "from_rake": "R008",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_3",
+        "from_rake": "R010",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_6",
+        "from_rake": "R007",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_15",
+        "from_rake": "R002",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_9",
+        "from_rake": "R017",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_8",
+        "from_rake": "R005",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_17",
+        "from_rake": "R014",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_11",
+        "from_rake": "R017",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_20",
+        "from_rake": "R018",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_2",
+        "from_rake": "R008",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_5",
+        "from_rake": "R009",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_30",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_34",
+        "from_rake": "R004",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_7",
+        "from_rake": "R013",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_16",
+        "from_rake": "R010",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_33",
+        "from_rake": "R011",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_41",
+        "from_rake": "R003",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_10",
+        "from_rake": "R006",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_19",
+        "from_rake": "R016",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_13",
+        "from_rake": "R004",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_21",
+        "from_rake": "R018",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_49",
+        "from_rake": "R001",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_29",
+        "from_rake": "R014",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_22",
+        "from_rake": "R017",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_14",
+        "from_rake": "R002",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_80",
+        "from_rake": "R012",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_23",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_24",
+        "from_rake": "R010",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_61",
+        "from_rake": "R009",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_40",
+        "from_rake": "R008",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_26",
+        "from_rake": "R012",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_35",
+        "from_rake": "R011",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_81",
+        "from_rake": "R013",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_27",
+        "from_rake": "R007",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_36",
+        "from_rake": "R003",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_70",
+        "from_rake": "R005",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_48",
+        "from_rake": "R016",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_28",
+        "from_rake": "R013",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_37",
+        "from_rake": "R018",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_31",
+        "from_rake": "R006",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_54",
+        "from_rake": "R001",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_32",
+        "from_rake": "R014",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_57",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_38",
+        "from_rake": "R002",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_60",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_42",
+        "from_rake": "R010",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_44",
+        "from_rake": "R008",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_67",
+        "from_rake": "R009",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_46",
+        "from_rake": "R011",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_69",
+        "from_rake": "R007",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_50",
+        "from_rake": "R003",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_72",
+        "from_rake": "R005",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_52",
+        "from_rake": "R016",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_74",
+        "from_rake": "R012",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_55",
+        "from_rake": "R018",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_76",
+        "from_rake": "R006",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_58",
+        "from_rake": "R013",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_39",
+        "from_rake": "R014",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_62",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_43",
+        "from_rake": "R002",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_65",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_45",
+        "from_rake": "R010",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_68",
+        "from_rake": "R001",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_47",
+        "from_rake": "R008",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_71",
+        "from_rake": "R009",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_51",
+        "from_rake": "R017",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_53",
+        "from_rake": "R011",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_75",
+        "from_rake": "R005",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_56",
+        "from_rake": "R003",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_77",
+        "from_rake": "R012",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_59",
+        "from_rake": "R018",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_78",
+        "from_rake": "R016",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_63",
+        "from_rake": "R006",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_79",
+        "from_rake": "R014",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_66",
+        "from_rake": "R015",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_109",
+        "from_rake": "R004",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_82",
+        "from_rake": "R005",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_113",
+        "from_rake": "R002",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_93",
+        "from_rake": "R009",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_117",
+        "from_rake": "R008",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_96",
+        "from_rake": "R001",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_83",
+        "from_rake": "R003",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_99",
+        "from_rake": "R012",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_85",
+        "from_rake": "R018",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_102",
+        "from_rake": "R017",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_87",
+        "from_rake": "R006",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_105",
+        "from_rake": "R013",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_89",
+        "from_rake": "R011",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_108",
+        "from_rake": "R004",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_91",
+        "from_rake": "R010",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_112",
+        "from_rake": "R002",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_94",
+        "from_rake": "R009",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_116",
+        "from_rake": "R008",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_97",
+        "from_rake": "R014",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_84",
+        "from_rake": "R005",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_100",
+        "from_rake": "R001",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_86",
+        "from_rake": "R007",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_103",
+        "from_rake": "R012",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_88",
+        "from_rake": "R018",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_106",
+        "from_rake": "R015",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_90",
+        "from_rake": "R003",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_110",
+        "from_rake": "R013",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_92",
+        "from_rake": "R006",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_114",
+        "from_rake": "R017",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_95",
+        "from_rake": "R004",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_118",
+        "from_rake": "R008",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_98",
+        "from_rake": "R009",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_120",
+        "from_rake": "R016",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_101",
+        "from_rake": "R010",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_122",
+        "from_rake": "R007",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_104",
+        "from_rake": "R011",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_124",
+        "from_rake": "R002",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_107",
+        "from_rake": "R014",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_126",
+        "from_rake": "R012",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_111",
+        "from_rake": "R018",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_128",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_115",
+        "from_rake": "R001",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_130",
+        "from_rake": "R013",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_119",
+        "from_rake": "R017",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_132",
+        "from_rake": "R009",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_121",
+        "from_rake": "R008",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_123",
+        "from_rake": "R016",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_136",
+        "from_rake": "R011",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_125",
+        "from_rake": "R003",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_138",
+        "from_rake": "R004",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_127",
+        "from_rake": "R010",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_140",
+        "from_rake": "R002",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_129",
+        "from_rake": "R007",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_142",
+        "from_rake": "R012",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_131",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_144",
+        "from_rake": "R005",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_133",
+        "from_rake": "R013",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_146",
+        "from_rake": "R008",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_135",
+        "from_rake": "R017",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_148",
+        "from_rake": "R009",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_137",
+        "from_rake": "R018",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_150",
+        "from_rake": "R001",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_139",
+        "from_rake": "R016",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_152",
+        "from_rake": "R006",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_141",
+        "from_rake": "R003",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_172",
+        "from_rake": "R011",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_154",
+        "from_rake": "R004",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_143",
+        "from_rake": "R010",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_156",
+        "from_rake": "R014",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_145",
+        "from_rake": "R002",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_158",
+        "from_rake": "R012",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_147",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_160",
+        "from_rake": "R013",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_149",
+        "from_rake": "R007",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_161",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_151",
+        "from_rake": "R009",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_190",
+        "from_rake": "R005",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_171",
+        "from_rake": "R001",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_162",
+        "from_rake": "R016",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_153",
+        "from_rake": "R006",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_163",
+        "from_rake": "R003",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_155",
+        "from_rake": "R017",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_164",
+        "from_rake": "R011",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_157",
+        "from_rake": "R004",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_165",
+        "from_rake": "R010",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_159",
+        "from_rake": "R014",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_166",
+        "from_rake": "R018",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_183",
+        "from_rake": "R012",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_167",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_186",
+        "from_rake": "R013",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_169",
+        "from_rake": "R007",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_189",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_173",
+        "from_rake": "R002",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_193",
+        "from_rake": "R005",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_175",
+        "from_rake": "R001",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_195",
+        "from_rake": "R016",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_177",
+        "from_rake": "R006",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_197",
+        "from_rake": "R003",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_179",
+        "from_rake": "R009",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_199",
+        "from_rake": "R011",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_181",
+        "from_rake": "R004",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_201",
+        "from_rake": "R010",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_184",
+        "from_rake": "R014",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_168",
+        "from_rake": "R018",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_187",
+        "from_rake": "R017",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_170",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_191",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_174",
+        "from_rake": "R007",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_194",
+        "from_rake": "R008",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_176",
+        "from_rake": "R002",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_196",
+        "from_rake": "R005",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_178",
+        "from_rake": "R001",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_198",
+        "from_rake": "R016",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_180",
+        "from_rake": "R013",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_200",
+        "from_rake": "R003",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_182",
+        "from_rake": "R009",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_202",
+        "from_rake": "R006",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_185",
+        "from_rake": "R004",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_205",
+        "from_rake": "R010",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_188",
+        "from_rake": "R014",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_206",
+        "from_rake": "R011",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_192",
+        "from_rake": "R017",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_207",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_214",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_203",
+        "from_rake": "R018",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_215",
+        "from_rake": "R008",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_208",
+        "from_rake": "R007",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_216",
+        "from_rake": "R005",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_209",
+        "from_rake": "R002",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_217",
+        "from_rake": "R016",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_218",
+        "from_rake": "R003",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_210",
+        "from_rake": "R009",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_211",
+        "from_rake": "R001",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_219",
+        "from_rake": "R013",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_212",
+        "from_rake": "R004",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_220",
+        "from_rake": "R010",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_213",
+        "from_rake": "R017",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_226",
+        "from_rake": "R014",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_221",
+        "from_rake": "R006",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_227",
+        "from_rake": "R011",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_204",
+        "from_rake": "R001",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_222",
+        "from_rake": "R015",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_228",
+        "from_rake": "R018",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_229",
+        "from_rake": "R005",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_223",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_233",
+        "from_rake": "R007",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_224",
+        "from_rake": "R014",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_235",
+        "from_rake": "R008",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_225",
+        "from_rake": "R004",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_236",
+        "from_rake": "R013",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_230",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_238",
+        "from_rake": "R002",
+        "to_rake": "R015"
+      },
+      {
+        "trip_id": "WK_239",
+        "from_rake": "R009",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_231",
+        "from_rake": "R011",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_240",
+        "from_rake": "R001",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_232",
+        "from_rake": "R016",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_241",
+        "from_rake": "R017",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_234",
+        "from_rake": "R018",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_244",
+        "from_rake": "R015",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_246",
+        "from_rake": "R014",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_237",
+        "from_rake": "R008",
+        "to_rake": "R013"
+      },
+      {
+        "trip_id": "WK_242",
+        "from_rake": "R007",
+        "to_rake": "R002"
+      },
+      {
+        "trip_id": "WK_243",
+        "from_rake": "R004",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_249",
+        "from_rake": "R016",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_252",
+        "from_rake": "R002",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_245",
+        "from_rake": "R006",
+        "to_rake": "R007"
+      },
+      {
+        "trip_id": "WK_255",
+        "from_rake": "R018",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_254",
+        "from_rake": "R015",
+        "to_rake": "R010"
+      }
+    ]
+  },
+  "scenario_b": {
+    "scenario_id": "b",
+    "disruption": {
+      "rakes_down": [
+        "R008",
+        "R013",
+        "R015",
+        "R002",
+        "R007"
+      ],
+      "time": "07:00:00"
+    },
+    "rakes_activated": [
+      "R022",
+      "R024"
+    ],
+    "rakes_activated_reason": "2 lowest km_since_last_maintenance among scheduled",
+    "rakes_active_count": 15,
+    "solver_status": "OPTIMAL",
+    "objective": 1401200.0,
+    "gap_pct": 0.0,
+    "elapsed_sec": 113.669,
+    "trips_withdrawn": 69,
+    "in_progress": {
+      "R008": [],
+      "R013": [],
+      "R015": [],
+      "R002": [
+        {
+          "trip_id": "WK_15",
+          "departure": "06:15:00",
+          "arrival": "07:07:28"
+        }
+      ],
+      "R007": [
+        {
+          "trip_id": "WK_6",
+          "departure": "06:15:00",
+          "arrival": "07:05:28"
+        }
+      ]
+    },
+    "trips_unchanged": 14,
+    "trips_reassigned": 222,
+    "trips_dropped": 14,
+    "dropped_trip_ids": [
+      "WK_160",
+      "WK_165",
+      "WK_186",
+      "WK_191",
+      "WK_201",
+      "WK_203",
+      "WK_205",
+      "WK_214",
+      "WK_40",
+      "WK_44",
+      "WK_47",
+      "WK_61",
+      "WK_64",
+      "WK_68"
+    ],
+    "reassignments": [
+      {
+        "trip_id": "WK_1",
+        "from_rake": "R008",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_3",
+        "from_rake": "R010",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_6",
+        "from_rake": "R007",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_15",
+        "from_rake": "R002",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_9",
+        "from_rake": "R017",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_8",
+        "from_rake": "R005",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_17",
+        "from_rake": "R014",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_11",
+        "from_rake": "R017",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_2",
+        "from_rake": "R008",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_5",
+        "from_rake": "R009",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_30",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_34",
+        "from_rake": "R004",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_7",
+        "from_rake": "R013",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_16",
+        "from_rake": "R010",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_25",
+        "from_rake": "R007",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_33",
+        "from_rake": "R011",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_41",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_13",
+        "from_rake": "R004",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_49",
+        "from_rake": "R001",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_29",
+        "from_rake": "R014",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_22",
+        "from_rake": "R017",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_14",
+        "from_rake": "R002",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_80",
+        "from_rake": "R012",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_23",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_24",
+        "from_rake": "R010",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_26",
+        "from_rake": "R012",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_35",
+        "from_rake": "R011",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_81",
+        "from_rake": "R013",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_27",
+        "from_rake": "R007",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_36",
+        "from_rake": "R003",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_70",
+        "from_rake": "R005",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_28",
+        "from_rake": "R013",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_37",
+        "from_rake": "R018",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_31",
+        "from_rake": "R006",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_54",
+        "from_rake": "R001",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_32",
+        "from_rake": "R014",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_57",
+        "from_rake": "R004",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_38",
+        "from_rake": "R002",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_60",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_42",
+        "from_rake": "R010",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_67",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_46",
+        "from_rake": "R011",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_69",
+        "from_rake": "R007",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_50",
+        "from_rake": "R003",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_72",
+        "from_rake": "R005",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_74",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_55",
+        "from_rake": "R018",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_76",
+        "from_rake": "R006",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_58",
+        "from_rake": "R013",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_39",
+        "from_rake": "R014",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_62",
+        "from_rake": "R004",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_43",
+        "from_rake": "R002",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_65",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_45",
+        "from_rake": "R010",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_71",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_51",
+        "from_rake": "R017",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_53",
+        "from_rake": "R011",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_73",
+        "from_rake": "R007",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_75",
+        "from_rake": "R005",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_56",
+        "from_rake": "R003",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_77",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_59",
+        "from_rake": "R018",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_78",
+        "from_rake": "R016",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_63",
+        "from_rake": "R006",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_79",
+        "from_rake": "R014",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_66",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_109",
+        "from_rake": "R004",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_82",
+        "from_rake": "R005",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_113",
+        "from_rake": "R002",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_93",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_117",
+        "from_rake": "R008",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_96",
+        "from_rake": "R001",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_83",
+        "from_rake": "R003",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_99",
+        "from_rake": "R012",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_85",
+        "from_rake": "R018",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_102",
+        "from_rake": "R017",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_87",
+        "from_rake": "R006",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_105",
+        "from_rake": "R013",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_89",
+        "from_rake": "R011",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_108",
+        "from_rake": "R004",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_91",
+        "from_rake": "R010",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_112",
+        "from_rake": "R002",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_94",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_116",
+        "from_rake": "R008",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_97",
+        "from_rake": "R014",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_84",
+        "from_rake": "R005",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_100",
+        "from_rake": "R001",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_86",
+        "from_rake": "R007",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_103",
+        "from_rake": "R012",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_88",
+        "from_rake": "R018",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_106",
+        "from_rake": "R015",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_90",
+        "from_rake": "R003",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_110",
+        "from_rake": "R013",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_92",
+        "from_rake": "R006",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_114",
+        "from_rake": "R017",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_95",
+        "from_rake": "R004",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_118",
+        "from_rake": "R008",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_98",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_120",
+        "from_rake": "R016",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_101",
+        "from_rake": "R010",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_122",
+        "from_rake": "R007",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_104",
+        "from_rake": "R011",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_124",
+        "from_rake": "R002",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_107",
+        "from_rake": "R014",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_126",
+        "from_rake": "R012",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_111",
+        "from_rake": "R018",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_128",
+        "from_rake": "R015",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_115",
+        "from_rake": "R001",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_130",
+        "from_rake": "R013",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_119",
+        "from_rake": "R017",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_132",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_121",
+        "from_rake": "R008",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_123",
+        "from_rake": "R016",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_136",
+        "from_rake": "R011",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_138",
+        "from_rake": "R004",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_127",
+        "from_rake": "R010",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_140",
+        "from_rake": "R002",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_129",
+        "from_rake": "R007",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_142",
+        "from_rake": "R012",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_131",
+        "from_rake": "R015",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_144",
+        "from_rake": "R005",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_133",
+        "from_rake": "R013",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_146",
+        "from_rake": "R008",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_135",
+        "from_rake": "R017",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_148",
+        "from_rake": "R009",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_137",
+        "from_rake": "R018",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_150",
+        "from_rake": "R001",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_139",
+        "from_rake": "R016",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_152",
+        "from_rake": "R006",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_141",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_172",
+        "from_rake": "R011",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_154",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_143",
+        "from_rake": "R010",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_145",
+        "from_rake": "R002",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_158",
+        "from_rake": "R012",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_147",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_149",
+        "from_rake": "R007",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_161",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_151",
+        "from_rake": "R009",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_190",
+        "from_rake": "R005",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_171",
+        "from_rake": "R001",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_162",
+        "from_rake": "R016",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_153",
+        "from_rake": "R006",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_163",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_155",
+        "from_rake": "R017",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_164",
+        "from_rake": "R011",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_157",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_166",
+        "from_rake": "R018",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_183",
+        "from_rake": "R012",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_167",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_169",
+        "from_rake": "R007",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_189",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_173",
+        "from_rake": "R002",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_193",
+        "from_rake": "R005",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_175",
+        "from_rake": "R001",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_195",
+        "from_rake": "R016",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_177",
+        "from_rake": "R006",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_197",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_179",
+        "from_rake": "R009",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_199",
+        "from_rake": "R011",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_181",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_168",
+        "from_rake": "R018",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_187",
+        "from_rake": "R017",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_170",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_174",
+        "from_rake": "R007",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_194",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_176",
+        "from_rake": "R002",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_196",
+        "from_rake": "R005",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_178",
+        "from_rake": "R001",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_198",
+        "from_rake": "R016",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_180",
+        "from_rake": "R013",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_200",
+        "from_rake": "R003",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_182",
+        "from_rake": "R009",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_202",
+        "from_rake": "R006",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_185",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_206",
+        "from_rake": "R011",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_192",
+        "from_rake": "R017",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_207",
+        "from_rake": "R015",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_215",
+        "from_rake": "R008",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_208",
+        "from_rake": "R007",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_216",
+        "from_rake": "R005",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_209",
+        "from_rake": "R002",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_217",
+        "from_rake": "R016",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_218",
+        "from_rake": "R003",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_210",
+        "from_rake": "R009",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_211",
+        "from_rake": "R001",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_219",
+        "from_rake": "R013",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_212",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_220",
+        "from_rake": "R010",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_213",
+        "from_rake": "R017",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_226",
+        "from_rake": "R014",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_221",
+        "from_rake": "R006",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_227",
+        "from_rake": "R011",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_204",
+        "from_rake": "R001",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_222",
+        "from_rake": "R015",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_228",
+        "from_rake": "R018",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_223",
+        "from_rake": "R012",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_233",
+        "from_rake": "R007",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_224",
+        "from_rake": "R014",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_235",
+        "from_rake": "R008",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_225",
+        "from_rake": "R004",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_236",
+        "from_rake": "R013",
+        "to_rake": "R017"
+      },
+      {
+        "trip_id": "WK_230",
+        "from_rake": "R003",
+        "to_rake": "R011"
+      },
+      {
+        "trip_id": "WK_238",
+        "from_rake": "R002",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_239",
+        "from_rake": "R009",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_231",
+        "from_rake": "R011",
+        "to_rake": "R001"
+      },
+      {
+        "trip_id": "WK_240",
+        "from_rake": "R001",
+        "to_rake": "R018"
+      },
+      {
+        "trip_id": "WK_232",
+        "from_rake": "R016",
+        "to_rake": "R024"
+      },
+      {
+        "trip_id": "WK_241",
+        "from_rake": "R017",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_234",
+        "from_rake": "R018",
+        "to_rake": "R010"
+      },
+      {
+        "trip_id": "WK_244",
+        "from_rake": "R015",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_246",
+        "from_rake": "R014",
+        "to_rake": "R022"
+      },
+      {
+        "trip_id": "WK_237",
+        "from_rake": "R008",
+        "to_rake": "R003"
+      },
+      {
+        "trip_id": "WK_247",
+        "from_rake": "R006",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_242",
+        "from_rake": "R007",
+        "to_rake": "R014"
+      },
+      {
+        "trip_id": "WK_248",
+        "from_rake": "R005",
+        "to_rake": "R016"
+      },
+      {
+        "trip_id": "WK_243",
+        "from_rake": "R004",
+        "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_249",
+        "from_rake": "R016",
+        "to_rake": "R004"
+      },
+      {
+        "trip_id": "WK_252",
+        "from_rake": "R002",
+        "to_rake": "R012"
+      },
+      {
+        "trip_id": "WK_245",
+        "from_rake": "R006",
+        "to_rake": "R009"
+      },
+      {
+        "trip_id": "WK_255",
+        "from_rake": "R018",
+        "to_rake": "R005"
+      },
+      {
+        "trip_id": "WK_254",
+        "from_rake": "R015",
+        "to_rake": "R024"
+      }
+    ],
+    "capacity_warning": "Capacity constrained. 15 rakes active. 14 trips dropped. Recommend prioritizing peak-hour trips."
+  }
+}

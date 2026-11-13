@@ -431,7 +431,7 @@
 
 - **Temporary diagnostic file.** `solver/crew_diag.py` is not part of the Phase 3 deliverable. Delete it after all docs are signed off.
 
-**Next Meeting:** Phase 5 — Near-Real-Time Re-Optimization (Phase 4 — Explainability completed 2026-11-13; see Meeting 14).
+**Next Meeting:** Phase 4 — Explainability (completed same day, see Meeting 14). Phase 5 name corrected — see Meeting 15.
 
 ## Meeting 14 — 2026-11-13
 **Attendees:** [Names]
@@ -462,7 +462,72 @@
 - **No Phase 1/2/3 files modified.** Phase 4 reads the seven output files read-only.
 - **All source citations present.** Below every table in the report.
 
-**Next Meeting:** Phase 5 — Near-Real-Time Re-Optimization (or Phase 4 retrospective, if requested).
+**Next Meeting:** Phase 5 — Disruption Response (see Meeting 15).
+
+## Meeting 15 — 2026-11-14
+**Attendees:** [Names]
+**Duration:** ~4 hours (across many sessions)
+**Agenda:** Phase 5 — Disruption Response (planned disruption re-optimization)
+
+**Decisions:**
+- **Phase 5 is complete.** A disruption response engine that re-optimizes the Phase 1 schedule when rakes become unavailable. **Not** a real-time control system, **not** a passenger-flow simulator, **not** a warm-start optimizer.
+- **Phase 5 supersedes the stale "Near-Real-Time Re-Optimization" placeholder** that Meetings 13 and 14 pointed at. There is no `src/realtime/warm_start.py`; the actual module lives in `solver/reschedule_*.py`.
+- **Full re-solve** (~80–115 s per scenario), not warm-start. Warm-start optimization is future work.
+- **Two scenarios:**
+  - **A = single-rake failure @ 18:00** (evening peak, happy path): R008 fails; R022 activated; 4 trips withdrawn → 4 recovered (100%) → **0 dropped**; OPTIMAL, obj 4,800.0, gap 0.0%.
+  - **B = 5-rake mass failure @ 07:00** (morning peak, capacity-constrained): R008 + R013 + R015 + R002 + R007 fail; R022 + R024 activated; 69 trips withdrawn → 55 recovered (79.7%) → **14 dropped**; OPTIMAL, obj 1,401,200.0, gap 0.0%.
+- **Data strategy: parallel file, not modify `rakes.csv`.** Phase 1's `data/synthetic/rakes.csv` is verified and locked. Phase 5 adds `data/synthetic/rakes_phase5.csv` with the same 25 rakes plus two new columns (`km_since_last_maintenance`, `maintenance_type`). Phase 1 stays pristine.
+- **Maintenance split — D3 correction.** The handoff's original D3 table listed R019, R020, R021, R022, R023 as "scheduled." This contradicted D2's rule ("2 highest-mileage maintenance rakes become unscheduled"). **Applied D2 on actual data:** R020 (176,838 km) and R023 (199,479 km) are unscheduled_repair (blocked); R019 (4,200 km-since), R021 (6,800), R022 (2,100), R024 (3,500), R025 (7,200) are scheduled (reactivatable). The heuristic therefore activates **R022 first** (lowest km-since) and **R024 second** — not R020.
+- **`km_since_last_maintenance` is `[SYNTHETIC]`** — snapshot at start of service day; real deployment would update per shift via fleet management. Used as reliability proxy for the reactivation heuristic (lowest = most recently serviced = safest for short-term rescue).
+- **Drop penalty `W_DROP = 1000`** added to Phase 1's rake-balance objective. `minimize( W_RAKE_BALANCE × OBJ_SCALE × sum(rake_balance_devs) + W_DROP × OBJ_SCALE × sum(dropped) )`. **Empirically verified load-bearing** — diagnostic with `W_DROP = 0` produced 12 drops at 17 rakes; real run with `W_DROP = 1000` produced 0 drops at 17 rakes. The penalty is the reason drops are minimized.
+- **Wall-clock cutoff withdrawal rule (D5, option i).** A downed rake's trips with `departure ≥ disruption_time` are unavailable to it. In-progress trips at the disruption instant **complete normally** — no mid-trip abort, no passenger deboarding. In-progress trips are disclosed per rake in `reschedule_summary.md` (e.g. Scenario A: R008 mid-trip on `WK_189`, arrives 18:04:55; Scenario B: 3 of 5 downed rakes were between trips at 07:00, 2 were mid-trip).
+- **Scenario B disruption timing changed from 14:00 to 07:00** after peak-hour analysis of `schedule.csv`. Morning-peak 07:00 withdraws 69 trips vs. 23 at 14:00. The 07:00 disruption is the operational worst case — every downed rake still has all its future trips ahead.
+- **"Dropped" ≠ "delayed."** Dropped means the trip does not operate (cancelled). The "45–90 min wait for alternative service" framing describes the passenger *experience* of a dropped trip, not a rescheduled delay. Both are true; never conflated in any output.
+- **No Phase 1/2/3/4 files modified.** Phase 1's `solver/constraints.py`, `solver/models.py`, `solver/solve.py`, `solver/config.py`, `data/synthetic/rakes.csv` are read-only for Phase 5. Drop-aware R1 lives in a new file `solver/reschedule_constraints.py`.
+
+**Action Items:**
+- [x] `data/synthetic/rakes_phase5.csv` — 25 rakes + `km_since_last_maintenance` + `maintenance_type`
+- [x] `data/disruptions/scenario_a.json` — R008 @ 18:00:00
+- [x] `data/disruptions/scenario_b.json` — 5 rakes @ 07:00:00
+- [x] `solver/reschedule_config.py` — Phase-5-local constants; imports shared from `solver.config`
+- [x] `solver/reschedule_models.py` — self-contained `RescheduleProblemData` loader
+- [x] `solver/reschedule_constraints.py` — copy of `constraints.py` with drop-aware R1 + `W_DROP` penalty in `build_objective`
+- [x] `solver/reschedule_diff.py` — library module: `compute_diff`, `write_diff_json`, `write_summary_md` (no CLI)
+- [x] `solver/reschedule_solve.py` — orchestrator; runs A and B, writes CSVs + JSON + MD
+- [x] Outputs written: `reschedule_scenario_a.csv` (250 rows, 0 dropped), `reschedule_scenario_b.csv` (250 rows, 14 dropped), `reschedule_diff.json` (D10 schema, no nulls, plus `trips_withdrawn` and `in_progress`), `reschedule_summary.md` (D11 template, corrected narratives)
+- [x] Diagnostics run during build: peak-hour analysis (`_peak_check.py`), capacity-threshold probe (`_probe.py`), `W_DROP = 0` load-bearing test (`_diag.py`). All deleted after use.
+- [x] Docs updated: `checklist.md` §Phase 5, `data-provenance.md` §6/§8/§9, `meeting-log.md` (this meeting). `phases.md` §Phase 5 and `project-status.md` §Phase 5 pending.
+- [x] Temp files cleaned: `_diag.py`, `_probe.py`, `_peak_check.py`, `data/processed/_diag_b.csv`, `data/processed/_probe_*.csv` all removed.
+- [ ] `docs/phases.md` §Phase 5 rewrite
+- [ ] `docs/project-status.md` §Phase 5 update
+
+**Notes:**
+
+- **Capacity threshold found empirically.** With `W_DROP = 1000` real runs: 17 active rakes → 0 drops; 15 active rakes → 14 drops (OPTIMAL). The capacity floor is ~16 rakes for 250 trips. Below 15, drops grow (13 active → 34 drops at 07:00). This is a genuine fleet-resilience finding, not a fabricated number.
+
+- **Drop set stability across all runs.** Dropped trip IDs — `WK_40, WK_44, WK_47, WK_61, WK_64, WK_68, WK_160, WK_165, WK_186, WK_191, WK_201, WK_203, WK_205, WK_214` — stayed identical across all 14-drop runs at 15 active rakes. Drops are capacity-driven, not solver-preference-driven.
+
+- **CP-SAT non-determinism observed.** With `num_search_workers = 4`, Scenario B's `unchanged`/`reassigned` split flipped between 14/222 and 15/221 across runs (all OPTIMAL, gap 0.0%, same 14 drops). This is normal flat-objective tie-breaking — objective, status, drop set are all stable. Documented, not hidden.
+
+- **Objective interpretation.** Scenario A objective 4,800.0 is identical to Phase 1's objective — no drops means only the rake-balance term is active, and 18 active rakes preserves the 250-trip distribution. Scenario B objective 1,401,200.0 = (14 drops × 100,000) + 1,200 rake-balance term. The drop penalty dominates by design.
+
+- **`[FINDING]` — D2 vs. D3 conflict.** The Phase 5 handoff's D2 rule (2 highest-mileage maintenance rakes = unscheduled) and D3's fixed ID table (R019–R023 = scheduled) contradicted each other on the actual fleet. D2 applied to actual `rakes.csv` gives R020+R023 as the 2 highest mileage, not R019+R020+R021+R022+R023 as the D3 table implied. Per handoff rule "verify against the actual file before writing — do not assume," D2 was applied to real data and R022/R024 became the activated rakes. This correction is recorded in `reschedule_summary.md`, `data/synthetic/rakes_phase5.csv` metadata, and the checklist.
+
+- **Peak-hour analysis (§Scenario B timing).** Measured withdrawal counts from `schedule.csv`: R008 alone withdraws 15/14/13 trips if down at 07:00/08:00/09:00; the 5-rake set withdraws 69/65/58. Evening hours withdraw far fewer (5-rake set: 29 at 16:00, 20 at 18:00, 15 at 19:00). 07:00 is the operational worst case. Scenario A was placed at 18:00 as a contrasting easy case (4 trips withdrawn) to demonstrate the system at both extremes.
+
+- **In-progress trip disclosure.** The handoff's D5 said "rake completes current trip, then withdrawn." Phase 5's `reschedule_summary.md` now names the specific in-progress trip per downed rake (e.g. *"R008: WK_189 in-progress (departed 17:14:30, arrives 18:04:55) — completes normally"*), or states *"no in-progress trip (between trips)"* where applicable. This makes the mid-trip rule visible in the output rather than only in the honest-limitations section, and it handles the between-trips edge case honestly.
+
+- **Honest limitations documented verbatim in `reschedule_summary.md`:** full re-solve not warm-start; no mid-trip abort; no cascading delay modeling; not real-time; synthetic km data; dropped ≠ delayed.
+
+- **Code conventions mirrored from Phase 1.** `sec_to_hhmmss` reused; `solver.StatusName(status)` for status; `gap_pct = 0.0 if OPTIMAL else (obj - bound) / obj * 100`; CSV writer with `extrasaction="ignore"` so internal `departure_sec`/`arrival_sec` stay out of the CSV; `CP_SAT_TIME_LIMIT_SEC` override parameter defaulting to config's 300s; `[tag]` print prefix. No new conventions invented.
+
+- **Handoff deviation noted.** D9 listed 4 outputs; the final output set has the same 4 outputs (`reschedule_scenario_a.csv`, `reschedule_scenario_b.csv`, `reschedule_diff.json`, `reschedule_summary.md`) plus two extra fields in `reschedule_diff.json` (`trips_withdrawn`, `in_progress`) that were added to support the "at risk vs. dropped" narrative. This is an additive extension of the D10 schema — no field removed, no field type changed.
+
+- **All work committed.** Temp diagnostic files (`_diag.py`, `_probe.py`, `_peak_check.py`, `_probe_*.csv`, `_diag_b.csv`) deleted. Repo state clean for Phase 5 build.
+
+**Next Meeting:** Phase 5 sign-off after `phases.md` and `project-status.md` updates complete.
+
+---
 
 ## Meeting Template (for future meetings)
 

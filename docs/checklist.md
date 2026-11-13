@@ -235,10 +235,86 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 5 — Near-Real-Time Re-Optimization
+## Phase 5 — Disruption Response ✅ COMPLETE (2026-11-14)
 
-- [ ] `src/realtime/warm_start.py`
-- [ ] Target: 1–2 min re-solve
+### What Phase 5 is (and is not)
+- A **planned disruption response engine** that re-optimizes the Phase 1 schedule when rakes become unavailable. Not a real-time control system, not a passenger-flow simulator, not a warm-start optimizer.
+- **Full re-solve** (~80–115 s per scenario), not warm-start. Warm-start optimization is future work.
+- **Two scenarios**: A = single-rake failure (happy path, 100% recovery), B = mass morning-peak failure (capacity-constrained, 14 trips dropped).
+
+### Data strategy (parallel file — Phase 1 untouched)
+- [x] `data/synthetic/rakes_phase5.csv` — 25 rakes + 2 new columns (`km_since_last_maintenance`, `maintenance_type`)
+- [x] Phase 1's `data/synthetic/rakes.csv` **not modified** — Phase 1 remains pristine
+- [x] `[SYNTHETIC]` tag on `km_since_last_maintenance` (snapshot at start of service day; real deployment would update per shift)
+- [x] Maintenance split (computed from actual `rakes.csv` `initial_mileage_km`, per handoff D2 rule):
+  - **Unscheduled repair (blocked):** R020 (176,838 km), R023 (199,479 km) — the two highest-mileage maintenance rakes
+  - **Scheduled (reactivatable):** R019 (4,200 km-since), R021 (6,800), R022 (2,100), R024 (3,500), R025 (7,200)
+  - **Service (18):** R001–R018, values 3,600–6,700 km `[SYNTHETIC]`
+- [x] **D3 correction note:** The handoff's original D3 table listed R019, R020, R021, R022, R023 as "scheduled" — this contradicted D2's "2 highest-mileage = unscheduled" rule. Actual split follows D2 on real data: R020/R023 unscheduled, R022/R024 activated by the heuristic.
+- [x] Heuristic: **lowest `km_since_last_maintenance` among scheduled rakes** (ascending) — synthetic proxy for "closest to release / safest for short-term rescue"
+
+### Code (new files only — Phase 1/2/3/4 untouched)
+- [x] `data/disruptions/scenario_a.json` — R008 fails @ 18:00:00
+- [x] `data/disruptions/scenario_b.json` — R008, R013, R015, R002, R007 fail @ 07:00:00
+- [x] `solver/reschedule_config.py` — Phase-5-local constants; imports shared from `solver.config`
+- [x] `solver/reschedule_models.py` — self-contained `RescheduleProblemData` loader (reads `schedule.csv` + `rakes_phase5.csv`)
+- [x] `solver/reschedule_constraints.py` — copy of `constraints.py` with R1 relaxed: `sum(rake_trip) + dropped[tid] == 1`; all 250 trips may_drop
+- [x] `solver/reschedule_diff.py` — library module: `compute_diff`, `write_diff_json`, `write_summary_md` (no CLI)
+- [x] `solver/reschedule_solve.py` — orchestrator; runs A and B, writes CSVs, computes diff in-memory, writes JSON + MD
+
+### Withdrawal rule (D5, wall-clock cutoff)
+- [x] **Rake completes its currently in-progress trip at disruption time, then is withdrawn.**
+- [x] **Rule:** all trips with `departure ≥ disruption_time` become unavailable to that rake
+- [x] **No mid-trip abort** — passengers on board ride to the terminal; the in-progress trip completes normally
+- [x] **In-progress trip disclosed per rake in `reschedule_summary.md`** — e.g. Scenario A: *"R008: WK_189 in-progress (departed 17:14:30, arrives 18:04:55) — completes normally"*; Scenario B: 3 of 5 downed rakes were between trips at 07:00, 2 were mid-trip
+- [x] Trips withdrawn from a downed rake are **re-assignable to any active rake** or **dropped** — not removed from the schedule entirely
+
+### Objective (drop penalty — D7)
+- [x] Drop penalty `W_DROP = 1000` (before `OBJ_SCALE`) added to Phase 1's rake-balance objective
+- [x] `minimize( W_RAKE_BALANCE × OBJ_SCALE × sum(rake_balance_devs) + W_DROP × OBJ_SCALE × sum(dropped) )`
+- [x] Empirically verified load-bearing: diagnostic run with `W_DROP = 0` produced 12 drops at 17 rakes (objective 0); real run with `W_DROP = 1000` produced 0 drops at 17 rakes (objective 3,600). **The penalty is the reason drops are minimized, not a decoration.**
+
+### Results (actual solver runs, gap 0.0% both scenarios)
+
+**Scenario A — R008 fails @ 18:00:00 (evening-peak happy path):**
+- [x] R022 activated (2,100 km-since, lowest among scheduled)
+- [x] Active after response: **18 rakes**
+- [x] Trips withdrawn from R008: **4** (WK_194, WK_215, WK_235, WK_237)
+- [x] Recovered by reassignment: **4 (100%)**
+- [x] **Dropped: 0**
+- [x] Solver status: **OPTIMAL**, objective **4,800.0**, gap **0.0%**, elapsed **~80–92 s**
+- [x] 250 of 250 trips served (7 unchanged on original rake, 243 reassigned)
+
+**Scenario B — 5 rakes fail @ 07:00:00 (morning-peak capacity-constrained):**
+- [x] R022 + R024 activated (2,100 + 3,500 km-since, two lowest among scheduled)
+- [x] Active after response: **15 rakes** (18 − 5 + 2)
+- [x] Trips withdrawn: **69** (R008=15, R013=13, R015=15, R002=13, R007=13)
+- [x] Recovered by reassignment: **55 (79.7%)**
+- [x] **Dropped: 14**
+- [x] Solver status: **OPTIMAL**, objective **1,401,200.0**, gap **0.0%**, elapsed **~90–114 s**
+- [x] 236 of 250 trips served (14 unchanged, 222 reassigned)
+- [x] **Capacity floor:** 14 drops is the irreducible gap at 15 active rakes under R5/R6/R11
+- [x] Dropped trip IDs (stable across all runs): WK_40, WK_44, WK_47, WK_61, WK_64, WK_68, WK_160, WK_165, WK_186, WK_191, WK_201, WK_203, WK_205, WK_214
+
+### Outputs
+- [x] `data/processed/reschedule_scenario_a.csv` — 250 rows, 7 columns (same schema as `schedule.csv`), `rake_id ∈ {R001…R018, R022}` ∪ `{"DROPPED"}`
+- [x] `data/processed/reschedule_scenario_b.csv` — 250 rows, 7 columns, 14 `DROPPED` rows with empty departure/arrival
+- [x] `data/processed/reschedule_diff.json` — D10 schema, all values computed (no nulls), plus `trips_withdrawn` and `in_progress` fields
+- [x] `data/processed/reschedule_summary.md` — D11 template, corrected narrative (withdrawn→recovered→dropped, in-progress disclosure, capacity floor statement, corrected D3/D4 defense notes, honest limitations)
+
+### Honest limitations (stated in summary)
+- [x] Full re-solve (~80–115 s), not warm-start
+- [x] No mid-trip abort (rake completes current trip before withdrawal; passengers never deboarded)
+- [x] No cascading delay modeling (Phase 2 integration is future work)
+- [x] Not real-time (planned disruption response, not sub-second control)
+- [x] Synthetic `km_since_last_maintenance` (proxy for reliability, not a live feed)
+- [x] **"Dropped" ≠ "delayed"** — dropped means the trip does not operate (cancelled); the "45–90 min wait" framing describes the passenger *experience* of a dropped trip, not a rescheduled delay. Both are true; never conflated.
+
+### Deliverables verified
+- [x] No Phase 1/2/3/4 files modified
+- [x] No `docs/` files read during implementation (per handoff protocol)
+- [x] Every number in `reschedule_diff.json` and `reschedule_summary.md` computed from actual solver output
+- [x] All 8 handoff success criteria met
 
 ---
 
