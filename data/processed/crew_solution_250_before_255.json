@@ -1,0 +1,6791 @@
+{
+  "45": {
+    "status": "OPTIMAL",
+    "pool_size": 45,
+    "elapsed_sec": 57.2459953999969,
+    "objective": 0.0,
+    "best_bound": 0.0,
+    "gap_pct": 0.0,
+    "num_trips": 250,
+    "num_active_drivers": 40,
+    "reserve": 5,
+    "assignments": [
+      {
+        "trip_id": "WK_1",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 21600,
+        "arr_sec": 24854
+      },
+      {
+        "trip_id": "WK_3",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 21600,
+        "arr_sec": 24845
+      },
+      {
+        "trip_id": "WK_15",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 22500,
+        "arr_sec": 25648
+      },
+      {
+        "trip_id": "WK_6",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 22500,
+        "arr_sec": 25528
+      },
+      {
+        "trip_id": "WK_9",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 22500,
+        "arr_sec": 23020
+      },
+      {
+        "trip_id": "WK_8",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 23400,
+        "arr_sec": 26618
+      },
+      {
+        "trip_id": "WK_17",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 23400,
+        "arr_sec": 26606
+      },
+      {
+        "trip_id": "WK_11",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 24300,
+        "arr_sec": 27328
+      },
+      {
+        "trip_id": "WK_20",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:58:12",
+        "pool_size": 45,
+        "dep_sec": 24300,
+        "arr_sec": 27448
+      },
+      {
+        "trip_id": "WK_2",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 25200,
+        "arr_sec": 28198
+      },
+      {
+        "trip_id": "WK_5",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 25225,
+        "arr_sec": 28443
+      },
+      {
+        "trip_id": "WK_30",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 25380,
+        "arr_sec": 27944
+      },
+      {
+        "trip_id": "WK_34",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 25620,
+        "arr_sec": 26091
+      },
+      {
+        "trip_id": "WK_7",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 25800,
+        "arr_sec": 28798
+      },
+      {
+        "trip_id": "WK_16",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 25885,
+        "arr_sec": 28913
+      },
+      {
+        "trip_id": "WK_25",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 26400,
+        "arr_sec": 29575
+      },
+      {
+        "trip_id": "WK_33",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 26545,
+        "arr_sec": 29733
+      },
+      {
+        "trip_id": "WK_41",
+        "driver_id": "D013",
+        "sign_on": "07:11:19",
+        "sign_off": "15:32:12",
+        "pool_size": 45,
+        "dep_sec": 26779,
+        "arr_sec": 29343
+      },
+      {
+        "trip_id": "WK_10",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 27000,
+        "arr_sec": 29998
+      },
+      {
+        "trip_id": "WK_19",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 27205,
+        "arr_sec": 30233
+      },
+      {
+        "trip_id": "WK_13",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 27600,
+        "arr_sec": 30778
+      },
+      {
+        "trip_id": "WK_21",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:58:12",
+        "pool_size": 45,
+        "dep_sec": 27805,
+        "arr_sec": 30973
+      },
+      {
+        "trip_id": "WK_49",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 28080,
+        "arr_sec": 30644
+      },
+      {
+        "trip_id": "WK_29",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 28200,
+        "arr_sec": 31198
+      },
+      {
+        "trip_id": "WK_22",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 28585,
+        "arr_sec": 31632
+      },
+      {
+        "trip_id": "WK_14",
+        "driver_id": "D012",
+        "sign_on": "07:45:00",
+        "sign_off": "15:57:42",
+        "pool_size": 45,
+        "dep_sec": 28800,
+        "arr_sec": 31785
+      },
+      {
+        "trip_id": "WK_80",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 28800,
+        "arr_sec": 29271
+      },
+      {
+        "trip_id": "WK_23",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 29005,
+        "arr_sec": 32052
+      },
+      {
+        "trip_id": "WK_24",
+        "driver_id": "D014",
+        "sign_on": "07:52:00",
+        "sign_off": "13:28:28",
+        "pool_size": 45,
+        "dep_sec": 29220,
+        "arr_sec": 32245
+      },
+      {
+        "trip_id": "WK_61",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 29425,
+        "arr_sec": 32472
+      },
+      {
+        "trip_id": "WK_40",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 29640,
+        "arr_sec": 32665
+      },
+      {
+        "trip_id": "WK_26",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 29845,
+        "arr_sec": 32892
+      },
+      {
+        "trip_id": "WK_81",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 30060,
+        "arr_sec": 30531
+      },
+      {
+        "trip_id": "WK_35",
+        "driver_id": "D035",
+        "sign_on": "08:06:00",
+        "sign_off": "16:31:09",
+        "pool_size": 45,
+        "dep_sec": 30060,
+        "arr_sec": 33085
+      },
+      {
+        "trip_id": "WK_27",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 30265,
+        "arr_sec": 33312
+      },
+      {
+        "trip_id": "WK_36",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 30480,
+        "arr_sec": 33505
+      },
+      {
+        "trip_id": "WK_70",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 30685,
+        "arr_sec": 33732
+      },
+      {
+        "trip_id": "WK_48",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 30900,
+        "arr_sec": 33925
+      },
+      {
+        "trip_id": "WK_28",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 31105,
+        "arr_sec": 34152
+      },
+      {
+        "trip_id": "WK_37",
+        "driver_id": "D018",
+        "sign_on": "08:27:00",
+        "sign_off": "16:37:48",
+        "pool_size": 45,
+        "dep_sec": 31320,
+        "arr_sec": 34345
+      },
+      {
+        "trip_id": "WK_31",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 31525,
+        "arr_sec": 34572
+      },
+      {
+        "trip_id": "WK_54",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 31740,
+        "arr_sec": 34765
+      },
+      {
+        "trip_id": "WK_32",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:58:12",
+        "pool_size": 45,
+        "dep_sec": 31945,
+        "arr_sec": 34992
+      },
+      {
+        "trip_id": "WK_57",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 32160,
+        "arr_sec": 35185
+      },
+      {
+        "trip_id": "WK_38",
+        "driver_id": "D012",
+        "sign_on": "07:45:00",
+        "sign_off": "15:57:42",
+        "pool_size": 45,
+        "dep_sec": 32365,
+        "arr_sec": 35412
+      },
+      {
+        "trip_id": "WK_60",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 32580,
+        "arr_sec": 35605
+      },
+      {
+        "trip_id": "WK_42",
+        "driver_id": "D013",
+        "sign_on": "07:11:19",
+        "sign_off": "15:32:12",
+        "pool_size": 45,
+        "dep_sec": 32785,
+        "arr_sec": 35832
+      },
+      {
+        "trip_id": "WK_64",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 33000,
+        "arr_sec": 36025
+      },
+      {
+        "trip_id": "WK_44",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 33205,
+        "arr_sec": 36252
+      },
+      {
+        "trip_id": "WK_67",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 33420,
+        "arr_sec": 36445
+      },
+      {
+        "trip_id": "WK_46",
+        "driver_id": "D014",
+        "sign_on": "07:52:00",
+        "sign_off": "13:28:28",
+        "pool_size": 45,
+        "dep_sec": 33625,
+        "arr_sec": 36672
+      },
+      {
+        "trip_id": "WK_69",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 33840,
+        "arr_sec": 36865
+      },
+      {
+        "trip_id": "WK_50",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 34045,
+        "arr_sec": 37092
+      },
+      {
+        "trip_id": "WK_72",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 34260,
+        "arr_sec": 37355
+      },
+      {
+        "trip_id": "WK_52",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 34465,
+        "arr_sec": 37512
+      },
+      {
+        "trip_id": "WK_74",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 34680,
+        "arr_sec": 37735
+      },
+      {
+        "trip_id": "WK_55",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 34885,
+        "arr_sec": 37882
+      },
+      {
+        "trip_id": "WK_76",
+        "driver_id": "D022",
+        "sign_on": "09:30:00",
+        "sign_off": "17:30:55",
+        "pool_size": 45,
+        "dep_sec": 35100,
+        "arr_sec": 38078
+      },
+      {
+        "trip_id": "WK_58",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 35305,
+        "arr_sec": 38352
+      },
+      {
+        "trip_id": "WK_39",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 35520,
+        "arr_sec": 38545
+      },
+      {
+        "trip_id": "WK_62",
+        "driver_id": "D018",
+        "sign_on": "08:27:00",
+        "sign_off": "16:37:48",
+        "pool_size": 45,
+        "dep_sec": 35725,
+        "arr_sec": 38772
+      },
+      {
+        "trip_id": "WK_43",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:58:12",
+        "pool_size": 45,
+        "dep_sec": 35940,
+        "arr_sec": 38965
+      },
+      {
+        "trip_id": "WK_65",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 36145,
+        "arr_sec": 39192
+      },
+      {
+        "trip_id": "WK_45",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 36360,
+        "arr_sec": 39485
+      },
+      {
+        "trip_id": "WK_68",
+        "driver_id": "D012",
+        "sign_on": "07:45:00",
+        "sign_off": "15:57:42",
+        "pool_size": 45,
+        "dep_sec": 36655,
+        "arr_sec": 39683
+      },
+      {
+        "trip_id": "WK_47",
+        "driver_id": "D013",
+        "sign_on": "07:11:19",
+        "sign_off": "15:32:12",
+        "pool_size": 45,
+        "dep_sec": 36780,
+        "arr_sec": 39955
+      },
+      {
+        "trip_id": "WK_71",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 37165,
+        "arr_sec": 40193
+      },
+      {
+        "trip_id": "WK_51",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 37200,
+        "arr_sec": 40305
+      },
+      {
+        "trip_id": "WK_53",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 37620,
+        "arr_sec": 40645
+      },
+      {
+        "trip_id": "WK_73",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 37675,
+        "arr_sec": 40703
+      },
+      {
+        "trip_id": "WK_75",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 37835,
+        "arr_sec": 38280
+      },
+      {
+        "trip_id": "WK_56",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 37980,
+        "arr_sec": 40978
+      },
+      {
+        "trip_id": "WK_77",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 38185,
+        "arr_sec": 41213
+      },
+      {
+        "trip_id": "WK_59",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 38490,
+        "arr_sec": 41488
+      },
+      {
+        "trip_id": "WK_78",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 38695,
+        "arr_sec": 41723
+      },
+      {
+        "trip_id": "WK_63",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 39000,
+        "arr_sec": 41998
+      },
+      {
+        "trip_id": "WK_79",
+        "driver_id": "D018",
+        "sign_on": "08:27:00",
+        "sign_off": "16:37:48",
+        "pool_size": 45,
+        "dep_sec": 39205,
+        "arr_sec": 42233
+      },
+      {
+        "trip_id": "WK_66",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 39510,
+        "arr_sec": 42508
+      },
+      {
+        "trip_id": "WK_109",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 39715,
+        "arr_sec": 42743
+      },
+      {
+        "trip_id": "WK_82",
+        "driver_id": "D012",
+        "sign_on": "07:45:00",
+        "sign_off": "15:57:42",
+        "pool_size": 45,
+        "dep_sec": 40020,
+        "arr_sec": 43018
+      },
+      {
+        "trip_id": "WK_113",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 40225,
+        "arr_sec": 43253
+      },
+      {
+        "trip_id": "WK_93",
+        "driver_id": "D022",
+        "sign_on": "09:30:00",
+        "sign_off": "17:30:55",
+        "pool_size": 45,
+        "dep_sec": 40530,
+        "arr_sec": 43528
+      },
+      {
+        "trip_id": "WK_117",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 40755,
+        "arr_sec": 43783
+      },
+      {
+        "trip_id": "WK_96",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 41040,
+        "arr_sec": 44038
+      },
+      {
+        "trip_id": "WK_83",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 41294,
+        "arr_sec": 44322
+      },
+      {
+        "trip_id": "WK_99",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 41550,
+        "arr_sec": 44548
+      },
+      {
+        "trip_id": "WK_85",
+        "driver_id": "D017",
+        "sign_on": "06:00:00",
+        "sign_off": "12:42:12",
+        "pool_size": 45,
+        "dep_sec": 41804,
+        "arr_sec": 44832
+      },
+      {
+        "trip_id": "WK_102",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 42060,
+        "arr_sec": 45058
+      },
+      {
+        "trip_id": "WK_87",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 42314,
+        "arr_sec": 45342
+      },
+      {
+        "trip_id": "WK_105",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 42570,
+        "arr_sec": 45568
+      },
+      {
+        "trip_id": "WK_89",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 42824,
+        "arr_sec": 45852
+      },
+      {
+        "trip_id": "WK_108",
+        "driver_id": "D013",
+        "sign_on": "07:11:19",
+        "sign_off": "15:32:12",
+        "pool_size": 45,
+        "dep_sec": 43080,
+        "arr_sec": 46078
+      },
+      {
+        "trip_id": "WK_91",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 43334,
+        "arr_sec": 46362
+      },
+      {
+        "trip_id": "WK_112",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 43590,
+        "arr_sec": 46588
+      },
+      {
+        "trip_id": "WK_94",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 43844,
+        "arr_sec": 46872
+      },
+      {
+        "trip_id": "WK_116",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 44100,
+        "arr_sec": 47098
+      },
+      {
+        "trip_id": "WK_97",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 44354,
+        "arr_sec": 47382
+      },
+      {
+        "trip_id": "WK_84",
+        "driver_id": "D014",
+        "sign_on": "07:52:00",
+        "sign_off": "13:28:28",
+        "pool_size": 45,
+        "dep_sec": 44610,
+        "arr_sec": 47608
+      },
+      {
+        "trip_id": "WK_100",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 44864,
+        "arr_sec": 47892
+      },
+      {
+        "trip_id": "WK_86",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 45120,
+        "arr_sec": 48118
+      },
+      {
+        "trip_id": "WK_103",
+        "driver_id": "D018",
+        "sign_on": "08:27:00",
+        "sign_off": "16:37:48",
+        "pool_size": 45,
+        "dep_sec": 45374,
+        "arr_sec": 48402
+      },
+      {
+        "trip_id": "WK_88",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 45630,
+        "arr_sec": 48628
+      },
+      {
+        "trip_id": "WK_106",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 45884,
+        "arr_sec": 48912
+      },
+      {
+        "trip_id": "WK_90",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 46140,
+        "arr_sec": 49138
+      },
+      {
+        "trip_id": "WK_110",
+        "driver_id": "D008",
+        "sign_on": "06:00:00",
+        "sign_off": "13:58:42",
+        "pool_size": 45,
+        "dep_sec": 46394,
+        "arr_sec": 49422
+      },
+      {
+        "trip_id": "WK_92",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "14:02:28",
+        "pool_size": 45,
+        "dep_sec": 46650,
+        "arr_sec": 49648
+      },
+      {
+        "trip_id": "WK_114",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 46904,
+        "arr_sec": 49932
+      },
+      {
+        "trip_id": "WK_95",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "14:10:58",
+        "pool_size": 45,
+        "dep_sec": 47160,
+        "arr_sec": 50158
+      },
+      {
+        "trip_id": "WK_118",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 47414,
+        "arr_sec": 50442
+      },
+      {
+        "trip_id": "WK_98",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 47670,
+        "arr_sec": 50668
+      },
+      {
+        "trip_id": "WK_120",
+        "driver_id": "D015",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 45,
+        "dep_sec": 47924,
+        "arr_sec": 50952
+      },
+      {
+        "trip_id": "WK_101",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 48180,
+        "arr_sec": 51178
+      },
+      {
+        "trip_id": "WK_122",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 48434,
+        "arr_sec": 51462
+      },
+      {
+        "trip_id": "WK_104",
+        "driver_id": "D006",
+        "sign_on": "06:52:00",
+        "sign_off": "14:36:28",
+        "pool_size": 45,
+        "dep_sec": 48690,
+        "arr_sec": 51688
+      },
+      {
+        "trip_id": "WK_124",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:41:12",
+        "pool_size": 45,
+        "dep_sec": 48944,
+        "arr_sec": 51972
+      },
+      {
+        "trip_id": "WK_107",
+        "driver_id": "D003",
+        "sign_on": "06:56:25",
+        "sign_off": "14:44:58",
+        "pool_size": 45,
+        "dep_sec": 49200,
+        "arr_sec": 52198
+      },
+      {
+        "trip_id": "WK_126",
+        "driver_id": "D002",
+        "sign_on": "06:45:00",
+        "sign_off": "14:49:42",
+        "pool_size": 45,
+        "dep_sec": 49454,
+        "arr_sec": 52482
+      },
+      {
+        "trip_id": "WK_111",
+        "driver_id": "D009",
+        "sign_on": "06:30:00",
+        "sign_off": "14:53:28",
+        "pool_size": 45,
+        "dep_sec": 49710,
+        "arr_sec": 52708
+      },
+      {
+        "trip_id": "WK_128",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:58:12",
+        "pool_size": 45,
+        "dep_sec": 49964,
+        "arr_sec": 52992
+      },
+      {
+        "trip_id": "WK_115",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 50220,
+        "arr_sec": 53218
+      },
+      {
+        "trip_id": "WK_130",
+        "driver_id": "D045",
+        "sign_on": "06:48:00",
+        "sign_off": "15:06:42",
+        "pool_size": 45,
+        "dep_sec": 50474,
+        "arr_sec": 53502
+      },
+      {
+        "trip_id": "WK_119",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 50730,
+        "arr_sec": 53728
+      },
+      {
+        "trip_id": "WK_132",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 50984,
+        "arr_sec": 54012
+      },
+      {
+        "trip_id": "WK_121",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:18:58",
+        "pool_size": 45,
+        "dep_sec": 51240,
+        "arr_sec": 54238
+      },
+      {
+        "trip_id": "WK_134",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 51494,
+        "arr_sec": 54522
+      },
+      {
+        "trip_id": "WK_123",
+        "driver_id": "D022",
+        "sign_on": "09:30:00",
+        "sign_off": "17:30:55",
+        "pool_size": 45,
+        "dep_sec": 51750,
+        "arr_sec": 54748
+      },
+      {
+        "trip_id": "WK_136",
+        "driver_id": "D013",
+        "sign_on": "07:11:19",
+        "sign_off": "15:32:12",
+        "pool_size": 45,
+        "dep_sec": 52004,
+        "arr_sec": 55032
+      },
+      {
+        "trip_id": "WK_125",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 52260,
+        "arr_sec": 55258
+      },
+      {
+        "trip_id": "WK_138",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 52514,
+        "arr_sec": 55542
+      },
+      {
+        "trip_id": "WK_127",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 52770,
+        "arr_sec": 55768
+      },
+      {
+        "trip_id": "WK_140",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 53024,
+        "arr_sec": 56052
+      },
+      {
+        "trip_id": "WK_129",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 53280,
+        "arr_sec": 56278
+      },
+      {
+        "trip_id": "WK_142",
+        "driver_id": "D012",
+        "sign_on": "07:45:00",
+        "sign_off": "15:57:42",
+        "pool_size": 45,
+        "dep_sec": 53534,
+        "arr_sec": 56562
+      },
+      {
+        "trip_id": "WK_131",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 53790,
+        "arr_sec": 56788
+      },
+      {
+        "trip_id": "WK_144",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 54044,
+        "arr_sec": 57072
+      },
+      {
+        "trip_id": "WK_133",
+        "driver_id": "D011",
+        "sign_on": "07:41:25",
+        "sign_off": "16:09:58",
+        "pool_size": 45,
+        "dep_sec": 54300,
+        "arr_sec": 57298
+      },
+      {
+        "trip_id": "WK_146",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 54554,
+        "arr_sec": 57582
+      },
+      {
+        "trip_id": "WK_135",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 54810,
+        "arr_sec": 57808
+      },
+      {
+        "trip_id": "WK_148",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 55064,
+        "arr_sec": 58092
+      },
+      {
+        "trip_id": "WK_137",
+        "driver_id": "D022",
+        "sign_on": "09:30:00",
+        "sign_off": "17:30:55",
+        "pool_size": 45,
+        "dep_sec": 55320,
+        "arr_sec": 58318
+      },
+      {
+        "trip_id": "WK_150",
+        "driver_id": "D035",
+        "sign_on": "08:06:00",
+        "sign_off": "16:31:09",
+        "pool_size": 45,
+        "dep_sec": 55574,
+        "arr_sec": 58569
+      },
+      {
+        "trip_id": "WK_139",
+        "driver_id": "D018",
+        "sign_on": "08:27:00",
+        "sign_off": "16:37:48",
+        "pool_size": 45,
+        "dep_sec": 55830,
+        "arr_sec": 58968
+      },
+      {
+        "trip_id": "WK_152",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 56084,
+        "arr_sec": 59192
+      },
+      {
+        "trip_id": "WK_172",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 56340,
+        "arr_sec": 58904
+      },
+      {
+        "trip_id": "WK_141",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 56340,
+        "arr_sec": 59408
+      },
+      {
+        "trip_id": "WK_154",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 56594,
+        "arr_sec": 59622
+      },
+      {
+        "trip_id": "WK_143",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 56850,
+        "arr_sec": 59848
+      },
+      {
+        "trip_id": "WK_156",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 57104,
+        "arr_sec": 60132
+      },
+      {
+        "trip_id": "WK_145",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 57360,
+        "arr_sec": 60358
+      },
+      {
+        "trip_id": "WK_158",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 57655,
+        "arr_sec": 60650
+      },
+      {
+        "trip_id": "WK_147",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 57870,
+        "arr_sec": 60828
+      },
+      {
+        "trip_id": "WK_160",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 58075,
+        "arr_sec": 61122
+      },
+      {
+        "trip_id": "WK_149",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 58290,
+        "arr_sec": 61315
+      },
+      {
+        "trip_id": "WK_161",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 58495,
+        "arr_sec": 61542
+      },
+      {
+        "trip_id": "WK_151",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 58710,
+        "arr_sec": 61735
+      },
+      {
+        "trip_id": "WK_190",
+        "driver_id": "D040",
+        "sign_on": "16:06:55",
+        "sign_off": "22:07:28",
+        "pool_size": 45,
+        "dep_sec": 58915,
+        "arr_sec": 61962
+      },
+      {
+        "trip_id": "WK_171",
+        "driver_id": "D022",
+        "sign_on": "09:30:00",
+        "sign_off": "17:30:55",
+        "pool_size": 45,
+        "dep_sec": 59130,
+        "arr_sec": 62155
+      },
+      {
+        "trip_id": "WK_162",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 59335,
+        "arr_sec": 62382
+      },
+      {
+        "trip_id": "WK_153",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 59550,
+        "arr_sec": 62575
+      },
+      {
+        "trip_id": "WK_163",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 59755,
+        "arr_sec": 62802
+      },
+      {
+        "trip_id": "WK_155",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 59970,
+        "arr_sec": 62995
+      },
+      {
+        "trip_id": "WK_164",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 60175,
+        "arr_sec": 63222
+      },
+      {
+        "trip_id": "WK_157",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 60390,
+        "arr_sec": 63415
+      },
+      {
+        "trip_id": "WK_165",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 60595,
+        "arr_sec": 63642
+      },
+      {
+        "trip_id": "WK_159",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 60810,
+        "arr_sec": 63835
+      },
+      {
+        "trip_id": "WK_166",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 61015,
+        "arr_sec": 64062
+      },
+      {
+        "trip_id": "WK_183",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 61230,
+        "arr_sec": 64255
+      },
+      {
+        "trip_id": "WK_167",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 61435,
+        "arr_sec": 64482
+      },
+      {
+        "trip_id": "WK_186",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 61650,
+        "arr_sec": 64675
+      },
+      {
+        "trip_id": "WK_169",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 61855,
+        "arr_sec": 64902
+      },
+      {
+        "trip_id": "WK_189",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 62070,
+        "arr_sec": 65095
+      },
+      {
+        "trip_id": "WK_173",
+        "driver_id": "D040",
+        "sign_on": "16:06:55",
+        "sign_off": "22:07:28",
+        "pool_size": 45,
+        "dep_sec": 62275,
+        "arr_sec": 65322
+      },
+      {
+        "trip_id": "WK_193",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 62490,
+        "arr_sec": 65515
+      },
+      {
+        "trip_id": "WK_175",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 62695,
+        "arr_sec": 65742
+      },
+      {
+        "trip_id": "WK_195",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 62910,
+        "arr_sec": 65935
+      },
+      {
+        "trip_id": "WK_177",
+        "driver_id": "D029",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 45,
+        "dep_sec": 63115,
+        "arr_sec": 66162
+      },
+      {
+        "trip_id": "WK_197",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 63330,
+        "arr_sec": 66355
+      },
+      {
+        "trip_id": "WK_179",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 63535,
+        "arr_sec": 66582
+      },
+      {
+        "trip_id": "WK_199",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 63750,
+        "arr_sec": 66775
+      },
+      {
+        "trip_id": "WK_181",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 63955,
+        "arr_sec": 67002
+      },
+      {
+        "trip_id": "WK_201",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 64170,
+        "arr_sec": 67195
+      },
+      {
+        "trip_id": "WK_184",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 64375,
+        "arr_sec": 67422
+      },
+      {
+        "trip_id": "WK_168",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 64590,
+        "arr_sec": 67615
+      },
+      {
+        "trip_id": "WK_187",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 64795,
+        "arr_sec": 67842
+      },
+      {
+        "trip_id": "WK_170",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 65010,
+        "arr_sec": 68035
+      },
+      {
+        "trip_id": "WK_191",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 65215,
+        "arr_sec": 68262
+      },
+      {
+        "trip_id": "WK_174",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 65430,
+        "arr_sec": 68455
+      },
+      {
+        "trip_id": "WK_194",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 65635,
+        "arr_sec": 68682
+      },
+      {
+        "trip_id": "WK_176",
+        "driver_id": "D040",
+        "sign_on": "16:06:55",
+        "sign_off": "22:07:28",
+        "pool_size": 45,
+        "dep_sec": 65850,
+        "arr_sec": 68875
+      },
+      {
+        "trip_id": "WK_196",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 66055,
+        "arr_sec": 69102
+      },
+      {
+        "trip_id": "WK_178",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 66270,
+        "arr_sec": 69295
+      },
+      {
+        "trip_id": "WK_198",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 66475,
+        "arr_sec": 69522
+      },
+      {
+        "trip_id": "WK_180",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 66690,
+        "arr_sec": 69715
+      },
+      {
+        "trip_id": "WK_200",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 66895,
+        "arr_sec": 69942
+      },
+      {
+        "trip_id": "WK_182",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 67110,
+        "arr_sec": 70135
+      },
+      {
+        "trip_id": "WK_202",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 67315,
+        "arr_sec": 70362
+      },
+      {
+        "trip_id": "WK_185",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 67530,
+        "arr_sec": 70605
+      },
+      {
+        "trip_id": "WK_205",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 67735,
+        "arr_sec": 70782
+      },
+      {
+        "trip_id": "WK_188",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 67950,
+        "arr_sec": 70975
+      },
+      {
+        "trip_id": "WK_206",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 68155,
+        "arr_sec": 71202
+      },
+      {
+        "trip_id": "WK_192",
+        "driver_id": "D031",
+        "sign_on": "12:00:00",
+        "sign_off": "20:04:55",
+        "pool_size": 45,
+        "dep_sec": 68370,
+        "arr_sec": 71395
+      },
+      {
+        "trip_id": "WK_207",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 68575,
+        "arr_sec": 71622
+      },
+      {
+        "trip_id": "WK_214",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 68790,
+        "arr_sec": 71815
+      },
+      {
+        "trip_id": "WK_203",
+        "driver_id": "D036",
+        "sign_on": "12:34:00",
+        "sign_off": "20:16:08",
+        "pool_size": 45,
+        "dep_sec": 69000,
+        "arr_sec": 72068
+      },
+      {
+        "trip_id": "WK_215",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 69210,
+        "arr_sec": 72216
+      },
+      {
+        "trip_id": "WK_208",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 69510,
+        "arr_sec": 72578
+      },
+      {
+        "trip_id": "WK_216",
+        "driver_id": "D040",
+        "sign_on": "16:06:55",
+        "sign_off": "22:07:28",
+        "pool_size": 45,
+        "dep_sec": 69630,
+        "arr_sec": 72655
+      },
+      {
+        "trip_id": "WK_209",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 70020,
+        "arr_sec": 73088
+      },
+      {
+        "trip_id": "WK_217",
+        "driver_id": "D042",
+        "sign_on": "12:04:14",
+        "sign_off": "20:33:35",
+        "pool_size": 45,
+        "dep_sec": 70050,
+        "arr_sec": 73115
+      },
+      {
+        "trip_id": "WK_218",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 70470,
+        "arr_sec": 73468
+      },
+      {
+        "trip_id": "WK_210",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 70530,
+        "arr_sec": 73608
+      },
+      {
+        "trip_id": "WK_211",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 70705,
+        "arr_sec": 71150
+      },
+      {
+        "trip_id": "WK_219",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 70980,
+        "arr_sec": 73978
+      },
+      {
+        "trip_id": "WK_212",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 71100,
+        "arr_sec": 74188
+      },
+      {
+        "trip_id": "WK_220",
+        "driver_id": "D024",
+        "sign_on": "12:29:44",
+        "sign_off": "20:56:28",
+        "pool_size": 45,
+        "dep_sec": 71490,
+        "arr_sec": 74488
+      },
+      {
+        "trip_id": "WK_213",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 71700,
+        "arr_sec": 74798
+      },
+      {
+        "trip_id": "WK_226",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 71935,
+        "arr_sec": 72380
+      },
+      {
+        "trip_id": "WK_221",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 72000,
+        "arr_sec": 75068
+      },
+      {
+        "trip_id": "WK_227",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 72360,
+        "arr_sec": 75398
+      },
+      {
+        "trip_id": "WK_204",
+        "driver_id": "D020",
+        "sign_on": "12:59:30",
+        "sign_off": "21:13:28",
+        "pool_size": 45,
+        "dep_sec": 72510,
+        "arr_sec": 75508
+      },
+      {
+        "trip_id": "WK_222",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 73020,
+        "arr_sec": 76018
+      },
+      {
+        "trip_id": "WK_228",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 73020,
+        "arr_sec": 76048
+      },
+      {
+        "trip_id": "WK_229",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 73205,
+        "arr_sec": 73650
+      },
+      {
+        "trip_id": "WK_223",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 73530,
+        "arr_sec": 76568
+      },
+      {
+        "trip_id": "WK_233",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 73680,
+        "arr_sec": 76708
+      },
+      {
+        "trip_id": "WK_224",
+        "driver_id": "D037",
+        "sign_on": "13:12:14",
+        "sign_off": "21:40:28",
+        "pool_size": 45,
+        "dep_sec": 74130,
+        "arr_sec": 77128
+      },
+      {
+        "trip_id": "WK_235",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 74340,
+        "arr_sec": 77443
+      },
+      {
+        "trip_id": "WK_225",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 74730,
+        "arr_sec": 77728
+      },
+      {
+        "trip_id": "WK_236",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 75000,
+        "arr_sec": 78028
+      },
+      {
+        "trip_id": "WK_230",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 75330,
+        "arr_sec": 78368
+      },
+      {
+        "trip_id": "WK_238",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 75355,
+        "arr_sec": 75800
+      },
+      {
+        "trip_id": "WK_239",
+        "driver_id": "D040",
+        "sign_on": "16:06:55",
+        "sign_off": "22:07:28",
+        "pool_size": 45,
+        "dep_sec": 75720,
+        "arr_sec": 78748
+      },
+      {
+        "trip_id": "WK_231",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 75930,
+        "arr_sec": 78928
+      },
+      {
+        "trip_id": "WK_240",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 76500,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_232",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 76530,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_241",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 76885,
+        "arr_sec": 77330
+      },
+      {
+        "trip_id": "WK_244",
+        "driver_id": "D021",
+        "sign_on": "14:16:00",
+        "sign_off": "22:35:28",
+        "pool_size": 45,
+        "dep_sec": 77400,
+        "arr_sec": 80428
+      },
+      {
+        "trip_id": "WK_234",
+        "driver_id": "D032",
+        "sign_on": "14:33:00",
+        "sign_off": "22:34:58",
+        "pool_size": 45,
+        "dep_sec": 77400,
+        "arr_sec": 80398
+      },
+      {
+        "trip_id": "WK_246",
+        "driver_id": "D023",
+        "sign_on": "14:24:30",
+        "sign_off": "22:50:28",
+        "pool_size": 45,
+        "dep_sec": 78300,
+        "arr_sec": 81328
+      },
+      {
+        "trip_id": "WK_237",
+        "driver_id": "D026",
+        "sign_on": "14:20:14",
+        "sign_off": "22:49:58",
+        "pool_size": 45,
+        "dep_sec": 78300,
+        "arr_sec": 81298
+      },
+      {
+        "trip_id": "WK_247",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 78685,
+        "arr_sec": 79130
+      },
+      {
+        "trip_id": "WK_248",
+        "driver_id": "D038",
+        "sign_on": "15:56:30",
+        "sign_off": "23:05:09",
+        "pool_size": 45,
+        "dep_sec": 79200,
+        "arr_sec": 82209
+      },
+      {
+        "trip_id": "WK_242",
+        "driver_id": "D041",
+        "sign_on": "17:13:30",
+        "sign_off": "23:04:58",
+        "pool_size": 45,
+        "dep_sec": 79200,
+        "arr_sec": 82198
+      },
+      {
+        "trip_id": "WK_243",
+        "driver_id": "D027",
+        "sign_on": "14:58:30",
+        "sign_off": "23:19:58",
+        "pool_size": 45,
+        "dep_sec": 80100,
+        "arr_sec": 83098
+      },
+      {
+        "trip_id": "WK_249",
+        "driver_id": "D044",
+        "sign_on": "15:45:55",
+        "sign_off": "23:20:09",
+        "pool_size": 45,
+        "dep_sec": 80100,
+        "arr_sec": 83109
+      },
+      {
+        "trip_id": "WK_245",
+        "driver_id": "D019",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:02",
+        "pool_size": 45,
+        "dep_sec": 81000,
+        "arr_sec": 84062
+      },
+      {
+        "trip_id": "WK_252",
+        "driver_id": "D028",
+        "sign_on": "17:09:55",
+        "sign_off": "23:36:24",
+        "pool_size": 45,
+        "dep_sec": 81000,
+        "arr_sec": 84084
+      },
+      {
+        "trip_id": "WK_255",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 81388,
+        "arr_sec": 81833
+      },
+      {
+        "trip_id": "WK_250",
+        "driver_id": "D005",
+        "sign_on": "15:41:00",
+        "sign_off": "23:32:49",
+        "pool_size": 45,
+        "dep_sec": 81418,
+        "arr_sec": 83869
+      },
+      {
+        "trip_id": "WK_254",
+        "driver_id": "D016",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 45,
+        "dep_sec": 82288,
+        "arr_sec": 82733
+      }
+    ]
+  },
+  "50": {
+    "status": "OPTIMAL",
+    "pool_size": 50,
+    "elapsed_sec": 58.79530299999897,
+    "objective": 0.0,
+    "best_bound": 0.0,
+    "gap_pct": 0.0,
+    "num_trips": 250,
+    "num_active_drivers": 45,
+    "reserve": 5,
+    "assignments": [
+      {
+        "trip_id": "WK_3",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "10:49:38",
+        "pool_size": 50,
+        "dep_sec": 21600,
+        "arr_sec": 24845
+      },
+      {
+        "trip_id": "WK_1",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 21600,
+        "arr_sec": 24854
+      },
+      {
+        "trip_id": "WK_9",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 22500,
+        "arr_sec": 23020
+      },
+      {
+        "trip_id": "WK_6",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 22500,
+        "arr_sec": 25528
+      },
+      {
+        "trip_id": "WK_15",
+        "driver_id": "D025",
+        "sign_on": "06:00:00",
+        "sign_off": "14:27:58",
+        "pool_size": 50,
+        "dep_sec": 22500,
+        "arr_sec": 25648
+      },
+      {
+        "trip_id": "WK_8",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 23400,
+        "arr_sec": 26618
+      },
+      {
+        "trip_id": "WK_17",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 23400,
+        "arr_sec": 26606
+      },
+      {
+        "trip_id": "WK_11",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 24300,
+        "arr_sec": 27328
+      },
+      {
+        "trip_id": "WK_20",
+        "driver_id": "D016",
+        "sign_on": "06:30:00",
+        "sign_off": "08:51:13",
+        "pool_size": 50,
+        "dep_sec": 24300,
+        "arr_sec": 27448
+      },
+      {
+        "trip_id": "WK_2",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 25200,
+        "arr_sec": 28198
+      },
+      {
+        "trip_id": "WK_5",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 25225,
+        "arr_sec": 28443
+      },
+      {
+        "trip_id": "WK_30",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 25380,
+        "arr_sec": 27944
+      },
+      {
+        "trip_id": "WK_34",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 25620,
+        "arr_sec": 26091
+      },
+      {
+        "trip_id": "WK_7",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 25800,
+        "arr_sec": 28798
+      },
+      {
+        "trip_id": "WK_16",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "10:49:38",
+        "pool_size": 50,
+        "dep_sec": 25885,
+        "arr_sec": 28913
+      },
+      {
+        "trip_id": "WK_25",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 26400,
+        "arr_sec": 29575
+      },
+      {
+        "trip_id": "WK_33",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 26545,
+        "arr_sec": 29733
+      },
+      {
+        "trip_id": "WK_41",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 26779,
+        "arr_sec": 29343
+      },
+      {
+        "trip_id": "WK_10",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 27000,
+        "arr_sec": 29998
+      },
+      {
+        "trip_id": "WK_19",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 27205,
+        "arr_sec": 30233
+      },
+      {
+        "trip_id": "WK_13",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 27600,
+        "arr_sec": 30778
+      },
+      {
+        "trip_id": "WK_21",
+        "driver_id": "D016",
+        "sign_on": "06:30:00",
+        "sign_off": "08:51:13",
+        "pool_size": 50,
+        "dep_sec": 27805,
+        "arr_sec": 30973
+      },
+      {
+        "trip_id": "WK_49",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 28080,
+        "arr_sec": 30644
+      },
+      {
+        "trip_id": "WK_29",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 28200,
+        "arr_sec": 31198
+      },
+      {
+        "trip_id": "WK_22",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 28585,
+        "arr_sec": 31632
+      },
+      {
+        "trip_id": "WK_14",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 28800,
+        "arr_sec": 31785
+      },
+      {
+        "trip_id": "WK_80",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 28800,
+        "arr_sec": 29271
+      },
+      {
+        "trip_id": "WK_23",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 29005,
+        "arr_sec": 32052
+      },
+      {
+        "trip_id": "WK_24",
+        "driver_id": "D003",
+        "sign_on": "07:52:00",
+        "sign_off": "16:14:42",
+        "pool_size": 50,
+        "dep_sec": 29220,
+        "arr_sec": 32245
+      },
+      {
+        "trip_id": "WK_61",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 29425,
+        "arr_sec": 32472
+      },
+      {
+        "trip_id": "WK_40",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "10:49:38",
+        "pool_size": 50,
+        "dep_sec": 29640,
+        "arr_sec": 32665
+      },
+      {
+        "trip_id": "WK_26",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 29845,
+        "arr_sec": 32892
+      },
+      {
+        "trip_id": "WK_35",
+        "driver_id": "D028",
+        "sign_on": "08:06:00",
+        "sign_off": "10:29:25",
+        "pool_size": 50,
+        "dep_sec": 30060,
+        "arr_sec": 33085
+      },
+      {
+        "trip_id": "WK_81",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 30060,
+        "arr_sec": 30531
+      },
+      {
+        "trip_id": "WK_27",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 30265,
+        "arr_sec": 33312
+      },
+      {
+        "trip_id": "WK_36",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 30480,
+        "arr_sec": 33505
+      },
+      {
+        "trip_id": "WK_70",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 30685,
+        "arr_sec": 33732
+      },
+      {
+        "trip_id": "WK_48",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 30900,
+        "arr_sec": 33925
+      },
+      {
+        "trip_id": "WK_28",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 31105,
+        "arr_sec": 34152
+      },
+      {
+        "trip_id": "WK_37",
+        "driver_id": "D040",
+        "sign_on": "08:27:00",
+        "sign_off": "16:41:32",
+        "pool_size": 50,
+        "dep_sec": 31320,
+        "arr_sec": 34345
+      },
+      {
+        "trip_id": "WK_31",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 31525,
+        "arr_sec": 34572
+      },
+      {
+        "trip_id": "WK_54",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 31740,
+        "arr_sec": 34765
+      },
+      {
+        "trip_id": "WK_32",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 31945,
+        "arr_sec": 34992
+      },
+      {
+        "trip_id": "WK_57",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 32160,
+        "arr_sec": 35185
+      },
+      {
+        "trip_id": "WK_38",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 32365,
+        "arr_sec": 35412
+      },
+      {
+        "trip_id": "WK_60",
+        "driver_id": "D003",
+        "sign_on": "07:52:00",
+        "sign_off": "16:14:42",
+        "pool_size": 50,
+        "dep_sec": 32580,
+        "arr_sec": 35605
+      },
+      {
+        "trip_id": "WK_42",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 32785,
+        "arr_sec": 35832
+      },
+      {
+        "trip_id": "WK_64",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 33000,
+        "arr_sec": 36025
+      },
+      {
+        "trip_id": "WK_44",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 33205,
+        "arr_sec": 36252
+      },
+      {
+        "trip_id": "WK_67",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 33420,
+        "arr_sec": 36445
+      },
+      {
+        "trip_id": "WK_46",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 33625,
+        "arr_sec": 36672
+      },
+      {
+        "trip_id": "WK_69",
+        "driver_id": "D028",
+        "sign_on": "08:06:00",
+        "sign_off": "10:29:25",
+        "pool_size": 50,
+        "dep_sec": 33840,
+        "arr_sec": 36865
+      },
+      {
+        "trip_id": "WK_50",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 34045,
+        "arr_sec": 37092
+      },
+      {
+        "trip_id": "WK_72",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 34260,
+        "arr_sec": 37355
+      },
+      {
+        "trip_id": "WK_52",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 34465,
+        "arr_sec": 37512
+      },
+      {
+        "trip_id": "WK_74",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 34680,
+        "arr_sec": 37735
+      },
+      {
+        "trip_id": "WK_55",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 34885,
+        "arr_sec": 37882
+      },
+      {
+        "trip_id": "WK_76",
+        "driver_id": "D001",
+        "sign_on": "05:45:00",
+        "sign_off": "10:49:38",
+        "pool_size": 50,
+        "dep_sec": 35100,
+        "arr_sec": 38078
+      },
+      {
+        "trip_id": "WK_58",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 35305,
+        "arr_sec": 38352
+      },
+      {
+        "trip_id": "WK_39",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 35520,
+        "arr_sec": 38545
+      },
+      {
+        "trip_id": "WK_62",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 35725,
+        "arr_sec": 38772
+      },
+      {
+        "trip_id": "WK_43",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 35940,
+        "arr_sec": 38965
+      },
+      {
+        "trip_id": "WK_65",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 36145,
+        "arr_sec": 39192
+      },
+      {
+        "trip_id": "WK_45",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 36360,
+        "arr_sec": 39485
+      },
+      {
+        "trip_id": "WK_68",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 36655,
+        "arr_sec": 39683
+      },
+      {
+        "trip_id": "WK_47",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 36780,
+        "arr_sec": 39955
+      },
+      {
+        "trip_id": "WK_71",
+        "driver_id": "D040",
+        "sign_on": "08:27:00",
+        "sign_off": "16:41:32",
+        "pool_size": 50,
+        "dep_sec": 37165,
+        "arr_sec": 40193
+      },
+      {
+        "trip_id": "WK_51",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 37200,
+        "arr_sec": 40305
+      },
+      {
+        "trip_id": "WK_53",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 37620,
+        "arr_sec": 40645
+      },
+      {
+        "trip_id": "WK_73",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 37675,
+        "arr_sec": 40703
+      },
+      {
+        "trip_id": "WK_75",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 37835,
+        "arr_sec": 38280
+      },
+      {
+        "trip_id": "WK_56",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 37980,
+        "arr_sec": 40978
+      },
+      {
+        "trip_id": "WK_77",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 38185,
+        "arr_sec": 41213
+      },
+      {
+        "trip_id": "WK_59",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 38490,
+        "arr_sec": 41488
+      },
+      {
+        "trip_id": "WK_78",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 38695,
+        "arr_sec": 41723
+      },
+      {
+        "trip_id": "WK_63",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 39000,
+        "arr_sec": 41998
+      },
+      {
+        "trip_id": "WK_79",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 39205,
+        "arr_sec": 42233
+      },
+      {
+        "trip_id": "WK_66",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 39510,
+        "arr_sec": 42508
+      },
+      {
+        "trip_id": "WK_109",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 39715,
+        "arr_sec": 42743
+      },
+      {
+        "trip_id": "WK_82",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 40020,
+        "arr_sec": 43018
+      },
+      {
+        "trip_id": "WK_113",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 40225,
+        "arr_sec": 43253
+      },
+      {
+        "trip_id": "WK_93",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 40530,
+        "arr_sec": 43528
+      },
+      {
+        "trip_id": "WK_117",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 40755,
+        "arr_sec": 43783
+      },
+      {
+        "trip_id": "WK_96",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 41040,
+        "arr_sec": 44038
+      },
+      {
+        "trip_id": "WK_83",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 41294,
+        "arr_sec": 44322
+      },
+      {
+        "trip_id": "WK_99",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 41550,
+        "arr_sec": 44548
+      },
+      {
+        "trip_id": "WK_85",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 41804,
+        "arr_sec": 44832
+      },
+      {
+        "trip_id": "WK_102",
+        "driver_id": "D006",
+        "sign_on": "05:45:00",
+        "sign_off": "12:45:58",
+        "pool_size": 50,
+        "dep_sec": 42060,
+        "arr_sec": 45058
+      },
+      {
+        "trip_id": "WK_87",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 42314,
+        "arr_sec": 45342
+      },
+      {
+        "trip_id": "WK_105",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 42570,
+        "arr_sec": 45568
+      },
+      {
+        "trip_id": "WK_89",
+        "driver_id": "D032",
+        "sign_on": "11:38:44",
+        "sign_off": "20:08:42",
+        "pool_size": 50,
+        "dep_sec": 42824,
+        "arr_sec": 45852
+      },
+      {
+        "trip_id": "WK_108",
+        "driver_id": "D038",
+        "sign_on": "11:43:00",
+        "sign_off": "20:04:55",
+        "pool_size": 50,
+        "dep_sec": 43080,
+        "arr_sec": 46078
+      },
+      {
+        "trip_id": "WK_91",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 43334,
+        "arr_sec": 46362
+      },
+      {
+        "trip_id": "WK_112",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 43590,
+        "arr_sec": 46588
+      },
+      {
+        "trip_id": "WK_94",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 43844,
+        "arr_sec": 46872
+      },
+      {
+        "trip_id": "WK_116",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 44100,
+        "arr_sec": 47098
+      },
+      {
+        "trip_id": "WK_97",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 44354,
+        "arr_sec": 47382
+      },
+      {
+        "trip_id": "WK_84",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 44610,
+        "arr_sec": 47608
+      },
+      {
+        "trip_id": "WK_100",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 44864,
+        "arr_sec": 47892
+      },
+      {
+        "trip_id": "WK_86",
+        "driver_id": "D015",
+        "sign_on": "06:15:00",
+        "sign_off": "13:36:58",
+        "pool_size": 50,
+        "dep_sec": 45120,
+        "arr_sec": 48118
+      },
+      {
+        "trip_id": "WK_103",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 45374,
+        "arr_sec": 48402
+      },
+      {
+        "trip_id": "WK_88",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 45630,
+        "arr_sec": 48628
+      },
+      {
+        "trip_id": "WK_106",
+        "driver_id": "D049",
+        "sign_on": "12:29:44",
+        "sign_off": "19:57:55",
+        "pool_size": 50,
+        "dep_sec": 45884,
+        "arr_sec": 48912
+      },
+      {
+        "trip_id": "WK_90",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 46140,
+        "arr_sec": 49138
+      },
+      {
+        "trip_id": "WK_110",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 46394,
+        "arr_sec": 49422
+      },
+      {
+        "trip_id": "WK_92",
+        "driver_id": "D002",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 50,
+        "dep_sec": 46650,
+        "arr_sec": 49648
+      },
+      {
+        "trip_id": "WK_114",
+        "driver_id": "D007",
+        "sign_on": "06:15:00",
+        "sign_off": "14:07:12",
+        "pool_size": 50,
+        "dep_sec": 46904,
+        "arr_sec": 49932
+      },
+      {
+        "trip_id": "WK_95",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 47160,
+        "arr_sec": 50158
+      },
+      {
+        "trip_id": "WK_118",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 47414,
+        "arr_sec": 50442
+      },
+      {
+        "trip_id": "WK_98",
+        "driver_id": "D003",
+        "sign_on": "07:52:00",
+        "sign_off": "16:14:42",
+        "pool_size": 50,
+        "dep_sec": 47670,
+        "arr_sec": 50668
+      },
+      {
+        "trip_id": "WK_120",
+        "driver_id": "D004",
+        "sign_on": "06:00:00",
+        "sign_off": "14:24:12",
+        "pool_size": 50,
+        "dep_sec": 47924,
+        "arr_sec": 50952
+      },
+      {
+        "trip_id": "WK_101",
+        "driver_id": "D025",
+        "sign_on": "06:00:00",
+        "sign_off": "14:27:58",
+        "pool_size": 50,
+        "dep_sec": 48180,
+        "arr_sec": 51178
+      },
+      {
+        "trip_id": "WK_122",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 48434,
+        "arr_sec": 51462
+      },
+      {
+        "trip_id": "WK_104",
+        "driver_id": "D050",
+        "sign_on": "06:48:00",
+        "sign_off": "14:36:28",
+        "pool_size": 50,
+        "dep_sec": 48690,
+        "arr_sec": 51688
+      },
+      {
+        "trip_id": "WK_124",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 48944,
+        "arr_sec": 51972
+      },
+      {
+        "trip_id": "WK_107",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 49200,
+        "arr_sec": 52198
+      },
+      {
+        "trip_id": "WK_126",
+        "driver_id": "D032",
+        "sign_on": "11:38:44",
+        "sign_off": "20:08:42",
+        "pool_size": 50,
+        "dep_sec": 49454,
+        "arr_sec": 52482
+      },
+      {
+        "trip_id": "WK_111",
+        "driver_id": "D005",
+        "sign_on": "07:05:00",
+        "sign_off": "14:53:28",
+        "pool_size": 50,
+        "dep_sec": 49710,
+        "arr_sec": 52708
+      },
+      {
+        "trip_id": "WK_128",
+        "driver_id": "D012",
+        "sign_on": "06:45:25",
+        "sign_off": "14:58:12",
+        "pool_size": 50,
+        "dep_sec": 49964,
+        "arr_sec": 52992
+      },
+      {
+        "trip_id": "WK_115",
+        "driver_id": "D014",
+        "sign_on": "06:45:00",
+        "sign_off": "15:01:58",
+        "pool_size": 50,
+        "dep_sec": 50220,
+        "arr_sec": 53218
+      },
+      {
+        "trip_id": "WK_130",
+        "driver_id": "D013",
+        "sign_on": "06:55:00",
+        "sign_off": "15:06:42",
+        "pool_size": 50,
+        "dep_sec": 50474,
+        "arr_sec": 53502
+      },
+      {
+        "trip_id": "WK_119",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 50730,
+        "arr_sec": 53728
+      },
+      {
+        "trip_id": "WK_132",
+        "driver_id": "D008",
+        "sign_on": "07:07:25",
+        "sign_off": "15:15:12",
+        "pool_size": 50,
+        "dep_sec": 50984,
+        "arr_sec": 54012
+      },
+      {
+        "trip_id": "WK_121",
+        "driver_id": "D035",
+        "sign_on": "06:52:00",
+        "sign_off": "15:18:58",
+        "pool_size": 50,
+        "dep_sec": 51240,
+        "arr_sec": 54238
+      },
+      {
+        "trip_id": "WK_134",
+        "driver_id": "D031",
+        "sign_on": "14:03:14",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 51494,
+        "arr_sec": 54522
+      },
+      {
+        "trip_id": "WK_123",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 51750,
+        "arr_sec": 54748
+      },
+      {
+        "trip_id": "WK_136",
+        "driver_id": "D024",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 50,
+        "dep_sec": 52004,
+        "arr_sec": 55032
+      },
+      {
+        "trip_id": "WK_125",
+        "driver_id": "D038",
+        "sign_on": "11:43:00",
+        "sign_off": "20:04:55",
+        "pool_size": 50,
+        "dep_sec": 52260,
+        "arr_sec": 55258
+      },
+      {
+        "trip_id": "WK_138",
+        "driver_id": "D009",
+        "sign_on": "07:33:00",
+        "sign_off": "15:40:42",
+        "pool_size": 50,
+        "dep_sec": 52514,
+        "arr_sec": 55542
+      },
+      {
+        "trip_id": "WK_127",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 52770,
+        "arr_sec": 55768
+      },
+      {
+        "trip_id": "WK_140",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 53024,
+        "arr_sec": 56052
+      },
+      {
+        "trip_id": "WK_129",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 53280,
+        "arr_sec": 56278
+      },
+      {
+        "trip_id": "WK_142",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 53534,
+        "arr_sec": 56562
+      },
+      {
+        "trip_id": "WK_131",
+        "driver_id": "D010",
+        "sign_on": "07:35:00",
+        "sign_off": "16:01:28",
+        "pool_size": 50,
+        "dep_sec": 53790,
+        "arr_sec": 56788
+      },
+      {
+        "trip_id": "WK_144",
+        "driver_id": "D011",
+        "sign_on": "08:41:00",
+        "sign_off": "16:06:12",
+        "pool_size": 50,
+        "dep_sec": 54044,
+        "arr_sec": 57072
+      },
+      {
+        "trip_id": "WK_133",
+        "driver_id": "D030",
+        "sign_on": "14:50:00",
+        "sign_off": "22:49:58",
+        "pool_size": 50,
+        "dep_sec": 54300,
+        "arr_sec": 57298
+      },
+      {
+        "trip_id": "WK_146",
+        "driver_id": "D003",
+        "sign_on": "07:52:00",
+        "sign_off": "16:14:42",
+        "pool_size": 50,
+        "dep_sec": 54554,
+        "arr_sec": 57582
+      },
+      {
+        "trip_id": "WK_135",
+        "driver_id": "D049",
+        "sign_on": "12:29:44",
+        "sign_off": "19:57:55",
+        "pool_size": 50,
+        "dep_sec": 54810,
+        "arr_sec": 57808
+      },
+      {
+        "trip_id": "WK_148",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 55064,
+        "arr_sec": 58092
+      },
+      {
+        "trip_id": "WK_137",
+        "driver_id": "D029",
+        "sign_on": "15:07:00",
+        "sign_off": "21:50:28",
+        "pool_size": 50,
+        "dep_sec": 55320,
+        "arr_sec": 58318
+      },
+      {
+        "trip_id": "WK_150",
+        "driver_id": "D038",
+        "sign_on": "11:43:00",
+        "sign_off": "20:04:55",
+        "pool_size": 50,
+        "dep_sec": 55574,
+        "arr_sec": 58569
+      },
+      {
+        "trip_id": "WK_139",
+        "driver_id": "D024",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 50,
+        "dep_sec": 55830,
+        "arr_sec": 58968
+      },
+      {
+        "trip_id": "WK_152",
+        "driver_id": "D040",
+        "sign_on": "08:27:00",
+        "sign_off": "16:41:32",
+        "pool_size": 50,
+        "dep_sec": 56084,
+        "arr_sec": 59192
+      },
+      {
+        "trip_id": "WK_172",
+        "driver_id": "D032",
+        "sign_on": "11:38:44",
+        "sign_off": "20:08:42",
+        "pool_size": 50,
+        "dep_sec": 56340,
+        "arr_sec": 58904
+      },
+      {
+        "trip_id": "WK_141",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 56340,
+        "arr_sec": 59408
+      },
+      {
+        "trip_id": "WK_154",
+        "driver_id": "D047",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:24",
+        "pool_size": 50,
+        "dep_sec": 56594,
+        "arr_sec": 59622
+      },
+      {
+        "trip_id": "WK_143",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 56850,
+        "arr_sec": 59848
+      },
+      {
+        "trip_id": "WK_156",
+        "driver_id": "D044",
+        "sign_on": "15:36:44",
+        "sign_off": "21:01:38",
+        "pool_size": 50,
+        "dep_sec": 57104,
+        "arr_sec": 60132
+      },
+      {
+        "trip_id": "WK_145",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 57360,
+        "arr_sec": 60358
+      },
+      {
+        "trip_id": "WK_158",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 57655,
+        "arr_sec": 60650
+      },
+      {
+        "trip_id": "WK_147",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 57870,
+        "arr_sec": 60828
+      },
+      {
+        "trip_id": "WK_160",
+        "driver_id": "D036",
+        "sign_on": "15:52:55",
+        "sign_off": "23:05:09",
+        "pool_size": 50,
+        "dep_sec": 58075,
+        "arr_sec": 61122
+      },
+      {
+        "trip_id": "WK_149",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 58290,
+        "arr_sec": 61315
+      },
+      {
+        "trip_id": "WK_161",
+        "driver_id": "D049",
+        "sign_on": "12:29:44",
+        "sign_off": "19:57:55",
+        "pool_size": 50,
+        "dep_sec": 58495,
+        "arr_sec": 61542
+      },
+      {
+        "trip_id": "WK_151",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 58710,
+        "arr_sec": 61735
+      },
+      {
+        "trip_id": "WK_190",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 58915,
+        "arr_sec": 61962
+      },
+      {
+        "trip_id": "WK_171",
+        "driver_id": "D026",
+        "sign_on": "16:10:30",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 59130,
+        "arr_sec": 62155
+      },
+      {
+        "trip_id": "WK_162",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 59335,
+        "arr_sec": 62382
+      },
+      {
+        "trip_id": "WK_153",
+        "driver_id": "D042",
+        "sign_on": "16:17:30",
+        "sign_off": "23:04:58",
+        "pool_size": 50,
+        "dep_sec": 59550,
+        "arr_sec": 62575
+      },
+      {
+        "trip_id": "WK_163",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 59755,
+        "arr_sec": 62802
+      },
+      {
+        "trip_id": "WK_155",
+        "driver_id": "D047",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:24",
+        "pool_size": 50,
+        "dep_sec": 59970,
+        "arr_sec": 62995
+      },
+      {
+        "trip_id": "WK_164",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 60175,
+        "arr_sec": 63222
+      },
+      {
+        "trip_id": "WK_157",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 60390,
+        "arr_sec": 63415
+      },
+      {
+        "trip_id": "WK_165",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 60595,
+        "arr_sec": 63642
+      },
+      {
+        "trip_id": "WK_159",
+        "driver_id": "D024",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 50,
+        "dep_sec": 60810,
+        "arr_sec": 63835
+      },
+      {
+        "trip_id": "WK_166",
+        "driver_id": "D029",
+        "sign_on": "15:07:00",
+        "sign_off": "21:50:28",
+        "pool_size": 50,
+        "dep_sec": 61015,
+        "arr_sec": 64062
+      },
+      {
+        "trip_id": "WK_183",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 61230,
+        "arr_sec": 64255
+      },
+      {
+        "trip_id": "WK_167",
+        "driver_id": "D031",
+        "sign_on": "14:03:14",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 61435,
+        "arr_sec": 64482
+      },
+      {
+        "trip_id": "WK_186",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 61650,
+        "arr_sec": 64675
+      },
+      {
+        "trip_id": "WK_169",
+        "driver_id": "D032",
+        "sign_on": "11:38:44",
+        "sign_off": "20:08:42",
+        "pool_size": 50,
+        "dep_sec": 61855,
+        "arr_sec": 64902
+      },
+      {
+        "trip_id": "WK_189",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 62070,
+        "arr_sec": 65095
+      },
+      {
+        "trip_id": "WK_173",
+        "driver_id": "D036",
+        "sign_on": "15:52:55",
+        "sign_off": "23:05:09",
+        "pool_size": 50,
+        "dep_sec": 62275,
+        "arr_sec": 65322
+      },
+      {
+        "trip_id": "WK_193",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 62490,
+        "arr_sec": 65515
+      },
+      {
+        "trip_id": "WK_175",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 62695,
+        "arr_sec": 65742
+      },
+      {
+        "trip_id": "WK_195",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 62910,
+        "arr_sec": 65935
+      },
+      {
+        "trip_id": "WK_177",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 63115,
+        "arr_sec": 66162
+      },
+      {
+        "trip_id": "WK_197",
+        "driver_id": "D026",
+        "sign_on": "16:10:30",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 63330,
+        "arr_sec": 66355
+      },
+      {
+        "trip_id": "WK_179",
+        "driver_id": "D044",
+        "sign_on": "15:36:44",
+        "sign_off": "21:01:38",
+        "pool_size": 50,
+        "dep_sec": 63535,
+        "arr_sec": 66582
+      },
+      {
+        "trip_id": "WK_199",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 63750,
+        "arr_sec": 66775
+      },
+      {
+        "trip_id": "WK_181",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 63955,
+        "arr_sec": 67002
+      },
+      {
+        "trip_id": "WK_201",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 64170,
+        "arr_sec": 67195
+      },
+      {
+        "trip_id": "WK_184",
+        "driver_id": "D049",
+        "sign_on": "12:29:44",
+        "sign_off": "19:57:55",
+        "pool_size": 50,
+        "dep_sec": 64375,
+        "arr_sec": 67422
+      },
+      {
+        "trip_id": "WK_168",
+        "driver_id": "D038",
+        "sign_on": "11:43:00",
+        "sign_off": "20:04:55",
+        "pool_size": 50,
+        "dep_sec": 64590,
+        "arr_sec": 67615
+      },
+      {
+        "trip_id": "WK_187",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 64795,
+        "arr_sec": 67842
+      },
+      {
+        "trip_id": "WK_170",
+        "driver_id": "D031",
+        "sign_on": "14:03:14",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 65010,
+        "arr_sec": 68035
+      },
+      {
+        "trip_id": "WK_191",
+        "driver_id": "D047",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:24",
+        "pool_size": 50,
+        "dep_sec": 65215,
+        "arr_sec": 68262
+      },
+      {
+        "trip_id": "WK_174",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 65430,
+        "arr_sec": 68455
+      },
+      {
+        "trip_id": "WK_194",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 65635,
+        "arr_sec": 68682
+      },
+      {
+        "trip_id": "WK_176",
+        "driver_id": "D029",
+        "sign_on": "15:07:00",
+        "sign_off": "21:50:28",
+        "pool_size": 50,
+        "dep_sec": 65850,
+        "arr_sec": 68875
+      },
+      {
+        "trip_id": "WK_196",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 66055,
+        "arr_sec": 69102
+      },
+      {
+        "trip_id": "WK_178",
+        "driver_id": "D042",
+        "sign_on": "16:17:30",
+        "sign_off": "23:04:58",
+        "pool_size": 50,
+        "dep_sec": 66270,
+        "arr_sec": 69295
+      },
+      {
+        "trip_id": "WK_198",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 66475,
+        "arr_sec": 69522
+      },
+      {
+        "trip_id": "WK_180",
+        "driver_id": "D026",
+        "sign_on": "16:10:30",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 66690,
+        "arr_sec": 69715
+      },
+      {
+        "trip_id": "WK_200",
+        "driver_id": "D044",
+        "sign_on": "15:36:44",
+        "sign_off": "21:01:38",
+        "pool_size": 50,
+        "dep_sec": 66895,
+        "arr_sec": 69942
+      },
+      {
+        "trip_id": "WK_182",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 67110,
+        "arr_sec": 70135
+      },
+      {
+        "trip_id": "WK_202",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 67315,
+        "arr_sec": 70362
+      },
+      {
+        "trip_id": "WK_185",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 67530,
+        "arr_sec": 70605
+      },
+      {
+        "trip_id": "WK_205",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 67735,
+        "arr_sec": 70782
+      },
+      {
+        "trip_id": "WK_188",
+        "driver_id": "D049",
+        "sign_on": "12:29:44",
+        "sign_off": "19:57:55",
+        "pool_size": 50,
+        "dep_sec": 67950,
+        "arr_sec": 70975
+      },
+      {
+        "trip_id": "WK_206",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 68155,
+        "arr_sec": 71202
+      },
+      {
+        "trip_id": "WK_192",
+        "driver_id": "D038",
+        "sign_on": "11:43:00",
+        "sign_off": "20:04:55",
+        "pool_size": 50,
+        "dep_sec": 68370,
+        "arr_sec": 71395
+      },
+      {
+        "trip_id": "WK_207",
+        "driver_id": "D032",
+        "sign_on": "11:38:44",
+        "sign_off": "20:08:42",
+        "pool_size": 50,
+        "dep_sec": 68575,
+        "arr_sec": 71622
+      },
+      {
+        "trip_id": "WK_214",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 68790,
+        "arr_sec": 71815
+      },
+      {
+        "trip_id": "WK_203",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 69000,
+        "arr_sec": 72068
+      },
+      {
+        "trip_id": "WK_215",
+        "driver_id": "D029",
+        "sign_on": "15:07:00",
+        "sign_off": "21:50:28",
+        "pool_size": 50,
+        "dep_sec": 69210,
+        "arr_sec": 72216
+      },
+      {
+        "trip_id": "WK_208",
+        "driver_id": "D024",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 50,
+        "dep_sec": 69510,
+        "arr_sec": 72578
+      },
+      {
+        "trip_id": "WK_216",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 69630,
+        "arr_sec": 72655
+      },
+      {
+        "trip_id": "WK_209",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 70020,
+        "arr_sec": 73088
+      },
+      {
+        "trip_id": "WK_217",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 70050,
+        "arr_sec": 73115
+      },
+      {
+        "trip_id": "WK_218",
+        "driver_id": "D043",
+        "sign_on": "12:21:14",
+        "sign_off": "20:39:28",
+        "pool_size": 50,
+        "dep_sec": 70470,
+        "arr_sec": 73468
+      },
+      {
+        "trip_id": "WK_210",
+        "driver_id": "D042",
+        "sign_on": "16:17:30",
+        "sign_off": "23:04:58",
+        "pool_size": 50,
+        "dep_sec": 70530,
+        "arr_sec": 73608
+      },
+      {
+        "trip_id": "WK_211",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 70705,
+        "arr_sec": 71150
+      },
+      {
+        "trip_id": "WK_219",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 70980,
+        "arr_sec": 73978
+      },
+      {
+        "trip_id": "WK_212",
+        "driver_id": "D036",
+        "sign_on": "15:52:55",
+        "sign_off": "23:05:09",
+        "pool_size": 50,
+        "dep_sec": 71100,
+        "arr_sec": 74188
+      },
+      {
+        "trip_id": "WK_220",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 71490,
+        "arr_sec": 74488
+      },
+      {
+        "trip_id": "WK_213",
+        "driver_id": "D044",
+        "sign_on": "15:36:44",
+        "sign_off": "21:01:38",
+        "pool_size": 50,
+        "dep_sec": 71700,
+        "arr_sec": 74798
+      },
+      {
+        "trip_id": "WK_226",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 71935,
+        "arr_sec": 72380
+      },
+      {
+        "trip_id": "WK_221",
+        "driver_id": "D026",
+        "sign_on": "16:10:30",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 72000,
+        "arr_sec": 75068
+      },
+      {
+        "trip_id": "WK_227",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 72360,
+        "arr_sec": 75398
+      },
+      {
+        "trip_id": "WK_204",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 72510,
+        "arr_sec": 75508
+      },
+      {
+        "trip_id": "WK_222",
+        "driver_id": "D031",
+        "sign_on": "14:03:14",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 73020,
+        "arr_sec": 76018
+      },
+      {
+        "trip_id": "WK_228",
+        "driver_id": "D045",
+        "sign_on": "13:25:00",
+        "sign_off": "21:22:28",
+        "pool_size": 50,
+        "dep_sec": 73020,
+        "arr_sec": 76048
+      },
+      {
+        "trip_id": "WK_229",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 73205,
+        "arr_sec": 73650
+      },
+      {
+        "trip_id": "WK_223",
+        "driver_id": "D047",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:24",
+        "pool_size": 50,
+        "dep_sec": 73530,
+        "arr_sec": 76568
+      },
+      {
+        "trip_id": "WK_233",
+        "driver_id": "D030",
+        "sign_on": "14:50:00",
+        "sign_off": "22:49:58",
+        "pool_size": 50,
+        "dep_sec": 73680,
+        "arr_sec": 76708
+      },
+      {
+        "trip_id": "WK_224",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 74130,
+        "arr_sec": 77128
+      },
+      {
+        "trip_id": "WK_235",
+        "driver_id": "D020",
+        "sign_on": "14:07:30",
+        "sign_off": "21:45:43",
+        "pool_size": 50,
+        "dep_sec": 74340,
+        "arr_sec": 77443
+      },
+      {
+        "trip_id": "WK_225",
+        "driver_id": "D029",
+        "sign_on": "15:07:00",
+        "sign_off": "21:50:28",
+        "pool_size": 50,
+        "dep_sec": 74730,
+        "arr_sec": 77728
+      },
+      {
+        "trip_id": "WK_236",
+        "driver_id": "D036",
+        "sign_on": "15:52:55",
+        "sign_off": "23:05:09",
+        "pool_size": 50,
+        "dep_sec": 75000,
+        "arr_sec": 78028
+      },
+      {
+        "trip_id": "WK_230",
+        "driver_id": "D042",
+        "sign_on": "16:17:30",
+        "sign_off": "23:04:58",
+        "pool_size": 50,
+        "dep_sec": 75330,
+        "arr_sec": 78368
+      },
+      {
+        "trip_id": "WK_238",
+        "driver_id": "D018",
+        "sign_on": "14:24:30",
+        "sign_off": "21:18:20",
+        "pool_size": 50,
+        "dep_sec": 75355,
+        "arr_sec": 75800
+      },
+      {
+        "trip_id": "WK_239",
+        "driver_id": "D023",
+        "sign_on": "20:47:00",
+        "sign_off": "22:07:28",
+        "pool_size": 50,
+        "dep_sec": 75720,
+        "arr_sec": 78748
+      },
+      {
+        "trip_id": "WK_231",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 75930,
+        "arr_sec": 78928
+      },
+      {
+        "trip_id": "WK_240",
+        "driver_id": "D026",
+        "sign_on": "16:10:30",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 76500,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_232",
+        "driver_id": "D031",
+        "sign_on": "14:03:14",
+        "sign_off": "22:20:28",
+        "pool_size": 50,
+        "dep_sec": 76530,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_241",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 76885,
+        "arr_sec": 77330
+      },
+      {
+        "trip_id": "WK_234",
+        "driver_id": "D024",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 50,
+        "dep_sec": 77400,
+        "arr_sec": 80398
+      },
+      {
+        "trip_id": "WK_244",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 77400,
+        "arr_sec": 80428
+      },
+      {
+        "trip_id": "WK_237",
+        "driver_id": "D030",
+        "sign_on": "14:50:00",
+        "sign_off": "22:49:58",
+        "pool_size": 50,
+        "dep_sec": 78300,
+        "arr_sec": 81298
+      },
+      {
+        "trip_id": "WK_246",
+        "driver_id": "D037",
+        "sign_on": "14:28:44",
+        "sign_off": "22:50:28",
+        "pool_size": 50,
+        "dep_sec": 78300,
+        "arr_sec": 81328
+      },
+      {
+        "trip_id": "WK_247",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 78685,
+        "arr_sec": 79130
+      },
+      {
+        "trip_id": "WK_248",
+        "driver_id": "D036",
+        "sign_on": "15:52:55",
+        "sign_off": "23:05:09",
+        "pool_size": 50,
+        "dep_sec": 79200,
+        "arr_sec": 82209
+      },
+      {
+        "trip_id": "WK_242",
+        "driver_id": "D042",
+        "sign_on": "16:17:30",
+        "sign_off": "23:04:58",
+        "pool_size": 50,
+        "dep_sec": 79200,
+        "arr_sec": 82198
+      },
+      {
+        "trip_id": "WK_243",
+        "driver_id": "D033",
+        "sign_on": "16:03:30",
+        "sign_off": "23:19:58",
+        "pool_size": 50,
+        "dep_sec": 80100,
+        "arr_sec": 83098
+      },
+      {
+        "trip_id": "WK_249",
+        "driver_id": "D041",
+        "sign_on": "15:41:00",
+        "sign_off": "23:20:09",
+        "pool_size": 50,
+        "dep_sec": 80100,
+        "arr_sec": 83109
+      },
+      {
+        "trip_id": "WK_245",
+        "driver_id": "D039",
+        "sign_on": "16:06:55",
+        "sign_off": "23:36:02",
+        "pool_size": 50,
+        "dep_sec": 81000,
+        "arr_sec": 84062
+      },
+      {
+        "trip_id": "WK_252",
+        "driver_id": "D047",
+        "sign_on": "15:28:14",
+        "sign_off": "23:36:24",
+        "pool_size": 50,
+        "dep_sec": 81000,
+        "arr_sec": 84084
+      },
+      {
+        "trip_id": "WK_255",
+        "driver_id": "D022",
+        "sign_on": "14:33:00",
+        "sign_off": "22:58:53",
+        "pool_size": 50,
+        "dep_sec": 81388,
+        "arr_sec": 81833
+      },
+      {
+        "trip_id": "WK_250",
+        "driver_id": "D021",
+        "sign_on": "15:32:30",
+        "sign_off": "23:32:49",
+        "pool_size": 50,
+        "dep_sec": 81418,
+        "arr_sec": 83869
+      },
+      {
+        "trip_id": "WK_254",
+        "driver_id": "D027",
+        "sign_on": "15:02:44",
+        "sign_off": "23:13:53",
+        "pool_size": 50,
+        "dep_sec": 82288,
+        "arr_sec": 82733
+      }
+    ]
+  },
+  "55": {
+    "status": "OPTIMAL",
+    "pool_size": 55,
+    "elapsed_sec": 64.3389027000012,
+    "objective": 0.0,
+    "best_bound": 0.0,
+    "gap_pct": 0.0,
+    "num_trips": 250,
+    "num_active_drivers": 50,
+    "reserve": 5,
+    "assignments": [
+      {
+        "trip_id": "WK_3",
+        "driver_id": "D043",
+        "sign_on": "05:45:00",
+        "sign_off": "07:09:05",
+        "pool_size": 55,
+        "dep_sec": 21600,
+        "arr_sec": 24845
+      },
+      {
+        "trip_id": "WK_1",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 21600,
+        "arr_sec": 24854
+      },
+      {
+        "trip_id": "WK_9",
+        "driver_id": "D020",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 55,
+        "dep_sec": 22500,
+        "arr_sec": 23020
+      },
+      {
+        "trip_id": "WK_15",
+        "driver_id": "D022",
+        "sign_on": "06:00:00",
+        "sign_off": "10:46:22",
+        "pool_size": 55,
+        "dep_sec": 22500,
+        "arr_sec": 25648
+      },
+      {
+        "trip_id": "WK_6",
+        "driver_id": "D038",
+        "sign_on": "06:00:00",
+        "sign_off": "08:51:13",
+        "pool_size": 55,
+        "dep_sec": 22500,
+        "arr_sec": 25528
+      },
+      {
+        "trip_id": "WK_8",
+        "driver_id": "D005",
+        "sign_on": "06:15:00",
+        "sign_off": "10:40:12",
+        "pool_size": 55,
+        "dep_sec": 23400,
+        "arr_sec": 26618
+      },
+      {
+        "trip_id": "WK_17",
+        "driver_id": "D050",
+        "sign_on": "06:15:00",
+        "sign_off": "12:07:23",
+        "pool_size": 55,
+        "dep_sec": 23400,
+        "arr_sec": 26606
+      },
+      {
+        "trip_id": "WK_11",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 24300,
+        "arr_sec": 27328
+      },
+      {
+        "trip_id": "WK_20",
+        "driver_id": "D048",
+        "sign_on": "06:30:00",
+        "sign_off": "07:52:28",
+        "pool_size": 55,
+        "dep_sec": 24300,
+        "arr_sec": 27448
+      },
+      {
+        "trip_id": "WK_2",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 25200,
+        "arr_sec": 28198
+      },
+      {
+        "trip_id": "WK_5",
+        "driver_id": "D049",
+        "sign_on": "06:45:25",
+        "sign_off": "11:58:53",
+        "pool_size": 55,
+        "dep_sec": 25225,
+        "arr_sec": 28443
+      },
+      {
+        "trip_id": "WK_30",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 25380,
+        "arr_sec": 27944
+      },
+      {
+        "trip_id": "WK_34",
+        "driver_id": "D020",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 55,
+        "dep_sec": 25620,
+        "arr_sec": 26091
+      },
+      {
+        "trip_id": "WK_7",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 25800,
+        "arr_sec": 28798
+      },
+      {
+        "trip_id": "WK_16",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 25885,
+        "arr_sec": 28913
+      },
+      {
+        "trip_id": "WK_25",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 26400,
+        "arr_sec": 29575
+      },
+      {
+        "trip_id": "WK_33",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 26545,
+        "arr_sec": 29733
+      },
+      {
+        "trip_id": "WK_41",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 26779,
+        "arr_sec": 29343
+      },
+      {
+        "trip_id": "WK_10",
+        "driver_id": "D005",
+        "sign_on": "06:15:00",
+        "sign_off": "10:40:12",
+        "pool_size": 55,
+        "dep_sec": 27000,
+        "arr_sec": 29998
+      },
+      {
+        "trip_id": "WK_19",
+        "driver_id": "D054",
+        "sign_on": "07:18:25",
+        "sign_off": "09:51:12",
+        "pool_size": 55,
+        "dep_sec": 27205,
+        "arr_sec": 30233
+      },
+      {
+        "trip_id": "WK_13",
+        "driver_id": "D041",
+        "sign_on": "07:25:00",
+        "sign_off": "12:24:43",
+        "pool_size": 55,
+        "dep_sec": 27600,
+        "arr_sec": 30778
+      },
+      {
+        "trip_id": "WK_21",
+        "driver_id": "D038",
+        "sign_on": "06:00:00",
+        "sign_off": "08:51:13",
+        "pool_size": 55,
+        "dep_sec": 27805,
+        "arr_sec": 30973
+      },
+      {
+        "trip_id": "WK_49",
+        "driver_id": "D022",
+        "sign_on": "06:00:00",
+        "sign_off": "10:46:22",
+        "pool_size": 55,
+        "dep_sec": 28080,
+        "arr_sec": 30644
+      },
+      {
+        "trip_id": "WK_29",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 28200,
+        "arr_sec": 31198
+      },
+      {
+        "trip_id": "WK_22",
+        "driver_id": "D020",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 55,
+        "dep_sec": 28585,
+        "arr_sec": 31632
+      },
+      {
+        "trip_id": "WK_80",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 28800,
+        "arr_sec": 29271
+      },
+      {
+        "trip_id": "WK_14",
+        "driver_id": "D011",
+        "sign_on": "07:45:00",
+        "sign_off": "15:49:12",
+        "pool_size": 55,
+        "dep_sec": 28800,
+        "arr_sec": 31785
+      },
+      {
+        "trip_id": "WK_23",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 29005,
+        "arr_sec": 32052
+      },
+      {
+        "trip_id": "WK_24",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 29220,
+        "arr_sec": 32245
+      },
+      {
+        "trip_id": "WK_61",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 29425,
+        "arr_sec": 32472
+      },
+      {
+        "trip_id": "WK_40",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 29640,
+        "arr_sec": 32665
+      },
+      {
+        "trip_id": "WK_26",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 29845,
+        "arr_sec": 32892
+      },
+      {
+        "trip_id": "WK_81",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 30060,
+        "arr_sec": 30531
+      },
+      {
+        "trip_id": "WK_35",
+        "driver_id": "D049",
+        "sign_on": "06:45:25",
+        "sign_off": "11:58:53",
+        "pool_size": 55,
+        "dep_sec": 30060,
+        "arr_sec": 33085
+      },
+      {
+        "trip_id": "WK_27",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 30265,
+        "arr_sec": 33312
+      },
+      {
+        "trip_id": "WK_36",
+        "driver_id": "D005",
+        "sign_on": "06:15:00",
+        "sign_off": "10:40:12",
+        "pool_size": 55,
+        "dep_sec": 30480,
+        "arr_sec": 33505
+      },
+      {
+        "trip_id": "WK_70",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 30685,
+        "arr_sec": 33732
+      },
+      {
+        "trip_id": "WK_48",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 30900,
+        "arr_sec": 33925
+      },
+      {
+        "trip_id": "WK_28",
+        "driver_id": "D041",
+        "sign_on": "07:25:00",
+        "sign_off": "12:24:43",
+        "pool_size": 55,
+        "dep_sec": 31105,
+        "arr_sec": 34152
+      },
+      {
+        "trip_id": "WK_37",
+        "driver_id": "D022",
+        "sign_on": "06:00:00",
+        "sign_off": "10:46:22",
+        "pool_size": 55,
+        "dep_sec": 31320,
+        "arr_sec": 34345
+      },
+      {
+        "trip_id": "WK_31",
+        "driver_id": "D054",
+        "sign_on": "07:18:25",
+        "sign_off": "09:51:12",
+        "pool_size": 55,
+        "dep_sec": 31525,
+        "arr_sec": 34572
+      },
+      {
+        "trip_id": "WK_54",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 31740,
+        "arr_sec": 34765
+      },
+      {
+        "trip_id": "WK_32",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 31945,
+        "arr_sec": 34992
+      },
+      {
+        "trip_id": "WK_57",
+        "driver_id": "D011",
+        "sign_on": "07:45:00",
+        "sign_off": "15:49:12",
+        "pool_size": 55,
+        "dep_sec": 32160,
+        "arr_sec": 35185
+      },
+      {
+        "trip_id": "WK_38",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 32365,
+        "arr_sec": 35412
+      },
+      {
+        "trip_id": "WK_60",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 32580,
+        "arr_sec": 35605
+      },
+      {
+        "trip_id": "WK_42",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 32785,
+        "arr_sec": 35832
+      },
+      {
+        "trip_id": "WK_64",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 33000,
+        "arr_sec": 36025
+      },
+      {
+        "trip_id": "WK_44",
+        "driver_id": "D016",
+        "sign_on": "08:58:25",
+        "sign_off": "10:19:12",
+        "pool_size": 55,
+        "dep_sec": 33205,
+        "arr_sec": 36252
+      },
+      {
+        "trip_id": "WK_67",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 33420,
+        "arr_sec": 36445
+      },
+      {
+        "trip_id": "WK_46",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 33625,
+        "arr_sec": 36672
+      },
+      {
+        "trip_id": "WK_69",
+        "driver_id": "D049",
+        "sign_on": "06:45:25",
+        "sign_off": "11:58:53",
+        "pool_size": 55,
+        "dep_sec": 33840,
+        "arr_sec": 36865
+      },
+      {
+        "trip_id": "WK_50",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 34045,
+        "arr_sec": 37092
+      },
+      {
+        "trip_id": "WK_72",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 34260,
+        "arr_sec": 37355
+      },
+      {
+        "trip_id": "WK_52",
+        "driver_id": "D005",
+        "sign_on": "06:15:00",
+        "sign_off": "10:40:12",
+        "pool_size": 55,
+        "dep_sec": 34465,
+        "arr_sec": 37512
+      },
+      {
+        "trip_id": "WK_74",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 34680,
+        "arr_sec": 37735
+      },
+      {
+        "trip_id": "WK_55",
+        "driver_id": "D022",
+        "sign_on": "06:00:00",
+        "sign_off": "10:46:22",
+        "pool_size": 55,
+        "dep_sec": 34885,
+        "arr_sec": 37882
+      },
+      {
+        "trip_id": "WK_76",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 35100,
+        "arr_sec": 38078
+      },
+      {
+        "trip_id": "WK_58",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 35305,
+        "arr_sec": 38352
+      },
+      {
+        "trip_id": "WK_39",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 35520,
+        "arr_sec": 38545
+      },
+      {
+        "trip_id": "WK_62",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 35725,
+        "arr_sec": 38772
+      },
+      {
+        "trip_id": "WK_43",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 35940,
+        "arr_sec": 38965
+      },
+      {
+        "trip_id": "WK_65",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 36145,
+        "arr_sec": 39192
+      },
+      {
+        "trip_id": "WK_45",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 36360,
+        "arr_sec": 39485
+      },
+      {
+        "trip_id": "WK_68",
+        "driver_id": "D041",
+        "sign_on": "07:25:00",
+        "sign_off": "12:24:43",
+        "pool_size": 55,
+        "dep_sec": 36655,
+        "arr_sec": 39683
+      },
+      {
+        "trip_id": "WK_47",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 36780,
+        "arr_sec": 39955
+      },
+      {
+        "trip_id": "WK_71",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 37165,
+        "arr_sec": 40193
+      },
+      {
+        "trip_id": "WK_51",
+        "driver_id": "D030",
+        "sign_on": "10:05:00",
+        "sign_off": "18:19:55",
+        "pool_size": 55,
+        "dep_sec": 37200,
+        "arr_sec": 40305
+      },
+      {
+        "trip_id": "WK_53",
+        "driver_id": "D040",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 55,
+        "dep_sec": 37620,
+        "arr_sec": 40645
+      },
+      {
+        "trip_id": "WK_73",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 37675,
+        "arr_sec": 40703
+      },
+      {
+        "trip_id": "WK_75",
+        "driver_id": "D049",
+        "sign_on": "06:45:25",
+        "sign_off": "11:58:53",
+        "pool_size": 55,
+        "dep_sec": 37835,
+        "arr_sec": 38280
+      },
+      {
+        "trip_id": "WK_56",
+        "driver_id": "D044",
+        "sign_on": "10:18:00",
+        "sign_off": "18:47:55",
+        "pool_size": 55,
+        "dep_sec": 37980,
+        "arr_sec": 40978
+      },
+      {
+        "trip_id": "WK_77",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 38185,
+        "arr_sec": 41213
+      },
+      {
+        "trip_id": "WK_59",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 38490,
+        "arr_sec": 41488
+      },
+      {
+        "trip_id": "WK_78",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 38695,
+        "arr_sec": 41723
+      },
+      {
+        "trip_id": "WK_63",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 39000,
+        "arr_sec": 41998
+      },
+      {
+        "trip_id": "WK_79",
+        "driver_id": "D049",
+        "sign_on": "06:45:25",
+        "sign_off": "11:58:53",
+        "pool_size": 55,
+        "dep_sec": 39205,
+        "arr_sec": 42233
+      },
+      {
+        "trip_id": "WK_66",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 39510,
+        "arr_sec": 42508
+      },
+      {
+        "trip_id": "WK_109",
+        "driver_id": "D050",
+        "sign_on": "06:15:00",
+        "sign_off": "12:07:23",
+        "pool_size": 55,
+        "dep_sec": 39715,
+        "arr_sec": 42743
+      },
+      {
+        "trip_id": "WK_82",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 40020,
+        "arr_sec": 43018
+      },
+      {
+        "trip_id": "WK_113",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 40225,
+        "arr_sec": 43253
+      },
+      {
+        "trip_id": "WK_93",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 40530,
+        "arr_sec": 43528
+      },
+      {
+        "trip_id": "WK_117",
+        "driver_id": "D041",
+        "sign_on": "07:25:00",
+        "sign_off": "12:24:43",
+        "pool_size": 55,
+        "dep_sec": 40755,
+        "arr_sec": 43783
+      },
+      {
+        "trip_id": "WK_96",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 41040,
+        "arr_sec": 44038
+      },
+      {
+        "trip_id": "WK_83",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 41294,
+        "arr_sec": 44322
+      },
+      {
+        "trip_id": "WK_99",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 41550,
+        "arr_sec": 44548
+      },
+      {
+        "trip_id": "WK_85",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 41804,
+        "arr_sec": 44832
+      },
+      {
+        "trip_id": "WK_102",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 42060,
+        "arr_sec": 45058
+      },
+      {
+        "trip_id": "WK_87",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 42314,
+        "arr_sec": 45342
+      },
+      {
+        "trip_id": "WK_105",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 42570,
+        "arr_sec": 45568
+      },
+      {
+        "trip_id": "WK_89",
+        "driver_id": "D040",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 55,
+        "dep_sec": 42824,
+        "arr_sec": 45852
+      },
+      {
+        "trip_id": "WK_108",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 43080,
+        "arr_sec": 46078
+      },
+      {
+        "trip_id": "WK_91",
+        "driver_id": "D011",
+        "sign_on": "07:45:00",
+        "sign_off": "15:49:12",
+        "pool_size": 55,
+        "dep_sec": 43334,
+        "arr_sec": 46362
+      },
+      {
+        "trip_id": "WK_112",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 43590,
+        "arr_sec": 46588
+      },
+      {
+        "trip_id": "WK_94",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 43844,
+        "arr_sec": 46872
+      },
+      {
+        "trip_id": "WK_116",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 44100,
+        "arr_sec": 47098
+      },
+      {
+        "trip_id": "WK_97",
+        "driver_id": "D055",
+        "sign_on": "05:45:00",
+        "sign_off": "13:24:42",
+        "pool_size": 55,
+        "dep_sec": 44354,
+        "arr_sec": 47382
+      },
+      {
+        "trip_id": "WK_84",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 44610,
+        "arr_sec": 47608
+      },
+      {
+        "trip_id": "WK_100",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 44864,
+        "arr_sec": 47892
+      },
+      {
+        "trip_id": "WK_86",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 45120,
+        "arr_sec": 48118
+      },
+      {
+        "trip_id": "WK_103",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 45374,
+        "arr_sec": 48402
+      },
+      {
+        "trip_id": "WK_88",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 45630,
+        "arr_sec": 48628
+      },
+      {
+        "trip_id": "WK_106",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 45884,
+        "arr_sec": 48912
+      },
+      {
+        "trip_id": "WK_90",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 46140,
+        "arr_sec": 49138
+      },
+      {
+        "trip_id": "WK_110",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 46394,
+        "arr_sec": 49422
+      },
+      {
+        "trip_id": "WK_92",
+        "driver_id": "D020",
+        "sign_on": "06:00:00",
+        "sign_off": "14:02:28",
+        "pool_size": 55,
+        "dep_sec": 46650,
+        "arr_sec": 49648
+      },
+      {
+        "trip_id": "WK_114",
+        "driver_id": "D046",
+        "sign_on": "12:46:44",
+        "sign_off": "21:13:28",
+        "pool_size": 55,
+        "dep_sec": 46904,
+        "arr_sec": 49932
+      },
+      {
+        "trip_id": "WK_95",
+        "driver_id": "D034",
+        "sign_on": "12:51:00",
+        "sign_off": "20:25:55",
+        "pool_size": 55,
+        "dep_sec": 47160,
+        "arr_sec": 50158
+      },
+      {
+        "trip_id": "WK_118",
+        "driver_id": "D002",
+        "sign_on": "06:48:00",
+        "sign_off": "14:15:42",
+        "pool_size": 55,
+        "dep_sec": 47414,
+        "arr_sec": 50442
+      },
+      {
+        "trip_id": "WK_98",
+        "driver_id": "D003",
+        "sign_on": "07:07:25",
+        "sign_off": "14:19:28",
+        "pool_size": 55,
+        "dep_sec": 47670,
+        "arr_sec": 50668
+      },
+      {
+        "trip_id": "WK_120",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 47924,
+        "arr_sec": 50952
+      },
+      {
+        "trip_id": "WK_101",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 48180,
+        "arr_sec": 51178
+      },
+      {
+        "trip_id": "WK_122",
+        "driver_id": "D010",
+        "sign_on": "06:30:00",
+        "sign_off": "14:32:42",
+        "pool_size": 55,
+        "dep_sec": 48434,
+        "arr_sec": 51462
+      },
+      {
+        "trip_id": "WK_104",
+        "driver_id": "D018",
+        "sign_on": "13:16:30",
+        "sign_off": "21:11:38",
+        "pool_size": 55,
+        "dep_sec": 48690,
+        "arr_sec": 51688
+      },
+      {
+        "trip_id": "WK_124",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 48944,
+        "arr_sec": 51972
+      },
+      {
+        "trip_id": "WK_107",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 49200,
+        "arr_sec": 52198
+      },
+      {
+        "trip_id": "WK_126",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 49454,
+        "arr_sec": 52482
+      },
+      {
+        "trip_id": "WK_111",
+        "driver_id": "D011",
+        "sign_on": "07:45:00",
+        "sign_off": "15:49:12",
+        "pool_size": 55,
+        "dep_sec": 49710,
+        "arr_sec": 52708
+      },
+      {
+        "trip_id": "WK_128",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 49964,
+        "arr_sec": 52992
+      },
+      {
+        "trip_id": "WK_115",
+        "driver_id": "D039",
+        "sign_on": "13:42:00",
+        "sign_off": "22:10:28",
+        "pool_size": 55,
+        "dep_sec": 50220,
+        "arr_sec": 53218
+      },
+      {
+        "trip_id": "WK_130",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 50474,
+        "arr_sec": 53502
+      },
+      {
+        "trip_id": "WK_119",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 50730,
+        "arr_sec": 53728
+      },
+      {
+        "trip_id": "WK_132",
+        "driver_id": "D004",
+        "sign_on": "06:55:00",
+        "sign_off": "15:15:12",
+        "pool_size": 55,
+        "dep_sec": 50984,
+        "arr_sec": 54012
+      },
+      {
+        "trip_id": "WK_121",
+        "driver_id": "D009",
+        "sign_on": "07:35:00",
+        "sign_off": "15:18:58",
+        "pool_size": 55,
+        "dep_sec": 51240,
+        "arr_sec": 54238
+      },
+      {
+        "trip_id": "WK_134",
+        "driver_id": "D013",
+        "sign_on": "06:56:25",
+        "sign_off": "15:23:42",
+        "pool_size": 55,
+        "dep_sec": 51494,
+        "arr_sec": 54522
+      },
+      {
+        "trip_id": "WK_123",
+        "driver_id": "D006",
+        "sign_on": "07:05:00",
+        "sign_off": "15:27:28",
+        "pool_size": 55,
+        "dep_sec": 51750,
+        "arr_sec": 54748
+      },
+      {
+        "trip_id": "WK_136",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 52004,
+        "arr_sec": 55032
+      },
+      {
+        "trip_id": "WK_125",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 52260,
+        "arr_sec": 55258
+      },
+      {
+        "trip_id": "WK_138",
+        "driver_id": "D007",
+        "sign_on": "07:11:19",
+        "sign_off": "15:40:42",
+        "pool_size": 55,
+        "dep_sec": 52514,
+        "arr_sec": 55542
+      },
+      {
+        "trip_id": "WK_127",
+        "driver_id": "D021",
+        "sign_on": "14:24:30",
+        "sign_off": "22:35:28",
+        "pool_size": 55,
+        "dep_sec": 52770,
+        "arr_sec": 55768
+      },
+      {
+        "trip_id": "WK_140",
+        "driver_id": "D011",
+        "sign_on": "07:45:00",
+        "sign_off": "15:49:12",
+        "pool_size": 55,
+        "dep_sec": 53024,
+        "arr_sec": 56052
+      },
+      {
+        "trip_id": "WK_129",
+        "driver_id": "D001",
+        "sign_on": "07:48:25",
+        "sign_off": "15:52:58",
+        "pool_size": 55,
+        "dep_sec": 53280,
+        "arr_sec": 56278
+      },
+      {
+        "trip_id": "WK_142",
+        "driver_id": "D018",
+        "sign_on": "13:16:30",
+        "sign_off": "21:11:38",
+        "pool_size": 55,
+        "dep_sec": 53534,
+        "arr_sec": 56562
+      },
+      {
+        "trip_id": "WK_131",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 53790,
+        "arr_sec": 56788
+      },
+      {
+        "trip_id": "WK_144",
+        "driver_id": "D008",
+        "sign_on": "07:45:00",
+        "sign_off": "16:06:12",
+        "pool_size": 55,
+        "dep_sec": 54044,
+        "arr_sec": 57072
+      },
+      {
+        "trip_id": "WK_133",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 54300,
+        "arr_sec": 57298
+      },
+      {
+        "trip_id": "WK_146",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 54554,
+        "arr_sec": 57582
+      },
+      {
+        "trip_id": "WK_135",
+        "driver_id": "D033",
+        "sign_on": "14:58:30",
+        "sign_off": "23:05:09",
+        "pool_size": 55,
+        "dep_sec": 54810,
+        "arr_sec": 57808
+      },
+      {
+        "trip_id": "WK_148",
+        "driver_id": "D046",
+        "sign_on": "12:46:44",
+        "sign_off": "21:13:28",
+        "pool_size": 55,
+        "dep_sec": 55064,
+        "arr_sec": 58092
+      },
+      {
+        "trip_id": "WK_137",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 55320,
+        "arr_sec": 58318
+      },
+      {
+        "trip_id": "WK_150",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 55574,
+        "arr_sec": 58569
+      },
+      {
+        "trip_id": "WK_139",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 55830,
+        "arr_sec": 58968
+      },
+      {
+        "trip_id": "WK_152",
+        "driver_id": "D034",
+        "sign_on": "12:51:00",
+        "sign_off": "20:25:55",
+        "pool_size": 55,
+        "dep_sec": 56084,
+        "arr_sec": 59192
+      },
+      {
+        "trip_id": "WK_141",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 56340,
+        "arr_sec": 59408
+      },
+      {
+        "trip_id": "WK_172",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 56340,
+        "arr_sec": 58904
+      },
+      {
+        "trip_id": "WK_154",
+        "driver_id": "D042",
+        "sign_on": "15:28:14",
+        "sign_off": "20:18:36",
+        "pool_size": 55,
+        "dep_sec": 56594,
+        "arr_sec": 59622
+      },
+      {
+        "trip_id": "WK_143",
+        "driver_id": "D039",
+        "sign_on": "13:42:00",
+        "sign_off": "22:10:28",
+        "pool_size": 55,
+        "dep_sec": 56850,
+        "arr_sec": 59848
+      },
+      {
+        "trip_id": "WK_156",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 57104,
+        "arr_sec": 60132
+      },
+      {
+        "trip_id": "WK_145",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 57360,
+        "arr_sec": 60358
+      },
+      {
+        "trip_id": "WK_158",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 57655,
+        "arr_sec": 60650
+      },
+      {
+        "trip_id": "WK_147",
+        "driver_id": "D012",
+        "sign_on": "09:05:25",
+        "sign_off": "17:08:48",
+        "pool_size": 55,
+        "dep_sec": 57870,
+        "arr_sec": 60828
+      },
+      {
+        "trip_id": "WK_160",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 58075,
+        "arr_sec": 61122
+      },
+      {
+        "trip_id": "WK_149",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 58290,
+        "arr_sec": 61315
+      },
+      {
+        "trip_id": "WK_161",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 58495,
+        "arr_sec": 61542
+      },
+      {
+        "trip_id": "WK_151",
+        "driver_id": "D014",
+        "sign_on": "16:03:30",
+        "sign_off": "23:36:02",
+        "pool_size": 55,
+        "dep_sec": 58710,
+        "arr_sec": 61735
+      },
+      {
+        "trip_id": "WK_190",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 58915,
+        "arr_sec": 61962
+      },
+      {
+        "trip_id": "WK_171",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 59130,
+        "arr_sec": 62155
+      },
+      {
+        "trip_id": "WK_162",
+        "driver_id": "D015",
+        "sign_on": "16:13:55",
+        "sign_off": "21:22:28",
+        "pool_size": 55,
+        "dep_sec": 59335,
+        "arr_sec": 62382
+      },
+      {
+        "trip_id": "WK_153",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 59550,
+        "arr_sec": 62575
+      },
+      {
+        "trip_id": "WK_163",
+        "driver_id": "D044",
+        "sign_on": "10:18:00",
+        "sign_off": "18:47:55",
+        "pool_size": 55,
+        "dep_sec": 59755,
+        "arr_sec": 62802
+      },
+      {
+        "trip_id": "WK_155",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 59970,
+        "arr_sec": 62995
+      },
+      {
+        "trip_id": "WK_164",
+        "driver_id": "D046",
+        "sign_on": "12:46:44",
+        "sign_off": "21:13:28",
+        "pool_size": 55,
+        "dep_sec": 60175,
+        "arr_sec": 63222
+      },
+      {
+        "trip_id": "WK_157",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 60390,
+        "arr_sec": 63415
+      },
+      {
+        "trip_id": "WK_165",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 60595,
+        "arr_sec": 63642
+      },
+      {
+        "trip_id": "WK_159",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 60810,
+        "arr_sec": 63835
+      },
+      {
+        "trip_id": "WK_166",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 61015,
+        "arr_sec": 64062
+      },
+      {
+        "trip_id": "WK_183",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 61230,
+        "arr_sec": 64255
+      },
+      {
+        "trip_id": "WK_167",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 61435,
+        "arr_sec": 64482
+      },
+      {
+        "trip_id": "WK_186",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 61650,
+        "arr_sec": 64675
+      },
+      {
+        "trip_id": "WK_169",
+        "driver_id": "D019",
+        "sign_on": "10:21:25",
+        "sign_off": "18:16:42",
+        "pool_size": 55,
+        "dep_sec": 61855,
+        "arr_sec": 64902
+      },
+      {
+        "trip_id": "WK_189",
+        "driver_id": "D030",
+        "sign_on": "10:05:00",
+        "sign_off": "18:19:55",
+        "pool_size": 55,
+        "dep_sec": 62070,
+        "arr_sec": 65095
+      },
+      {
+        "trip_id": "WK_173",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 62275,
+        "arr_sec": 65322
+      },
+      {
+        "trip_id": "WK_193",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 62490,
+        "arr_sec": 65515
+      },
+      {
+        "trip_id": "WK_175",
+        "driver_id": "D021",
+        "sign_on": "14:24:30",
+        "sign_off": "22:35:28",
+        "pool_size": 55,
+        "dep_sec": 62695,
+        "arr_sec": 65742
+      },
+      {
+        "trip_id": "WK_195",
+        "driver_id": "D015",
+        "sign_on": "16:13:55",
+        "sign_off": "21:22:28",
+        "pool_size": 55,
+        "dep_sec": 62910,
+        "arr_sec": 65935
+      },
+      {
+        "trip_id": "WK_177",
+        "driver_id": "D040",
+        "sign_on": "10:12:00",
+        "sign_off": "18:37:42",
+        "pool_size": 55,
+        "dep_sec": 63115,
+        "arr_sec": 66162
+      },
+      {
+        "trip_id": "WK_197",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 63330,
+        "arr_sec": 66355
+      },
+      {
+        "trip_id": "WK_179",
+        "driver_id": "D034",
+        "sign_on": "12:51:00",
+        "sign_off": "20:25:55",
+        "pool_size": 55,
+        "dep_sec": 63535,
+        "arr_sec": 66582
+      },
+      {
+        "trip_id": "WK_199",
+        "driver_id": "D044",
+        "sign_on": "10:18:00",
+        "sign_off": "18:47:55",
+        "pool_size": 55,
+        "dep_sec": 63750,
+        "arr_sec": 66775
+      },
+      {
+        "trip_id": "WK_181",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 63955,
+        "arr_sec": 67002
+      },
+      {
+        "trip_id": "WK_201",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 64170,
+        "arr_sec": 67195
+      },
+      {
+        "trip_id": "WK_184",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 64375,
+        "arr_sec": 67422
+      },
+      {
+        "trip_id": "WK_168",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 64590,
+        "arr_sec": 67615
+      },
+      {
+        "trip_id": "WK_187",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 64795,
+        "arr_sec": 67842
+      },
+      {
+        "trip_id": "WK_170",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 65010,
+        "arr_sec": 68035
+      },
+      {
+        "trip_id": "WK_191",
+        "driver_id": "D042",
+        "sign_on": "15:28:14",
+        "sign_off": "20:18:36",
+        "pool_size": 55,
+        "dep_sec": 65215,
+        "arr_sec": 68262
+      },
+      {
+        "trip_id": "WK_174",
+        "driver_id": "D033",
+        "sign_on": "14:58:30",
+        "sign_off": "23:05:09",
+        "pool_size": 55,
+        "dep_sec": 65430,
+        "arr_sec": 68455
+      },
+      {
+        "trip_id": "WK_194",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 65635,
+        "arr_sec": 68682
+      },
+      {
+        "trip_id": "WK_176",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 65850,
+        "arr_sec": 68875
+      },
+      {
+        "trip_id": "WK_196",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 66055,
+        "arr_sec": 69102
+      },
+      {
+        "trip_id": "WK_178",
+        "driver_id": "D018",
+        "sign_on": "13:16:30",
+        "sign_off": "21:11:38",
+        "pool_size": 55,
+        "dep_sec": 66270,
+        "arr_sec": 69295
+      },
+      {
+        "trip_id": "WK_198",
+        "driver_id": "D039",
+        "sign_on": "13:42:00",
+        "sign_off": "22:10:28",
+        "pool_size": 55,
+        "dep_sec": 66475,
+        "arr_sec": 69522
+      },
+      {
+        "trip_id": "WK_180",
+        "driver_id": "D037",
+        "sign_on": "11:09:00",
+        "sign_off": "19:36:55",
+        "pool_size": 55,
+        "dep_sec": 66690,
+        "arr_sec": 69715
+      },
+      {
+        "trip_id": "WK_200",
+        "driver_id": "D046",
+        "sign_on": "12:46:44",
+        "sign_off": "21:13:28",
+        "pool_size": 55,
+        "dep_sec": 66895,
+        "arr_sec": 69942
+      },
+      {
+        "trip_id": "WK_182",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 67110,
+        "arr_sec": 70135
+      },
+      {
+        "trip_id": "WK_202",
+        "driver_id": "D021",
+        "sign_on": "14:24:30",
+        "sign_off": "22:35:28",
+        "pool_size": 55,
+        "dep_sec": 67315,
+        "arr_sec": 70362
+      },
+      {
+        "trip_id": "WK_185",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 67530,
+        "arr_sec": 70605
+      },
+      {
+        "trip_id": "WK_205",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 67735,
+        "arr_sec": 70782
+      },
+      {
+        "trip_id": "WK_188",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 67950,
+        "arr_sec": 70975
+      },
+      {
+        "trip_id": "WK_206",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 68155,
+        "arr_sec": 71202
+      },
+      {
+        "trip_id": "WK_192",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 68370,
+        "arr_sec": 71395
+      },
+      {
+        "trip_id": "WK_207",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 68575,
+        "arr_sec": 71622
+      },
+      {
+        "trip_id": "WK_214",
+        "driver_id": "D036",
+        "sign_on": "12:17:00",
+        "sign_off": "20:11:55",
+        "pool_size": 55,
+        "dep_sec": 68790,
+        "arr_sec": 71815
+      },
+      {
+        "trip_id": "WK_203",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 69000,
+        "arr_sec": 72068
+      },
+      {
+        "trip_id": "WK_215",
+        "driver_id": "D042",
+        "sign_on": "15:28:14",
+        "sign_off": "20:18:36",
+        "pool_size": 55,
+        "dep_sec": 69210,
+        "arr_sec": 72216
+      },
+      {
+        "trip_id": "WK_208",
+        "driver_id": "D015",
+        "sign_on": "16:13:55",
+        "sign_off": "21:22:28",
+        "pool_size": 55,
+        "dep_sec": 69510,
+        "arr_sec": 72578
+      },
+      {
+        "trip_id": "WK_216",
+        "driver_id": "D034",
+        "sign_on": "12:51:00",
+        "sign_off": "20:25:55",
+        "pool_size": 55,
+        "dep_sec": 69630,
+        "arr_sec": 72655
+      },
+      {
+        "trip_id": "WK_209",
+        "driver_id": "D033",
+        "sign_on": "14:58:30",
+        "sign_off": "23:05:09",
+        "pool_size": 55,
+        "dep_sec": 70020,
+        "arr_sec": 73088
+      },
+      {
+        "trip_id": "WK_217",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 70050,
+        "arr_sec": 73115
+      },
+      {
+        "trip_id": "WK_218",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 70470,
+        "arr_sec": 73468
+      },
+      {
+        "trip_id": "WK_210",
+        "driver_id": "D039",
+        "sign_on": "13:42:00",
+        "sign_off": "22:10:28",
+        "pool_size": 55,
+        "dep_sec": 70530,
+        "arr_sec": 73608
+      },
+      {
+        "trip_id": "WK_211",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 70705,
+        "arr_sec": 71150
+      },
+      {
+        "trip_id": "WK_219",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 70980,
+        "arr_sec": 73978
+      },
+      {
+        "trip_id": "WK_212",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 71100,
+        "arr_sec": 74188
+      },
+      {
+        "trip_id": "WK_220",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 71490,
+        "arr_sec": 74488
+      },
+      {
+        "trip_id": "WK_213",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 71700,
+        "arr_sec": 74798
+      },
+      {
+        "trip_id": "WK_226",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 71935,
+        "arr_sec": 72380
+      },
+      {
+        "trip_id": "WK_221",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 72000,
+        "arr_sec": 75068
+      },
+      {
+        "trip_id": "WK_227",
+        "driver_id": "D018",
+        "sign_on": "13:16:30",
+        "sign_off": "21:11:38",
+        "pool_size": 55,
+        "dep_sec": 72360,
+        "arr_sec": 75398
+      },
+      {
+        "trip_id": "WK_204",
+        "driver_id": "D046",
+        "sign_on": "12:46:44",
+        "sign_off": "21:13:28",
+        "pool_size": 55,
+        "dep_sec": 72510,
+        "arr_sec": 75508
+      },
+      {
+        "trip_id": "WK_228",
+        "driver_id": "D015",
+        "sign_on": "16:13:55",
+        "sign_off": "21:22:28",
+        "pool_size": 55,
+        "dep_sec": 73020,
+        "arr_sec": 76048
+      },
+      {
+        "trip_id": "WK_222",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 73020,
+        "arr_sec": 76018
+      },
+      {
+        "trip_id": "WK_229",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 73205,
+        "arr_sec": 73650
+      },
+      {
+        "trip_id": "WK_223",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 73530,
+        "arr_sec": 76568
+      },
+      {
+        "trip_id": "WK_233",
+        "driver_id": "D021",
+        "sign_on": "14:24:30",
+        "sign_off": "22:35:28",
+        "pool_size": 55,
+        "dep_sec": 73680,
+        "arr_sec": 76708
+      },
+      {
+        "trip_id": "WK_224",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 74130,
+        "arr_sec": 77128
+      },
+      {
+        "trip_id": "WK_235",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 74340,
+        "arr_sec": 77443
+      },
+      {
+        "trip_id": "WK_225",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 74730,
+        "arr_sec": 77728
+      },
+      {
+        "trip_id": "WK_236",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 75000,
+        "arr_sec": 78028
+      },
+      {
+        "trip_id": "WK_230",
+        "driver_id": "D033",
+        "sign_on": "14:58:30",
+        "sign_off": "23:05:09",
+        "pool_size": 55,
+        "dep_sec": 75330,
+        "arr_sec": 78368
+      },
+      {
+        "trip_id": "WK_238",
+        "driver_id": "D035",
+        "sign_on": "13:25:00",
+        "sign_off": "21:18:20",
+        "pool_size": 55,
+        "dep_sec": 75355,
+        "arr_sec": 75800
+      },
+      {
+        "trip_id": "WK_239",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 75720,
+        "arr_sec": 78748
+      },
+      {
+        "trip_id": "WK_231",
+        "driver_id": "D039",
+        "sign_on": "13:42:00",
+        "sign_off": "22:10:28",
+        "pool_size": 55,
+        "dep_sec": 75930,
+        "arr_sec": 78928
+      },
+      {
+        "trip_id": "WK_240",
+        "driver_id": "D024",
+        "sign_on": "21:00:00",
+        "sign_off": "23:20:09",
+        "pool_size": 55,
+        "dep_sec": 76500,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_232",
+        "driver_id": "D032",
+        "sign_on": "14:16:00",
+        "sign_off": "22:20:28",
+        "pool_size": 55,
+        "dep_sec": 76530,
+        "arr_sec": 79528
+      },
+      {
+        "trip_id": "WK_241",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 76885,
+        "arr_sec": 77330
+      },
+      {
+        "trip_id": "WK_234",
+        "driver_id": "D017",
+        "sign_on": "14:11:44",
+        "sign_off": "22:34:58",
+        "pool_size": 55,
+        "dep_sec": 77400,
+        "arr_sec": 80398
+      },
+      {
+        "trip_id": "WK_244",
+        "driver_id": "D021",
+        "sign_on": "14:24:30",
+        "sign_off": "22:35:28",
+        "pool_size": 55,
+        "dep_sec": 77400,
+        "arr_sec": 80428
+      },
+      {
+        "trip_id": "WK_246",
+        "driver_id": "D023",
+        "sign_on": "15:15:30",
+        "sign_off": "22:50:28",
+        "pool_size": 55,
+        "dep_sec": 78300,
+        "arr_sec": 81328
+      },
+      {
+        "trip_id": "WK_237",
+        "driver_id": "D028",
+        "sign_on": "15:24:00",
+        "sign_off": "22:49:58",
+        "pool_size": 55,
+        "dep_sec": 78300,
+        "arr_sec": 81298
+      },
+      {
+        "trip_id": "WK_247",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 78685,
+        "arr_sec": 79130
+      },
+      {
+        "trip_id": "WK_242",
+        "driver_id": "D029",
+        "sign_on": "14:50:00",
+        "sign_off": "23:04:58",
+        "pool_size": 55,
+        "dep_sec": 79200,
+        "arr_sec": 82198
+      },
+      {
+        "trip_id": "WK_248",
+        "driver_id": "D033",
+        "sign_on": "14:58:30",
+        "sign_off": "23:05:09",
+        "pool_size": 55,
+        "dep_sec": 79200,
+        "arr_sec": 82209
+      },
+      {
+        "trip_id": "WK_249",
+        "driver_id": "D024",
+        "sign_on": "21:00:00",
+        "sign_off": "23:20:09",
+        "pool_size": 55,
+        "dep_sec": 80100,
+        "arr_sec": 83109
+      },
+      {
+        "trip_id": "WK_243",
+        "driver_id": "D031",
+        "sign_on": "15:07:00",
+        "sign_off": "23:19:58",
+        "pool_size": 55,
+        "dep_sec": 80100,
+        "arr_sec": 83098
+      },
+      {
+        "trip_id": "WK_245",
+        "driver_id": "D014",
+        "sign_on": "16:03:30",
+        "sign_off": "23:36:02",
+        "pool_size": 55,
+        "dep_sec": 81000,
+        "arr_sec": 84062
+      },
+      {
+        "trip_id": "WK_252",
+        "driver_id": "D026",
+        "sign_on": "15:24:00",
+        "sign_off": "23:36:24",
+        "pool_size": 55,
+        "dep_sec": 81000,
+        "arr_sec": 84084
+      },
+      {
+        "trip_id": "WK_255",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 81388,
+        "arr_sec": 81833
+      },
+      {
+        "trip_id": "WK_250",
+        "driver_id": "D027",
+        "sign_on": "15:11:14",
+        "sign_off": "23:32:49",
+        "pool_size": 55,
+        "dep_sec": 81418,
+        "arr_sec": 83869
+      },
+      {
+        "trip_id": "WK_254",
+        "driver_id": "D025",
+        "sign_on": "15:41:00",
+        "sign_off": "23:13:53",
+        "pool_size": 55,
+        "dep_sec": 82288,
+        "arr_sec": 82733
+      }
+    ]
+  }
+}

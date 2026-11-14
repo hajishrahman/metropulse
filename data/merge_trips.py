@@ -1,17 +1,17 @@
 """
-Merge full-route trips (232) + partial trips (18) into one dataset (250).
+Merge full-route trips (232) + partial trips (23) into one dataset (255).
 
 Reads:
     data/trips_full_route.csv
     data/trips_partial.csv
 
 Writes:
-    data/trips_all.csv   (same schema, 250 rows)
+    data/trips_all.csv   (same schema, 255 rows)
 
 Verifies:
-    - 250 rows total
+    - 255 rows total
     - No duplicate trip_id
-    - Sum of durations, first/last stop distribution printed
+    - First/last stop and direction distributions printed
 
 Run:
     python data/merge_trips.py
@@ -31,6 +31,10 @@ FIELDS = [
     "stop_count", "first_stop", "last_stop",
 ]
 
+EXPECTED_TOTAL = 255
+EXPECTED_FULL = 232
+EXPECTED_PARTIAL = 23
+
 
 def read(path):
     with open(path, encoding="utf-8") as f:
@@ -42,13 +46,16 @@ def main():
     partial = read(PARTIAL)
     all_trips = full + partial
 
-    # Sanity checks
     ids = [t["trip_id"] for t in all_trips]
     dup = [tid for tid, n in Counter(ids).items() if n > 1]
     if dup:
         raise SystemExit(f"DUPLICATE trip_ids: {dup[:10]}")
-    if len(all_trips) != 250:
-        raise SystemExit(f"Expected 250 trips, got {len(all_trips)}")
+    if len(full) != EXPECTED_FULL:
+        raise SystemExit(f"Expected {EXPECTED_FULL} full-route trips, got {len(full)}")
+    if len(partial) != EXPECTED_PARTIAL:
+        raise SystemExit(f"Expected {EXPECTED_PARTIAL} partial trips, got {len(partial)}")
+    if len(all_trips) != EXPECTED_TOTAL:
+        raise SystemExit(f"Expected {EXPECTED_TOTAL} trips total, got {len(all_trips)}")
 
     with open(OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)

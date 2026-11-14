@@ -1,7 +1,16 @@
 """
 MetroPulse CP-SAT solver — orchestrator.
 
-Builds the model from real GTFS trips, solves, writes solution.json + schedule.csv.
+Builds the model from real GTFS trips (255-trip V1 model, window [04:40, 24:00)),
+solves with the O6 rake-balance objective active, writes solution.json + schedule.csv.
+
+Notes:
+  - R4 / R7 / R8 / R9 / R12 are NOT called here — those constraints have
+    no solver counterpart in V1 (see solver/constraints.py module docstring).
+    * R4 is enforced by construction (only service_rakes iterated).
+    * R7 is enforced at load time in models.py.
+    * R8 / R9 / R12 are not modelled (no stabling, empty maintenance, R3 subsumes R12).
+  - The objective (O6) is active, not a feasibility probe.
 """
 from __future__ import annotations
 
@@ -45,15 +54,10 @@ def solve(data: ProblemData, verbose: bool = False,
     print("[solve] applying constraints")
     C.add_r1_service_coverage(model, trip_vars, rake_trip, data)
     C.add_r3_operating_window(model, trip_vars)
-    C.add_r4_fleet_availability(model, trip_vars, rake_trip, data)
     C.add_r5_rake_non_overlap(model, trip_vars, rake_trip, data)
     C.add_r6_turnaround(model, trip_vars, rake_trip, data)
-    C.add_r7_running_time(model, trip_vars)
-    C.add_r8_depot_capacity(model, trip_vars, rake_trip, data)
-    C.add_r9_maintenance_exclusivity(model, trip_vars, rake_trip, data)
     C.add_r10_maintenance_threshold(model, trip_vars, rake_trip, data)
     C.add_r11_terminal_continuity(model, trip_vars, rake_trip, data)
-    C.add_r12_nonservice_window(model, trip_vars)
 
     print("[solve] applying objective")
     o6 = C.add_obj6_rake_balance(model, trip_vars, rake_trip, data)

@@ -1,0 +1,28 @@
+{
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "running_time",
+      "gtfs_value": 48.11,
+      "dpr_value": 18.91,
+      "diff_pct": 154.44,
+      "status": "FAIL"
+    },
+    {
+      "name": "turnaround",
+      "gtfs_value": null,
+      "dpr_value": 3,
+      "diff_pct": null,
+      "status": "WARN",
+      "reason": "GTFS has no block_id or rake assignment"
+    },
+    {
+      "name": "peak_headway",
+      "gtfs_value": 7.0,
+      "dpr_value": 3.0,
+      "diff_pct": 133.33,
+      "status": "FAIL"
+    }
+  ],
+  "summary": "0 of 3 checks PASS, 1 WARN, 2 FAIL. Turnaround is unvalidated because GTFS has no rake/block assignments."
+}

@@ -1,13 +1,13 @@
 {
   "overall": "PASS",
-  "num_trips": 250,
+  "num_trips": 255,
   "checks": [
     {
       "check": "R1_service_coverage",
       "status": "PASS",
       "details": {
-        "required": 250,
-        "scheduled": 250,
+        "required": 255,
+        "scheduled": 255,
         "failures": []
       }
     },
@@ -37,8 +37,9 @@
       "check": "R6_turnaround",
       "status": "PASS",
       "details": {
-        "same_terminal_pairs": 167,
-        "cross_terminal_pairs": 65,
+        "same_terminal_pairs": 164,
+        "cross_terminal_15_pairs": 60,
+        "cross_terminal_8_mutt_pairs": 13,
         "failures": []
       }
     },
@@ -50,11 +51,11 @@
       }
     },
     {
-      "check": "R8_depot_capacity",
-      "status": "SKIPPED",
+      "check": "R9_maintenance_exclusivity",
+      "status": "PASS",
       "details": {
-        "reason": "No stabling assignment in V1.",
-        "info_park_2_capacity": 2
+        "maintenance_windows": 0,
+        "failures": []
       }
     },
     {
@@ -71,12 +72,12 @@
       "check": "R11_terminal_continuity",
       "status": "PASS",
       "details": {
-        "cross_terminal_switches": 65,
+        "cross_terminal_switches": 73,
         "failures": []
       }
     },
     {
-      "check": "R12_nonservice_window",
+      "check": "D_direction_consistency",
       "status": "PASS",
       "details": {
         "failures": []

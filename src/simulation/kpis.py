@@ -61,9 +61,13 @@ def compute_on_time(
     """
     On-time percentage at a given tolerance (seconds).
 
-    Headline denominator: all trips (250).
-    Secondary denominator: eligible trips (all trips minus each rake's first),
-    which cannot propagate.
+    Headline denominator: all trips (`trips_total` field — currently 255).
+    Secondary denominator: eligible trips (`trips_eligible` field — currently
+    237), i.e. all trips minus each rake's first trip, which cannot propagate.
+
+    Keys suffixed `_250_` / `_232_` are LEGACY ALIASES with identical values,
+    kept for downstream compatibility. Use the canonical (unsuffixed) keys in
+    new code. See metadata `kpi_key_schema` in simulation_kpis.json.
 
     On-time means actual_dep - sched_dep <= tolerance_sec.
     """
@@ -89,16 +93,27 @@ def compute_on_time(
             if is_on:
                 on_time_eligible += 1
 
+    on_time_pct = round(100.0 * on_time_total / total, 2) if total else 0.0
+    on_time_eligible_pct = (
+        round(100.0 * on_time_eligible / eligible, 2) if eligible else 0.0
+    )
+
     return {
         "tolerance_sec": tolerance_sec,
-        "on_time_250_pct": round(100.0 * on_time_total / total, 2) if total else 0.0,
-        "on_time_250_count": on_time_total,
+        # Canonical keys (truth for current schedule; denominator = trips_total)
+        "on_time_pct": on_time_pct,
+        "on_time_count": on_time_total,
         "trips_total": total,
-        "on_time_232_eligible_pct": (
-            round(100.0 * on_time_eligible / eligible, 2) if eligible else 0.0
-        ),
-        "on_time_232_eligible_count": on_time_eligible,
+        "on_time_eligible_pct": on_time_eligible_pct,
+        "on_time_eligible_count": on_time_eligible,
         "trips_eligible": eligible,
+        # LEGACY ALIASES — identical values to canonical keys above.
+        # Historic names predate the 255-trip schedule. NOT 250-trip snapshots.
+        # See metadata kpi_key_schema in simulation_kpis.json.
+        "on_time_250_pct": on_time_pct,
+        "on_time_250_count": on_time_total,
+        "on_time_232_eligible_pct": on_time_eligible_pct,
+        "on_time_232_eligible_count": on_time_eligible,
     }
 
 

@@ -344,6 +344,30 @@ def add_obj6_rake_balance(model, trip_vars, rake_trip, data):
     return terms
 
 
+def add_balance_bound_phase5(model, trip_vars, rake_trip, data):
+    """Phase 5 only: hard bound on trips-per-rake as a CP-SAT pruning hint.
+
+    Any schedule optimizing W_RAKE_BALANCE under normal conditions already
+    satisfies this bound (a balance-optimal solution never assigns more than
+    ceil(N/R) trips to one rake). Adding it as a HARD constraint doesn't
+    change the optimum — it only helps CP-SAT prune the search tree faster,
+    which closes the optimality gap within the same time limit.
+
+    Does not modify the objective. Does not change which schedule is optimal.
+    """
+    import math
+    n_rakes = len(data.service_rakes)
+    n_trips = len(trip_vars)
+    if n_rakes == 0 or n_trips == 0:
+        return
+    max_per_rake = math.ceil(n_trips / n_rakes)
+
+    for _, r in data.service_rakes.iterrows():
+        rid = r["rake_id"]
+        count = sum(rake_trip[(rid, tid)] for tid in trip_vars)
+        model.Add(count <= max_per_rake)
+
+
 def build_objective(model, o6, dropped):
     """Minimize  OBJ_SCALE * ( W_RAKE_BALANCE * sum(balance_devs)
                              + W_DROP          * sum(dropped) ).

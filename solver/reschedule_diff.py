@@ -227,6 +227,13 @@ def write_summary_md(
         diff_a["in_progress"], a_time
     )
 
+    # Total trips in the baseline — derived, not hardcoded
+    total_trips = (
+        diff_a["trips_unchanged"]
+        + diff_a["trips_reassigned"]
+        + diff_a["trips_dropped"]
+    )
+
     # ---------- Scenario B ---------------------------------------------------
     b_down = diff_b["disruption"]["rakes_down"]
     b_time = diff_b["disruption"]["time"]
@@ -249,7 +256,7 @@ def write_summary_md(
 - **Disruption:** {", ".join(a_down)} fails at {a_time}. {a_in_progress}. Withdrawn for any future trip departing ≥ {a_time}; trips already departed complete normally.
 - **Response:** {a_activated_str} activated ({a_km}; lowest km_since_last_maintenance among scheduled).
 - **Result:** {diff_a["rakes_active_count"]} rakes active. {a_recovery}.
-  - {a_total_served} of 250 trips served ({diff_a["trips_unchanged"]} unchanged on original rake, {diff_a["trips_reassigned"]} reassigned to a different rake).
+  - {a_total_served} of {total_trips} trips served ({diff_a["trips_unchanged"]} unchanged on original rake, {diff_a["trips_reassigned"]} reassigned to a different rake).
 - **Solver status:** {diff_a["solver_status"]}, objective {diff_a["objective"]}, gap {diff_a["gap_pct"]}%.
 - **Solve time:** {diff_a["elapsed_sec"]} seconds.
 
@@ -257,10 +264,10 @@ def write_summary_md(
 - **Disruption:** {", ".join(b_down)} fail at {b_time}. {b_in_progress}. Withdrawn for any future trip departing ≥ {b_time}; trips already departed complete normally.
 - **Response:** {b_activated_str} activated ({b_km}).
 - **Result:** {diff_b["rakes_active_count"]} rakes active. {b_recovery}.
-  - {b_total_served} of 250 trips served ({diff_b["trips_unchanged"]} unchanged on original rake, {diff_b["trips_reassigned"]} reassigned to a different rake).
+  - {b_total_served} of {total_trips} trips served ({diff_b["trips_unchanged"]} unchanged on original rake, {diff_b["trips_reassigned"]} reassigned to a different rake).
 - **Solver status:** {diff_b["solver_status"]}, objective {diff_b["objective"]}, gap {diff_b["gap_pct"]}%.
 - **Solve time:** {diff_b["elapsed_sec"]} seconds.
-- **Capacity floor:** {diff_b["trips_dropped"]} drops is the irreducible gap at {diff_b["rakes_active_count"]} active rakes under R5/R6/R11. The remaining {250 - diff_b["trips_dropped"]} trips are served.
+- **Capacity floor:** {diff_b["trips_dropped"]} drops at {diff_b["rakes_active_count"]} active rakes under R5/R6/R11. The remaining {total_trips - diff_b["trips_dropped"]} trips are served.
 - **Capacity warning:** {diff_b["trips_dropped"]} trips cannot be covered.
 
 **DROPPED** = trip scheduled but cannot operate due to insufficient rakes.

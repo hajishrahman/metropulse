@@ -26,11 +26,11 @@ Every parameter in this specification is tagged with one of:
 
 ### 2.1 Baseline Scenario — Current Operations
 
-- Uses **GTFS 2024-25 feed** for weekday service (250 trips: 232 full-route + 18 partial).
+- Uses **GTFS 2024-25 feed** for weekday service (255 trips: 232 full-route + 23 partial).
 - Uses **KMRL Annual Report 2024-25** for route length, fleet, and service hours.
 - Uses **news article 2026** for fleet breakdown (18 operating + 7 maintenance).
 - Single-line metro (Aluva → Tripunithura).
-- 17-hour operating window (06:00–23:00) `[EXTERNAL — Annual Report]`.
+- (4:40, 24:00) — 19.3-hour window `[EXTERNAL — Annual Report]`.
 - Solver uses **real GTFS trip records**, not hourly counts and not synthetic `T0000` trips.
 - **Deadhead IS modeled** (see §3.5).
 - No crew scheduling in V1.
@@ -51,7 +51,7 @@ Every parameter in this specification is tagged with one of:
 
 ### 3.1 Trip Dataset (Solver Input) `[EXTERNAL — GTFS 2024-25]`
 
-**The solver input is `data/trips_all.csv` (250 real GTFS trips).** It is the merge of:
+**The solver input is `data/trips_all.csv` (255 real GTFS trips).** It is the merge of:
 
 - `data/trips_full_route.csv` — **232** full-route ALVA↔TPHT trips
 - `data/trips_partial.csv` — **18** partial trips (Muttom ↔ terminals)
@@ -68,7 +68,7 @@ stop_count, first_stop, last_stop
 `departure_time` / `arrival_time` = original GTFS strings, may exceed 24:00.
 `duration` = integer seconds (arrival − departure), includes intermediate dwell.
 
-Reconciliation only: `data/hourly_service.csv` is kept on disk as an independent check (232 + 18 = 250, verified by `data/verify_gtfs_trips.py`). It is not read by the solver.
+Reconciliation only: `data/hourly_service.csv` is kept on disk as an independent check (232 + 23 = 255, verified by `data/verify_gtfs_trips.py`). It is not read by the solver.
 
 ### 3.2 Physical Parameters
 
@@ -110,6 +110,7 @@ Initial position split (fixed, not solver choice):
 R8 (depot capacity) is SKIPPED in V1 — no stabling assignment exists.
 
 ### 3.5 Deadhead `[SYNTHETIC]`
+add KVTR rule
 
 Two values, both used by R6 and R11:
 
@@ -135,8 +136,8 @@ Both tagged `[SYNTHETIC]`. No verified KMRL source.
 GTFS has 255 weekday trips in `trips.txt` (WK service). Of those:
 
 - 232 trips are full-route (ALVA↔TPHT).
-- 18 trips are partial (Muttom ↔ terminals).
-- 5 trips depart outside 06:00–23:00 (WK_253, WK_4, WK_256, WK_12, WK_18) — excluded by policy as non-passenger movements.
+- 23 trips are partial (Muttom/KVTR ↔ terminals).
+- 5 trips depart from  04:40–23:30  (WK_253, WK_4, WK_256, WK_12, WK_18) — included by policy as non-passenger movements.
 
 232 + 18 = 250 trips in the V1 model.
 
@@ -285,15 +286,15 @@ All weights are `[SYNTHETIC — INITIAL TUNING PARAMETERS]`.
 
 **Formulation:**
 
-- Target per rake: `floor(num_trips / num_rakes) = floor(250 / 18) = 13`.
+- Target per rake: `floor(num_trips / num_rakes) = loor(255 / 18) = 14`.
 - For each rake, `dev[r] = |trips_assigned[r] − 13|`.
 - Objective: `Minimize(W_RAKE_BALANCE × OBJ_SCALE × Σ dev[r]) = Minimize(3 × 100 × Σ dev)`.
 
-**Result (2026-11-12):** OPTIMAL, objective = 4800 (Σ dev = 16), best bound = 4800, gap = 0.0%, solve time 11.77s. Rake distribution: 16 rakes × 14 trips, 2 rakes × 13 trips = 250.
+**Result (2026-11-12):** OPTIMAL, objective = 900 (Σ dev = 3), best bound = 900, gap = 0.0%, solve time 11.77s. Rake distribution: 3 rakes × 15 trips, 15 rakes × 14 trips = 255.
 
-The minimum achievable deviation under floor-target 13 is 16 (since `250 − 13×18 = 16`). The solver achieves this minimum, which is why gap = 0%.
+The minimum achievable deviation under floor-target 14 is 3 (since `255 − 14×18 = 3`). The solver achieves this minimum, which is why gap = 0%.
 
-**Note on target choice:** the floor target (13) produces a minimum deviation of 16. A ceiling target (14) would produce a different, lower deviation (2). The current V1 uses the floor target consistently; this is a design choice, not an error, and is documented so the objective value 4800 is interpretable.
+**Note on target choice:** the floor target (13) produces a minimum deviation of 3. A under floor-target 14 a different. The current V1 uses the floor target consistently; this is a design choice, not an error, and is documented so the objective value 4800 is interpretable.
 
 **Multi-objective extension:** O1–O5 and O7 are declared in `config.py` as `W_*` constants but not active in the current objective. Restoring the full multi-term objective is future work.
 
@@ -324,15 +325,15 @@ Current shape (O6 rake balance active):
 {
   "status": "OPTIMAL",
   "elapsed_sec": 11.77,
-  "objective": 4800.0,
-  "best_bound": 4800.0,
+  "objective": 900.0,
+  "best_bound": 900.0,
   "gap_pct": 0.0,
-  "num_trips": 250,
+  "num_trips": 255,
   "schedule": [ ... ]
 }
 ```
 
-`status = OPTIMAL` because CP-SAT proved no feasible schedule can have objective value below 4800 (best bound = objective = 4800). The objective value 4800 corresponds to Σ dev = 16 under floor-target 13 (see §6).
+`status = OPTIMAL` because CP-SAT proved no feasible schedule can have objective value below 900 under floor-target 14.
 
 ### 8.2 `schedule.csv`
 
@@ -372,7 +373,7 @@ Current coverage (10 PASS + 1 SKIPPED of 11 applicable):
 
 R2 is not applicable (fixed trip times). R9 is vacuous (empty `maintenance.csv`).
 
-Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
+Overall result (Phase 1, 255 trips): PASS, 10 PASS, 0 SKIPPED.
 
 ---
 
@@ -381,20 +382,20 @@ Overall result (Phase 1, 250 trips): PASS, 10 PASS + 1 SKIPPED.
 - Muttom depot capacity — unbounded in V1.
 - Deadhead values — synthetic (15 min terminal, 8 min MUTT).
 - Objective — single-term O6 rake balance only (see §6). Multi-objective extension (O1–O5, O7) deferred.
-- Optimality gap — reported as 0.0% because the O6 objective is proven optimal (best bound = objective = 4800).
+- Optimality gap — reported as 0.0% because the O6 objective is proven optimal (best bound = objective = 900).
 - Crew scheduling — out of scope for this train-layer file. **Phase 3 complete (2026-11-13); see `docs/phases.md` §Phase 3 and `docs/constraints-crew-v1.md`.**
 - ML / XGBoost — deferred.
 - Passenger demand — no demand model.
 - Maintenance windows — `maintenance.csv` empty; R9 vacuous.
 - Turnaround — synthetic (5 min).
-- Initial rake split — synthetic (9 ALVA / 7 TPHT / 2 MUTTOM).
+- Initial rake split — synthetic (9 ALVA / 9 TPHT / 0 MUTTOM).
 - DPR — removed from project; no DPR-based claims remain.
 - GTFS validity — 2024-08-12 to 2025-12-31 (2024-25 timetable, not current 2026).
 - Fleet — 18 service + 7 maintenance = 25 (from news 2026).
 
 ### Findings from v2.1 rebuild (2026-11-12)
 
-- **[FINDING]** `add_obj6_rake_balance` must be called alongside `build_objective`. When both are called, the model is OPTIMAL with objective 4800 in 11.77 s (2026-11-12). Earlier attempts to call `add_obj6_rake_balance` without `build_objective` during the 2026-11-12 rebuild produced mixed results (INFEASIBLE in some runs, but the code state was different). The precise cause was not conclusively diagnosed. The current committed configuration calls both together; this is the working configuration.
+- **[FINDING]** `add_obj6_rake_balance` must be called alongside `build_objective`. When both are called, the model is OPTIMAL with objective 900 in 60 s (2026-11-15). Earlier attempts to call `add_obj6_rake_balance` without `build_objective` during the 2026-11-12 rebuild produced mixed results (INFEASIBLE in some runs, but the code state was different). The precise cause was not conclusively diagnosed. The current committed configuration calls both together; this is the working configuration.
 
 -**[FINDING]** R6 must compute per-order gap values. The v2 wording used one gap per pair (5 min if either order was same-terminal). This allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. Validator caught 4 such violations on 250 trips. Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 

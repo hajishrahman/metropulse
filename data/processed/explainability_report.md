@@ -8,14 +8,14 @@
 
 ## 1. Executive Summary
 
-- Total trips scheduled: **250**
+- Total trips scheduled: **255**
 - Total rakes used: **18**
 - Active drivers: pool 45: 40 active (of 45), pool 50: 45 active (of 50), pool 55: 50 active (of 55)
-- Phase 1 solver status: **OPTIMAL**, objective = 4800.0, best bound = 4800.0, gap = 0.0%
+- Phase 1 solver status: **OPTIMAL**, objective = 900.0, best bound = 900.0, gap = 0.0%
 - Phase 1 validator overall: **PASS**
 - Phase 3 validator overall: **PASS**
 
-MetroPulse Phase 1 scheduled the 250-trip service day across the 18 service rakes, and Phase 3 assigned every trip to an active driver in each of the three tested pool sizes while keeping a reserve. Phase 2 simulation over 100 seeds shows on-time performance at the broadest tolerance stays at 100% and degrades monotonically as the assumed delay scale increases.
+MetroPulse Phase 1 scheduled the 255-trip service day across the 18 service rakes, and Phase 3 assigned every trip to an active driver in each of the three tested pool sizes while keeping a reserve. Phase 2 simulation over 100 seeds shows on-time performance at the broadest tolerance stays at 100% and degrades monotonically as the assumed delay scale increases.
 
 > **What "OPTIMAL" means here.** Phase 1 OPTIMAL is under the O6 rake-balance objective only. Other objectives are declared in `config.py` but disabled in V1. OPTIMAL does not mean "best possible schedule overall" — it means "best under the single active objective, proven at gap 0.0%."
 
@@ -23,24 +23,24 @@ MetroPulse Phase 1 scheduled the 250-trip service day across the 18 service rake
 
 ---
 
-## 2. Phase 1 Constraint Status (R1–R12)
+## 2. Phase 1 Constraint Status
 
-Overall: **PASS** (250 trips).
+Overall: **PASS** (255 trips).
 
 | Check | Status | Key detail |
 |---|---|---|
-| R1_service_coverage | PASS | required=250, scheduled=250 |
+| R1_service_coverage | PASS | required=255, scheduled=255 |
 | R3_operating_window | PASS | failures=0 |
 | R4_fleet_availability | PASS | bad_rakes=0 |
 | R5_rake_non_overlap | PASS | overlap failures=0 |
-| R6_turnaround | PASS | same-terminal pairs=167, cross-terminal pairs=65 |
+| R6_turnaround | PASS | same-terminal pairs=164, cross-terminal 15-min pairs=60, cross-terminal 8-min MUTT pairs=13 |
 | R7_running_time | PASS | running-time mismatches=0 |
-| R8_depot_capacity | SKIPPED | SKIPPED — No stabling assignment in V1.; info_park_2_capacity=2 |
+| R9_maintenance_exclusivity | PASS | maintenance windows=0, failures=0 |
 | R10_maintenance_threshold | PASS | required=None, scheduled=None |
 | R11_terminal_continuity | PASS | required=None, scheduled=None |
-| R12_nonservice_window | PASS | required=None, scheduled=None |
+| D_direction_consistency | PASS | failures=0 |
 
-**Notes.** R2 (fixed GTFS times) is not present — GTFS timings are treated as given. R8 is SKIPPED because V1 performs no stabling assignment. R9 (maintenance exclusivity) is not present as a check row — it is vacuous in V1 because maintenance rakes are excluded from service by R10 and no maintenance rake can be selected for any trip.
+**Notes.** This section reflects exactly the checks present in `validation.json` for the current run (R1, R3, R4, R5, R6, R7, R9, R10, R11, D). R2 is not present — GTFS timings are treated as given. R8 and R12 are no longer run. R9 now appears as a dedicated check. `D` is the direction-consistency check.
 
 *Source: data/processed/validation.json*
 
@@ -57,7 +57,7 @@ Overall: **PASS**.
 | C1_no_overlap | PASS | failures=0 |
 | C2_max_duty | PASS | failures=0 |
 | C3_sign_buffers | PASS | failures=0 |
-| C4_coverage | PASS | required=250, scheduled=250 |
+| C4_coverage | PASS | required=255, scheduled=255 |
 | C7_reserve | PASS | pool=45, active=40, reserve=5, min_reserve=5 |
 
 C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 reports objective = 0.0 for this pool, i.e. zero C6 penalty was incurred.
@@ -69,7 +69,7 @@ C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 rep
 | C1_no_overlap | PASS | failures=0 |
 | C2_max_duty | PASS | failures=0 |
 | C3_sign_buffers | PASS | failures=0 |
-| C4_coverage | PASS | required=250, scheduled=250 |
+| C4_coverage | PASS | required=255, scheduled=255 |
 | C7_reserve | PASS | pool=50, active=45, reserve=5, min_reserve=5 |
 
 C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 reports objective = 0.0 for this pool, i.e. zero C6 penalty was incurred.
@@ -81,7 +81,7 @@ C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 rep
 | C1_no_overlap | PASS | failures=0 |
 | C2_max_duty | PASS | failures=0 |
 | C3_sign_buffers | PASS | failures=0 |
-| C4_coverage | PASS | required=250, scheduled=250 |
+| C4_coverage | PASS | required=255, scheduled=255 |
 | C7_reserve | PASS | pool=55, active=50, reserve=5, min_reserve=5 |
 
 C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 reports objective = 0.0 for this pool, i.e. zero C6 penalty was incurred.
@@ -103,34 +103,34 @@ C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 rep
 
 **Aggregate metrics:**
 
-- Trips per rake — min = 13, mean = 13.89, max = 16
+- Trips per rake — min = 14, mean = 14.17, max = 15
 - Peak simultaneous rakes = 15
-- Mean utilization = 72.0%
+- Mean utilization = 70.7%
 
 **Per-rake table:**
 
 | Rake | Trips | First departure | Last arrival | Span (min) | Busy (min) | Utilization % |
 |---|---|---|---|---|---|---|
-| R001 | 13 | 07:48:00 | 22:05:28 | 857.47 | 603.40 | 70.4% |
-| R002 | 14 | 06:15:00 | 23:21:24 | 1026.40 | 665.90 | 64.9% |
-| R003 | 13 | 07:26:19 | 21:46:08 | 859.82 | 648.02 | 75.4% |
-| R004 | 15 | 07:07:00 | 23:04:58 | 957.97 | 717.20 | 74.9% |
-| R005 | 13 | 06:30:00 | 22:50:09 | 980.15 | 573.78 | 58.5% |
-| R006 | 14 | 07:30:00 | 23:21:02 | 951.03 | 664.62 | 69.9% |
-| R007 | 14 | 06:15:00 | 22:49:58 | 994.97 | 708.63 | 71.2% |
-| R008 | 16 | 06:00:00 | 22:34:58 | 994.97 | 813.42 | 81.8% |
-| R009 | 14 | 07:00:25 | 21:52:28 | 892.05 | 710.02 | 79.6% |
-| R010 | 13 | 06:00:00 | 20:41:28 | 881.47 | 660.15 | 74.9% |
-| R011 | 13 | 07:22:25 | 21:55:28 | 873.05 | 650.97 | 74.6% |
-| R012 | 13 | 08:00:00 | 21:16:08 | 796.13 | 613.55 | 77.1% |
-| R013 | 13 | 07:10:00 | 21:40:28 | 870.47 | 612.30 | 70.3% |
-| R014 | 14 | 06:30:00 | 22:35:28 | 965.47 | 665.43 | 68.9% |
-| R015 | 15 | 07:03:00 | 22:58:53 | 955.88 | 704.72 | 73.7% |
-| R016 | 13 | 07:33:25 | 23:05:09 | 931.73 | 658.05 | 70.6% |
-| R017 | 15 | 06:15:00 | 23:17:49 | 1022.82 | 663.97 | 64.9% |
-| R018 | 15 | 06:45:00 | 22:43:53 | 958.88 | 716.15 | 74.7% |
+| R001 | 15 | 06:30:00 | 23:17:49 | 1007.82 | 708.42 | 70.3% |
+| R002 | 15 | 05:00:00 | 23:21:02 | 1101.03 | 716.47 | 65.1% |
+| R003 | 15 | 05:20:00 | 24:03:45 | 1123.75 | 715.90 | 63.7% |
+| R004 | 14 | 07:03:00 | 22:05:28 | 902.47 | 697.40 | 77.3% |
+| R005 | 14 | 07:10:00 | 22:58:53 | 948.88 | 623.30 | 65.7% |
+| R006 | 14 | 07:07:00 | 22:35:28 | 928.47 | 666.45 | 71.8% |
+| R007 | 14 | 06:45:00 | 22:05:28 | 920.47 | 663.48 | 72.1% |
+| R008 | 14 | 06:30:00 | 22:43:53 | 973.88 | 671.13 | 68.9% |
+| R009 | 14 | 06:45:00 | 21:25:28 | 880.47 | 697.43 | 79.2% |
+| R010 | 14 | 07:50:00 | 23:04:58 | 914.97 | 660.83 | 72.2% |
+| R011 | 14 | 05:45:00 | 22:50:09 | 1025.15 | 698.03 | 68.1% |
+| R012 | 14 | 07:22:25 | 21:06:58 | 824.55 | 615.35 | 74.6% |
+| R013 | 14 | 07:11:25 | 22:49:58 | 938.55 | 708.08 | 75.4% |
+| R014 | 14 | 07:00:00 | 23:21:24 | 981.40 | 621.52 | 63.3% |
+| R015 | 14 | 06:00:00 | 22:20:28 | 980.47 | 709.65 | 72.4% |
+| R016 | 14 | 06:15:00 | 23:05:09 | 1010.15 | 699.92 | 69.3% |
+| R017 | 14 | 06:00:00 | 22:34:58 | 994.97 | 671.30 | 67.5% |
+| R018 | 14 | 06:15:00 | 21:40:28 | 925.47 | 708.63 | 76.6% |
 
-Row count: **250** data rows in `schedule.csv` (file line count is data + 1 header).
+Row count: **255** data rows in `schedule.csv` (file line count is data + 1 header).
 
 *Source: data/processed/schedule.csv*
 
@@ -147,164 +147,164 @@ Row count: **250** data rows in `schedule.csv` (file line count is data + 1 head
 ### Pool 45
 
 - pool_size = **45**, active drivers = **40**, reserve = **5**
-- Total depot hours — min = 5.61, mean = 7.94, max = 8.50
-- Rows in `crew_schedule.csv` for pool 45: 250 (assignments listed in `crew_solution.json` pool 45: 250)
+- Total depot hours — min = 4.26, mean = 7.75, max = 8.50
+- Rows in `crew_schedule.csv` for pool 45: 255 (assignments listed in `crew_solution.json` pool 45: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
-| D001 | 7 | 05:45:00 | 14:10:58 | 8.43 |
-| D002 | 7 | 06:45:00 | 14:49:42 | 8.08 |
-| D003 | 6 | 06:56:25 | 14:44:58 | 7.81 |
-| D004 | 7 | 06:55:00 | 15:18:58 | 8.40 |
-| D005 | 7 | 15:41:00 | 23:32:49 | 7.86 |
-| D006 | 7 | 06:52:00 | 14:36:28 | 7.74 |
-| D007 | 8 | 06:15:00 | 14:41:12 | 8.44 |
-| D008 | 8 | 06:00:00 | 13:58:42 | 7.98 |
-| D009 | 7 | 06:30:00 | 14:53:28 | 8.39 |
-| D010 | 5 | 06:30:00 | 14:58:12 | 8.47 |
-| D011 | 6 | 07:41:25 | 16:09:58 | 8.48 |
-| D012 | 5 | 07:45:00 | 15:57:42 | 8.21 |
-| D013 | 5 | 07:11:19 | 15:32:12 | 8.35 |
-| D014 | 3 | 07:52:00 | 13:28:28 | 5.61 |
-| D015 | 7 | 06:00:00 | 14:24:12 | 8.40 |
-| D016 | 8 | 15:02:44 | 23:13:53 | 8.19 |
-| D017 | 6 | 06:00:00 | 12:42:12 | 6.70 |
-| D018 | 5 | 08:27:00 | 16:37:48 | 8.18 |
-| D019 | 7 | 15:28:14 | 23:36:02 | 8.13 |
-| D020 | 7 | 12:59:30 | 21:13:28 | 8.23 |
-| D021 | 7 | 14:16:00 | 22:35:28 | 8.32 |
-| D022 | 5 | 09:30:00 | 17:30:55 | 8.02 |
-| D023 | 7 | 14:24:30 | 22:50:28 | 8.43 |
-| D024 | 6 | 12:29:44 | 20:56:28 | 8.45 |
-| D026 | 7 | 14:20:14 | 22:49:58 | 8.50 |
-| D027 | 6 | 14:58:30 | 23:19:58 | 8.36 |
-| D028 | 6 | 17:09:55 | 23:36:24 | 6.44 |
-| D029 | 6 | 10:12:00 | 18:37:42 | 8.43 |
-| D031 | 6 | 12:00:00 | 20:04:55 | 8.08 |
-| D032 | 8 | 14:33:00 | 22:34:58 | 8.03 |
-| D035 | 2 | 08:06:00 | 16:31:09 | 8.42 |
-| D036 | 6 | 12:34:00 | 20:16:08 | 7.70 |
-| D037 | 7 | 13:12:14 | 21:40:28 | 8.47 |
-| D038 | 6 | 15:56:30 | 23:05:09 | 7.14 |
-| D040 | 5 | 16:06:55 | 22:07:28 | 6.01 |
-| D041 | 6 | 17:13:30 | 23:04:58 | 5.86 |
-| D042 | 6 | 12:04:14 | 20:33:35 | 8.49 |
-| D043 | 7 | 05:45:00 | 14:02:28 | 8.29 |
-| D044 | 6 | 15:45:55 | 23:20:09 | 7.57 |
-| D045 | 7 | 06:48:00 | 15:06:42 | 8.31 |
+| D001 | 7 | 06:48:00 | 14:49:42 | 8.03 |
+| D003 | 7 | 05:45:00 | 14:07:12 | 8.37 |
+| D004 | 6 | 06:00:00 | 13:02:58 | 7.05 |
+| D005 | 7 | 06:00:00 | 14:10:58 | 8.18 |
+| D006 | 7 | 06:15:00 | 14:44:58 | 8.50 |
+| D007 | 8 | 06:52:00 | 15:15:12 | 8.39 |
+| D008 | 7 | 06:15:00 | 14:36:28 | 8.36 |
+| D009 | 6 | 05:30:00 | 12:11:58 | 6.70 |
+| D010 | 6 | 06:30:00 | 14:58:12 | 8.47 |
+| D011 | 7 | 07:45:00 | 15:57:42 | 8.21 |
+| D012 | 7 | 07:35:00 | 15:52:58 | 8.30 |
+| D013 | 6 | 05:42:00 | 13:58:42 | 8.28 |
+| D014 | 7 | 15:24:00 | 23:36:24 | 8.21 |
+| D015 | 7 | 06:55:00 | 15:06:42 | 8.20 |
+| D016 | 6 | 09:05:25 | 17:16:55 | 8.19 |
+| D017 | 4 | 06:00:00 | 10:53:00 | 4.88 |
+| D018 | 6 | 16:13:55 | 23:19:58 | 7.10 |
+| D020 | 5 | 10:04:25 | 18:26:55 | 8.38 |
+| D021 | 6 | 11:47:14 | 20:00:50 | 8.23 |
+| D022 | 4 | 18:23:30 | 23:20:09 | 4.94 |
+| D023 | 6 | 05:05:00 | 10:49:38 | 5.74 |
+| D024 | 5 | 16:38:30 | 24:18:45 | 7.67 |
+| D025 | 4 | 17:51:55 | 22:07:28 | 4.26 |
+| D027 | 5 | 14:24:30 | 22:01:08 | 7.61 |
+| D028 | 8 | 13:03:44 | 21:31:08 | 8.46 |
+| D029 | 7 | 14:58:30 | 23:13:53 | 8.26 |
+| D030 | 7 | 12:12:44 | 20:39:28 | 8.45 |
+| D032 | 7 | 12:00:00 | 20:16:08 | 8.27 |
+| D033 | 8 | 14:45:44 | 22:58:53 | 8.22 |
+| D034 | 7 | 15:24:00 | 23:05:09 | 7.69 |
+| D035 | 7 | 15:36:44 | 22:49:58 | 7.22 |
+| D036 | 7 | 15:45:55 | 23:32:49 | 7.78 |
+| D037 | 6 | 15:52:55 | 23:04:58 | 7.20 |
+| D038 | 7 | 15:07:00 | 23:36:02 | 8.48 |
+| D039 | 7 | 07:28:25 | 15:40:42 | 8.20 |
+| D040 | 4 | 08:06:00 | 16:14:42 | 8.14 |
+| D041 | 7 | 10:12:55 | 18:23:42 | 8.18 |
+| D043 | 8 | 14:07:30 | 22:34:58 | 8.46 |
+| D044 | 7 | 12:34:00 | 21:01:38 | 8.46 |
+| D045 | 5 | 04:45:00 | 13:11:28 | 8.44 |
 
 ### Pool 50
 
 - pool_size = **50**, active drivers = **45**, reserve = **5**
-- Total depot hours — min = 1.34, mean = 7.37, max = 8.50
-- Rows in `crew_schedule.csv` for pool 50: 250 (assignments listed in `crew_solution.json` pool 50: 250)
+- Total depot hours — min = 1.35, mean = 7.44, max = 8.48
+- Rows in `crew_schedule.csv` for pool 50: 255 (assignments listed in `crew_solution.json` pool 50: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
-| D001 | 4 | 05:45:00 | 10:49:38 | 5.08 |
-| D002 | 7 | 06:00:00 | 14:02:28 | 8.04 |
-| D003 | 4 | 07:52:00 | 16:14:42 | 8.38 |
-| D004 | 8 | 06:00:00 | 14:24:12 | 8.40 |
-| D005 | 7 | 07:05:00 | 14:53:28 | 7.81 |
-| D006 | 7 | 05:45:00 | 12:45:58 | 7.02 |
-| D007 | 7 | 06:15:00 | 14:07:12 | 7.87 |
-| D008 | 7 | 07:07:25 | 15:15:12 | 8.13 |
-| D009 | 7 | 07:33:00 | 15:40:42 | 8.13 |
-| D010 | 7 | 07:35:00 | 16:01:28 | 8.44 |
-| D011 | 7 | 08:41:00 | 16:06:12 | 7.42 |
-| D012 | 7 | 06:45:25 | 14:58:12 | 8.21 |
-| D013 | 7 | 06:55:00 | 15:06:42 | 8.20 |
-| D014 | 7 | 06:45:00 | 15:01:58 | 8.28 |
-| D015 | 6 | 06:15:00 | 13:36:58 | 7.37 |
-| D016 | 2 | 06:30:00 | 08:51:13 | 2.35 |
-| D018 | 6 | 14:24:30 | 21:18:20 | 6.90 |
-| D020 | 6 | 14:07:30 | 21:45:43 | 7.64 |
-| D021 | 7 | 15:32:30 | 23:32:49 | 8.01 |
-| D022 | 6 | 14:33:00 | 22:58:53 | 8.43 |
-| D023 | 1 | 20:47:00 | 22:07:28 | 1.34 |
-| D024 | 5 | 14:11:44 | 22:34:58 | 8.39 |
-| D025 | 2 | 06:00:00 | 14:27:58 | 8.47 |
-| D026 | 5 | 16:10:30 | 22:20:28 | 6.17 |
-| D027 | 7 | 15:02:44 | 23:13:53 | 8.19 |
-| D028 | 2 | 08:06:00 | 10:29:25 | 2.39 |
-| D029 | 5 | 15:07:00 | 21:50:28 | 6.72 |
-| D030 | 3 | 14:50:00 | 22:49:58 | 8.00 |
-| D031 | 5 | 14:03:14 | 22:20:28 | 8.29 |
-| D032 | 5 | 11:38:44 | 20:08:42 | 8.50 |
-| D033 | 6 | 16:03:30 | 23:19:58 | 7.27 |
-| D035 | 8 | 06:52:00 | 15:18:58 | 8.45 |
-| D036 | 5 | 15:52:55 | 23:05:09 | 7.20 |
-| D037 | 6 | 14:28:44 | 22:50:28 | 8.36 |
-| D038 | 5 | 11:43:00 | 20:04:55 | 8.37 |
-| D039 | 6 | 16:06:55 | 23:36:02 | 7.49 |
-| D040 | 3 | 08:27:00 | 16:41:32 | 8.24 |
-| D041 | 6 | 15:41:00 | 23:20:09 | 7.65 |
-| D042 | 5 | 16:17:30 | 23:04:58 | 6.79 |
-| D043 | 7 | 12:21:14 | 20:39:28 | 8.30 |
-| D044 | 4 | 15:36:44 | 21:01:38 | 5.42 |
-| D045 | 7 | 13:25:00 | 21:22:28 | 7.96 |
-| D047 | 5 | 15:28:14 | 23:36:24 | 8.14 |
-| D049 | 5 | 12:29:44 | 19:57:55 | 7.47 |
-| D050 | 6 | 06:48:00 | 14:36:28 | 7.81 |
+| D001 | 1 | 22:15:00 | 23:36:02 | 1.35 |
+| D002 | 8 | 06:00:00 | 14:19:28 | 8.32 |
+| D003 | 4 | 07:59:00 | 14:02:28 | 6.06 |
+| D004 | 7 | 06:00:00 | 13:53:58 | 7.90 |
+| D005 | 7 | 07:11:19 | 15:35:58 | 8.41 |
+| D006 | 6 | 07:45:00 | 15:49:12 | 8.07 |
+| D007 | 5 | 07:18:25 | 15:40:42 | 8.37 |
+| D008 | 7 | 05:30:00 | 12:42:12 | 7.20 |
+| D009 | 7 | 08:06:00 | 16:06:12 | 8.00 |
+| D010 | 6 | 05:42:00 | 14:10:58 | 8.48 |
+| D011 | 6 | 07:45:00 | 15:52:58 | 8.13 |
+| D012 | 5 | 06:00:00 | 12:28:58 | 6.48 |
+| D013 | 6 | 05:05:00 | 12:15:53 | 7.18 |
+| D014 | 4 | 16:03:30 | 23:20:09 | 7.28 |
+| D015 | 4 | 06:15:00 | 11:13:05 | 4.97 |
+| D016 | 4 | 09:02:00 | 17:30:55 | 8.48 |
+| D017 | 6 | 04:45:00 | 12:50:42 | 8.10 |
+| D018 | 5 | 09:26:25 | 16:31:09 | 7.08 |
+| D019 | 7 | 13:12:14 | 21:21:58 | 8.16 |
+| D020 | 2 | 09:19:25 | 16:41:32 | 7.37 |
+| D021 | 7 | 15:56:30 | 23:32:49 | 7.61 |
+| D022 | 5 | 15:49:30 | 22:49:58 | 7.01 |
+| D023 | 3 | 06:30:00 | 12:54:28 | 6.41 |
+| D024 | 7 | 12:12:44 | 20:21:20 | 8.14 |
+| D025 | 8 | 14:07:30 | 22:13:50 | 8.11 |
+| D026 | 7 | 13:29:14 | 21:33:28 | 8.07 |
+| D027 | 3 | 05:45:00 | 09:44:12 | 3.99 |
+| D029 | 4 | 08:06:00 | 16:18:28 | 8.21 |
+| D030 | 4 | 06:30:00 | 11:24:53 | 4.91 |
+| D031 | 7 | 13:59:00 | 22:20:28 | 8.36 |
+| D032 | 8 | 14:50:00 | 23:05:09 | 8.25 |
+| D033 | 7 | 16:38:30 | 24:18:45 | 7.67 |
+| D034 | 4 | 12:08:30 | 20:33:35 | 8.42 |
+| D036 | 5 | 08:27:00 | 16:01:28 | 7.57 |
+| D037 | 7 | 15:36:44 | 23:19:58 | 7.72 |
+| D040 | 7 | 15:28:14 | 23:04:58 | 7.61 |
+| D041 | 8 | 15:24:00 | 23:13:53 | 7.83 |
+| D043 | 7 | 11:26:00 | 19:47:42 | 8.36 |
+| D044 | 2 | 15:32:30 | 22:10:28 | 6.63 |
+| D045 | 5 | 10:38:25 | 18:51:42 | 8.22 |
+| D046 | 6 | 13:33:30 | 21:45:43 | 8.20 |
+| D047 | 7 | 13:16:30 | 21:40:28 | 8.40 |
+| D048 | 8 | 15:24:00 | 23:36:24 | 8.21 |
+| D049 | 6 | 05:45:00 | 13:50:12 | 8.09 |
+| D050 | 6 | 07:48:25 | 15:06:42 | 7.30 |
 
 ### Pool 55
 
 - pool_size = **55**, active drivers = **50**, reserve = **5**
-- Total depot hours — min = 1.35, mean = 6.90, max = 8.50
-- Rows in `crew_schedule.csv` for pool 55: 250 (assignments listed in `crew_solution.json` pool 55: 250)
+- Total depot hours — min = 1.38, mean = 7.16, max = 8.49
+- Rows in `crew_schedule.csv` for pool 55: 255 (assignments listed in `crew_solution.json` pool 55: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
-| D001 | 6 | 07:48:25 | 15:52:58 | 8.08 |
-| D002 | 6 | 06:48:00 | 14:15:42 | 7.46 |
-| D003 | 6 | 07:07:25 | 14:19:28 | 7.20 |
-| D004 | 7 | 06:55:00 | 15:15:12 | 8.34 |
-| D005 | 4 | 06:15:00 | 10:40:12 | 4.42 |
-| D006 | 6 | 07:05:00 | 15:27:28 | 8.37 |
-| D007 | 8 | 07:11:19 | 15:40:42 | 8.49 |
-| D008 | 8 | 07:45:00 | 16:06:12 | 8.35 |
-| D009 | 6 | 07:35:00 | 15:18:58 | 7.73 |
-| D010 | 6 | 06:30:00 | 14:32:42 | 8.04 |
-| D011 | 5 | 07:45:00 | 15:49:12 | 8.07 |
-| D012 | 6 | 09:05:25 | 17:08:48 | 8.06 |
-| D013 | 8 | 06:56:25 | 15:23:42 | 8.45 |
-| D014 | 2 | 16:03:30 | 23:36:02 | 7.54 |
-| D015 | 4 | 16:13:55 | 21:22:28 | 5.14 |
-| D016 | 1 | 08:58:25 | 10:19:12 | 1.35 |
-| D017 | 6 | 14:11:44 | 22:34:58 | 8.39 |
-| D018 | 4 | 13:16:30 | 21:11:38 | 7.92 |
-| D019 | 6 | 10:21:25 | 18:16:42 | 7.92 |
-| D020 | 4 | 06:00:00 | 14:02:28 | 8.04 |
-| D021 | 5 | 14:24:30 | 22:35:28 | 8.18 |
-| D022 | 4 | 06:00:00 | 10:46:22 | 4.77 |
-| D023 | 7 | 15:15:30 | 22:50:28 | 7.58 |
-| D024 | 2 | 21:00:00 | 23:20:09 | 2.34 |
-| D025 | 8 | 15:41:00 | 23:13:53 | 7.55 |
-| D026 | 8 | 15:24:00 | 23:36:24 | 8.21 |
-| D027 | 8 | 15:11:14 | 23:32:49 | 8.36 |
-| D028 | 7 | 15:24:00 | 22:49:58 | 7.43 |
-| D029 | 7 | 14:50:00 | 23:04:58 | 8.25 |
-| D030 | 2 | 10:05:00 | 18:19:55 | 8.25 |
-| D031 | 6 | 15:07:00 | 23:19:58 | 8.22 |
-| D032 | 8 | 14:16:00 | 22:20:28 | 8.07 |
-| D033 | 5 | 14:58:30 | 23:05:09 | 8.11 |
-| D034 | 4 | 12:51:00 | 20:25:55 | 7.58 |
-| D035 | 6 | 13:25:00 | 21:18:20 | 7.89 |
-| D036 | 6 | 12:17:00 | 20:11:55 | 7.92 |
-| D037 | 6 | 11:09:00 | 19:36:55 | 8.47 |
-| D038 | 2 | 06:00:00 | 08:51:13 | 2.85 |
-| D039 | 5 | 13:42:00 | 22:10:28 | 8.47 |
-| D040 | 3 | 10:12:00 | 18:37:42 | 8.43 |
-| D041 | 4 | 07:25:00 | 12:24:43 | 5.00 |
-| D042 | 3 | 15:28:14 | 20:18:36 | 4.84 |
-| D043 | 1 | 05:45:00 | 07:09:05 | 1.40 |
-| D044 | 3 | 10:18:00 | 18:47:55 | 8.50 |
-| D046 | 5 | 12:46:44 | 21:13:28 | 8.45 |
-| D048 | 1 | 06:30:00 | 07:52:28 | 1.37 |
-| D049 | 5 | 06:45:25 | 11:58:53 | 5.22 |
-| D050 | 2 | 06:15:00 | 12:07:23 | 5.87 |
-| D054 | 2 | 07:18:25 | 09:51:12 | 2.55 |
-| D055 | 6 | 05:45:00 | 13:24:42 | 7.66 |
+| D001 | 7 | 06:30:00 | 14:36:28 | 8.11 |
+| D002 | 6 | 06:45:25 | 14:32:42 | 7.79 |
+| D003 | 6 | 04:45:00 | 11:54:58 | 7.17 |
+| D004 | 4 | 06:48:00 | 12:03:28 | 5.26 |
+| D005 | 8 | 15:24:00 | 23:32:49 | 8.15 |
+| D006 | 4 | 08:13:00 | 15:44:28 | 7.52 |
+| D007 | 6 | 05:30:00 | 12:15:53 | 6.76 |
+| D008 | 6 | 06:00:00 | 13:45:28 | 7.76 |
+| D009 | 5 | 06:55:00 | 14:27:58 | 7.55 |
+| D010 | 7 | 07:41:25 | 15:23:42 | 7.70 |
+| D011 | 3 | 07:45:00 | 11:20:55 | 3.60 |
+| D012 | 6 | 08:51:25 | 17:20:42 | 8.49 |
+| D013 | 6 | 06:15:00 | 14:41:12 | 8.44 |
+| D014 | 6 | 05:45:00 | 13:50:12 | 8.09 |
+| D015 | 6 | 15:24:00 | 23:36:24 | 8.21 |
+| D016 | 7 | 07:52:00 | 15:49:12 | 7.95 |
+| D017 | 4 | 10:05:00 | 18:16:42 | 8.20 |
+| D018 | 6 | 15:52:55 | 23:36:02 | 7.72 |
+| D019 | 6 | 07:15:00 | 15:01:58 | 7.78 |
+| D020 | 6 | 07:18:25 | 15:27:28 | 8.15 |
+| D021 | 4 | 14:33:00 | 20:51:28 | 6.31 |
+| D022 | 6 | 16:31:30 | 24:18:45 | 7.79 |
+| D023 | 3 | 14:45:44 | 18:02:42 | 3.28 |
+| D024 | 4 | 09:40:25 | 18:05:55 | 8.43 |
+| D025 | 6 | 15:19:44 | 23:04:58 | 7.75 |
+| D028 | 5 | 17:16:55 | 23:13:53 | 5.95 |
+| D029 | 3 | 11:47:14 | 20:00:50 | 8.23 |
+| D030 | 7 | 11:51:30 | 19:51:45 | 8.00 |
+| D032 | 5 | 15:07:00 | 21:45:43 | 6.65 |
+| D034 | 7 | 15:02:44 | 22:49:58 | 7.79 |
+| D035 | 7 | 14:41:30 | 22:58:53 | 8.29 |
+| D036 | 8 | 13:46:14 | 22:13:50 | 8.46 |
+| D037 | 6 | 14:37:14 | 22:10:28 | 7.55 |
+| D038 | 6 | 15:36:44 | 22:50:28 | 7.23 |
+| D039 | 6 | 11:04:15 | 19:08:55 | 8.08 |
+| D040 | 1 | 07:05:00 | 08:27:55 | 1.38 |
+| D041 | 7 | 05:45:00 | 13:41:42 | 7.95 |
+| D042 | 3 | 06:00:00 | 12:33:42 | 6.56 |
+| D043 | 1 | 07:25:00 | 08:47:58 | 1.38 |
+| D044 | 6 | 15:32:30 | 23:20:09 | 7.79 |
+| D045 | 2 | 07:28:25 | 11:46:28 | 4.30 |
+| D046 | 6 | 13:03:44 | 20:39:28 | 7.60 |
+| D047 | 4 | 13:25:00 | 21:06:08 | 7.69 |
+| D048 | 2 | 05:05:00 | 11:41:53 | 6.61 |
+| D049 | 3 | 06:00:00 | 14:15:42 | 8.26 |
+| D050 | 6 | 15:11:14 | 23:19:58 | 8.15 |
+| D051 | 4 | 11:09:00 | 16:37:48 | 5.48 |
+| D052 | 2 | 12:17:00 | 20:33:35 | 8.28 |
+| D054 | 4 | 13:29:14 | 21:50:28 | 8.35 |
+| D055 | 6 | 06:56:25 | 15:10:28 | 8.23 |
 
 *Source: data/processed/crew_schedule.csv, data/processed/crew_solution.json*
 
@@ -317,19 +317,19 @@ Row count: **250** data rows in `schedule.csv` (file line count is data + 1 head
 
 **Headline seed run — on-time % by tolerance:**
 
-| Experiment | Tolerance | On-time (250 trips) | On-time (232 eligible) |
+| Experiment | Tolerance | On-time (255 trips) | On-time (237 eligible) |
 |---|---|---|---|
 | E1 | ±1 min | 100.00% | 100.00% |
 | E1 | ±3 min | 100.00% | 100.00% |
 | E1 | ±5 min | 100.00% | 100.00% |
-| E2 | ±1 min | 95.60% | 95.26% |
+| E2 | ±1 min | 96.08% | 95.78% |
 | E2 | ±3 min | 100.00% | 100.00% |
 | E2 | ±5 min | 100.00% | 100.00% |
-| E3 | ±1 min | 84.40% | 83.62% |
-| E3 | ±3 min | 96.40% | 96.12% |
+| E3 | ±1 min | 85.49% | 85.65% |
+| E3 | ±3 min | 96.86% | 96.62% |
 | E3 | ±5 min | 100.00% | 100.00% |
-| E4 | ±1 min | 63.60% | 62.07% |
-| E4 | ±3 min | 79.20% | 78.02% |
+| E4 | ±1 min | 67.45% | 67.09% |
+| E4 | ±3 min | 81.18% | 81.01% |
 | E4 | ±5 min | 100.00% | 100.00% |
 
 **Monte Carlo aggregate (100 seeds) — mean / p5–p95:**
@@ -339,17 +339,17 @@ Row count: **250** data rows in `schedule.csv` (file line count is data + 1 head
 | E1 | ±1 min | 100.00% | 100.00% | 100.00% |
 | E1 | ±3 min | 100.00% | 100.00% | 100.00% |
 | E1 | ±5 min | 100.00% | 100.00% | 100.00% |
-| E2 | ±1 min | 96.24% | 94.00% | 98.40% |
+| E2 | ±1 min | 96.40% | 94.12% | 98.43% |
 | E2 | ±3 min | 100.00% | 100.00% | 100.00% |
 | E2 | ±5 min | 100.00% | 100.00% | 100.00% |
-| E3 | ±1 min | 80.13% | 75.58% | 84.40% |
-| E3 | ±3 min | 96.93% | 95.18% | 98.80% |
+| E3 | ±1 min | 81.10% | 76.86% | 85.12% |
+| E3 | ±3 min | 97.10% | 95.29% | 98.82% |
 | E3 | ±5 min | 100.00% | 100.00% | 100.00% |
-| E4 | ±1 min | 60.26% | 54.40% | 66.02% |
-| E4 | ±3 min | 75.47% | 70.40% | 80.40% |
+| E4 | ±1 min | 62.00% | 56.45% | 67.45% |
+| E4 | ±3 min | 76.72% | 71.76% | 80.78% |
 | E4 | ±5 min | 100.00% | 100.00% | 100.00% |
 
-> All delay values are [SYNTHETIC]. Schedule is from synthetic fleet assumptions. Terminal continuity and deadhead are not verified (constraints-v2 R11 not configured). Results describe model behaviour, not real KMRL prediction.
+> All delay values are [SYNTHETIC]. Schedule is from synthetic fleet assumptions. Terminal continuity: R11 PASS (first-trip home-terminal rule with deadhead). R6 PASS (per-pair deadhead gaps: 5/8/15 min). Physical continuity checker reports 73/237 cross-terminal pairs - these are legal R6-legal deadheads, not violations. Phase 2 propagation uses a 300 s same-terminal turnaround floor; cross-terminal pairs have >= required R6 deadhead slack (verified: 0/237 pairs below required), so the floor never binds. Results describe model behaviour, not real KMRL prediction.
 
 **On the ±5-minute = 100% result.** The 100% figure at ±5 minutes is a **model property** — the own-delay cap is 300 s and ±5 minutes is an inclusive tolerance, so a single trip cannot exceed ±5. It is **not** an operational guarantee.
 

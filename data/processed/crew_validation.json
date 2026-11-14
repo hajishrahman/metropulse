@@ -31,8 +31,8 @@
           "check": "C4_coverage",
           "status": "PASS",
           "details": {
-            "required": 250,
-            "scheduled": 250,
+            "required": 255,
+            "scheduled": 255,
             "failures": []
           }
         },
@@ -79,8 +79,8 @@
           "check": "C4_coverage",
           "status": "PASS",
           "details": {
-            "required": 250,
-            "scheduled": 250,
+            "required": 255,
+            "scheduled": 255,
             "failures": []
           }
         },
@@ -127,8 +127,8 @@
           "check": "C4_coverage",
           "status": "PASS",
           "details": {
-            "required": 250,
-            "scheduled": 250,
+            "required": 255,
+            "scheduled": 255,
             "failures": []
           }
         },

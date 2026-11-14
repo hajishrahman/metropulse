@@ -256,6 +256,7 @@ def run_scenario(
 
     print(f"[scenario {sid.upper()}] applying objective")
     o6 = RC.add_obj6_rake_balance(model, trip_vars, rake_trip, scenario_data)
+    RC.add_balance_bound_phase5(model, trip_vars, rake_trip, scenario_data)
     RC.build_objective(model, o6, dropped)
 
     solver = cp_model.CpSolver()
@@ -383,9 +384,10 @@ def main():
     baseline_schedule = pd.read_csv(
         R5.BASELINE_SCHEDULE_CSV, encoding="utf-8"
     )
-    if len(baseline_schedule) != 250:
+    if len(baseline_schedule) != len(data.trips):
         raise RuntimeError(
-            f"Expected 250 baseline trips, got {len(baseline_schedule)}"
+            f"Baseline schedule has {len(baseline_schedule)} rows, "
+            f"but data.trips has {len(data.trips)} — mismatch"
         )
 
     # ---- Scenario A -------------------------------------------------------

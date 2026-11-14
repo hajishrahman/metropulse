@@ -136,7 +136,7 @@ def build_section_1_executive_summary(
 
 def build_section_2_phase1_constraints(validation: dict) -> str:
     lines: list[str] = []
-    lines.append("## 2. Phase 1 Constraint Status (R1–R12)")
+    lines.append("## 2. Phase 1 Constraint Status")
     lines.append("")
     lines.append(f"Overall: **{validation['overall']}** "
                  f"({validation['num_trips']} trips).")
@@ -150,13 +150,13 @@ def build_section_2_phase1_constraints(validation: dict) -> str:
         detail = _phase1_detail(name, det)
         lines.append(f"| {name} | {status} | {detail} |")
     lines.append("")
+    present = [c["check"].split("_")[0] for c in validation.get("checks", [])]
     lines.append(
-        "**Notes.** R2 (fixed GTFS times) is not present — GTFS timings are "
-        "treated as given. R8 is SKIPPED because V1 performs no stabling "
-        "assignment. R9 (maintenance exclusivity) is not present as a check "
-        "row — it is vacuous in V1 because maintenance rakes are excluded "
-        "from service by R10 and no maintenance rake can be selected for any "
-        "trip."
+        "**Notes.** This section reflects exactly the checks present in "
+        "`validation.json` for the current run (" + ", ".join(present) + "). "
+        "R2 is not present — GTFS timings are treated as given. R8 and R12 "
+        "are no longer run. R9 now appears as a dedicated check. `D` is the "
+        "direction-consistency check."
     )
     lines.append("")
     lines.append("*Source: data/processed/validation.json*")
@@ -171,19 +171,27 @@ def _phase1_detail(name: str, det: dict) -> str:
     if name.startswith("R5"):
         return f"overlap failures={det.get('total', 0)}"
     if name.startswith("R6"):
-        return (f"same-terminal pairs={det.get('same_terminal_pairs')}, "
+        same = det.get('same_terminal_pairs')
+        if 'cross_terminal_15_pairs' in det:
+            x15 = det.get('cross_terminal_15_pairs')
+            x8 = det.get('cross_terminal_8_mutt_pairs')
+            return (f"same-terminal pairs={same}, "
+                    f"cross-terminal 15-min pairs={x15}, "
+                    f"cross-terminal 8-min MUTT pairs={x8}")
+        return (f"same-terminal pairs={same}, "
                 f"cross-terminal pairs={det.get('cross_terminal_pairs')}")
     if name.startswith("R7"):
         return f"running-time mismatches={len(det.get('failures', []))}"
-    if name.startswith("R8"):
-        return f"SKIPPED — {det.get('reason','')}; info_park_2_capacity={det.get('info_park_2_capacity')}"
+    if name.startswith("R9"):
+        return (f"maintenance windows={det.get('maintenance_windows')}, "
+                f"failures={len(det.get('failures', []))}")
     if name.startswith("R10"):
         return (f"threshold={det.get('threshold_km')} km, "
                 f"max mileage={det.get('max_mileage_km')} km, "
                 f"rakes over threshold={len(det.get('rakes_over_threshold', []))}")
     if name.startswith("R11"):
         return f"cross-terminal switches={det.get('cross_terminal_switches')}"
-    if name.startswith("R12"):
+    if name.startswith("D_") or name == "D_direction_consistency":
         return f"failures={len(det.get('failures', []))}"
     if name.startswith("R3"):
         return f"failures={len(det.get('failures', []))}"
@@ -488,7 +496,9 @@ def build_section_6_simulation(sim: dict) -> str:
     lines.append("")
     lines.append("**Headline seed run — on-time % by tolerance:**")
     lines.append("")
-    lines.append("| Experiment | Tolerance | On-time (250 trips) | On-time (232 eligible) |")
+    totals = md.get("trips_total", "?")
+    elig = md.get("eligible_trips", "?")
+    lines.append(f"| Experiment | Tolerance | On-time ({totals} trips) | On-time ({elig} eligible) |")
     lines.append("|---|---|---|---|")
     tol_keys = ["on_time_1min", "on_time_3min", "on_time_5min"]
     for exp in ["E1", "E2", "E3", "E4"]:

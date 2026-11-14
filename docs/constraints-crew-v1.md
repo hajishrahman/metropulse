@@ -2,7 +2,7 @@
 
 **Status:** Locked for V1 implementation  
 **Date:** 2026-11-13  
-**Scope:** Crew scheduling layer only (SC/TO driver assignment to 250 Phase 1 trips).  
+**Scope:** Crew scheduling layer only (SC/TO driver assignment to 255 Phase 1 trips).  
 **Relationship to `constraints-v2.2.md`:** that file covers the **train layer**. This file covers the **crew layer**. Neither supersedes the other.
 
 ---
@@ -22,8 +22,8 @@ Every parameter is tagged with one of:
 
 ## 2. Scope & Scenario
 
-- Reads `data/processed/schedule.csv` (Phase 1 output — 250 trips, read-only) and `data/synthetic/drivers.csv`.
-- Assigns each of the 250 trips to exactly one driver.
+- Reads `data/processed/schedule.csv` (Phase 1 output — 255 trips, read-only) and `data/synthetic/drivers.csv`.
+- Assigns each of the 255 trips to exactly one driver.
 - Single-day planning. No rostering across days in V1.
 - Pool sizes tested: **45, 50, 55** `[SYNTHETIC]`.
 - Solver: OR-Tools CP-SAT.
@@ -115,9 +115,9 @@ Validator: for each row in `crew_schedule.csv`, `dep − sign_on ≥ 900` and `s
 
 ### C4 — Full Coverage `[EXTERNAL]`
 
-Each of the 250 trips is assigned to **exactly one** driver.
+Each of the 255 trips is assigned to **exactly one** driver.
 
-Validator: `crew_schedule.csv` per pool has exactly 250 rows, each `trip_id` once.
+Validator: `crew_schedule.csv` per pool has exactly 255 rows, each `trip_id` once.
 
 ### C5 — Min Rest (12 h) — **DEFERRED**
 
@@ -170,7 +170,7 @@ Weight: 15.
 trip_id, driver_id, sign_on, sign_off, pool_size
 ```
 
-One row per (trip, pool). **750 rows total** (250 trips × 3 pools).
+One row per (trip, pool). **765 rows total** (255 trips × 3 pools).
 
 ### 7.2 `data/processed/crew_solution.json`
 
@@ -184,7 +184,7 @@ Keyed by `"45"`, `"50"`, `"55"`. Each entry:
   "objective": 0.0,
   "best_bound": 0.0,
   "gap_pct": 0.0,
-  "num_trips": 250,
+  "num_trips": 255,
   "num_active_drivers": 40,
   "reserve": 5,
   "assignments": []
@@ -206,13 +206,14 @@ Keyed by `"45"`, `"50"`, `"55"`. Each entry:
 
 ---
 
-## 8. Results (2026-11-13)
+## 8. Results (2026-11-15, on 255-trip Phase 1)
+> Regenerated against 255-trip Phase 1 schedule on 2026-11-15. The 2026-11-13 250-trip run is superseded.
 
 | Pool | Status | Time | Active | Reserve | Objective | Gap |
 |---|---|---:|---:|---:|---:|---:|
-| 45 | OPTIMAL | 57.25 s | 40 | 5 | 0.0 | 0.0% |
-| 50 | OPTIMAL | 58.80 s | 45 | 5 | 0.0 | 0.0% |
-| 55 | OPTIMAL | 64.34 s | 50 | 5 | 0.0 | 0.0% |
+| 45 | OPTIMAL | 59.61 s | 40 | 5 | 0.0 | 0.0% |
+| 50 | OPTIMAL | 62.10 s | 45 | 5 | 0.0 | 0.0% |
+| 55 | OPTIMAL | 70.10 s | 50 | 5 | 0.0 | 0.0% |
 
 All hard constraints PASS independent validation at all pools. C7 PASS at all pools. Overall: **PASS**.
 

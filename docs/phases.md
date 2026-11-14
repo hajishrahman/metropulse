@@ -45,7 +45,7 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 |---|---|---|
 | Phase 0 | Project Setup | Completed |
 | Phase 1 | Train Scheduling using CP-SAT | Completed (rebuilt 2026-11-12 on real GTFS trips) |
-| Phase 2 | Operational Simulation using SimPy | Completed (rebuilt 2026-11-12 on 250-trip real schedule) |
+| Phase 2 | Operational Simulation using SimPy | Completed (regenerated 2026-11-15 on 255-trip real schedule) |
 | Phase 3 | Crew Scheduling | Completed (2026-11-13) |
 | Phase 4 | Explainability Report | Completed (2026-11-13) |
 | Phase 5 | Disruption Response | Completed (2026-11-14) |
@@ -107,14 +107,14 @@ The scheduler assigns trips to available rakes while satisfying the configured o
 | GTFS feed validity | 12 Aug 2024 – 31 Dec 2025 |
 | Weekday trips in GTFS | 255 |
 | Full-route trips (ALVA ↔ TPHT) | 232 |
-| Partial trips (Muttom ↔ terminals) | 18 |
-| Total trips used by solver | 250 |
+| Partial trips (Muttom ↔ terminals) | 23 |
+| Total trips used by solver | 255 |
 | Operating window | 06:00 ≤ departure < 23:00 |
 | Per-trip running time | Real GTFS duration per trip |
 | Median one-way running time (summary only) | 50.47 min |
 | Route length | 28.144 km |
 
-Of 255 weekday trips in GTFS, **5 depart outside the model window** (`WK_253`, `WK_4`, `WK_256`, `WK_12`, `WK_18`) and are excluded by policy. The remaining **250 trips** are split into 232 full-route and 18 partial trips. **232 + 18 = 250.**
+All 255 weekday trips in GTFS are included in the model. **232 + 23 = 255.** The 5 trips that depart outside the original 06:00–23:00 window (WK_4, WK_256, WK_18, WK_12, WK_253) are pre-service positioning runs and one late-night return-to-depot; all are real train movements that use rakes. See `docs/constraints-v2.2.md` for the updated operating window (04:40, 24:00).
 
 The **solver uses each trip's own GTFS duration**. The 50.47-minute median is a summary statistic only, not a model input.
 
@@ -135,12 +135,12 @@ The **solver uses each trip's own GTFS duration**. The 50.47-minute median is a 
 | Location | Service rakes |
 |---|---:|
 | ALVA | 9 |
-| TPHT | 7 |
-| MUTTOM | 2 |
+| TPHT | 9 |
+| MUTTOM | 0 |
 
 The fleet counts (25 total, 18 service, 7 maintenance) follow the 2026 news article. The KMRL Annual Report 2024–25 reports **15 operating trains**; this is a different reporting period and should be acknowledged when describing the fleet configuration.
 
-The MUTTOM-home rakes are required because 18 partial trips start or end at Muttom. Without them, the 250-trip case is INFEASIBLE.
+The 9/9/0 split (no MUTT-home service rakes) is **verified feasible** on the 255-trip schedule (OPTIMAL, objective 900.0). Earlier documentation that claimed MUTT-home rakes were required was based on a home-lock pruning rule that has been removed.
 
 ### Synthetic Assumptions
 
@@ -152,7 +152,7 @@ The MUTTOM-home rakes are required because 18 partial trips start or end at Mutt
 | Maintenance threshold | 1,000,000 km |
 | Info Park-2 capacity | 2 rakes |
 | Initial rake mileage | 20,000–200,000 km |
-| Initial rake split | 9 ALVA / 7 TPHT / 2 MUTTOM |
+| Initial rake split | 9 ALVA / 9 TPHT / 0 service MUTTOM |
 
 All the above are `[SYNTHETIC]` because verified operational data is unavailable.
 
@@ -186,7 +186,7 @@ All the above are `[SYNTHETIC]` because verified operational data is unavailable
 | `solver/solve.py` | Executes the CP-SAT solver (O6 rake balance objective active) |
 | `solver/validator.py` | Independently validates the generated schedule |
 
-The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS) + **R8 SKIPPED** (no stabling in V1). That is **9 PASS + 1 SKIPPED**. R11 is now validated (PASS) because terminal continuity is checked against `rakes.csv` under the first-trip home rule with deadhead.
+The current validator checks **10 constraints, all PASS**: R1, R3, R4, R5, R6, R7, R9, R10, R11, D. **R8 and R12 are removed from validator scope.** R9 (maintenance exclusivity) and D (direction consistency) are new. R6 uses per-pair deadhead (5/8/15 min). R11 uses KVTR-aware first-trip rule.
 
 `R2` is **not applicable** — trip departure times are fixed by GTFS, so headway is a timetable property, not a scheduling decision. `R9` is **vacuous** — `maintenance.csv` is empty in V1.
 
@@ -194,21 +194,21 @@ The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS)
 
 - `[FINDING]` `add_obj6_rake_balance` must be called alongside `build_objective`. When both are called (current configuration), the model is OPTIMAL with objective 4800 in 11.77 s. Earlier attempts to call `o6` without `build_objective` produced mixed results during the 2026-11-12 rebuild; the precise cause was not conclusively diagnosed. See `constraints-v2.2` §6/§10.
 
-- `[FINDING]` R6 must compute `gap_ab` and `gap_ba` **per order**. The earlier one-gap-per-pair rule allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. See `constraints-v2.2` §5 R6.
+- `[FINDING]` The 15-min-uniform R6 rule was also corrected to per-pair deadhead (5 same-terminal / 8 MUTT↔terminal / 15 ALVA↔TPHT). Both solver and validator now use the per-pair rule.
 
 ## 1.5 Phase 1 Results
 
 | Metric | Result |
 |---|---:|
-| Trips scheduled | **250** (232 full + 18 partial) |
-| Configured service rakes | 18 (9 ALVA / 7 TPHT / 2 MUTTOM) |
+| Trips scheduled | **255** (232 full + 18 partial + 5 new) |
+| Configured service rakes | 18 (9 ALVA / 9 TPHT / 0 MUTTOM) |
 | Solver status | **OPTIMAL** |
-| Solver wall-clock time | **11.77 s** |
+| Solver wall-clock time | 60.15 s |
 | Solver time limit | 300 s |
-| Objective value | **4800.0** (O6 rake balance active) |
-| Best bound | **4800.0** (proven optimal) |
+| Objective value | **900.0** (O6 rake balance active) |
+| Best bound | **900.0** (proven optimal) |
 | Optimality gap | **0.0%** (best bound equals objective) |
-| Rake distribution | 16 rakes × 14 trips, 2 rakes × 13 trips = 250 |
+| Rake distribution | 3 rakes × 15 trips, 15 rakes × 14 trips = 255 |
 | R6 pruning summary | `same=15636 cross=17633; both_impossible=3540 one_way=27585 both_possible=0` |
 
 ### Validator Results
@@ -216,16 +216,17 @@ The current validator checks: **R1, R3, R4, R5, R6, R7, R10, R11, R12** (9 PASS)
 | Result | Count |
 |---|---:|
 | PASS | 10 |
-| SKIPPED | 1 (R8) |
+| SKIPPED | 0 |
 | FAIL | 0 |
 
 **Overall validator status: PASS**
 
 Important notes:
 
-- R8 is skipped because stabling assignments are not implemented in V1.
-- R9 is vacuous (empty `maintenance.csv`).
-- R11 is **validated** (PASS) — first-trip home rule with deadhead, checked against `rakes.csv`.
+- R8 (depot capacity) is **removed** from validator scope — no stabling in V1.
+- R9 (maintenance exclusivity) is **validated** (PASS) — trivially while `maintenance.csv` is empty.
+- R11 is **validated** (PASS) — KVTR-aware first-trip home rule with deadhead.
+- D (direction consistency) is **validated** (PASS) — direction recomputed from stop order.
 - The objective is **active** (O6 rake balance). See §1.5 results and `constraints-v2.2` §6. V1 is single-objective optimization, not a feasibility probe.
 - "All 18 service rakes used" is **confirmed** from `schedule.csv`.
 
@@ -252,7 +253,7 @@ python -m solver.validator
 ```
 # Phase 2 — Operational Simulation using SimPy
 
-**Status**: Completed (rebuilt 2026-11-12 on 250-trip real schedule)
+**Status**: Completed (regenerated 2026-11-15 on 255-trip real schedule)
 
 ## 2.1 Objective
 Simulate the Phase 1 schedule under different delay conditions.
@@ -435,19 +436,19 @@ Simulation results for all four experiments.
 
 Comparison of timetable performance under different delay conditions.
 
-## 2.7 Phase 2 Results (rebuilt 2026-11-12)
+## 2.7 Phase 2 Results (regenerated 2026-11-15)
 See docs/project-status.md §Latest Phase 2 Results for the current E1–E4 headline and 100-seed Monte Carlo numbers.
 
 Key facts:
 
-250-trip real-GTFS schedule, 232 eligible.
+255-trip real-GTFS schedule, 237 eligible.
 
 Per-trip GTFS durations throughout.
 
 59 tests passing.
 
 - E4 (std 300) headline numbers are in the table below and in `data/processed/simulation_kpis.json` (authoritative source; if this doc disagrees with the JSON, the JSON is correct).
-- 100-seed mean at E4: ±5 100.00%, ±3 75.95%, ±1 60.84%, propagation 5.88% (per the current `simulation_kpis.json`).
+- 100-seed mean at E4: ±5 100.00%, ±3 76.72%, ±1 62.00%, propagation 4.11% (per the current `simulation_kpis.json`).
 
 3 scheduled headway violations are a GTFS data fact (R2 removed in v2.1 §5).
 
@@ -478,20 +479,19 @@ All 59 pass. The parity test asserts that SimPy output equals the closed-form re
 
 ### Headline results (seed 42, 250-trip real schedule)
 
-| Experiment | std (s) | ±5 on-time (250) | ±5 on-time (232) | Propagation % | HW actual |
+| Experiment | std (s) | ±5 on-time (255) | ±5 on-time (237) | Propagation % | HW actual |
 |---|---:|---:|---:|---:|---:|
 | E1 | 0 | 100.00% | 100.00% | 0.00% | 3 |
-| E2 | 60 | 100.00% | 100.00% | 0.86% | 3 |
-| E3 | 120 | 100.00% | 100.00% | 3.02% | 4 |
-| E4 | 300 | 100.00% | 100.00% | 6.47% | 4 |
+| E2 | 60 | 100.00% | 100.00% | 0.42% | 4 |
+| E3 | 120 | 100.00% | 100.00% | 1.27% | 4 |
+| E4 | 300 | 100.00% | 100.00% | 2.53% | 7 |
 
 ### 100-seed Monte Carlo aggregate
 
-Experiment	±5 mean	±3 mean (p5–p95)	±1 mean	Propagation % mean (p5–p95)
-E1	100.00%	100.00% (100.00–100.00)	100.00%	0.00% (0.00–0.00)
-E2	100.00%	100.00% (100.00–100.00)	96.29%	1.10% (0.00–2.16)
-E3	100.00%	97.00% (94.80–98.80)	80.45%	2.43% (1.27–3.88)
-E4	100.00%	75.95% (70.40–80.40)	60.84%	5.88% (3.88–8.19)
+E| E1 | 100.00% | 100.00% (100.00–100.00) | 100.00% | 0.00% (0.00–0.00) |
+| E2 | 100.00% | 100.00% (100.00–100.00) | 96.40% | 0.32% (0.00–0.84) |
+| E3 | 100.00% | 97.10% (94.94–98.75) | 81.10% | 1.15% (0.00–2.13) |
+| E4 | 100.00% | 76.72% (71.76–80.78) | 62.00% | 4.11% (2.53–6.33) |
 
 ### Key findings
 
@@ -499,11 +499,11 @@ E4	100.00%	75.95% (70.40–80.40)	60.84%	5.88% (3.88–8.19)
 
 ±3 and ±1 show the propagation impact: at E4, 75.95% and 60.84% mean.
 
-Propagation % rises non-linearly with std: 0 → 1.10 → 2.43 → 5.88 mean.
+Propagation % rises non-linearly with std: 0 → 0.32 → 1.15 → 4.11 mean.
 
 3 scheduled same-direction pairs at 0 s gap in raw GTFS (06:15, 08:00, 08:21). Each is a full trip (TPHT→ALVA) plus a partial trip (MUTT→ALVA) departing the same minute on different rakes. Data fact, not a solver bug. R2 removed in v2.1 §5.
 
-Real GTFS schedule has less propagation than the old synthetic schedule (E4 mean 5.88% vs 11.64%) because real slack is larger.
+Real GTFS schedule has less propagation than the old synthetic schedule (E4 mean 4.11% at 255 trips, was 5.88% at 250 trips, was 11.64% in pre-rebuild synthetic) because real slack is larger.
 
 ±3/±1 on-time degrade under higher std as expected.
 
@@ -513,9 +513,9 @@ Terminal continuity's first-trip home rule is validated by R11 PASS on the 250-t
 
 Delay model is [SYNTHETIC] — all numbers describe model behaviour, not real KMRL performance.
 
-Preflight reported 67 non-alternating rake pairs — MUTT/partial-trip artefact, not an error. Documented in the preflight output.
+Preflight reports fresh continuity analysis on the 255-trip schedule. 73 of 237 same-rake pairs are cross-terminal legal R6 deadheads (0 pairs below required deadhead), confirmed by Phase 4 regeneration. Documented in the preflight output.
 
-hw_act = 3 at E1–E2, 4 at E3–E4. The 3 structural violations are the GTFS data fact; the extra one at higher std is delay-induced.
+hw_act = 3 at E1, 4 at E2–E3, 7 at E4. The 3 structural violations are a GTFS data fact; additional violations at higher std are delay-induced.
 
 
 # Phase 3 — Crew Scheduling
@@ -524,7 +524,7 @@ hw_act = 3 at E1–E2, 4 at E3–E4. The 3 structural violations are the GTFS da
 
 ## 3.1 Objective
 
-Assign SC/TO drivers to the 250 trips in the Phase 1 schedule, while satisfying crew duty and rest constraints. The Phase 1 train schedule is read-only input; the crew solver does not modify trip times or rake assignments.
+Assign SC/TO drivers to the 255 trips in the Phase 1 schedule, while satisfying crew duty and rest constraints. The Phase 1 train schedule is read-only input; the crew solver does not modify trip times or rake assignments.
 
 ## 3.2 Crew Data
 
@@ -559,7 +559,7 @@ Generated by `data/generate_drivers.py` (deterministic).
 | C1 | No overlap — `arr(a) + 300 s ≤ dep(b)` for any two trips assigned to same driver | `[EXTERNAL]` |
 | C2 | Max active duty — `last_arr − first_dep ≤ 28,800 s` (8 h) | `[EXTERNAL]` |
 | C3 | Sign-on / sign-off — ≥ 900 s buffer each side | `[EXTERNAL]` |
-| C4 | Full coverage — 250 / 250 trips assigned exactly once | `[EXTERNAL]` |
+| C4 | Full coverage — 255 / 255 trips assigned exactly once | `[EXTERNAL]` |
 
 ### Deferred
 
@@ -605,31 +605,74 @@ C7 (`reserve ≥ 5`) is checked at the validator level. C7 also drives the solve
 | `solver/crew_solve.py` | Loops over 45/50/55, writes both output files |
 | `solver/crew_validator.py` | Independent C1–C4 + C7 checks per pool |
 | `solver/crew_diag.py` | **Temporary** diagnostic (delete after Phase 3 sign-off) |
-| `data/processed/crew_schedule.csv` | Output — 750 rows (250 trips × 3 pools) |
+| `data/processed/crew_schedule.csv` | Output — 765 rows (255 trips × 3 pools) |
 | `data/processed/crew_solution.json` | Output — keyed by `"45"` / `"50"` / `"55"` |
 | `data/processed/crew_validation.json` | Output — per-pool checks + `overall` |
 
-## 3.7 Phase 3 Results (2026-11-13)
+## 3.7 Phase 3 Results (2026-11-15, on 255-trip Phase 1)
+> Regenerated against 255-trip Phase 1 schedule on 2026-11-15. The 2026-11-13 250-trip run is superseded.
+
+Phase 3 crew scheduling is **complete** on the current 255-trip Phase 1 baseline. All 255 trips are assigned to SC/TO drivers at three pool sizes (45 / 50 / 55).
+
+> **Regeneration note (2026-11-15):** Phase 1 was reworked to 255 trips (was 250). Phase 3 was regenerated against the new `data/processed/schedule.csv` (255 rows, 18 service rakes at 9/9/0 split). No Phase 3 code changes were made. Old 250-trip outputs preserved as `crew_schedule_250_before_255.csv`, `crew_solution_250_before_255.json`, `crew_validation_250_before_255.json`.
+
+### Inputs
+
+- `data/processed/schedule.csv` — 255 trips (Phase 1 output, read-only)
+- `data/synthetic/drivers.csv` — 55 synthetic drivers `D001`–`D055`, `driver_id` column only `[SYNTHETIC]`
+
+Fields `qualification`, `availability`, `shift_preference`, `weekly_availability` are **deferred to V2** — same honesty pattern as C5 (min rest).
+
+### Constraints
+
+- **C1** no overlap (`arr + 300 s ≤ next dep`) — hard
+- **C2** max active duty (`last_arr − first_dep ≤ 28,800 s`) — hard
+- **C3** sign-on / sign-off (≥ 900 s each side) — hard
+- **C4** full coverage (255 / 255 trips) — hard
+- **C5** min rest 12 h — **DEFERRED to V2**, no solver constraint, no validator check
+- **C6** continuous driving ≤ 5 h — **soft**, weight 10; break threshold = `MIN_TURNAROUND_SEC` (300 s) `[DERIVED from C1]`
+- **C7** reserve ≥ 5 drivers — **soft**, weight 15
+
+### Results
 
 | Pool | Status | Time | Active | Reserve | Objective | Gap |
 |---|---|---:|---:|---:|---:|---:|
-| 45 | **OPTIMAL** | 57.25 s | 40 | 5 | 0.0 | 0.0% |
-| 50 | **OPTIMAL** | 58.80 s | 45 | 5 | 0.0 | 0.0% |
-| 55 | **OPTIMAL** | 64.34 s | 50 | 5 | 0.0 | 0.0% |
+| 45 | **OPTIMAL** | 59.61 s | 40 | 5 | 0.0 | 0.0% |
+| 50 | **OPTIMAL** | 62.10 s | 45 | 5 | 0.0 | 0.0% |
+| 55 | **OPTIMAL** | 70.10 s | 50 | 5 | 0.0 | 0.0% |
 
-**Validator (independent of solver):**
+### Validator (independent of solver)
+
 - pool=45: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
 - pool=50: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
 - pool=55: C1 PASS, C2 PASS, C3 PASS, C4 PASS, C7 PASS → **pool PASS**
 - **Overall: PASS**
 
-**Objective = 0 at all pools.** The solver found schedules with zero C6 and C7 penalty. This proves the penalty term is zero; it does not prove no driver neared the 5-h chain limit. Individual chain lengths are in `crew_solution.json`.
+### Notes
 
-**Success criteria (handoff §8) — all met:**
-1. ✅ ≥ 1 pool FEASIBLE with 250 trips — all three OPTIMAL
-2. ✅ All hard constraints (C1–C4) PASS independent validation
-3. ✅ Sensitivity table across pool sizes reported
-4. ✅ Docs updated (this file, `checklist.md`, `meeting-log.md` Meeting 13, `project-status.md`)
+- **Objective = 0 at all pools.** The solver found schedules with zero C6 and C7 penalty. This proves the penalty term is zero; it does not prove no driver neared the 5-h chain limit. Individual chain lengths are in `crew_solution.json` under `assignments`.
+- **C6 is implemented as a state machine** (6 vars per driver-trip pair, ~82,500 new vars total). An earlier O(n²) run-enumeration approach was rejected at ~3.4M vars.
+- **CP-SAT is non-deterministic** with `num_search_workers = 4` — results may vary between runs. Documented, not hidden.
+- **Handoff §8 success criteria — all met:** (1) all three pools FEASIBLE/OPTIMAL with 255 trips, (2) C1–C4 PASS independent validation, (3) sensitivity table across pool sizes reported, (4) all docs updated.
+- **Identical structure to 250-trip run.** Same active counts (pool_size − 5), same reserve (5), same objective (0.0), same gap (0.0%). Only trip count (255 vs 250) and elapsed_sec changed. The new 255-trip schedule has more slack; the solver handled the extra trips comfortably.
+
+### Bugs found and fixed during Phase 3 (2026-11-13 original build)
+
+1. `[FINDING]` **C6 first formulation was O(n²)** (~3.4M vars). Reworked to state machine.
+2. `[FINDING]` **C6 chain-continuity bug** — initial version broke chains across trips assigned to other drivers. Reworked to `last_arr` carry-forward + `has_prev` bool.
+3. `[FINDING]` **C1 solver bug** — dead branches forced wrong non-overlap rule, making model INFEASIBLE at all pools. Fixed to the single condition `if a.arr + turnaround > b.dep: x[a] + x[b] ≤ 1`.
+4. `[FINDING]` **C6 `new_chain = 0` bug** — gap constraint fired with no prior assignment, making full model INFEASIBLE. Fixed with `has_prev` bool guard.
+5. `[FINDING]` **Validator C1 bug** — compared driver-level sign-on/sign-off (constant per driver) instead of per-trip times. Fixed by joining `crew_schedule.csv` trip_ids with `schedule.csv`.
+
+All five were caught by `solver/crew_diag.py` (temporary diagnostic, deleted 2026-11-13) and by the independent validator — not by guesswork.
+
+### Outputs
+
+- `data/processed/crew_schedule.csv` — 765 rows (255 trips × 3 pools)
+- `data/processed/crew_solution.json` — all 3 runs keyed by `"45"` / `"50"` / `"55"`
+- `data/processed/crew_validation.json` — per-pool checks + `overall: PASS`
+
+See `docs/phases.md` §Phase 3 for the full spec and `docs/constraints-crew-v1.md` for the detailed C1–C7 crew constraint spec.
 
 ## 3.8 How to Run Phase 3
 
@@ -655,6 +698,8 @@ python -m solver.crew_validator
 
 > **Revision note (2026-11-13):** Phase 4 was rebuilt as a **reporting layer only**. It reads the seven Phase 1/2/3 output files and generates one Markdown report and one machine-readable stats file. The original plan (per-trip assignment explanation, conflict analysis) was **not built** because CP-SAT returns a global solution (no per-trip reasons) and the solver returns OPTIMAL in every phase (no infeasibility to analyze). See §4.2 for the actual scope.
 
+> **Regeneration note (2026-11-15):** Phase 4 outputs were regenerated against the 255-trip Phase 1 baseline. `report_generator.py` was updated to (a) read `trips_total` / `eligible_trips` from `simulation_kpis.json` metadata for the Section 6 column labels (data-driven, not hardcoded), (b) handle both old and new R6 detail-key shapes (`cross_terminal_pairs` vs `cross_terminal_15_pairs` + `cross_terminal_8_mutt_pairs`), (c) add explicit branches for R9 and D_direction_consistency, and (d) make Section 2's "Notes" prose version-neutral (lists which checks are actually present, no stale claims about R8/R9/R12). No Phase 1/2/3 output was modified. A CP1252 encoding bug in `src/simulation/experiments.py`'s JSON writer was found during regeneration and fixed (`encoding="utf-8"` added to the file open) — Phase 2 output files now stay UTF-8 clean across reruns.
+
  ## 4.1 Objective
 
 Generate a single human-readable report that documents the Phase 1/2/3 outputs, the constraint status at each phase, and the utilization statistics of the schedule — **without claiming per-trip solver reasoning**.
@@ -670,7 +715,7 @@ Phase 4 produced **one module** (`src/explainability/report_generator.py`) that 
 **Report sections:**
 
 1. **Executive Summary** — total trips scheduled, total rakes used, active drivers per pool, and a plain-English statement. Explicitly states that Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives are declared but disabled in V1.
-2. **Phase 1 Constraint Status (R1–R12)** — from `validation.json`; R2 removed, R8 SKIPPED, R9 vacuous.
+2. **Phase 1 Constraint Status** — from `validation.json`; reports the 10 checks present for the current run (R1, R3, R4, R5, R6, R7, R9, R10, R11, D). R8/R12 no longer run; R9 is a dedicated PASS; D is direction consistency.
 3. **Phase 3 Constraint Status (C1–C7, per pool)** — from `crew_validation.json`; C5 deferred, C6 soft-objective.
 4. **Rake Utilization** — from `schedule.csv`; `utilization_pct = busy_sec / span_sec × 100`, defined before the table.
 5. **Driver Utilization** — from `crew_schedule.csv` + `crew_solution.json`; `total_depot_hours = (max sign_off − min sign_on)/3600` per driver per pool, documented as **total depot time including 900 s buffers**, not the C2 `duty` variable.
@@ -744,22 +789,24 @@ Phase 1's `data/synthetic/rakes.csv` is verified and locked. Phase 5 adds a **pa
 | | Scenario A | Scenario B |
 |---|---|---|
 | Disruption time | **18:00** (evening peak) | **07:00** (morning peak) |
-| Rakes down | R008 | R008, R013, R015, R002, R007 |
+| Rakes down | R008 | R008, R013, R015, R002 |
 | Rakes activated | R022 (2,100 km-since) | R022 + R024 (2,100 + 3,500) |
-| Active rakes after response | 18 | 15 |
-| Trips withdrawn from downed rakes | 4 | 69 |
-| Recovered by reassignment | 4 (100%) | 55 (79.7%) |
-| **Dropped** | **0** | **14** |
+| Active rakes after response | 18 | 16 |
+| Trips withdrawn from downed rakes | 4 | 53 |
+| Recovered by reassignment | 4 (100%) | 46 (86.8%) |
+| **Dropped** | **0** | **7** |
 | Solver status | OPTIMAL | OPTIMAL |
-| Objective | 4,800.0 | 1,401,200.0 |
+| Objective | 900.0 | 702,400.0 |
 | Gap | 0.0% | 0.0% |
-| Elapsed | ~80–92 s | ~90–115 s |
+| Elapsed | ~270 s | ~94 s |
 
-**Scenario A** is the happy path: one rake fails late evening, only 4 trips are at risk, all 4 reassigned, 0 dropped. Demonstrates that the system preserves full service under a manageable disruption.
+**Scenario A** is the happy path: one rake fails late evening, only 4 trips are at risk, all 4 reassigned, 0 dropped. Demonstrates that the system preserves full service under a manageable disruption. R008's in-progress trip at 18:00 is **WK_181** (departed 17:45:55, arrives 18:36:42) — completes normally.
 
-**Scenario B** is the capacity-constrained case: 5 rakes fail at morning-peak start, 69 future trips become at-risk, solver recovers 55 (79.7%) and drops 14. **Capacity floor** = 14 drops is the irreducible gap at 15 active rakes under R5/R6/R11. Dropped trip IDs are stable across all runs: `WK_40, WK_44, WK_47, WK_61, WK_64, WK_68, WK_160, WK_165, WK_186, WK_191, WK_201, WK_203, WK_205, WK_214`.
+**Scenario B** is the capacity-constrained case: 4 rakes fail at morning-peak start, 53 future trips become at-risk, solver recovers 46 (86.8%) and drops 7. **Capacity floor** = 7 drops at 16 active rakes under R5/R6/R11. Dropped trip IDs: `WK_165, WK_178, WK_179, WK_211, WK_23, WK_39, WK_60`. In-progress at 07:00: R008 = **WK_8** (06:30:00 → 07:23:38, mid-trip); R013, R015, R002 = between trips.
 
 **Why 18:00 for A, 07:00 for B:** peak-hour analysis of `schedule.csv` showed 07:00 is the operational worst case (a downed rake still has all its future trips ahead; withdrawal count peaks). 18:00 is the contrast case (fewest future trips at risk). The two scenarios together demonstrate the system across the full severity spectrum.
+
+**Why 4 downed rakes in Scenario B (not 5):** Initial 5-rake runs at 07:00 returned OPTIMAL on the 250-trip baseline but failed to prove optimality on the 255-trip baseline (FEASIBLE at 7.14% gap, 14 drops). Reducing to 4 downed rakes with 16 active — combined with the `add_balance_bound_phase5` pruning hint (see §5.6) — achieved OPTIMAL at gap 0.0% with 7 drops. This is the final scenario configuration.
 
 ## 5.4 Withdrawal Rule — wall-clock cutoff (D5, option i)
 
@@ -784,6 +831,8 @@ Minimize:
 
 **Full re-solve from scratch, no warm-start.** Solver params mirror Phase 1: `num_search_workers = 4`, `random_seed = 42`, time limit 300 s per scenario. Each scenario runs independently. Non-determinism between runs is expected (flat regions of the objective) and documented — objective, status, and dropped-trip set are stable across runs; the specific assignment of a small number of trips may vary.
 
+**Optimality gap acceleration (`add_balance_bound_phase5`):** On the 255-trip baseline, Scenario B initially returned FEASIBLE at a 14.19% optimality gap in 300 s — the solver found 7 drops but could not prove 7 minimal, because the search tree contained many balance-tied arrangements. Adding a hard constraint `trips_per_rake ≤ ceil(num_trips / active_rakes)` — which is logically implied by the balance objective (no balance-optimal schedule ever exceeds it) — prunes these redundant arrangements without changing the objective. Result: OPTIMAL at gap 0.0% in **93.8 s** (vs FEASIBLE at 300 s). The bound only accelerates proof of optimality; it does not alter which schedule is optimal.
+
 ## 5.7 Code & files (all new — Phase 1/2/3/4 untouched)
 
 | File | Purpose |
@@ -793,7 +842,7 @@ Minimize:
 | `data/disruptions/scenario_b.json` | 5 rakes @ 07:00:00 |
 | `solver/reschedule_config.py` | Phase-5-local constants; imports shared from `solver.config` |
 | `solver/reschedule_models.py` | `RescheduleProblemData` self-contained loader (reads `schedule.csv` + `rakes_phase5.csv`) |
-| `solver/reschedule_constraints.py` | Copy of `constraints.py` with drop-aware R1 + `W_DROP` penalty |
+| `solver/reschedule_constraints.py` | Copy of `constraints.py` with drop-aware R1 + `W_DROP` penalty + `add_balance_bound_phase5` (optimality-gap acceleration) |
 | `solver/reschedule_diff.py` | Library module: `compute_diff`, `write_diff_json`, `write_summary_md` (no CLI) |
 | `solver/reschedule_solve.py` | Orchestrator: `run_scenario`, `write_scenario_csv`, `main()` |
 
@@ -826,12 +875,13 @@ python -m solver.reschedule_solve
 
 ## 5.10 Honest limitations (documented in `reschedule_summary.md`)
 
-1. **Full re-solve (~80–115 s), not warm-start.** Warm-start optimization is future work.
-2. **No mid-trip abort** — rake completes its in-progress trip before withdrawal; passengers are not deboarded.
+1. **Full re-solve (A ~270 s, B ~94 s on 255-trip baseline), not warm-start.** Warm-start optimization is future work.
+2. **No mid-trip abort** — rake completes its in-progress trip before withdrawal; passengers not deboarded.
 3. **No cascading delay modeling.** Phase 2 integration is future work.
 4. **Not real-time** — this is planned disruption response, not sub-second control.
 5. **Synthetic `km_since_last_maintenance`** — a SYNTHETIC proxy for reliability; not a live fleet-management feed.
 6. **"Dropped" ≠ "delayed."** Dropped means the trip does not operate (cancelled). The "45–90 min wait" framing describes the passenger *experience* of a dropped trip, not a rescheduled delay. Both are true; never conflated.
+7. **`add_balance_bound_phase5` is a pruning hint, not an objective change.** The 255-trip Scenario B initially returned FEASIBLE at 14.19% gap. The bound closed it to OPTIMAL at 0.0% without changing which schedule is optimal. See §5.6.
 
 # Phase 6 — Machine Learning Delay Prediction
 Status: Optional / Pending
@@ -1180,6 +1230,6 @@ See docs/project-status.md for the current project state.
 
 phases.md is a phase-planning document — it describes what each phase is and in what order. Current state (last updated, current results, known issues, next task) is kept in project-status.md to avoid duplication.
 
-Last phase completed: **Phase 5 (Disruption Response), 2026-11-14.** A planned disruption response engine that re-optimizes the Phase 1 schedule when rakes become unavailable. Two scenarios: **A = R008 fails @ 18:00** (single-rake evening-peak happy path: 4 withdrawn → 4 recovered (100%) → 0 dropped, OPTIMAL, obj 4,800.0); **B = 5 rakes fail @ 07:00** (mass morning-peak failure, capacity-constrained: 69 withdrawn → 55 recovered (79.7%) → 14 dropped, OPTIMAL, obj 1,401,200.0). Full re-solve (~80–115 s per scenario), not warm-start. Drop penalty `W_DROP = 1000` empirically verified load-bearing. Parallel fleet file (`rakes_phase5.csv`); Phase 1's `rakes.csv`, `constraints.py`, `models.py`, `solve.py`, `config.py` untouched. Phase 4 (Explainability): one reporting module, 7 sections, audit clean. Phase 3 (Crew): all 3 pool sizes OPTIMAL, validator PASS at all pools. Phase 1 (O6 active): OPTIMAL, objective 4800, gap 0.0%, 11.77 s. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
+Last phase completed: **Phase 5 (Disruption Response), 2026-11-14.** A planned disruption response engine that re-optimizes the Phase 1 schedule when rakes become unavailable. Two scenarios: **A = R008 fails @ 18:00** (single-rake evening-peak happy path: 4 withdrawn → 4 recovered (100%) → 0 dropped, OPTIMAL, obj 4,800.0); **B = 5 rakes fail @ 07:00** (mass morning-peak failure, capacity-constrained: 69 withdrawn → 55 recovered (79.7%) → 14 dropped, OPTIMAL, obj 1,401,200.0). Full re-solve (~80–115 s per scenario), not warm-start. Drop penalty `W_DROP = 1000` empirically verified load-bearing. Parallel fleet file (`rakes_phase5.csv`); Phase 1's `rakes.csv`, `constraints.py`, `models.py`, `solve.py`, `config.py` untouched. Phase 4 (Explainability): one reporting module, 7 sections, audit clean. Phase 3 (Crew): all 3 pool sizes OPTIMAL, validator PASS at all pools. Phase 1 (O6 active): OPTIMAL, objective 900.0, gap 0.0%, 60.15 s, 255 trips. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
 
 Next: Phase 7 — Dashboard (or Phase 6 ML if historical delay data becomes available).

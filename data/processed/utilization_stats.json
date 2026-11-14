@@ -5,12 +5,12 @@
     "crew_solution_json": "data/processed/crew_solution.json"
   },
   "row_counts": {
-    "schedule_rows": 250,
-    "crew_schedule_rows": 750,
+    "schedule_rows": 255,
+    "crew_schedule_rows": 765,
     "crew_pool_rows": {
-      "45": 250,
-      "50": 250,
-      "55": 250
+      "45": 255,
+      "50": 255,
+      "55": 255
     }
   },
   "rake_utilization": {
@@ -19,174 +19,174 @@
     "formula_utilization_pct": "busy_sec / span_sec * 100 (null if span_sec <= 0)",
     "formula_peak_simultaneous_rakes": "max concurrent rake intervals via event sweep",
     "trips_per_rake": {
-      "min": 13,
-      "mean": 13.88888888888889,
-      "max": 16
+      "min": 14,
+      "mean": 14.166666666666666,
+      "max": 15
     },
     "peak_simultaneous_rakes": 15,
-    "mean_utilization_pct": 72.0117585235527,
+    "mean_utilization_pct": 70.74704194575966,
     "per_rake": [
       {
         "rake_id": "R001",
-        "trip_count": 13,
-        "first_departure": "07:48:00",
-        "last_arrival": "22:05:28",
-        "span_min": 857.4666666666667,
-        "busy_min": 603.4,
-        "utilization_pct": 70.37008241331053
+        "trip_count": 15,
+        "first_departure": "06:30:00",
+        "last_arrival": "23:17:49",
+        "span_min": 1007.8166666666667,
+        "busy_min": 708.4166666666666,
+        "utilization_pct": 70.29221584613605
       },
       {
         "rake_id": "R002",
-        "trip_count": 14,
-        "first_departure": "06:15:00",
-        "last_arrival": "23:21:24",
-        "span_min": 1026.4,
-        "busy_min": 665.9,
-        "utilization_pct": 64.87724084177708
+        "trip_count": 15,
+        "first_departure": "05:00:00",
+        "last_arrival": "23:21:02",
+        "span_min": 1101.0333333333333,
+        "busy_min": 716.4666666666667,
+        "utilization_pct": 65.07220489842875
       },
       {
         "rake_id": "R003",
-        "trip_count": 13,
-        "first_departure": "07:26:19",
-        "last_arrival": "21:46:08",
-        "span_min": 859.8166666666667,
-        "busy_min": 648.0166666666667,
-        "utilization_pct": 75.36684176859409
+        "trip_count": 15,
+        "first_departure": "05:20:00",
+        "last_arrival": "24:03:45",
+        "span_min": 1123.75,
+        "busy_min": 715.9,
+        "utilization_pct": 63.706340378198
       },
       {
         "rake_id": "R004",
-        "trip_count": 15,
-        "first_departure": "07:07:00",
-        "last_arrival": "23:04:58",
-        "span_min": 957.9666666666667,
-        "busy_min": 717.2,
-        "utilization_pct": 74.86690559866383
+        "trip_count": 14,
+        "first_departure": "07:03:00",
+        "last_arrival": "22:05:28",
+        "span_min": 902.4666666666667,
+        "busy_min": 697.4,
+        "utilization_pct": 77.27709241338555
       },
       {
         "rake_id": "R005",
-        "trip_count": 13,
-        "first_departure": "06:30:00",
-        "last_arrival": "22:50:09",
-        "span_min": 980.15,
-        "busy_min": 573.7833333333333,
-        "utilization_pct": 58.54035946878879
+        "trip_count": 14,
+        "first_departure": "07:10:00",
+        "last_arrival": "22:58:53",
+        "span_min": 948.8833333333333,
+        "busy_min": 623.3,
+        "utilization_pct": 65.68773821860783
       },
       {
         "rake_id": "R006",
         "trip_count": 14,
-        "first_departure": "07:30:00",
-        "last_arrival": "23:21:02",
-        "span_min": 951.0333333333333,
-        "busy_min": 664.6166666666667,
-        "utilization_pct": 69.88363534401178
+        "first_departure": "07:07:00",
+        "last_arrival": "22:35:28",
+        "span_min": 928.4666666666667,
+        "busy_min": 666.45,
+        "utilization_pct": 71.77963667695842
       },
       {
         "rake_id": "R007",
         "trip_count": 14,
-        "first_departure": "06:15:00",
-        "last_arrival": "22:49:58",
-        "span_min": 994.9666666666667,
-        "busy_min": 708.6333333333333,
-        "utilization_pct": 71.22181647626387
+        "first_departure": "06:45:00",
+        "last_arrival": "22:05:28",
+        "span_min": 920.4666666666667,
+        "busy_min": 663.4833333333333,
+        "utilization_pct": 72.08119070036938
       },
       {
         "rake_id": "R008",
-        "trip_count": 16,
-        "first_departure": "06:00:00",
-        "last_arrival": "22:34:58",
-        "span_min": 994.9666666666667,
-        "busy_min": 813.4166666666666,
-        "utilization_pct": 81.75315755971725
+        "trip_count": 14,
+        "first_departure": "06:30:00",
+        "last_arrival": "22:43:53",
+        "span_min": 973.8833333333333,
+        "busy_min": 671.1333333333333,
+        "utilization_pct": 68.91311416494105
       },
       {
         "rake_id": "R009",
         "trip_count": 14,
-        "first_departure": "07:00:25",
-        "last_arrival": "21:52:28",
-        "span_min": 892.05,
-        "busy_min": 710.0166666666667,
-        "utilization_pct": 79.59381947947611
+        "first_departure": "06:45:00",
+        "last_arrival": "21:25:28",
+        "span_min": 880.4666666666667,
+        "busy_min": 697.4333333333333,
+        "utilization_pct": 79.21178163095328
       },
       {
         "rake_id": "R010",
-        "trip_count": 13,
-        "first_departure": "06:00:00",
-        "last_arrival": "20:41:28",
-        "span_min": 881.4666666666667,
-        "busy_min": 660.15,
-        "utilization_pct": 74.8922250794131
+        "trip_count": 14,
+        "first_departure": "07:50:00",
+        "last_arrival": "23:04:58",
+        "span_min": 914.9666666666667,
+        "busy_min": 660.8333333333334,
+        "utilization_pct": 72.22485336442129
       },
       {
         "rake_id": "R011",
-        "trip_count": 13,
-        "first_departure": "07:22:25",
-        "last_arrival": "21:55:28",
-        "span_min": 873.05,
-        "busy_min": 650.9666666666667,
-        "utilization_pct": 74.56235801691389
+        "trip_count": 14,
+        "first_departure": "05:45:00",
+        "last_arrival": "22:50:09",
+        "span_min": 1025.15,
+        "busy_min": 698.0333333333333,
+        "utilization_pct": 68.09084849371636
       },
       {
         "rake_id": "R012",
-        "trip_count": 13,
-        "first_departure": "08:00:00",
-        "last_arrival": "21:16:08",
-        "span_min": 796.1333333333333,
-        "busy_min": 613.55,
-        "utilization_pct": 77.0662368112544
+        "trip_count": 14,
+        "first_departure": "07:22:25",
+        "last_arrival": "21:06:58",
+        "span_min": 824.55,
+        "busy_min": 615.35,
+        "utilization_pct": 74.62858528894549
       },
       {
         "rake_id": "R013",
-        "trip_count": 13,
-        "first_departure": "07:10:00",
-        "last_arrival": "21:40:28",
-        "span_min": 870.4666666666667,
-        "busy_min": 612.3,
-        "utilization_pct": 70.34157922953204
+        "trip_count": 14,
+        "first_departure": "07:11:25",
+        "last_arrival": "22:49:58",
+        "span_min": 938.55,
+        "busy_min": 708.0833333333334,
+        "utilization_pct": 75.4443911707776
       },
       {
         "rake_id": "R014",
         "trip_count": 14,
-        "first_departure": "06:30:00",
-        "last_arrival": "22:35:28",
-        "span_min": 965.4666666666667,
-        "busy_min": 665.4333333333333,
-        "utilization_pct": 68.92349123049303
+        "first_departure": "07:00:00",
+        "last_arrival": "23:21:24",
+        "span_min": 981.4,
+        "busy_min": 621.5166666666667,
+        "utilization_pct": 63.329597174105025
       },
       {
         "rake_id": "R015",
-        "trip_count": 15,
-        "first_departure": "07:03:00",
-        "last_arrival": "22:58:53",
-        "span_min": 955.8833333333333,
-        "busy_min": 704.7166666666667,
-        "utilization_pct": 73.72412951371332
+        "trip_count": 14,
+        "first_departure": "06:00:00",
+        "last_arrival": "22:20:28",
+        "span_min": 980.4666666666667,
+        "busy_min": 709.65,
+        "utilization_pct": 72.37879921125995
       },
       {
         "rake_id": "R016",
-        "trip_count": 13,
-        "first_departure": "07:33:25",
+        "trip_count": 14,
+        "first_departure": "06:15:00",
         "last_arrival": "23:05:09",
-        "span_min": 931.7333333333333,
-        "busy_min": 658.05,
-        "utilization_pct": 70.62643102461362
+        "span_min": 1010.15,
+        "busy_min": 699.9166666666666,
+        "utilization_pct": 69.28838951310861
       },
       {
         "rake_id": "R017",
-        "trip_count": 15,
-        "first_departure": "06:15:00",
-        "last_arrival": "23:17:49",
-        "span_min": 1022.8166666666667,
-        "busy_min": 663.9666666666667,
-        "utilization_pct": 64.9155110886604
+        "trip_count": 14,
+        "first_departure": "06:00:00",
+        "last_arrival": "22:34:58",
+        "span_min": 994.9666666666667,
+        "busy_min": 671.3,
+        "utilization_pct": 67.46959697142283
       },
       {
         "rake_id": "R018",
-        "trip_count": 15,
-        "first_departure": "06:45:00",
-        "last_arrival": "22:43:53",
-        "span_min": 958.8833333333333,
-        "busy_min": 716.15,
-        "utilization_pct": 74.68583247875132
+        "trip_count": 14,
+        "first_departure": "06:15:00",
+        "last_arrival": "21:40:28",
+        "span_min": 925.4666666666667,
+        "busy_min": 708.6333333333333,
+        "utilization_pct": 76.57037890793833
       }
     ]
   },
@@ -197,293 +197,293 @@
         "pool_size": 45,
         "active_drivers": 40,
         "reserve": 5,
-        "rows_in_crew_schedule": 250,
-        "assignments_in_crew_solution": 250,
+        "rows_in_crew_schedule": 255,
+        "assignments_in_crew_solution": 255,
         "total_depot_hours": {
-          "min": 5.607777777777778,
-          "mean": 7.935013888888889,
-          "max": 8.495555555555555
+          "min": 4.259166666666666,
+          "mean": 7.753736111111111,
+          "max": 8.499444444444444
         },
         "per_driver": [
           {
             "driver_id": "D001",
             "trip_count": 7,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "14:10:58",
-            "total_depot_hours": 8.432777777777778
-          },
-          {
-            "driver_id": "D002",
-            "trip_count": 7,
-            "first_sign_on": "06:45:00",
+            "first_sign_on": "06:48:00",
             "last_sign_off": "14:49:42",
-            "total_depot_hours": 8.078333333333333
+            "total_depot_hours": 8.028333333333334
           },
           {
             "driver_id": "D003",
-            "trip_count": 6,
-            "first_sign_on": "06:56:25",
-            "last_sign_off": "14:44:58",
-            "total_depot_hours": 7.809166666666667
+            "trip_count": 7,
+            "first_sign_on": "05:45:00",
+            "last_sign_off": "14:07:12",
+            "total_depot_hours": 8.37
           },
           {
             "driver_id": "D004",
-            "trip_count": 7,
-            "first_sign_on": "06:55:00",
-            "last_sign_off": "15:18:58",
-            "total_depot_hours": 8.399444444444445
+            "trip_count": 6,
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "13:02:58",
+            "total_depot_hours": 7.049444444444444
           },
           {
             "driver_id": "D005",
             "trip_count": 7,
-            "first_sign_on": "15:41:00",
-            "last_sign_off": "23:32:49",
-            "total_depot_hours": 7.863611111111111
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "14:10:58",
+            "total_depot_hours": 8.182777777777778
           },
           {
             "driver_id": "D006",
             "trip_count": 7,
-            "first_sign_on": "06:52:00",
-            "last_sign_off": "14:36:28",
-            "total_depot_hours": 7.7411111111111115
+            "first_sign_on": "06:15:00",
+            "last_sign_off": "14:44:58",
+            "total_depot_hours": 8.499444444444444
           },
           {
             "driver_id": "D007",
             "trip_count": 8,
-            "first_sign_on": "06:15:00",
-            "last_sign_off": "14:41:12",
-            "total_depot_hours": 8.436666666666667
+            "first_sign_on": "06:52:00",
+            "last_sign_off": "15:15:12",
+            "total_depot_hours": 8.386666666666667
           },
           {
             "driver_id": "D008",
-            "trip_count": 8,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "13:58:42",
-            "total_depot_hours": 7.9783333333333335
+            "trip_count": 7,
+            "first_sign_on": "06:15:00",
+            "last_sign_off": "14:36:28",
+            "total_depot_hours": 8.357777777777779
           },
           {
             "driver_id": "D009",
-            "trip_count": 7,
-            "first_sign_on": "06:30:00",
-            "last_sign_off": "14:53:28",
-            "total_depot_hours": 8.391111111111112
+            "trip_count": 6,
+            "first_sign_on": "05:30:00",
+            "last_sign_off": "12:11:58",
+            "total_depot_hours": 6.6994444444444445
           },
           {
             "driver_id": "D010",
-            "trip_count": 5,
+            "trip_count": 6,
             "first_sign_on": "06:30:00",
             "last_sign_off": "14:58:12",
             "total_depot_hours": 8.47
           },
           {
             "driver_id": "D011",
-            "trip_count": 6,
-            "first_sign_on": "07:41:25",
-            "last_sign_off": "16:09:58",
-            "total_depot_hours": 8.475833333333334
-          },
-          {
-            "driver_id": "D012",
-            "trip_count": 5,
+            "trip_count": 7,
             "first_sign_on": "07:45:00",
             "last_sign_off": "15:57:42",
             "total_depot_hours": 8.211666666666666
           },
           {
+            "driver_id": "D012",
+            "trip_count": 7,
+            "first_sign_on": "07:35:00",
+            "last_sign_off": "15:52:58",
+            "total_depot_hours": 8.299444444444445
+          },
+          {
             "driver_id": "D013",
-            "trip_count": 5,
-            "first_sign_on": "07:11:19",
-            "last_sign_off": "15:32:12",
-            "total_depot_hours": 8.348055555555556
+            "trip_count": 6,
+            "first_sign_on": "05:42:00",
+            "last_sign_off": "13:58:42",
+            "total_depot_hours": 8.278333333333334
           },
           {
             "driver_id": "D014",
-            "trip_count": 3,
-            "first_sign_on": "07:52:00",
-            "last_sign_off": "13:28:28",
-            "total_depot_hours": 5.607777777777778
+            "trip_count": 7,
+            "first_sign_on": "15:24:00",
+            "last_sign_off": "23:36:24",
+            "total_depot_hours": 8.206666666666667
           },
           {
             "driver_id": "D015",
             "trip_count": 7,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "14:24:12",
-            "total_depot_hours": 8.403333333333334
+            "first_sign_on": "06:55:00",
+            "last_sign_off": "15:06:42",
+            "total_depot_hours": 8.195
           },
           {
             "driver_id": "D016",
-            "trip_count": 8,
-            "first_sign_on": "15:02:44",
-            "last_sign_off": "23:13:53",
-            "total_depot_hours": 8.185833333333333
+            "trip_count": 6,
+            "first_sign_on": "09:05:25",
+            "last_sign_off": "17:16:55",
+            "total_depot_hours": 8.191666666666666
           },
           {
             "driver_id": "D017",
-            "trip_count": 6,
+            "trip_count": 4,
             "first_sign_on": "06:00:00",
-            "last_sign_off": "12:42:12",
-            "total_depot_hours": 6.703333333333333
+            "last_sign_off": "10:53:00",
+            "total_depot_hours": 4.883333333333334
           },
           {
             "driver_id": "D018",
-            "trip_count": 5,
-            "first_sign_on": "08:27:00",
-            "last_sign_off": "16:37:48",
-            "total_depot_hours": 8.18
-          },
-          {
-            "driver_id": "D019",
-            "trip_count": 7,
-            "first_sign_on": "15:28:14",
-            "last_sign_off": "23:36:02",
-            "total_depot_hours": 8.13
+            "trip_count": 6,
+            "first_sign_on": "16:13:55",
+            "last_sign_off": "23:19:58",
+            "total_depot_hours": 7.100833333333333
           },
           {
             "driver_id": "D020",
-            "trip_count": 7,
-            "first_sign_on": "12:59:30",
-            "last_sign_off": "21:13:28",
-            "total_depot_hours": 8.232777777777779
+            "trip_count": 5,
+            "first_sign_on": "10:04:25",
+            "last_sign_off": "18:26:55",
+            "total_depot_hours": 8.375
           },
           {
             "driver_id": "D021",
-            "trip_count": 7,
-            "first_sign_on": "14:16:00",
-            "last_sign_off": "22:35:28",
-            "total_depot_hours": 8.324444444444444
+            "trip_count": 6,
+            "first_sign_on": "11:47:14",
+            "last_sign_off": "20:00:50",
+            "total_depot_hours": 8.226666666666667
           },
           {
             "driver_id": "D022",
-            "trip_count": 5,
-            "first_sign_on": "09:30:00",
-            "last_sign_off": "17:30:55",
-            "total_depot_hours": 8.015277777777778
+            "trip_count": 4,
+            "first_sign_on": "18:23:30",
+            "last_sign_off": "23:20:09",
+            "total_depot_hours": 4.944166666666667
           },
           {
             "driver_id": "D023",
-            "trip_count": 7,
-            "first_sign_on": "14:24:30",
-            "last_sign_off": "22:50:28",
-            "total_depot_hours": 8.432777777777778
+            "trip_count": 6,
+            "first_sign_on": "05:05:00",
+            "last_sign_off": "10:49:38",
+            "total_depot_hours": 5.743888888888889
           },
           {
             "driver_id": "D024",
-            "trip_count": 6,
-            "first_sign_on": "12:29:44",
-            "last_sign_off": "20:56:28",
-            "total_depot_hours": 8.445555555555556
+            "trip_count": 5,
+            "first_sign_on": "16:38:30",
+            "last_sign_off": "24:18:45",
+            "total_depot_hours": 7.670833333333333
           },
           {
-            "driver_id": "D026",
-            "trip_count": 7,
-            "first_sign_on": "14:20:14",
-            "last_sign_off": "22:49:58",
-            "total_depot_hours": 8.495555555555555
+            "driver_id": "D025",
+            "trip_count": 4,
+            "first_sign_on": "17:51:55",
+            "last_sign_off": "22:07:28",
+            "total_depot_hours": 4.259166666666666
           },
           {
             "driver_id": "D027",
-            "trip_count": 6,
-            "first_sign_on": "14:58:30",
-            "last_sign_off": "23:19:58",
-            "total_depot_hours": 8.357777777777779
+            "trip_count": 5,
+            "first_sign_on": "14:24:30",
+            "last_sign_off": "22:01:08",
+            "total_depot_hours": 7.610555555555556
           },
           {
             "driver_id": "D028",
-            "trip_count": 6,
-            "first_sign_on": "17:09:55",
-            "last_sign_off": "23:36:24",
-            "total_depot_hours": 6.441388888888889
+            "trip_count": 8,
+            "first_sign_on": "13:03:44",
+            "last_sign_off": "21:31:08",
+            "total_depot_hours": 8.456666666666667
           },
           {
             "driver_id": "D029",
-            "trip_count": 6,
-            "first_sign_on": "10:12:00",
-            "last_sign_off": "18:37:42",
-            "total_depot_hours": 8.428333333333333
+            "trip_count": 7,
+            "first_sign_on": "14:58:30",
+            "last_sign_off": "23:13:53",
+            "total_depot_hours": 8.256388888888889
           },
           {
-            "driver_id": "D031",
-            "trip_count": 6,
-            "first_sign_on": "12:00:00",
-            "last_sign_off": "20:04:55",
-            "total_depot_hours": 8.081944444444444
+            "driver_id": "D030",
+            "trip_count": 7,
+            "first_sign_on": "12:12:44",
+            "last_sign_off": "20:39:28",
+            "total_depot_hours": 8.445555555555556
           },
           {
             "driver_id": "D032",
+            "trip_count": 7,
+            "first_sign_on": "12:00:00",
+            "last_sign_off": "20:16:08",
+            "total_depot_hours": 8.268888888888888
+          },
+          {
+            "driver_id": "D033",
             "trip_count": 8,
-            "first_sign_on": "14:33:00",
-            "last_sign_off": "22:34:58",
-            "total_depot_hours": 8.032777777777778
+            "first_sign_on": "14:45:44",
+            "last_sign_off": "22:58:53",
+            "total_depot_hours": 8.219166666666666
+          },
+          {
+            "driver_id": "D034",
+            "trip_count": 7,
+            "first_sign_on": "15:24:00",
+            "last_sign_off": "23:05:09",
+            "total_depot_hours": 7.685833333333333
           },
           {
             "driver_id": "D035",
-            "trip_count": 2,
-            "first_sign_on": "08:06:00",
-            "last_sign_off": "16:31:09",
-            "total_depot_hours": 8.419166666666667
+            "trip_count": 7,
+            "first_sign_on": "15:36:44",
+            "last_sign_off": "22:49:58",
+            "total_depot_hours": 7.220555555555555
           },
           {
             "driver_id": "D036",
-            "trip_count": 6,
-            "first_sign_on": "12:34:00",
-            "last_sign_off": "20:16:08",
-            "total_depot_hours": 7.702222222222222
+            "trip_count": 7,
+            "first_sign_on": "15:45:55",
+            "last_sign_off": "23:32:49",
+            "total_depot_hours": 7.781666666666666
           },
           {
             "driver_id": "D037",
-            "trip_count": 7,
-            "first_sign_on": "13:12:14",
-            "last_sign_off": "21:40:28",
-            "total_depot_hours": 8.470555555555556
+            "trip_count": 6,
+            "first_sign_on": "15:52:55",
+            "last_sign_off": "23:04:58",
+            "total_depot_hours": 7.200833333333334
           },
           {
             "driver_id": "D038",
-            "trip_count": 6,
-            "first_sign_on": "15:56:30",
-            "last_sign_off": "23:05:09",
-            "total_depot_hours": 7.144166666666667
+            "trip_count": 7,
+            "first_sign_on": "15:07:00",
+            "last_sign_off": "23:36:02",
+            "total_depot_hours": 8.483888888888888
+          },
+          {
+            "driver_id": "D039",
+            "trip_count": 7,
+            "first_sign_on": "07:28:25",
+            "last_sign_off": "15:40:42",
+            "total_depot_hours": 8.204722222222221
           },
           {
             "driver_id": "D040",
-            "trip_count": 5,
-            "first_sign_on": "16:06:55",
-            "last_sign_off": "22:07:28",
-            "total_depot_hours": 6.009166666666666
+            "trip_count": 4,
+            "first_sign_on": "08:06:00",
+            "last_sign_off": "16:14:42",
+            "total_depot_hours": 8.145
           },
           {
             "driver_id": "D041",
-            "trip_count": 6,
-            "first_sign_on": "17:13:30",
-            "last_sign_off": "23:04:58",
-            "total_depot_hours": 5.857777777777778
-          },
-          {
-            "driver_id": "D042",
-            "trip_count": 6,
-            "first_sign_on": "12:04:14",
-            "last_sign_off": "20:33:35",
-            "total_depot_hours": 8.489166666666666
+            "trip_count": 7,
+            "first_sign_on": "10:12:55",
+            "last_sign_off": "18:23:42",
+            "total_depot_hours": 8.179722222222223
           },
           {
             "driver_id": "D043",
-            "trip_count": 7,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "14:02:28",
-            "total_depot_hours": 8.29111111111111
+            "trip_count": 8,
+            "first_sign_on": "14:07:30",
+            "last_sign_off": "22:34:58",
+            "total_depot_hours": 8.457777777777778
           },
           {
             "driver_id": "D044",
-            "trip_count": 6,
-            "first_sign_on": "15:45:55",
-            "last_sign_off": "23:20:09",
-            "total_depot_hours": 7.570555555555556
+            "trip_count": 7,
+            "first_sign_on": "12:34:00",
+            "last_sign_off": "21:01:38",
+            "total_depot_hours": 8.460555555555555
           },
           {
             "driver_id": "D045",
-            "trip_count": 7,
-            "first_sign_on": "06:48:00",
-            "last_sign_off": "15:06:42",
-            "total_depot_hours": 8.311666666666667
+            "trip_count": 5,
+            "first_sign_on": "04:45:00",
+            "last_sign_off": "13:11:28",
+            "total_depot_hours": 8.44111111111111
           }
         ]
       },
@@ -491,328 +491,328 @@
         "pool_size": 50,
         "active_drivers": 45,
         "reserve": 5,
-        "rows_in_crew_schedule": 250,
-        "assignments_in_crew_solution": 250,
+        "rows_in_crew_schedule": 255,
+        "assignments_in_crew_solution": 255,
         "total_depot_hours": {
-          "min": 1.3411111111111111,
-          "mean": 7.3657407407407405,
-          "max": 8.499444444444444
+          "min": 1.3505555555555555,
+          "mean": 7.4379382716049385,
+          "max": 8.482777777777779
         },
         "per_driver": [
           {
             "driver_id": "D001",
-            "trip_count": 4,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "10:49:38",
-            "total_depot_hours": 5.077222222222222
+            "trip_count": 1,
+            "first_sign_on": "22:15:00",
+            "last_sign_off": "23:36:02",
+            "total_depot_hours": 1.3505555555555555
           },
           {
             "driver_id": "D002",
-            "trip_count": 7,
+            "trip_count": 8,
             "first_sign_on": "06:00:00",
-            "last_sign_off": "14:02:28",
-            "total_depot_hours": 8.04111111111111
+            "last_sign_off": "14:19:28",
+            "total_depot_hours": 8.324444444444444
           },
           {
             "driver_id": "D003",
             "trip_count": 4,
-            "first_sign_on": "07:52:00",
-            "last_sign_off": "16:14:42",
-            "total_depot_hours": 8.378333333333334
+            "first_sign_on": "07:59:00",
+            "last_sign_off": "14:02:28",
+            "total_depot_hours": 6.057777777777778
           },
           {
             "driver_id": "D004",
-            "trip_count": 8,
+            "trip_count": 7,
             "first_sign_on": "06:00:00",
-            "last_sign_off": "14:24:12",
-            "total_depot_hours": 8.403333333333334
+            "last_sign_off": "13:53:58",
+            "total_depot_hours": 7.899444444444445
           },
           {
             "driver_id": "D005",
             "trip_count": 7,
-            "first_sign_on": "07:05:00",
-            "last_sign_off": "14:53:28",
-            "total_depot_hours": 7.807777777777778
+            "first_sign_on": "07:11:19",
+            "last_sign_off": "15:35:58",
+            "total_depot_hours": 8.410833333333333
           },
           {
             "driver_id": "D006",
-            "trip_count": 7,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "12:45:58",
-            "total_depot_hours": 7.016111111111111
+            "trip_count": 6,
+            "first_sign_on": "07:45:00",
+            "last_sign_off": "15:49:12",
+            "total_depot_hours": 8.07
           },
           {
             "driver_id": "D007",
-            "trip_count": 7,
-            "first_sign_on": "06:15:00",
-            "last_sign_off": "14:07:12",
-            "total_depot_hours": 7.87
+            "trip_count": 5,
+            "first_sign_on": "07:18:25",
+            "last_sign_off": "15:40:42",
+            "total_depot_hours": 8.37138888888889
           },
           {
             "driver_id": "D008",
             "trip_count": 7,
-            "first_sign_on": "07:07:25",
-            "last_sign_off": "15:15:12",
-            "total_depot_hours": 8.129722222222222
+            "first_sign_on": "05:30:00",
+            "last_sign_off": "12:42:12",
+            "total_depot_hours": 7.203333333333333
           },
           {
             "driver_id": "D009",
             "trip_count": 7,
-            "first_sign_on": "07:33:00",
-            "last_sign_off": "15:40:42",
-            "total_depot_hours": 8.128333333333334
+            "first_sign_on": "08:06:00",
+            "last_sign_off": "16:06:12",
+            "total_depot_hours": 8.003333333333334
           },
           {
             "driver_id": "D010",
-            "trip_count": 7,
-            "first_sign_on": "07:35:00",
-            "last_sign_off": "16:01:28",
-            "total_depot_hours": 8.44111111111111
+            "trip_count": 6,
+            "first_sign_on": "05:42:00",
+            "last_sign_off": "14:10:58",
+            "total_depot_hours": 8.482777777777779
           },
           {
             "driver_id": "D011",
-            "trip_count": 7,
-            "first_sign_on": "08:41:00",
-            "last_sign_off": "16:06:12",
-            "total_depot_hours": 7.42
+            "trip_count": 6,
+            "first_sign_on": "07:45:00",
+            "last_sign_off": "15:52:58",
+            "total_depot_hours": 8.132777777777777
           },
           {
             "driver_id": "D012",
-            "trip_count": 7,
-            "first_sign_on": "06:45:25",
-            "last_sign_off": "14:58:12",
-            "total_depot_hours": 8.213055555555556
+            "trip_count": 5,
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "12:28:58",
+            "total_depot_hours": 6.482777777777778
           },
           {
             "driver_id": "D013",
-            "trip_count": 7,
-            "first_sign_on": "06:55:00",
-            "last_sign_off": "15:06:42",
-            "total_depot_hours": 8.195
+            "trip_count": 6,
+            "first_sign_on": "05:05:00",
+            "last_sign_off": "12:15:53",
+            "total_depot_hours": 7.181388888888889
           },
           {
             "driver_id": "D014",
-            "trip_count": 7,
-            "first_sign_on": "06:45:00",
-            "last_sign_off": "15:01:58",
-            "total_depot_hours": 8.282777777777778
+            "trip_count": 4,
+            "first_sign_on": "16:03:30",
+            "last_sign_off": "23:20:09",
+            "total_depot_hours": 7.2775
           },
           {
             "driver_id": "D015",
-            "trip_count": 6,
+            "trip_count": 4,
             "first_sign_on": "06:15:00",
-            "last_sign_off": "13:36:58",
-            "total_depot_hours": 7.3661111111111115
+            "last_sign_off": "11:13:05",
+            "total_depot_hours": 4.968055555555556
           },
           {
             "driver_id": "D016",
-            "trip_count": 2,
-            "first_sign_on": "06:30:00",
-            "last_sign_off": "08:51:13",
-            "total_depot_hours": 2.3536111111111113
+            "trip_count": 4,
+            "first_sign_on": "09:02:00",
+            "last_sign_off": "17:30:55",
+            "total_depot_hours": 8.481944444444444
+          },
+          {
+            "driver_id": "D017",
+            "trip_count": 6,
+            "first_sign_on": "04:45:00",
+            "last_sign_off": "12:50:42",
+            "total_depot_hours": 8.095
           },
           {
             "driver_id": "D018",
-            "trip_count": 6,
-            "first_sign_on": "14:24:30",
-            "last_sign_off": "21:18:20",
-            "total_depot_hours": 6.897222222222222
+            "trip_count": 5,
+            "first_sign_on": "09:26:25",
+            "last_sign_off": "16:31:09",
+            "total_depot_hours": 7.078888888888889
+          },
+          {
+            "driver_id": "D019",
+            "trip_count": 7,
+            "first_sign_on": "13:12:14",
+            "last_sign_off": "21:21:58",
+            "total_depot_hours": 8.162222222222223
           },
           {
             "driver_id": "D020",
-            "trip_count": 6,
-            "first_sign_on": "14:07:30",
-            "last_sign_off": "21:45:43",
-            "total_depot_hours": 7.6369444444444445
+            "trip_count": 2,
+            "first_sign_on": "09:19:25",
+            "last_sign_off": "16:41:32",
+            "total_depot_hours": 7.368611111111111
           },
           {
             "driver_id": "D021",
             "trip_count": 7,
-            "first_sign_on": "15:32:30",
+            "first_sign_on": "15:56:30",
             "last_sign_off": "23:32:49",
-            "total_depot_hours": 8.005277777777778
+            "total_depot_hours": 7.605277777777777
           },
           {
             "driver_id": "D022",
-            "trip_count": 6,
-            "first_sign_on": "14:33:00",
-            "last_sign_off": "22:58:53",
-            "total_depot_hours": 8.43138888888889
+            "trip_count": 5,
+            "first_sign_on": "15:49:30",
+            "last_sign_off": "22:49:58",
+            "total_depot_hours": 7.007777777777778
           },
           {
             "driver_id": "D023",
-            "trip_count": 1,
-            "first_sign_on": "20:47:00",
-            "last_sign_off": "22:07:28",
-            "total_depot_hours": 1.3411111111111111
+            "trip_count": 3,
+            "first_sign_on": "06:30:00",
+            "last_sign_off": "12:54:28",
+            "total_depot_hours": 6.407777777777778
           },
           {
             "driver_id": "D024",
-            "trip_count": 5,
-            "first_sign_on": "14:11:44",
-            "last_sign_off": "22:34:58",
-            "total_depot_hours": 8.387222222222222
+            "trip_count": 7,
+            "first_sign_on": "12:12:44",
+            "last_sign_off": "20:21:20",
+            "total_depot_hours": 8.143333333333333
           },
           {
             "driver_id": "D025",
-            "trip_count": 2,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "14:27:58",
-            "total_depot_hours": 8.466111111111111
+            "trip_count": 8,
+            "first_sign_on": "14:07:30",
+            "last_sign_off": "22:13:50",
+            "total_depot_hours": 8.105555555555556
           },
           {
             "driver_id": "D026",
-            "trip_count": 5,
-            "first_sign_on": "16:10:30",
-            "last_sign_off": "22:20:28",
-            "total_depot_hours": 6.166111111111111
+            "trip_count": 7,
+            "first_sign_on": "13:29:14",
+            "last_sign_off": "21:33:28",
+            "total_depot_hours": 8.070555555555556
           },
           {
             "driver_id": "D027",
-            "trip_count": 7,
-            "first_sign_on": "15:02:44",
-            "last_sign_off": "23:13:53",
-            "total_depot_hours": 8.185833333333333
-          },
-          {
-            "driver_id": "D028",
-            "trip_count": 2,
-            "first_sign_on": "08:06:00",
-            "last_sign_off": "10:29:25",
-            "total_depot_hours": 2.390277777777778
+            "trip_count": 3,
+            "first_sign_on": "05:45:00",
+            "last_sign_off": "09:44:12",
+            "total_depot_hours": 3.986666666666667
           },
           {
             "driver_id": "D029",
-            "trip_count": 5,
-            "first_sign_on": "15:07:00",
-            "last_sign_off": "21:50:28",
-            "total_depot_hours": 6.724444444444444
+            "trip_count": 4,
+            "first_sign_on": "08:06:00",
+            "last_sign_off": "16:18:28",
+            "total_depot_hours": 8.207777777777778
           },
           {
             "driver_id": "D030",
-            "trip_count": 3,
-            "first_sign_on": "14:50:00",
-            "last_sign_off": "22:49:58",
-            "total_depot_hours": 7.999444444444444
+            "trip_count": 4,
+            "first_sign_on": "06:30:00",
+            "last_sign_off": "11:24:53",
+            "total_depot_hours": 4.914722222222222
           },
           {
             "driver_id": "D031",
-            "trip_count": 5,
-            "first_sign_on": "14:03:14",
+            "trip_count": 7,
+            "first_sign_on": "13:59:00",
             "last_sign_off": "22:20:28",
-            "total_depot_hours": 8.287222222222223
+            "total_depot_hours": 8.357777777777779
           },
           {
             "driver_id": "D032",
-            "trip_count": 5,
-            "first_sign_on": "11:38:44",
-            "last_sign_off": "20:08:42",
-            "total_depot_hours": 8.499444444444444
+            "trip_count": 8,
+            "first_sign_on": "14:50:00",
+            "last_sign_off": "23:05:09",
+            "total_depot_hours": 8.2525
           },
           {
             "driver_id": "D033",
-            "trip_count": 6,
-            "first_sign_on": "16:03:30",
-            "last_sign_off": "23:19:58",
-            "total_depot_hours": 7.274444444444445
+            "trip_count": 7,
+            "first_sign_on": "16:38:30",
+            "last_sign_off": "24:18:45",
+            "total_depot_hours": 7.670833333333333
           },
           {
-            "driver_id": "D035",
-            "trip_count": 8,
-            "first_sign_on": "06:52:00",
-            "last_sign_off": "15:18:58",
-            "total_depot_hours": 8.449444444444444
+            "driver_id": "D034",
+            "trip_count": 4,
+            "first_sign_on": "12:08:30",
+            "last_sign_off": "20:33:35",
+            "total_depot_hours": 8.418055555555556
           },
           {
             "driver_id": "D036",
             "trip_count": 5,
-            "first_sign_on": "15:52:55",
-            "last_sign_off": "23:05:09",
-            "total_depot_hours": 7.203888888888889
+            "first_sign_on": "08:27:00",
+            "last_sign_off": "16:01:28",
+            "total_depot_hours": 7.5744444444444445
           },
           {
             "driver_id": "D037",
-            "trip_count": 6,
-            "first_sign_on": "14:28:44",
-            "last_sign_off": "22:50:28",
-            "total_depot_hours": 8.362222222222222
-          },
-          {
-            "driver_id": "D038",
-            "trip_count": 5,
-            "first_sign_on": "11:43:00",
-            "last_sign_off": "20:04:55",
-            "total_depot_hours": 8.365277777777777
-          },
-          {
-            "driver_id": "D039",
-            "trip_count": 6,
-            "first_sign_on": "16:06:55",
-            "last_sign_off": "23:36:02",
-            "total_depot_hours": 7.485277777777778
+            "trip_count": 7,
+            "first_sign_on": "15:36:44",
+            "last_sign_off": "23:19:58",
+            "total_depot_hours": 7.720555555555555
           },
           {
             "driver_id": "D040",
-            "trip_count": 3,
-            "first_sign_on": "08:27:00",
-            "last_sign_off": "16:41:32",
-            "total_depot_hours": 8.242222222222223
+            "trip_count": 7,
+            "first_sign_on": "15:28:14",
+            "last_sign_off": "23:04:58",
+            "total_depot_hours": 7.612222222222222
           },
           {
             "driver_id": "D041",
-            "trip_count": 6,
-            "first_sign_on": "15:41:00",
-            "last_sign_off": "23:20:09",
-            "total_depot_hours": 7.6525
-          },
-          {
-            "driver_id": "D042",
-            "trip_count": 5,
-            "first_sign_on": "16:17:30",
-            "last_sign_off": "23:04:58",
-            "total_depot_hours": 6.791111111111111
+            "trip_count": 8,
+            "first_sign_on": "15:24:00",
+            "last_sign_off": "23:13:53",
+            "total_depot_hours": 7.831388888888889
           },
           {
             "driver_id": "D043",
             "trip_count": 7,
-            "first_sign_on": "12:21:14",
-            "last_sign_off": "20:39:28",
-            "total_depot_hours": 8.303888888888888
+            "first_sign_on": "11:26:00",
+            "last_sign_off": "19:47:42",
+            "total_depot_hours": 8.361666666666666
           },
           {
             "driver_id": "D044",
-            "trip_count": 4,
-            "first_sign_on": "15:36:44",
-            "last_sign_off": "21:01:38",
-            "total_depot_hours": 5.415
+            "trip_count": 2,
+            "first_sign_on": "15:32:30",
+            "last_sign_off": "22:10:28",
+            "total_depot_hours": 6.632777777777778
           },
           {
             "driver_id": "D045",
-            "trip_count": 7,
-            "first_sign_on": "13:25:00",
-            "last_sign_off": "21:22:28",
-            "total_depot_hours": 7.957777777777777
+            "trip_count": 5,
+            "first_sign_on": "10:38:25",
+            "last_sign_off": "18:51:42",
+            "total_depot_hours": 8.221388888888889
+          },
+          {
+            "driver_id": "D046",
+            "trip_count": 6,
+            "first_sign_on": "13:33:30",
+            "last_sign_off": "21:45:43",
+            "total_depot_hours": 8.203611111111112
           },
           {
             "driver_id": "D047",
-            "trip_count": 5,
-            "first_sign_on": "15:28:14",
+            "trip_count": 7,
+            "first_sign_on": "13:16:30",
+            "last_sign_off": "21:40:28",
+            "total_depot_hours": 8.399444444444445
+          },
+          {
+            "driver_id": "D048",
+            "trip_count": 8,
+            "first_sign_on": "15:24:00",
             "last_sign_off": "23:36:24",
-            "total_depot_hours": 8.136111111111111
+            "total_depot_hours": 8.206666666666667
           },
           {
             "driver_id": "D049",
-            "trip_count": 5,
-            "first_sign_on": "12:29:44",
-            "last_sign_off": "19:57:55",
-            "total_depot_hours": 7.469722222222222
+            "trip_count": 6,
+            "first_sign_on": "05:45:00",
+            "last_sign_off": "13:50:12",
+            "total_depot_hours": 8.086666666666666
           },
           {
             "driver_id": "D050",
             "trip_count": 6,
-            "first_sign_on": "06:48:00",
-            "last_sign_off": "14:36:28",
-            "total_depot_hours": 7.807777777777778
+            "first_sign_on": "07:48:25",
+            "last_sign_off": "15:06:42",
+            "total_depot_hours": 7.304722222222222
           }
         ]
       },
@@ -820,363 +820,363 @@
         "pool_size": 55,
         "active_drivers": 50,
         "reserve": 5,
-        "rows_in_crew_schedule": 250,
-        "assignments_in_crew_solution": 250,
+        "rows_in_crew_schedule": 255,
+        "assignments_in_crew_solution": 255,
         "total_depot_hours": {
-          "min": 1.3463888888888889,
-          "mean": 6.903200000000001,
-          "max": 8.498611111111112
+          "min": 1.3819444444444444,
+          "mean": 7.163577777777777,
+          "max": 8.488055555555556
         },
         "per_driver": [
           {
             "driver_id": "D001",
-            "trip_count": 6,
-            "first_sign_on": "07:48:25",
-            "last_sign_off": "15:52:58",
-            "total_depot_hours": 8.075833333333334
+            "trip_count": 7,
+            "first_sign_on": "06:30:00",
+            "last_sign_off": "14:36:28",
+            "total_depot_hours": 8.107777777777779
           },
           {
             "driver_id": "D002",
             "trip_count": 6,
-            "first_sign_on": "06:48:00",
-            "last_sign_off": "14:15:42",
-            "total_depot_hours": 7.461666666666667
+            "first_sign_on": "06:45:25",
+            "last_sign_off": "14:32:42",
+            "total_depot_hours": 7.788055555555555
           },
           {
             "driver_id": "D003",
             "trip_count": 6,
-            "first_sign_on": "07:07:25",
-            "last_sign_off": "14:19:28",
-            "total_depot_hours": 7.200833333333334
+            "first_sign_on": "04:45:00",
+            "last_sign_off": "11:54:58",
+            "total_depot_hours": 7.166111111111111
           },
           {
             "driver_id": "D004",
-            "trip_count": 7,
-            "first_sign_on": "06:55:00",
-            "last_sign_off": "15:15:12",
-            "total_depot_hours": 8.336666666666666
+            "trip_count": 4,
+            "first_sign_on": "06:48:00",
+            "last_sign_off": "12:03:28",
+            "total_depot_hours": 5.257777777777778
           },
           {
             "driver_id": "D005",
-            "trip_count": 4,
-            "first_sign_on": "06:15:00",
-            "last_sign_off": "10:40:12",
-            "total_depot_hours": 4.42
+            "trip_count": 8,
+            "first_sign_on": "15:24:00",
+            "last_sign_off": "23:32:49",
+            "total_depot_hours": 8.146944444444445
           },
           {
             "driver_id": "D006",
-            "trip_count": 6,
-            "first_sign_on": "07:05:00",
-            "last_sign_off": "15:27:28",
-            "total_depot_hours": 8.374444444444444
+            "trip_count": 4,
+            "first_sign_on": "08:13:00",
+            "last_sign_off": "15:44:28",
+            "total_depot_hours": 7.524444444444445
           },
           {
             "driver_id": "D007",
-            "trip_count": 8,
-            "first_sign_on": "07:11:19",
-            "last_sign_off": "15:40:42",
-            "total_depot_hours": 8.489722222222222
+            "trip_count": 6,
+            "first_sign_on": "05:30:00",
+            "last_sign_off": "12:15:53",
+            "total_depot_hours": 6.764722222222222
           },
           {
             "driver_id": "D008",
-            "trip_count": 8,
-            "first_sign_on": "07:45:00",
-            "last_sign_off": "16:06:12",
-            "total_depot_hours": 8.353333333333333
+            "trip_count": 6,
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "13:45:28",
+            "total_depot_hours": 7.757777777777778
           },
           {
             "driver_id": "D009",
-            "trip_count": 6,
-            "first_sign_on": "07:35:00",
-            "last_sign_off": "15:18:58",
-            "total_depot_hours": 7.732777777777778
+            "trip_count": 5,
+            "first_sign_on": "06:55:00",
+            "last_sign_off": "14:27:58",
+            "total_depot_hours": 7.549444444444444
           },
           {
             "driver_id": "D010",
-            "trip_count": 6,
-            "first_sign_on": "06:30:00",
-            "last_sign_off": "14:32:42",
-            "total_depot_hours": 8.045
+            "trip_count": 7,
+            "first_sign_on": "07:41:25",
+            "last_sign_off": "15:23:42",
+            "total_depot_hours": 7.704722222222222
           },
           {
             "driver_id": "D011",
-            "trip_count": 5,
+            "trip_count": 3,
             "first_sign_on": "07:45:00",
-            "last_sign_off": "15:49:12",
-            "total_depot_hours": 8.07
+            "last_sign_off": "11:20:55",
+            "total_depot_hours": 3.598611111111111
           },
           {
             "driver_id": "D012",
             "trip_count": 6,
-            "first_sign_on": "09:05:25",
-            "last_sign_off": "17:08:48",
-            "total_depot_hours": 8.05638888888889
+            "first_sign_on": "08:51:25",
+            "last_sign_off": "17:20:42",
+            "total_depot_hours": 8.488055555555556
           },
           {
             "driver_id": "D013",
-            "trip_count": 8,
-            "first_sign_on": "06:56:25",
-            "last_sign_off": "15:23:42",
-            "total_depot_hours": 8.454722222222221
+            "trip_count": 6,
+            "first_sign_on": "06:15:00",
+            "last_sign_off": "14:41:12",
+            "total_depot_hours": 8.436666666666667
           },
           {
             "driver_id": "D014",
-            "trip_count": 2,
-            "first_sign_on": "16:03:30",
-            "last_sign_off": "23:36:02",
-            "total_depot_hours": 7.542222222222223
+            "trip_count": 6,
+            "first_sign_on": "05:45:00",
+            "last_sign_off": "13:50:12",
+            "total_depot_hours": 8.086666666666666
           },
           {
             "driver_id": "D015",
-            "trip_count": 4,
-            "first_sign_on": "16:13:55",
-            "last_sign_off": "21:22:28",
-            "total_depot_hours": 5.1425
-          },
-          {
-            "driver_id": "D016",
-            "trip_count": 1,
-            "first_sign_on": "08:58:25",
-            "last_sign_off": "10:19:12",
-            "total_depot_hours": 1.3463888888888889
-          },
-          {
-            "driver_id": "D017",
             "trip_count": 6,
-            "first_sign_on": "14:11:44",
-            "last_sign_off": "22:34:58",
-            "total_depot_hours": 8.387222222222222
-          },
-          {
-            "driver_id": "D018",
-            "trip_count": 4,
-            "first_sign_on": "13:16:30",
-            "last_sign_off": "21:11:38",
-            "total_depot_hours": 7.918888888888889
-          },
-          {
-            "driver_id": "D019",
-            "trip_count": 6,
-            "first_sign_on": "10:21:25",
-            "last_sign_off": "18:16:42",
-            "total_depot_hours": 7.921388888888889
-          },
-          {
-            "driver_id": "D020",
-            "trip_count": 4,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "14:02:28",
-            "total_depot_hours": 8.04111111111111
-          },
-          {
-            "driver_id": "D021",
-            "trip_count": 5,
-            "first_sign_on": "14:24:30",
-            "last_sign_off": "22:35:28",
-            "total_depot_hours": 8.182777777777778
-          },
-          {
-            "driver_id": "D022",
-            "trip_count": 4,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "10:46:22",
-            "total_depot_hours": 4.772777777777778
-          },
-          {
-            "driver_id": "D023",
-            "trip_count": 7,
-            "first_sign_on": "15:15:30",
-            "last_sign_off": "22:50:28",
-            "total_depot_hours": 7.582777777777777
-          },
-          {
-            "driver_id": "D024",
-            "trip_count": 2,
-            "first_sign_on": "21:00:00",
-            "last_sign_off": "23:20:09",
-            "total_depot_hours": 2.3358333333333334
-          },
-          {
-            "driver_id": "D025",
-            "trip_count": 8,
-            "first_sign_on": "15:41:00",
-            "last_sign_off": "23:13:53",
-            "total_depot_hours": 7.548055555555556
-          },
-          {
-            "driver_id": "D026",
-            "trip_count": 8,
             "first_sign_on": "15:24:00",
             "last_sign_off": "23:36:24",
             "total_depot_hours": 8.206666666666667
           },
           {
-            "driver_id": "D027",
-            "trip_count": 8,
-            "first_sign_on": "15:11:14",
-            "last_sign_off": "23:32:49",
-            "total_depot_hours": 8.359722222222222
+            "driver_id": "D016",
+            "trip_count": 7,
+            "first_sign_on": "07:52:00",
+            "last_sign_off": "15:49:12",
+            "total_depot_hours": 7.953333333333333
+          },
+          {
+            "driver_id": "D017",
+            "trip_count": 4,
+            "first_sign_on": "10:05:00",
+            "last_sign_off": "18:16:42",
+            "total_depot_hours": 8.195
+          },
+          {
+            "driver_id": "D018",
+            "trip_count": 6,
+            "first_sign_on": "15:52:55",
+            "last_sign_off": "23:36:02",
+            "total_depot_hours": 7.7186111111111115
+          },
+          {
+            "driver_id": "D019",
+            "trip_count": 6,
+            "first_sign_on": "07:15:00",
+            "last_sign_off": "15:01:58",
+            "total_depot_hours": 7.782777777777778
+          },
+          {
+            "driver_id": "D020",
+            "trip_count": 6,
+            "first_sign_on": "07:18:25",
+            "last_sign_off": "15:27:28",
+            "total_depot_hours": 8.150833333333333
+          },
+          {
+            "driver_id": "D021",
+            "trip_count": 4,
+            "first_sign_on": "14:33:00",
+            "last_sign_off": "20:51:28",
+            "total_depot_hours": 6.307777777777778
+          },
+          {
+            "driver_id": "D022",
+            "trip_count": 6,
+            "first_sign_on": "16:31:30",
+            "last_sign_off": "24:18:45",
+            "total_depot_hours": 7.7875
+          },
+          {
+            "driver_id": "D023",
+            "trip_count": 3,
+            "first_sign_on": "14:45:44",
+            "last_sign_off": "18:02:42",
+            "total_depot_hours": 3.2827777777777776
+          },
+          {
+            "driver_id": "D024",
+            "trip_count": 4,
+            "first_sign_on": "09:40:25",
+            "last_sign_off": "18:05:55",
+            "total_depot_hours": 8.425
+          },
+          {
+            "driver_id": "D025",
+            "trip_count": 6,
+            "first_sign_on": "15:19:44",
+            "last_sign_off": "23:04:58",
+            "total_depot_hours": 7.753888888888889
           },
           {
             "driver_id": "D028",
-            "trip_count": 7,
-            "first_sign_on": "15:24:00",
-            "last_sign_off": "22:49:58",
-            "total_depot_hours": 7.432777777777778
+            "trip_count": 5,
+            "first_sign_on": "17:16:55",
+            "last_sign_off": "23:13:53",
+            "total_depot_hours": 5.9494444444444445
           },
           {
             "driver_id": "D029",
-            "trip_count": 7,
-            "first_sign_on": "14:50:00",
-            "last_sign_off": "23:04:58",
-            "total_depot_hours": 8.249444444444444
+            "trip_count": 3,
+            "first_sign_on": "11:47:14",
+            "last_sign_off": "20:00:50",
+            "total_depot_hours": 8.226666666666667
           },
           {
             "driver_id": "D030",
-            "trip_count": 2,
-            "first_sign_on": "10:05:00",
-            "last_sign_off": "18:19:55",
-            "total_depot_hours": 8.248611111111112
-          },
-          {
-            "driver_id": "D031",
-            "trip_count": 6,
-            "first_sign_on": "15:07:00",
-            "last_sign_off": "23:19:58",
-            "total_depot_hours": 8.216111111111111
+            "trip_count": 7,
+            "first_sign_on": "11:51:30",
+            "last_sign_off": "19:51:45",
+            "total_depot_hours": 8.004166666666666
           },
           {
             "driver_id": "D032",
-            "trip_count": 8,
-            "first_sign_on": "14:16:00",
-            "last_sign_off": "22:20:28",
-            "total_depot_hours": 8.074444444444444
-          },
-          {
-            "driver_id": "D033",
             "trip_count": 5,
-            "first_sign_on": "14:58:30",
-            "last_sign_off": "23:05:09",
-            "total_depot_hours": 8.110833333333334
+            "first_sign_on": "15:07:00",
+            "last_sign_off": "21:45:43",
+            "total_depot_hours": 6.645277777777777
           },
           {
             "driver_id": "D034",
-            "trip_count": 4,
-            "first_sign_on": "12:51:00",
-            "last_sign_off": "20:25:55",
-            "total_depot_hours": 7.581944444444445
+            "trip_count": 7,
+            "first_sign_on": "15:02:44",
+            "last_sign_off": "22:49:58",
+            "total_depot_hours": 7.787222222222222
           },
           {
             "driver_id": "D035",
-            "trip_count": 6,
-            "first_sign_on": "13:25:00",
-            "last_sign_off": "21:18:20",
-            "total_depot_hours": 7.888888888888889
+            "trip_count": 7,
+            "first_sign_on": "14:41:30",
+            "last_sign_off": "22:58:53",
+            "total_depot_hours": 8.289722222222222
           },
           {
             "driver_id": "D036",
-            "trip_count": 6,
-            "first_sign_on": "12:17:00",
-            "last_sign_off": "20:11:55",
-            "total_depot_hours": 7.915277777777778
+            "trip_count": 8,
+            "first_sign_on": "13:46:14",
+            "last_sign_off": "22:13:50",
+            "total_depot_hours": 8.46
           },
           {
             "driver_id": "D037",
             "trip_count": 6,
-            "first_sign_on": "11:09:00",
-            "last_sign_off": "19:36:55",
-            "total_depot_hours": 8.465277777777779
+            "first_sign_on": "14:37:14",
+            "last_sign_off": "22:10:28",
+            "total_depot_hours": 7.553888888888889
           },
           {
             "driver_id": "D038",
-            "trip_count": 2,
-            "first_sign_on": "06:00:00",
-            "last_sign_off": "08:51:13",
-            "total_depot_hours": 2.8536111111111113
+            "trip_count": 6,
+            "first_sign_on": "15:36:44",
+            "last_sign_off": "22:50:28",
+            "total_depot_hours": 7.228888888888889
           },
           {
             "driver_id": "D039",
-            "trip_count": 5,
-            "first_sign_on": "13:42:00",
-            "last_sign_off": "22:10:28",
-            "total_depot_hours": 8.474444444444444
+            "trip_count": 6,
+            "first_sign_on": "11:04:15",
+            "last_sign_off": "19:08:55",
+            "total_depot_hours": 8.077777777777778
           },
           {
             "driver_id": "D040",
-            "trip_count": 3,
-            "first_sign_on": "10:12:00",
-            "last_sign_off": "18:37:42",
-            "total_depot_hours": 8.428333333333333
+            "trip_count": 1,
+            "first_sign_on": "07:05:00",
+            "last_sign_off": "08:27:55",
+            "total_depot_hours": 1.3819444444444444
           },
           {
             "driver_id": "D041",
-            "trip_count": 4,
-            "first_sign_on": "07:25:00",
-            "last_sign_off": "12:24:43",
-            "total_depot_hours": 4.995277777777778
+            "trip_count": 7,
+            "first_sign_on": "05:45:00",
+            "last_sign_off": "13:41:42",
+            "total_depot_hours": 7.945
           },
           {
             "driver_id": "D042",
             "trip_count": 3,
-            "first_sign_on": "15:28:14",
-            "last_sign_off": "20:18:36",
-            "total_depot_hours": 4.839444444444444
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "12:33:42",
+            "total_depot_hours": 6.5616666666666665
           },
           {
             "driver_id": "D043",
             "trip_count": 1,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "07:09:05",
-            "total_depot_hours": 1.4013888888888888
+            "first_sign_on": "07:25:00",
+            "last_sign_off": "08:47:58",
+            "total_depot_hours": 1.3827777777777779
           },
           {
             "driver_id": "D044",
-            "trip_count": 3,
-            "first_sign_on": "10:18:00",
-            "last_sign_off": "18:47:55",
-            "total_depot_hours": 8.498611111111112
+            "trip_count": 6,
+            "first_sign_on": "15:32:30",
+            "last_sign_off": "23:20:09",
+            "total_depot_hours": 7.7941666666666665
+          },
+          {
+            "driver_id": "D045",
+            "trip_count": 2,
+            "first_sign_on": "07:28:25",
+            "last_sign_off": "11:46:28",
+            "total_depot_hours": 4.300833333333333
           },
           {
             "driver_id": "D046",
-            "trip_count": 5,
-            "first_sign_on": "12:46:44",
-            "last_sign_off": "21:13:28",
-            "total_depot_hours": 8.445555555555556
+            "trip_count": 6,
+            "first_sign_on": "13:03:44",
+            "last_sign_off": "20:39:28",
+            "total_depot_hours": 7.595555555555555
+          },
+          {
+            "driver_id": "D047",
+            "trip_count": 4,
+            "first_sign_on": "13:25:00",
+            "last_sign_off": "21:06:08",
+            "total_depot_hours": 7.685555555555555
           },
           {
             "driver_id": "D048",
-            "trip_count": 1,
-            "first_sign_on": "06:30:00",
-            "last_sign_off": "07:52:28",
-            "total_depot_hours": 1.3744444444444444
+            "trip_count": 2,
+            "first_sign_on": "05:05:00",
+            "last_sign_off": "11:41:53",
+            "total_depot_hours": 6.614722222222222
           },
           {
             "driver_id": "D049",
-            "trip_count": 5,
-            "first_sign_on": "06:45:25",
-            "last_sign_off": "11:58:53",
-            "total_depot_hours": 5.224444444444444
+            "trip_count": 3,
+            "first_sign_on": "06:00:00",
+            "last_sign_off": "14:15:42",
+            "total_depot_hours": 8.261666666666667
           },
           {
             "driver_id": "D050",
+            "trip_count": 6,
+            "first_sign_on": "15:11:14",
+            "last_sign_off": "23:19:58",
+            "total_depot_hours": 8.145555555555555
+          },
+          {
+            "driver_id": "D051",
+            "trip_count": 4,
+            "first_sign_on": "11:09:00",
+            "last_sign_off": "16:37:48",
+            "total_depot_hours": 5.48
+          },
+          {
+            "driver_id": "D052",
             "trip_count": 2,
-            "first_sign_on": "06:15:00",
-            "last_sign_off": "12:07:23",
-            "total_depot_hours": 5.873055555555555
+            "first_sign_on": "12:17:00",
+            "last_sign_off": "20:33:35",
+            "total_depot_hours": 8.276388888888889
           },
           {
             "driver_id": "D054",
-            "trip_count": 2,
-            "first_sign_on": "07:18:25",
-            "last_sign_off": "09:51:12",
-            "total_depot_hours": 2.546388888888889
+            "trip_count": 4,
+            "first_sign_on": "13:29:14",
+            "last_sign_off": "21:50:28",
+            "total_depot_hours": 8.35388888888889
           },
           {
             "driver_id": "D055",
             "trip_count": 6,
-            "first_sign_on": "05:45:00",
-            "last_sign_off": "13:24:42",
-            "total_depot_hours": 7.661666666666667
+            "first_sign_on": "06:56:25",
+            "last_sign_off": "15:10:28",
+            "total_depot_hours": 8.234166666666667
           }
         ]
       }

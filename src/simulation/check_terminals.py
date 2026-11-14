@@ -11,12 +11,19 @@ For each rake's consecutive pair (prev, next):
   prev_last_stop  =?=  next_first_stop
 
 Prints summary. Writes nothing.
+
+Note: parse_hhmm_to_sec is imported from schedule_loader so both helpers
+accept HH:MM and HH:MM:SS identically. The previous local implementation
+silently assumed HH:MM and raised ValueError on HH:MM:SS, which is how
+the 255-trip schedule is actually written.
 """
 
 from __future__ import annotations
 import csv
 from collections import defaultdict
 from pathlib import Path
+
+from src.simulation.schedule_loader import parse_hhmm_to_sec
 
 TRIPS = Path("data/raw/trips.txt")
 STOP_TIMES = Path("data/raw/stop_times.txt")
@@ -61,11 +68,6 @@ def load_schedule() -> list[dict]:
                 }
             )
     return rows
-
-
-def parse_hhmm_to_sec(s: str) -> int:
-    hh, mm = s.strip().split(":")
-    return int(hh) * 3600 + int(mm) * 60
 
 
 def main() -> None:

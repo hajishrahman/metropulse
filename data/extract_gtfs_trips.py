@@ -9,7 +9,7 @@ Writes: data/trips_full_route.csv
 
 Rules:
 - Only WK service.
-- Window: 06:00:00 <= departure < 23:00:00  (departure = first stop departure)
+- Window: 04:40:00 <= departure < 24:00:00  (departure = first stop departure)
 - Full route trip: first stop ALVA and last stop TPHT, or first TPHT and last ALVA.
 - Direction: UP if last_index > first_index, DOWN if last_index < first_index.
   Station index is taken from the stop order of one normal ALVA->TPHT trip.
@@ -91,7 +91,7 @@ def classify(rows, station_index, trip_row):
     dep_sec = parse_time_to_sec(first["departure_time"])
 
     # Window check uses departure of first stop
-    if not (6 * 3600 <= dep_sec < 23 * 3600):
+    if not (4 * 3600 + 40 * 60 <= dep_sec < 24 * 3600):
         return None, "out_of_window"
 
     # Direction by station index

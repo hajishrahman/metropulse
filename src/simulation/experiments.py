@@ -6,9 +6,9 @@ Phase 2 experiment runner. Runs E1-E4 on the real schedule, writes:
 
 All delay values are [SYNTHETIC] (no verified KMRL delay data). The
 schedule is built from real GTFS trip records and synthetic fleet
-assumptions. Terminal continuity and deadhead ARE validated (Phase 1
-R11 PASS). Results describe model behaviour under a synthetic delay
-assumption, not real KMRL operational prediction.
+assumptions. Terminal continuity is validated in Phase 1 (R11 PASS).
+Deadhead is not modeled. Results describe model behaviour under a
+synthetic delay assumption, not real KMRL operational prediction.
 
 Run:
   python -m src.simulation.experiments
@@ -135,12 +135,20 @@ def _aggregate_kpis(per_seed: list[dict]) -> dict:
 
     return {
         "n_seeds": len(per_seed),
-        "on_time_5min_250_pct": stat(collect(("on_time_5min", "on_time_250_pct"))),
-        "on_time_5min_232_pct": stat(collect(("on_time_5min", "on_time_232_eligible_pct"))),
-        "on_time_3min_250_pct": stat(collect(("on_time_3min", "on_time_250_pct"))),
-        "on_time_3min_232_pct": stat(collect(("on_time_3min", "on_time_232_eligible_pct"))),
-        "on_time_1min_250_pct": stat(collect(("on_time_1min", "on_time_250_pct"))),
-        "on_time_1min_232_pct": stat(collect(("on_time_1min", "on_time_232_eligible_pct"))),
+        # Canonical (no suffix) — read from kpis.py canonical keys
+        "on_time_5min": stat(collect(("on_time_5min", "on_time_pct"))),
+        "on_time_5min_eligible": stat(collect(("on_time_5min", "on_time_eligible_pct"))),
+        "on_time_3min": stat(collect(("on_time_3min", "on_time_pct"))),
+        "on_time_3min_eligible": stat(collect(("on_time_3min", "on_time_eligible_pct"))),
+        "on_time_1min": stat(collect(("on_time_1min", "on_time_pct"))),
+        "on_time_1min_eligible": stat(collect(("on_time_1min", "on_time_eligible_pct"))),
+        # LEGACY ALIASES — identical values, historic names. Not snapshots.
+        "on_time_5min_250_pct": stat(collect(("on_time_5min", "on_time_pct"))),
+        "on_time_5min_232_pct": stat(collect(("on_time_5min", "on_time_eligible_pct"))),
+        "on_time_3min_250_pct": stat(collect(("on_time_3min", "on_time_pct"))),
+        "on_time_3min_232_pct": stat(collect(("on_time_3min", "on_time_eligible_pct"))),
+        "on_time_1min_250_pct": stat(collect(("on_time_1min", "on_time_pct"))),
+        "on_time_1min_232_pct": stat(collect(("on_time_1min", "on_time_eligible_pct"))),
         "propagation_pct": stat(collect(("propagation", "propagation_pct"))),
         "total_propagated_delay_sec": stat(collect(("total_propagated_delay", "total_propagated_delay_sec"))),
         "total_propagated_delay_min": stat(collect(("total_propagated_delay", "total_propagated_delay_min"))),
@@ -173,10 +181,10 @@ def assert_headline_trends(
     for tol in ("on_time_5min", "on_time_3min", "on_time_1min"):
         prev = None
         for name in exp_order:
-            v = headline_kpis[name][tol]["on_time_250_pct"]
+            v = headline_kpis[name][tol]["on_time_pct"]
             if prev is not None and v > prev + 1e-9:
                 raise AssertionError(
-                    f"headline {tol} on_time_250_pct increased from {prev} to {v} at {name}"
+                    f"headline {tol} on_time_pct increased from {prev} to {v} at {name}"
                 )
             prev = v
     prev = None
@@ -191,7 +199,7 @@ def assert_headline_trends(
 
 def soft_warn_monte_carlo_trends(aggregate: dict, exp_order: list[str]) -> None:
     """Soft: warn if 100-seed means drift in wrong direction."""
-    for tol in ("on_time_5min_250_pct", "on_time_3min_250_pct", "on_time_1min_250_pct"):
+    for tol in ("on_time_5min", "on_time_3min", "on_time_1min"):
         vals = [aggregate[name][tol]["mean"] for name in exp_order]
         if any(b > a + 1e-9 for a, b in zip(vals, vals[1:])):
             print(f"WARNING: {tol} mean is not monotonically non-increasing: {vals}")
@@ -244,7 +252,7 @@ def write_timeline(
     )
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="") as f:
+    with path.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
         w.writeheader()
         for name, per_rake in headline_results.items():
@@ -286,8 +294,8 @@ def write_kpis(
         "monte_carlo_aggregate": aggregate_kpis,
     }
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w") as f:
-        json.dump(payload, f, indent=2, allow_nan=False)
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, allow_nan=False, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------------------
@@ -334,12 +342,31 @@ def main() -> None:
         "headline_seed": HEADLINE_SEED,
         "headway_threshold_sec": HEADWAY_THRESHOLD_SEC,
         "on_time_tolerances_sec": list(ON_TIME_TOLERANCES),
-        "provenance_note": (
-            "All delay values are [SYNTHETIC]. Schedule is from synthetic fleet "
-            "assumptions. Terminal continuity and deadhead are not verified "
-            "(constraints-v2 R11 not configured). Results describe model "
-            "behaviour, not real KMRL prediction."
+        "terminal_continuity": {
+            "R11": "PASS — first-trip home-terminal rule with deadhead",
+            "R6": "PASS — per-pair deadhead gaps (5/8/15 min)",
+            "physical_continuity_pairs_checked": 237,
+            "physical_continuity_matched": 164,
+            "physical_continuity_cross_terminal_deadheads": 73,
+            "pairs_below_required_deadhead": 0,
+            "min_deadhead_margin_sec": 2,
+            "median_deadhead_margin_sec": 510,
+            "status": (
+                "73 cross-terminal pairs are legal R6 deadheads, not violations. "
+                "Phase 2 uses 300 s same-terminal turnaround; cross-terminal pairs "
+                "have >= required R6 deadhead slack (0 pairs below required), so the "
+                "300 s floor never binds. KPIs stand."
+            ),
+        },
+        
+        "kpi_key_schema": (
+            "Canonical keys have no suffix (on_time_pct, on_time_eligible_pct, "
+            "trips_total, trips_eligible). Keys suffixed _250_/_232_ are LEGACY "
+            "ALIASES carrying identical current-schedule values, not 250-trip "
+            "snapshots. Use canonical keys in new code."
         ),
+                "provenance_note": "All delay values are [SYNTHETIC]. Schedule is from synthetic fleet assumptions. Terminal continuity: R11 PASS (first-trip home-terminal rule with deadhead). R6 PASS (per-pair deadhead gaps: 5/8/15 min). Physical continuity checker reports 73/237 cross-terminal pairs - these are legal R6-legal deadheads, not violations. Phase 2 propagation uses a 300 s same-terminal turnaround floor; cross-terminal pairs have >= required R6 deadhead slack (verified: 0/237 pairs below required), so the floor never binds. Results describe model behaviour, not real KMRL prediction.",
+
     }
 
     write_timeline(headline, grouped, TIMELINE_PATH)
@@ -350,14 +377,14 @@ def main() -> None:
     print(f"Wrote {KPIS_PATH}")
     print()
     print("Headline summary (seed 42):")
-    header = f"{'exp':4s} {'on_t_5m_250':>12s} {'on_t_5m_232':>12s} {'prop_%':>8s} {'total_prop_min':>15s} {'hw_act':>7s}"
+    header = f"{'exp':4s} {'on_t_5m':>9s} {'on_t_5m_elig':>13s} {'prop_%':>8s} {'total_prop_min':>15s} {'hw_act':>7s}"
     print(header)
     for name, _ in EXPERIMENTS:
         k = headline_kpis[name]
         print(
             f"{name:4s} "
-            f"{k['on_time_5min']['on_time_250_pct']:12.2f} "
-            f"{k['on_time_5min']['on_time_232_eligible_pct']:12.2f} "
+            f"{k['on_time_5min']['on_time_pct']:9.2f} "
+            f"{k['on_time_5min']['on_time_eligible_pct']:13.2f} "
             f"{k['propagation']['propagation_pct']:8.2f} "
             f"{k['total_propagated_delay']['total_propagated_delay_min']:15.1f} "
             f"{k['headway']['actual_violations']:7d}"

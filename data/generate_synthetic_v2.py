@@ -35,9 +35,8 @@ def write_rakes() -> None:
     """
     18 service rakes, 7 maintenance. Initial split:
       9 at ALVA    (R001..R009)
-      7 at TPHT    (R010..R016)
-      2 at MUTTOM  (R017..R018)   [SYNTHETIC — Muttom depot has operating rakes]
-    7 maintenance at MUTTOM (R019..R025)
+      9 at TPHT    (R010..R018)
+      0 service at MUTTOM  (R019..R025 are maintenance only)
     """
     path = SYNTH_DIR / "rakes.csv"
     rows = []
@@ -48,7 +47,7 @@ def write_rakes() -> None:
             "status": "service" if service else "maintenance",
             "initial_mileage_km": random.randint(20_000, 200_000),
             "cmrs_status": "valid",
-            "initial_location": "ALVA" if i <= 9 else "TPHT" if i <= 16 else "MUTTOM",
+            "initial_location": "ALVA" if i <= 9 else "TPHT" if i <= 18 else "MUTTOM",
             "initial_available_time": "06:00" if service else "00:00",
         })
 

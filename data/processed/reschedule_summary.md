@@ -1,22 +1,22 @@
 # MetroPulse — Disruption Response Summary
 
 ## Scenario A: Single Rake Breakdown
-- **Disruption:** R008 fails at 18:00:00. R008: WK_189 in-progress (departed 17:14:30, arrives 18:04:55) — completes normally. Withdrawn for any future trip departing ≥ 18:00:00; trips already departed complete normally.
+- **Disruption:** R008 fails at 18:00:00. R008: WK_181 in-progress (departed 17:45:55, arrives 18:36:42) — completes normally. Withdrawn for any future trip departing ≥ 18:00:00; trips already departed complete normally.
 - **Response:** R022 activated (R022 (2,100 km); lowest km_since_last_maintenance among scheduled).
 - **Result:** 18 rakes active. 4 trips withdrawn from downed rakes; 4 recovered by reassignment (100.0%); 0 dropped.
-  - 250 of 250 trips served (7 unchanged on original rake, 243 reassigned to a different rake).
-- **Solver status:** OPTIMAL, objective 4800.0, gap 0.0%.
-- **Solve time:** 91.615 seconds.
+  - 255 of 255 trips served (14 unchanged on original rake, 241 reassigned to a different rake).
+- **Solver status:** OPTIMAL, objective 900.0, gap 0.0%.
+- **Solve time:** 269.573 seconds.
 
 ## Scenario B: Multiple Rake Breakdowns (Capacity-Constrained)
-- **Disruption:** R008, R013, R015, R002, R007 fail at 07:00:00. R008: no in-progress trip (between trips) at 07:00:00; R013: no in-progress trip (between trips) at 07:00:00; R015: no in-progress trip (between trips) at 07:00:00; R002: WK_15 in-progress (departed 06:15:00, arrives 07:07:28) — completes normally; R007: WK_6 in-progress (departed 06:15:00, arrives 07:05:28) — completes normally. Withdrawn for any future trip departing ≥ 07:00:00; trips already departed complete normally.
+- **Disruption:** R008, R013, R015, R002 fail at 07:00:00. R008: WK_8 in-progress (departed 06:30:00, arrives 07:23:38) — completes normally; R013: no in-progress trip (between trips) at 07:00:00; R015: no in-progress trip (between trips) at 07:00:00; R002: no in-progress trip (between trips) at 07:00:00. Withdrawn for any future trip departing ≥ 07:00:00; trips already departed complete normally.
 - **Response:** R022, R024 activated (R022 (2,100 km), R024 (3,500 km)).
-- **Result:** 15 rakes active. 69 trips withdrawn from downed rakes; 55 recovered by reassignment (79.7%); 14 dropped.
-  - 236 of 250 trips served (14 unchanged on original rake, 222 reassigned to a different rake).
-- **Solver status:** OPTIMAL, objective 1401200.0, gap 0.0%.
-- **Solve time:** 113.669 seconds.
-- **Capacity floor:** 14 drops is the irreducible gap at 15 active rakes under R5/R6/R11. The remaining 236 trips are served.
-- **Capacity warning:** 14 trips cannot be covered.
+- **Result:** 16 rakes active. 53 trips withdrawn from downed rakes; 46 recovered by reassignment (86.8%); 7 dropped.
+  - 248 of 255 trips served (15 unchanged on original rake, 233 reassigned to a different rake).
+- **Solver status:** OPTIMAL, objective 702400.0, gap 0.0%.
+- **Solve time:** 93.797 seconds.
+- **Capacity floor:** 7 drops at 16 active rakes under R5/R6/R11. The remaining 248 trips are served.
+- **Capacity warning:** 7 trips cannot be covered.
 
 **DROPPED** = trip scheduled but cannot operate due to insufficient rakes.
 
@@ -41,8 +41,8 @@ first — most recently serviced, safest for short-term rescue.
 ## Passenger Impact & Operational Recommendation
 
 **Scenario B — dropped trips:**
-- 14 trips cannot operate due to insufficient rakes at 15 active. Of the 69 trips withdrawn from downed rakes, 55 were recovered by reassignment and 14 remained dropped.
-- Estimated passenger impact: approximately 1,400 passenger journeys affected (assuming 100 passengers/trip).
+- 7 trips cannot operate due to insufficient rakes at 16 active. Of the 53 trips withdrawn from downed rakes, 46 were recovered by reassignment and 7 remained dropped.
+- Estimated passenger impact: approximately 700 passenger journeys affected (assuming 100 passengers/trip).
 - Passenger experience: affected passengers will wait 45–90 minutes for alternative service. If no alternative is available, trips should be announced as **cancelled** via PA system and app notification.
 - **Operational recommendation:** Prioritize peak-hour trips for coverage. Drop off-peak trips where alternative service is available within 15 minutes. For dropped peak trips, issue delay notification first (30 min), then cancellation if no recovery.
 
