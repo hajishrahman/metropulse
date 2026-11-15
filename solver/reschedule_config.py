@@ -49,11 +49,18 @@ RAKES_PHASE5_CSV = f"{config.SYNTHETIC_DIR}/rakes_phase5.csv"
 
 SCENARIO_A_JSON = "data/disruptions/scenario_a.json"
 SCENARIO_B_JSON = "data/disruptions/scenario_b.json"
+SCENARIO_C_JSON = "data/disruptions/scenario_c.json"
+SCENARIO_D_JSON = "data/disruptions/scenario_d.json"
+SCENARIO_E_JSON = "data/disruptions/scenario_e.json"
 
 RESCHEDULE_OUT_A = f"{config.GENERATED_DIR}/reschedule_scenario_a.csv"
 RESCHEDULE_OUT_B = f"{config.GENERATED_DIR}/reschedule_scenario_b.csv"
+RESCHEDULE_OUT_C = f"{config.GENERATED_DIR}/reschedule_scenario_c.csv"
+RESCHEDULE_OUT_D = f"{config.GENERATED_DIR}/reschedule_scenario_d.csv"
+RESCHEDULE_OUT_E = f"{config.GENERATED_DIR}/reschedule_scenario_e.csv"
 RESCHEDULE_DIFF_JSON = f"{config.GENERATED_DIR}/reschedule_diff.json"
 RESCHEDULE_SUMMARY_MD = f"{config.GENERATED_DIR}/reschedule_summary.md"
+SENSITIVITY_ANALYSIS_JSON = f"{config.GENERATED_DIR}/sensitivity_analysis.json"
 
 # ===========================================================================
 # BASELINE (Phase 1) — read-only reference for the diff

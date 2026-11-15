@@ -49,8 +49,7 @@ The system aims to generate feasible train schedules, allocate available rakes, 
 | Phase 3 | Crew Scheduling | Completed (2026-11-13) |
 | Phase 4 | Explainability Report | Completed (2026-11-13) |
 | Phase 5 | Disruption Response | Completed (2026-11-14) |
-| Phase 6 | Machine Learning Delay Prediction | Optional |
-| Phase 7 | Dashboard and Visualization | Pending |
+| Phase final | Dashboard and Visualization | Pending |
 
 ---
 
@@ -885,111 +884,7 @@ python -m solver.reschedule_solve
 6. **"Dropped" ≠ "delayed."** Dropped means the trip does not operate (cancelled). The "45–90 min wait" framing describes the passenger *experience* of a dropped trip, not a rescheduled delay. Both are true; never conflated.
 7. **`add_balance_bound_phase5` is a pruning hint, not an objective change.** The 255-trip Scenario B initially returned FEASIBLE at 14.19% gap. The bound closed it to OPTIMAL at 0.0% without changing which schedule is optimal. See §5.6.
 
-# Phase 6 — Machine Learning Delay Prediction
-Status: Optional / Pending
-
-## 6.1 Objective
-Predict possible train delays using historical operational data.
-
-The prediction model can provide delay estimates to the scheduling system.
-
-Important: This phase depends on obtaining suitable historical delay data. Synthetic data can be used for experimentation, but it must not be presented as real KMRL prediction performance.
-
-## 6.2 Proposed Model
-Algorithm: XGBoost Regressor
-
-Possible Input Features
-Hour of the day.
-
-Day of the week.
-
-Month.
-
-Previous trip delay.
-
-Previous trip running time.
-
-Historical average delay.
-
-Route direction.
-
-Weather information, if reliable data is available.
-
-Operational disruption indicators.
-
-Target
-Predicted delay in minutes or seconds.
-
-The final target definition must be established from the available dataset.
-
-## 6.3 Training Process
-Collect and inspect historical delay data.
-
-Clean and preprocess the data.
-
-Create time-based features.
-
-Create training and testing datasets.
-
-Train the XGBoost model.
-
-Evaluate prediction performance.
-
-Generate delay predictions.
-
-Pass predictions to the scheduling system.
-
-Use a time-based train/test split to avoid data leakage.
-
-## 6.4 Evaluation Metrics
-MAE
-
-RMSE
-
-R²
-
-Actual vs predicted delay chart.
-
-## 6.5 Integration
-The proposed integration flow is:
-
-```text
-Historical Data
-      |
-      v
-Data Preprocessing
-      |
-      v
-XGBoost Delay Prediction
-      |
-      v
-Predicted Delay Values
-      |
-      v
-OR-Tools CP-SAT
-      |
-      v
-Updated Train Schedule
-      |
-      v
-SimPy Validation
-```
-The predicted delays may be used as scheduling inputs or objective weights, depending on the final model design.
-
-Deliverables
-Historical delay dataset.
-
-Data preprocessing pipeline.
-
-XGBoost model.
-
-Model evaluation report.
-
-Prediction output.
-
-Integration with the scheduling system.
-
-# Phase 7 — Dashboard and Visualization
+# Phase final — Dashboard and Visualization
 Status: Pending
 
 ## 7.1 Objective
@@ -1131,9 +1026,9 @@ Phase 4: Explainability
 Phase 5: Disruption Response
         |
         v
-Phase 7: Dashboard
+Phase final: Dashboard
 ```
-Phase 6 (Machine Learning) is optional and can be developed separately once suitable historical delay data is available.
+
 
 The dashboard can also be developed incrementally alongside the other phases.
 
@@ -1221,8 +1116,7 @@ Phase 2	Completed
 Phase 3	Completed (2026-11-13; ~5 hours across sessions)
 Phase 4 Completed (2026-11-13; ~4 hours across sessions)
 Phase 5	Completed (2026-11-14; ~4 hours across sessions)
-Phase 6	Depends on historical data availability
-Phase 7	1–2 weeks
+Phase final	1–2 weeks
 MVP target: Phase 1 + Phase 2, completed 2026-11-12.
 
 The complete implementation may take approximately 2 months, depending on testing, data availability, and integration complexity.
@@ -1234,4 +1128,4 @@ phases.md is a phase-planning document — it describes what each phase is and i
 
 Last phase completed: **Phase 5 (Disruption Response), regenerated 2026-11-15 on 255-trip Phase 1 baseline.** Two scenarios: **A = R008 fails @ 18:00** (4 withdrawn → 4 recovered → 0 dropped, OPTIMAL, obj 900.0, ~270 s); **B = 4 rakes fail @ 07:00** (53 withdrawn → 46 recovered (86.8%) → 7 dropped, OPTIMAL, obj 702,400.0, ~94 s). Full re-solve (~270 s / ~94 s), not warm-start. Drop penalty `W_DROP = 1000` and `add_balance_bound_phase5` pruning hint both load-bearing. Phase 1's `rakes.csv`, `constraints.py`, `models.py`, `solve.py`, `config.py` untouched. Phase 4 (Explainability): one reporting module, 7 sections, audit clean. Phase 3 (Crew): all 3 pool sizes OPTIMAL, validator PASS at all pools. Phase 1 (O6 active): OPTIMAL, objective 900.0, gap 0.0%, 60.15 s, 255 trips. Phase 2 (SimPy): 59 tests passing, 100-seed Monte Carlo complete.
 
-Next: Phase 7 — Dashboard (or Phase 6 ML if historical delay data becomes available).
+Next: Phase final — Dashboard 

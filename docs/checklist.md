@@ -328,12 +328,8 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 6 — ML Layer (Optional)
 
-- [ ] `src/ml/train.py` (only if historical data available)
 
----
-
-## Phase 7 — UI
+## Phase final — UI
 
 - [ ] `src/ui/app.py` (Streamlit dashboard)

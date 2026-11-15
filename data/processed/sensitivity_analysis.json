@@ -1,0 +1,53 @@
+{
+  "scenarios": [
+    {
+      "id": "c",
+      "rakes_failed": 2,
+      "rake_ids": [
+        "R008",
+        "R013"
+      ],
+      "disruption_time": "07:00:00",
+      "drops": 0,
+      "recovery_pct": 100.0,
+      "status": "OPTIMAL",
+      "objective": 900.0,
+      "gap_pct": 0.0,
+      "elapsed_sec": 186.54
+    },
+    {
+      "id": "d",
+      "rakes_failed": 3,
+      "rake_ids": [
+        "R008",
+        "R013",
+        "R015"
+      ],
+      "disruption_time": "07:00:00",
+      "drops": 0,
+      "recovery_pct": 100.0,
+      "status": "OPTIMAL",
+      "objective": 0.0,
+      "gap_pct": 0.0,
+      "elapsed_sec": 141.73
+    },
+    {
+      "id": "e",
+      "rakes_failed": 5,
+      "rake_ids": [
+        "R008",
+        "R013",
+        "R015",
+        "R002",
+        "R007"
+      ],
+      "disruption_time": "07:00:00",
+      "drops": 16,
+      "recovery_pct": 75.76,
+      "status": "FEASIBLE",
+      "objective": 1604800.0,
+      "gap_pct": 18.75,
+      "elapsed_sec": 300.22
+    }
+  ]
+}

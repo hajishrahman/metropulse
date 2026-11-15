@@ -1,0 +1,6 @@
+{
+  "scenario_id": "c",
+  "description": "Two rake breakdowns at 07:00 — sensitivity point",
+  "rakes_down": ["R008", "R013"],
+  "disruption_time": "07:00:00"
+}

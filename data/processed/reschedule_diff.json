@@ -15,7 +15,7 @@
     "solver_status": "OPTIMAL",
     "objective": 900.0,
     "gap_pct": 0.0,
-    "elapsed_sec": 184.992,
+    "elapsed_sec": 189.185,
     "trips_withdrawn": 4,
     "in_progress": {
       "R008": [
@@ -1301,9 +1301,9 @@
     "rakes_activated_reason": "2 lowest km_since_last_maintenance among scheduled",
     "rakes_active_count": 16,
     "solver_status": "FEASIBLE",
-    "objective": 802100.0,
-    "gap_pct": 31.62947263433487,
-    "elapsed_sec": 300.19,
+    "objective": 702400.0,
+    "gap_pct": 21.9248291571754,
+    "elapsed_sec": 300.214,
     "trips_withdrawn": 53,
     "in_progress": {
       "R008": [
@@ -1317,39 +1317,38 @@
       "R015": [],
       "R002": []
     },
-    "trips_unchanged": 5,
-    "trips_reassigned": 242,
-    "trips_dropped": 8,
+    "trips_unchanged": 13,
+    "trips_reassigned": 235,
+    "trips_dropped": 7,
     "dropped_trip_ids": [
-      "WK_14",
       "WK_165",
-      "WK_170",
-      "WK_195",
-      "WK_207",
-      "WK_39",
-      "WK_40",
-      "WK_60"
+      "WK_192",
+      "WK_201",
+      "WK_205",
+      "WK_26",
+      "WK_60",
+      "WK_65"
     ],
     "reassignments": [
       {
         "trip_id": "WK_4",
         "from_rake": "R002",
-        "to_rake": "R016"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_256",
         "from_rake": "R003",
-        "to_rake": "R001"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_18",
         "from_rake": "R011",
-        "to_rake": "R005"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_12",
         "from_rake": "R003",
-        "to_rake": "R001"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_1",
@@ -1364,12 +1363,12 @@
       {
         "trip_id": "WK_15",
         "from_rake": "R016",
-        "to_rake": "R004"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_9",
         "from_rake": "R002",
-        "to_rake": "R009"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_8",
@@ -1389,32 +1388,27 @@
       {
         "trip_id": "WK_20",
         "from_rake": "R007",
-        "to_rake": "R010"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_2",
         "from_rake": "R014",
-        "to_rake": "R006"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_5",
         "from_rake": "R017",
-        "to_rake": "R005"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_30",
         "from_rake": "R004",
-        "to_rake": "R009"
+        "to_rake": "R006"
       },
       {
         "trip_id": "WK_34",
         "from_rake": "R006",
         "to_rake": "R018"
-      },
-      {
-        "trip_id": "WK_7",
-        "from_rake": "R005",
-        "to_rake": "R003"
       },
       {
         "trip_id": "WK_16",
@@ -1434,12 +1428,12 @@
       {
         "trip_id": "WK_41",
         "from_rake": "R016",
-        "to_rake": "R022"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_10",
         "from_rake": "R003",
-        "to_rake": "R011"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_19",
@@ -1449,17 +1443,17 @@
       {
         "trip_id": "WK_13",
         "from_rake": "R006",
-        "to_rake": "R001"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_21",
         "from_rake": "R008",
-        "to_rake": "R017"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_49",
         "from_rake": "R009",
-        "to_rake": "R010"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_29",
@@ -1472,6 +1466,11 @@
         "to_rake": "R016"
       },
       {
+        "trip_id": "WK_14",
+        "from_rake": "R017",
+        "to_rake": "R001"
+      },
+      {
         "trip_id": "WK_80",
         "from_rake": "R001",
         "to_rake": "R006"
@@ -1479,22 +1478,22 @@
       {
         "trip_id": "WK_23",
         "from_rake": "R011",
-        "to_rake": "R004"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_24",
         "from_rake": "R002",
-        "to_rake": "R024"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_61",
         "from_rake": "R014",
-        "to_rake": "R003"
+        "to_rake": "R005"
       },
       {
-        "trip_id": "WK_26",
-        "from_rake": "R004",
-        "to_rake": "R005"
+        "trip_id": "WK_40",
+        "from_rake": "R013",
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_35",
@@ -1504,7 +1503,7 @@
       {
         "trip_id": "WK_81",
         "from_rake": "R005",
-        "to_rake": "R009"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_27",
@@ -1519,7 +1518,7 @@
       {
         "trip_id": "WK_70",
         "from_rake": "R012",
-        "to_rake": "R022"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_48",
@@ -1549,7 +1548,7 @@
       {
         "trip_id": "WK_32",
         "from_rake": "R010",
-        "to_rake": "R017"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_57",
@@ -1564,22 +1563,22 @@
       {
         "trip_id": "WK_42",
         "from_rake": "R002",
-        "to_rake": "R024"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_64",
         "from_rake": "R008",
-        "to_rake": "R003"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_44",
         "from_rake": "R013",
-        "to_rake": "R004"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_67",
         "from_rake": "R004",
-        "to_rake": "R005"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_46",
@@ -1599,7 +1598,7 @@
       {
         "trip_id": "WK_72",
         "from_rake": "R014",
-        "to_rake": "R022"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_52",
@@ -1627,6 +1626,11 @@
         "to_rake": "R010"
       },
       {
+        "trip_id": "WK_39",
+        "from_rake": "R005",
+        "to_rake": "R022"
+      },
+      {
         "trip_id": "WK_62",
         "from_rake": "R007",
         "to_rake": "R016"
@@ -1637,24 +1641,19 @@
         "to_rake": "R001"
       },
       {
-        "trip_id": "WK_65",
-        "from_rake": "R011",
-        "to_rake": "R017"
-      },
-      {
         "trip_id": "WK_45",
         "from_rake": "R002",
-        "to_rake": "R024"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_68",
         "from_rake": "R017",
-        "to_rake": "R003"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_47",
         "from_rake": "R013",
-        "to_rake": "R004"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_71",
@@ -1674,12 +1673,12 @@
       {
         "trip_id": "WK_73",
         "from_rake": "R001",
-        "to_rake": "R005"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_75",
         "from_rake": "R014",
-        "to_rake": "R022"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_56",
@@ -1714,7 +1713,7 @@
       {
         "trip_id": "WK_66",
         "from_rake": "R007",
-        "to_rake": "R017"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_109",
@@ -1729,7 +1728,7 @@
       {
         "trip_id": "WK_113",
         "from_rake": "R010",
-        "to_rake": "R024"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_93",
@@ -1737,14 +1736,9 @@
         "to_rake": "R012"
       },
       {
-        "trip_id": "WK_117",
-        "from_rake": "R005",
-        "to_rake": "R004"
-      },
-      {
         "trip_id": "WK_96",
         "from_rake": "R004",
-        "to_rake": "R005"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_83",
@@ -1759,7 +1753,7 @@
       {
         "trip_id": "WK_85",
         "from_rake": "R017",
-        "to_rake": "R003"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_102",
@@ -1774,7 +1768,7 @@
       {
         "trip_id": "WK_105",
         "from_rake": "R013",
-        "to_rake": "R011"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_89",
@@ -1789,12 +1783,12 @@
       {
         "trip_id": "WK_91",
         "from_rake": "R014",
-        "to_rake": "R022"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_112",
         "from_rake": "R003",
-        "to_rake": "R024"
+        "to_rake": "R014"
       },
       {
         "trip_id": "WK_94",
@@ -1804,22 +1798,22 @@
       {
         "trip_id": "WK_116",
         "from_rake": "R010",
-        "to_rake": "R004"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_97",
         "from_rake": "R012",
-        "to_rake": "R016"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_84",
         "from_rake": "R007",
-        "to_rake": "R014"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_100",
         "from_rake": "R011",
-        "to_rake": "R006"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_86",
@@ -1829,22 +1823,22 @@
       {
         "trip_id": "WK_103",
         "from_rake": "R005",
-        "to_rake": "R009"
+        "to_rake": "R006"
       },
       {
         "trip_id": "WK_88",
         "from_rake": "R018",
-        "to_rake": "R005"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_106",
         "from_rake": "R004",
-        "to_rake": "R011"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_90",
         "from_rake": "R017",
-        "to_rake": "R001"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_110",
@@ -1859,17 +1853,17 @@
       {
         "trip_id": "WK_114",
         "from_rake": "R006",
-        "to_rake": "R024"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_95",
         "from_rake": "R013",
-        "to_rake": "R022"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_118",
         "from_rake": "R001",
-        "to_rake": "R017"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_98",
@@ -1884,7 +1878,7 @@
       {
         "trip_id": "WK_101",
         "from_rake": "R010",
-        "to_rake": "R016"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_122",
@@ -1894,27 +1888,17 @@
       {
         "trip_id": "WK_104",
         "from_rake": "R012",
-        "to_rake": "R003"
-      },
-      {
-        "trip_id": "WK_124",
-        "from_rake": "R011",
-        "to_rake": "R005"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_107",
         "from_rake": "R008",
-        "to_rake": "R006"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_126",
         "from_rake": "R018",
-        "to_rake": "R004"
-      },
-      {
-        "trip_id": "WK_111",
-        "from_rake": "R004",
-        "to_rake": "R011"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_128",
@@ -1924,7 +1908,7 @@
       {
         "trip_id": "WK_115",
         "from_rake": "R015",
-        "to_rake": "R010"
+        "to_rake": "R006"
       },
       {
         "trip_id": "WK_130",
@@ -1934,7 +1918,7 @@
       {
         "trip_id": "WK_119",
         "from_rake": "R002",
-        "to_rake": "R024"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_132",
@@ -1949,7 +1933,7 @@
       {
         "trip_id": "WK_134",
         "from_rake": "R013",
-        "to_rake": "R016"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_123",
@@ -1959,12 +1943,12 @@
       {
         "trip_id": "WK_136",
         "from_rake": "R001",
-        "to_rake": "R009"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_138",
         "from_rake": "R012",
-        "to_rake": "R006"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_127",
@@ -1984,22 +1968,12 @@
       {
         "trip_id": "WK_142",
         "from_rake": "R015",
-        "to_rake": "R004"
-      },
-      {
-        "trip_id": "WK_131",
-        "from_rake": "R018",
-        "to_rake": "R005"
+        "to_rake": "R006"
       },
       {
         "trip_id": "WK_144",
         "from_rake": "R011",
         "to_rake": "R010"
-      },
-      {
-        "trip_id": "WK_133",
-        "from_rake": "R004",
-        "to_rake": "R018"
       },
       {
         "trip_id": "WK_146",
@@ -2029,22 +2003,22 @@
       {
         "trip_id": "WK_139",
         "from_rake": "R005",
-        "to_rake": "R016"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_152",
         "from_rake": "R017",
-        "to_rake": "R022"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_141",
         "from_rake": "R001",
-        "to_rake": "R009"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_172",
         "from_rake": "R012",
-        "to_rake": "R001"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_154",
@@ -2059,7 +2033,7 @@
       {
         "trip_id": "WK_156",
         "from_rake": "R016",
-        "to_rake": "R005"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_145",
@@ -2104,17 +2078,17 @@
       {
         "trip_id": "WK_162",
         "from_rake": "R003",
-        "to_rake": "R016"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_153",
         "from_rake": "R012",
-        "to_rake": "R022"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_163",
         "from_rake": "R005",
-        "to_rake": "R009"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_155",
@@ -2134,7 +2108,7 @@
       {
         "trip_id": "WK_159",
         "from_rake": "R016",
-        "to_rake": "R005"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_166",
@@ -2177,9 +2151,14 @@
         "to_rake": "R007"
       },
       {
+        "trip_id": "WK_195",
+        "from_rake": "R003",
+        "to_rake": "R009"
+      },
+      {
         "trip_id": "WK_177",
         "from_rake": "R012",
-        "to_rake": "R022"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_197",
@@ -2194,7 +2173,7 @@
       {
         "trip_id": "WK_199",
         "from_rake": "R001",
-        "to_rake": "R009"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_181",
@@ -2202,19 +2181,19 @@
         "to_rake": "R003"
       },
       {
-        "trip_id": "WK_201",
-        "from_rake": "R010",
-        "to_rake": "R011"
-      },
-      {
         "trip_id": "WK_184",
         "from_rake": "R016",
-        "to_rake": "R005"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_168",
         "from_rake": "R014",
         "to_rake": "R006"
+      },
+      {
+        "trip_id": "WK_170",
+        "from_rake": "R007",
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_191",
@@ -2247,14 +2226,9 @@
         "to_rake": "R007"
       },
       {
-        "trip_id": "WK_198",
-        "from_rake": "R009",
-        "to_rake": "R010"
-      },
-      {
         "trip_id": "WK_180",
         "from_rake": "R012",
-        "to_rake": "R022"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_200",
@@ -2269,7 +2243,7 @@
       {
         "trip_id": "WK_202",
         "from_rake": "R001",
-        "to_rake": "R009"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_185",
@@ -2277,14 +2251,9 @@
         "to_rake": "R003"
       },
       {
-        "trip_id": "WK_205",
-        "from_rake": "R010",
-        "to_rake": "R011"
-      },
-      {
         "trip_id": "WK_188",
         "from_rake": "R003",
-        "to_rake": "R005"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_206",
@@ -2292,9 +2261,9 @@
         "to_rake": "R006"
       },
       {
-        "trip_id": "WK_192",
-        "from_rake": "R016",
-        "to_rake": "R004"
+        "trip_id": "WK_207",
+        "from_rake": "R007",
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_214",
@@ -2327,11 +2296,6 @@
         "to_rake": "R007"
       },
       {
-        "trip_id": "WK_217",
-        "from_rake": "R009",
-        "to_rake": "R010"
-      },
-      {
         "trip_id": "WK_218",
         "from_rake": "R005",
         "to_rake": "R016"
@@ -2344,12 +2308,12 @@
       {
         "trip_id": "WK_211",
         "from_rake": "R012",
-        "to_rake": "R022"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_219",
         "from_rake": "R001",
-        "to_rake": "R009"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_212",
@@ -2364,7 +2328,7 @@
       {
         "trip_id": "WK_213",
         "from_rake": "R003",
-        "to_rake": "R005"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_226",
@@ -2394,47 +2358,47 @@
       {
         "trip_id": "WK_228",
         "from_rake": "R016",
-        "to_rake": "R022"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_229",
         "from_rake": "R007",
-        "to_rake": "R004"
+        "to_rake": "R012"
       },
       {
         "trip_id": "WK_223",
         "from_rake": "R006",
-        "to_rake": "R007"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_233",
         "from_rake": "R011",
-        "to_rake": "R012"
+        "to_rake": "R009"
       },
       {
         "trip_id": "WK_224",
         "from_rake": "R009",
-        "to_rake": "R004"
+        "to_rake": "R007"
       },
       {
         "trip_id": "WK_235",
         "from_rake": "R005",
-        "to_rake": "R009"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_225",
         "from_rake": "R002",
-        "to_rake": "R024"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_236",
         "from_rake": "R018",
-        "to_rake": "R016"
+        "to_rake": "R012"
       },
       {
         "trip_id": "WK_230",
         "from_rake": "R001",
-        "to_rake": "R005"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_238",
@@ -2449,22 +2413,22 @@
       {
         "trip_id": "WK_231",
         "from_rake": "R003",
-        "to_rake": "R001"
+        "to_rake": "R011"
       },
       {
         "trip_id": "WK_240",
         "from_rake": "R004",
-        "to_rake": "R010"
+        "to_rake": "R003"
       },
       {
         "trip_id": "WK_232",
         "from_rake": "R007",
-        "to_rake": "R003"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_241",
         "from_rake": "R014",
-        "to_rake": "R017"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_234",
@@ -2474,12 +2438,12 @@
       {
         "trip_id": "WK_244",
         "from_rake": "R015",
-        "to_rake": "R011"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_246",
         "from_rake": "R006",
-        "to_rake": "R007"
+        "to_rake": "R005"
       },
       {
         "trip_id": "WK_237",
@@ -2489,59 +2453,59 @@
       {
         "trip_id": "WK_247",
         "from_rake": "R010",
-        "to_rake": "R024"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_242",
         "from_rake": "R013",
-        "to_rake": "R017"
+        "to_rake": "R022"
       },
       {
         "trip_id": "WK_248",
         "from_rake": "R011",
-        "to_rake": "R004"
+        "to_rake": "R017"
       },
       {
         "trip_id": "WK_243",
         "from_rake": "R010",
-        "to_rake": "R009"
+        "to_rake": "R016"
       },
       {
         "trip_id": "WK_249",
         "from_rake": "R016",
-        "to_rake": "R001"
+        "to_rake": "R010"
       },
       {
         "trip_id": "WK_252",
         "from_rake": "R014",
-        "to_rake": "R010"
+        "to_rake": "R024"
       },
       {
         "trip_id": "WK_245",
         "from_rake": "R002",
-        "to_rake": "R011"
+        "to_rake": "R007"
       },
       {
         "trip_id": "WK_255",
         "from_rake": "R008",
-        "to_rake": "R003"
+        "to_rake": "R004"
       },
       {
         "trip_id": "WK_250",
         "from_rake": "R001",
-        "to_rake": "R022"
+        "to_rake": "R006"
       },
       {
         "trip_id": "WK_254",
         "from_rake": "R005",
-        "to_rake": "R016"
+        "to_rake": "R001"
       },
       {
         "trip_id": "WK_253",
         "from_rake": "R003",
-        "to_rake": "R024"
+        "to_rake": "R022"
       }
     ],
-    "capacity_warning": "Capacity constrained. 16 rakes active. 8 trips dropped. Recommend prioritizing peak-hour trips."
+    "capacity_warning": "Capacity constrained. 16 rakes active. 7 trips dropped. Recommend prioritizing peak-hour trips."
   }
 }

@@ -312,6 +312,7 @@ R019,maintenance,<mileage>,valid,MUTTOM,00:00
 R025,maintenance,<mileage>,valid,MUTTOM,00:00
 ```
 ```
+```
 ### Rake Distribution
 
 - **9 rakes:** service, home ALVA
@@ -320,7 +321,7 @@ R025,maintenance,<mileage>,valid,MUTTOM,00:00
 - **7 rakes:** maintenance, at MUTTOM
 - **Total:** 25 rakes
 - **Initial mileage:** Randomized between 20,000 and 200,000 km
-
+```
 ### Synthetic Assumptions
 
 | Field | Assumed Value | Rationale |
@@ -339,7 +340,7 @@ R025,maintenance,<mileage>,valid,MUTTOM,00:00
 These values are project assumptions, not confirmed KMRL operational data.
 
 The Phase 2 delay model is documented in full in docs/phases.md (Phase 2) and in data/processed/simulation_kpis.json (metadata section). Phase 2 outputs were regenerated on 2026-11-15 on the 255-trip real-GTFS schedule. A CP1252/UTF-8 encoding bug in src/simulation/experiments.py's JSON writer was found and fixed during Phase 4 regeneration (encoding="utf-8" added to both CSV and JSON writers) — no KPI values were affected.
-
+```
 ## 7. GTFS Consistency Check (optional module)
 
 **File:** `src/gtfs_validation.py`
@@ -356,7 +357,7 @@ An optional, non-pipeline consistency check. It is not part of the scheduling pi
 The module exists to spot obvious inconsistencies. It is not required for the solver or validator. The main scheduling pipeline is:
 
 extract_gtfs_trips.py → trips_full_route.csv + trips_partial.csv → merge_trips.py → trips_all.csv → solver → validator.
-
+```
 ## 8. Data Flow Summary
 
 ### Main Scheduling Pipeline
@@ -429,7 +430,7 @@ data/verify_gtfs_trips.py
 Verifies: hourly(255) == hourly(232) + hourly(23)
 Kept on disk for reconciliation only.
 Not read by the solver.
-
+```
 ## Phase 4 — Explainability (reads Phase 1/2/3 outputs, writes two new files)
 
 Phase 1 outputs                     Phase 2 output         Phase 3 outputs
@@ -479,7 +480,7 @@ Phase 1's solver/constraints.py is unchanged — Phase 5's drop-aware R1 lives
 in solver/reschedule_constraints.py (new file, parallel to constraints.py).
 
 ```
-
+```
 ## 9. Limitations
 
 **GTFS data vintage:** The feed covers 2024–25 and may not represent current 2026 operations.
@@ -513,8 +514,6 @@ Terminal continuity: The Phase 1 schedule uses real GTFS trip IDs (WK_*). Termin
 Phase 2 outputs: data/processed/simulation_kpis.json and simulation_timeline.csv were regenerated on 2026-11-15 on the 255-trip real-GTFS schedule.
 
 ## 10. Source References
-
-
 
 ### GTFS Feed
 

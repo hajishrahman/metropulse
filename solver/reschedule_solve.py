@@ -14,6 +14,7 @@ formula, same CSV schema, same solver parameter shape.
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -397,6 +398,9 @@ def main():
             f"but data.trips has {len(data.trips)} — mismatch"
         )
 
+    # Time limit override for Scenario B (env-var controlled for diagnostics)
+    _b_time_limit = 1800 if os.environ.get("PHASE5_B_LONG_SOLVE") == "1" else None
+
     # ---- Scenario A -------------------------------------------------------
     cfg_a = load_scenario_json(R5.SCENARIO_A_JSON)
     result_a = run_scenario(
@@ -409,10 +413,6 @@ def main():
 
     # ---- Scenario B -------------------------------------------------------
     cfg_b = load_scenario_json(R5.SCENARIO_B_JSON)
-    _b_time_limit = None
-    import os
-    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
-        _b_time_limit = 1800
     result_b = run_scenario(
         scenario_config=cfg_b,
         baseline_data=data,
@@ -420,13 +420,9 @@ def main():
         num_activated=2,
         time_limit_sec=_b_time_limit,
     )
-    import os
-    _b_out = R5.RESCHEDULE_OUT_B
-    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
-        _b_out = "data/processed/reschedule_scenario_b_uncapped_diag.csv"
-    write_scenario_csv(result_b["schedule"], _b_out)
+    write_scenario_csv(result_b["schedule"], R5.RESCHEDULE_OUT_B)
 
-    # ---- Diff (in-memory) -------------------------------------------------
+    # ---- Diff for A and B (unchanged narrative) ---------------------------
     trips_withdrawn_a = sum(len(w) for w in result_a["withdrawals"].values())
     trips_withdrawn_b = sum(len(w) for w in result_b["withdrawals"].values())
 
@@ -461,14 +457,66 @@ def main():
         "2 lowest km_since_last_maintenance among scheduled"
     )
 
-    import os
-    _diff_out = R5.RESCHEDULE_DIFF_JSON
-    _summary_out = R5.RESCHEDULE_SUMMARY_MD
-    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
-        _diff_out = "data/processed/reschedule_diff_uncapped_diag.json"
-        _summary_out = "data/processed/reschedule_summary_uncapped_diag.md"
-    write_diff_json(diff_a, diff_b, _diff_out)
-    write_summary_md(diff_a, diff_b, data.rakes, _summary_out)
+    write_diff_json(diff_a, diff_b, R5.RESCHEDULE_DIFF_JSON)
+    write_summary_md(diff_a, diff_b, data.rakes, R5.RESCHEDULE_SUMMARY_MD)
+
+    # ---- Sensitivity scenarios C, D, E -----------------------------------
+    # Each runs at 07:00 with k rakes down. Only CSVs + sensitivity JSON.
+    sensitivity_scenarios = [
+        ("scenario_c", R5.SCENARIO_C_JSON, R5.RESCHEDULE_OUT_C),
+        ("scenario_d", R5.SCENARIO_D_JSON, R5.RESCHEDULE_OUT_D),
+        ("scenario_e", R5.SCENARIO_E_JSON, R5.RESCHEDULE_OUT_E),
+    ]
+
+    sensitivity_results = []
+    for sid, json_path, csv_out in sensitivity_scenarios:
+        cfg = load_scenario_json(json_path)
+        # Sensitivity policy: cap activated rakes at 2, matching Scenario B.
+        # This keeps active-rake count varying with severity (18, 18, 17, 15)
+        # so the sensitivity curve shows drops vs. fleet size.
+        n_activated = min(2, len(cfg["rakes_down"]))
+        n_activated = min(n_activated, len(data.scheduled_maintenance_rakes))
+
+        result = run_scenario(
+            scenario_config=cfg,
+            baseline_data=data,
+            baseline_schedule=baseline_schedule,
+            num_activated=n_activated,
+        )
+        write_scenario_csv(result["schedule"], csv_out)
+
+        # Compute drop count and recovery %
+        dropped_count = len(result["dropped_trip_ids"])
+        withdrawn_count = sum(
+            len(w) for w in result["withdrawals"].values()
+        )
+        recovered_count = withdrawn_count - dropped_count
+        recovery_pct = (
+            round(recovered_count / withdrawn_count * 100, 2)
+            if withdrawn_count > 0 else 100.0
+        )
+
+        sensitivity_results.append({
+            "id": cfg["scenario_id"],
+            "rakes_failed": len(cfg["rakes_down"]),
+            "rake_ids": list(cfg["rakes_down"]),
+            "disruption_time": cfg["disruption_time"],
+            "drops": dropped_count,
+            "recovery_pct": recovery_pct,
+            "status": result["solve_result"]["status"],
+            "objective": result["solve_result"]["objective"],
+            "gap_pct": round(result["solve_result"]["gap_pct"], 3)
+                       if result["solve_result"]["gap_pct"] is not None else None,
+            "elapsed_sec": round(result["solve_result"]["elapsed_sec"], 2),
+        })
+
+    # Write sensitivity analysis JSON
+    sensitivity_payload = {"scenarios": sensitivity_results}
+    sensitivity_path = Path(R5.SENSITIVITY_ANALYSIS_JSON)
+    sensitivity_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(sensitivity_path, "w", encoding="utf-8") as f:
+        json.dump(sensitivity_payload, f, indent=2)
+    print(f"[sensitivity] wrote {sensitivity_path}")
 
     # ---- Console summary --------------------------------------------------
     print("\n" + "=" * 70)
@@ -484,6 +532,16 @@ def main():
             f"reassigned={d['trips_reassigned']}, "
             f"dropped={d['trips_dropped']}, "
             f"elapsed={d['elapsed_sec']}s"
+        )
+    for s in sensitivity_results:
+        print(
+            f"Scenario {s['id'].upper()[-1]}: status={s['status']}, "
+            f"obj={s['objective']}, "
+            f"gap={s['gap_pct']}%, "
+            f"rakes_down={s['rakes_failed']}, "
+            f"dropped={s['drops']}, "
+            f"recovery={s['recovery_pct']}%, "
+            f"elapsed={s['elapsed_sec']}s"
         )
 
 
