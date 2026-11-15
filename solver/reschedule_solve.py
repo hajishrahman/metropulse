@@ -114,7 +114,12 @@ def build_active_fleet(
                 f"reactivated."
             )
         rakes.loc[mask, "status"] = "service"
-        rakes.loc[mask, "initial_location"] = "MUTTOM"
+        # Phase 5 activated rakes come from the MUTTOM depot, but trip data
+        # uses the stop name "MUTT". Normalise here so R11's
+        # _first_trip_deadhead("MUTT", ...) matches and activated rakes can
+        # start at terminals. Without this, R11 returns (None, False) for
+        # every terminal-origin trip and activated rakes are nearly useless.
+        rakes.loc[mask, "initial_location"] = "MUTT"
         rakes.loc[mask, "initial_available_time"] = "00:00"
 
     return rakes
@@ -256,7 +261,9 @@ def run_scenario(
 
     print(f"[scenario {sid.upper()}] applying objective")
     o6 = RC.add_obj6_rake_balance(model, trip_vars, rake_trip, scenario_data)
-    RC.add_balance_bound_phase5(model, trip_vars, rake_trip, scenario_data)
+    import os
+    if os.environ.get("PHASE5_DISABLE_BALANCE_BOUND") != "1":
+        RC.add_balance_bound_phase5(model, trip_vars, rake_trip, scenario_data)
     RC.build_objective(model, o6, dropped)
 
     solver = cp_model.CpSolver()
@@ -402,13 +409,22 @@ def main():
 
     # ---- Scenario B -------------------------------------------------------
     cfg_b = load_scenario_json(R5.SCENARIO_B_JSON)
+    _b_time_limit = None
+    import os
+    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
+        _b_time_limit = 1800
     result_b = run_scenario(
         scenario_config=cfg_b,
         baseline_data=data,
         baseline_schedule=baseline_schedule,
         num_activated=2,
+        time_limit_sec=_b_time_limit,
     )
-    write_scenario_csv(result_b["schedule"], R5.RESCHEDULE_OUT_B)
+    import os
+    _b_out = R5.RESCHEDULE_OUT_B
+    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
+        _b_out = "data/processed/reschedule_scenario_b_uncapped_diag.csv"
+    write_scenario_csv(result_b["schedule"], _b_out)
 
     # ---- Diff (in-memory) -------------------------------------------------
     trips_withdrawn_a = sum(len(w) for w in result_a["withdrawals"].values())
@@ -445,8 +461,14 @@ def main():
         "2 lowest km_since_last_maintenance among scheduled"
     )
 
-    write_diff_json(diff_a, diff_b, R5.RESCHEDULE_DIFF_JSON)
-    write_summary_md(diff_a, diff_b, data.rakes, R5.RESCHEDULE_SUMMARY_MD)
+    import os
+    _diff_out = R5.RESCHEDULE_DIFF_JSON
+    _summary_out = R5.RESCHEDULE_SUMMARY_MD
+    if os.environ.get("PHASE5_B_LONG_SOLVE") == "1":
+        _diff_out = "data/processed/reschedule_diff_uncapped_diag.json"
+        _summary_out = "data/processed/reschedule_summary_uncapped_diag.md"
+    write_diff_json(diff_a, diff_b, _diff_out)
+    write_summary_md(diff_a, diff_b, data.rakes, _summary_out)
 
     # ---- Console summary --------------------------------------------------
     print("\n" + "=" * 70)

@@ -17,10 +17,10 @@ R015,service,37093,valid,TPHT,06:00,5300,service
 R016,service,152051,valid,TPHT,06:00,6500,service
 R017,service,183753,valid,TPHT,06:00,4200,service
 R018,service,160277,valid,TPHT,06:00,5100,service
-R019,maintenance,55792,valid,MUTTOM,00:00,4200,scheduled
-R020,maintenance,176838,valid,MUTTOM,00:00,0,unscheduled_repair
-R021,maintenance,65951,valid,MUTTOM,00:00,6800,scheduled
-R022,maintenance,41380,valid,MUTTOM,00:00,2100,scheduled
-R023,maintenance,199479,valid,MUTTOM,00:00,0,unscheduled_repair
-R024,maintenance,31765,valid,MUTTOM,00:00,3500,scheduled
-R025,maintenance,66081,valid,MUTTOM,00:00,7200,scheduled
+R019,maintenance,55792,valid,MUTT,00:00,4200,scheduled
+R020,maintenance,176838,valid,MUTT,00:00,0,unscheduled_repair
+R021,maintenance,65951,valid,MUTT,00:00,6800,scheduled
+R022,maintenance,41380,valid,MUTT,00:00,2100,scheduled
+R023,maintenance,199479,valid,MUTT,00:00,0,unscheduled_repair
+R024,maintenance,31765,valid,MUTT,00:00,3500,scheduled
+R025,maintenance,66081,valid,MUTT,00:00,7200,scheduled
