@@ -1,6 +1,6 @@
 # MetroPulse — Current Project Status
 
-**Last Updated:** 2026-11-14
+**Last Updated:** 2026-11-15
 
 ## Current Project Direction
 
@@ -67,7 +67,7 @@ pytest tests\ -v
 
 python -m solver.solve → Status: OPTIMAL, Trips: 255, Objective: 900.0, Gap: 0.0%, elapsed ~60 s
 
-python -m solver.validator → Overall: PASS (10 PASS + 1 SKIPPED, R8 skipped)
+python -m solver.validator → Overall: PASS (10 PASS, 0 SKIPPED)
 
 pytest tests\ -v → 59 passed
 
@@ -83,7 +83,7 @@ data/processed_backup/ — pre-rerun baseline snapshot (created 2026-11-12 befor
 
 Phase 2 output files:
 
-data/processed/simulation_kpis.json — KPIs for E1–E4 + 100-seed Monte Carlo (regenerated 2026-11-12 on 250-trip real-GTFS schedule)
+data/processed/simulation_kpis.json — KPIs for E1–E4 + 100-seed Monte Carlo (regenerated 2026-11-15 on 255-trip real-GTFS schedule)
 data/processed/simulation_timeline.csv — 1020 rows (4 experiments × 255 trips)
 
 Phase 3 output files:
@@ -121,7 +121,6 @@ Route length	28.144 km (Annual Report)
 Total fleet	25 rakes
 Service rakes	18
 Maintenance rakes	7
-[SYNTHETIC]
 Turnaround time	5 min [SYNTHETIC]
 Terminal ↔ terminal deadhead	15 min [SYNTHETIC]
 MUTTOM ↔ terminal deadhead	8 min [SYNTHETIC]
@@ -165,7 +164,7 @@ Validator checks (10): R1, R3, R4, R5, R6, R7, R9, R10, R11, D. R8 and R12 remov
 
 ## Latest Phase 2 Results (2026-11-15, regenerated on 255-trip real schedule)
 
-The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simulation_kpis.json` and `simulation_timeline.csv` now describe the current schedule.
+The Phase 2 SimPy simulation was **regenerated** on the new 255-trip schedule. `simulation_kpis.json` and `simulation_timeline.csv` now describe the current schedule.
 
 - Loaded: 255 trips, 18 rakes, 237 eligible
 - Timeline: 1020 rows (4 experiments × 255 trips)
@@ -197,7 +196,7 @@ The Phase 2 SimPy simulation was **rebuilt** on the new 250-trip schedule. `simu
 
 - **3 scheduled same-direction pairs at 0 s gap** in the raw GTFS timetable (06:15, 08:00, 08:21). Each is a full trip (TPHT→ALVA) and a partial trip (MUTT→ALVA) departing the same minute on different rakes. Not a solver or simulation bug. R2a removed in v2.1 §5 because departure times are fixed by GTFS.
 - Actual violations rise with std: E1 = 3, E2 = 4, E3 = 4, E4 = 7. The 3 structural violations are a GTFS data fact; additional violations at higher std are delay-induced.
-- **Real GTFS schedule shows less propagation than the old synthetic one** (E4 mean 6.89% vs 11.64% before) because real slack is larger.
+- **Real GTFS schedule shows less propagation than the old synthetic one** (E4 mean 4.11% at 255 trips, was 5.88% at 250 trips, was 11.64% in pre-rebuild synthetic) because real slack is larger.
 - All Phase 2 delay values are `[SYNTHETIC]`. Results describe model behaviour, not real KMRL performance.
 
 ## 3.7 Phase 3 Results (2026-11-15, regenerated on 255-trip Phase 1 baseline)
@@ -264,7 +263,7 @@ All five were caught by `solver/crew_diag.py` (temporary diagnostic, deleted 202
 
 See `docs/phases.md` §Phase 3 for the full spec and `docs/constraints-crew-v1.md` for the detailed C1–C7 crew constraint spec.
 
-## Latest Phase 4 Results (2026-11-13)
+## Latest Phase 4 Results (2026-11-15, regenerated on 255-trip Phase 1 baseline)
 
 Phase 4 **Explainability Report** is **complete**. One reporting module reads the seven Phase 1/2/3 output files and generates one Markdown report plus one machine-readable stats file.
 
@@ -273,7 +272,7 @@ Phase 4 **Explainability Report** is **complete**. One reporting module reads th
 ### Scope
 Phase 4 is a **reporting layer only** — not an optimizer, not a simulator, not a conflict analyzer, not a per-trip reasoning engine.
 
-- ❌ **No conflict analyzer.** The solver returns OPTIMAL in every phase (Phase 1 objective 4800 gap 0.0%; Phase 3 all pools objective 0.0 gap 0.0%). There is no infeasibility to analyze.
+- ❌ **No conflict analyzer.** The solver returns OPTIMAL in every phase (Phase 1 objective 900.0 gap 0.0%; Phase 3 all pools objective 0.0 gap 0.0%). There is no infeasibility to analyze.
 - ❌ **No per-trip "why" claims.** CP-SAT returns a global solution, not per-assignment reasons. The report frames explanations as "context + consistency," not "reason."
 - ❌ **No hardcoded numbers.** Every number traces to one of the seven source files, cited below each table.
 
@@ -286,7 +285,7 @@ Phase 4 is a **reporting layer only** — not an optimizer, not a simulator, not
 
 ### Report sections (7, all present)
 
-1. **Executive Summary** — total trips (250), total rakes (18), active drivers per pool. States that Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives disabled in V1.
+1. **Executive Summary** — total trips (255), total rakes (18), active drivers per pool. States that Phase 1 OPTIMAL is under the O6 rake-balance objective only; other objectives disabled in V1.
 2. **Phase 1 Constraint Status** — from `validation.json`; reports the 10 checks present for the current run (R1, R3, R4, R5, R6, R7, R9, R10, R11, D). R8/R12 no longer run; R9 is a dedicated PASS; D is direction consistency.
 3. **Phase 3 Constraint Status (C1–C7, per pool)** — from `crew_validation.json`; C5 deferred, C6 soft-objective.
 4. **Rake Utilization** — from `schedule.csv`; `utilization_pct = busy_sec / span_sec × 100`, defined before the table.

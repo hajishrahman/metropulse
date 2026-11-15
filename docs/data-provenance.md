@@ -126,7 +126,7 @@ The file is named `KMRLGTFS2`, but it contains the **KMRL Annual Report 2024–2
 | Trains operating | 15 | Report states 15 trains operating |
 | Peak headway | 7 min 30 sec | Same source |
 | Stations | 25 | Same source |
-| Operating hours | 06:00–23:00 | KMRL published timetable |
+| Operating hours | 06:00–23:00 | KMRL published timetable (V1 extends to (04:40, 24:00) to include positioning runs — see §1) |
 | Punctuality rate | 99.98% | Annual Report KPIs |
 | Ridership | 35.6 million passengers/year | Annual Report KPIs; reporting period should be confirmed |
 
@@ -205,18 +205,10 @@ The project initially used values attributed to a DPR (Detailed Project Report).
 | Location | Service rakes | Source |
 |---|---:|---|
 | ALVA | 9 | `[SYNTHETIC]` |
-| TPHT | 7 | `[SYNTHETIC]` |
-| MUTTOM | 2 | `[SYNTHETIC]` |
-
-The MUTTOM assignment is required because 18 partial trips start or end at Muttom; with**Initial position split (fixed, not solver choice):**
-
-| Location | Service rakes | Source |
-|---|---:|---|
-| ALVA | 9 | `[SYNTHETIC]` |
 | TPHT | 9 | `[SYNTHETIC]` |
 | MUTTOM | 0 service (7 maintenance only) | `[SYNTHETIC]` |
 
-The 9/9/0 split is **verified feasible** on the 255-trip schedule (OPTIMAL, objective 900.0, ~60 s). Earlier documentation that claimed MUTT-home service rakes were required was based on an **undocumented home-lock pruning rule** in `create_rake_assignment_variables` that has been removed. With the home-lock removed, 9/9/0 is feasible and is the current committed configuration.out MUTTOM-origin rakes, the 250-trip case is INFEASIBLE (see `constraints-v2.1` Findings).
+The 9/9/0 split is **verified feasible** on the 255-trip schedule (OPTIMAL, objective 900.0, ~60 s). Earlier documentation that claimed MUTT-home service rakes were required was based on an **undocumented home-lock pruning rule** in `create_rake_assignment_variables` that has been removed. With the home-lock removed, 9/9/0 is feasible and is the current committed configuration.
 
 ### Aggregate Fleet Capacity Estimate
 
@@ -289,7 +281,7 @@ Two new columns added to the same 25 rakes:
 **Disruption scenario configs:**
 
 - `data/disruptions/scenario_a.json` — R008 fails @ 18:00:00 (single-rake happy path, evening peak)
-- `data/disruptions/scenario_b.json` — 5 rakes (R008, R013, R015, R002, R007) fail @ 07:00:00 (mass failure, morning peak)
+- `data/disruptions/scenario_b.json` — 4 rakes (R008, R013, R015, R002) fail @ 07:00:00 (mass failure, morning peak)
 
 Both JSONs are hand-authored per handoff D8 (with the corrected scenario timings from the peak-hour analysis — see `docs/phases.md` §Phase 5).
 
@@ -309,6 +301,7 @@ Driver qualifications, availability, shift preferences, and weekly availability 
 
 ### Rake Schema
 
+```csv
 rake_id,status,initial_mileage_km,cmrs_status,initial_location,initial_available_time
 R001,service,187621,valid,ALVA,06:00
 ...
@@ -317,6 +310,7 @@ R018,service,<mileage>,valid,TPHT,06:00
 R019,maintenance,<mileage>,valid,MUTTOM,00:00
 ...
 R025,maintenance,<mileage>,valid,MUTTOM,00:00
+```
 ```
 ### Rake Distribution
 
@@ -374,14 +368,14 @@ GTFS (data/raw/)
 data/extract_gtfs_trips.py
        |
        +---> data/trips_full_route.csv      (232)
-       +---> data/trips_partial.csv         (18)
+       +---> data/trips_partial.csv         (23)
        +---> data/stop_sequences_*.csv      (audit)
        |
        v
 data/merge_trips.py
        |
        v
-data/trips_all.csv  (250 = 232 + 18)
+data/trips_all.csv  (255 = 232 + 23)
        |
        v
 solver/models.py  (ProblemData)
@@ -390,14 +384,14 @@ solver/models.py  (ProblemData)
 solver/solve.py  (CP-SAT, O6 rake balance active)
        |
        v
-data/processed/schedule.csv  (250 scheduled trips)
+data/processed/schedule.csv  (255 scheduled trips)
        |
        v
 solver/validator.py  (Independent verification)
        |
        v
 data/processed/validation.json
-(10 PASS + 1 SKIPPED, Overall PASS)
+(10 PASS, 0 SKIPPED, Overall PASS)
 
 ## Supporting Data Flow
 
@@ -419,20 +413,20 @@ GTFS running-time analysis
 Summary statistic only (50.47 min median).
 The solver uses per-trip GTFS durations, not this constant.
 
-Initial rake split (9 / 7 / 2)
+Initial rake split (9 / 9 / 0)
        |
        v
 data/generate_synthetic_v2.py → rakes.csv
 
 ## Reconciliation Check
 
-data/hourly_service.csv  (legacy, 250 counts)
+data/hourly_service.csv  (legacy, 255 counts)
        |
        v
 data/verify_gtfs_trips.py
        |
        v
-Verifies: hourly(250) == hourly(232) + hourly(18)
+Verifies: hourly(255) == hourly(232) + hourly(23)
 Kept on disk for reconciliation only.
 Not read by the solver.
 
@@ -457,9 +451,9 @@ Read-only: Phase 4 does not modify any Phase 1/2/3 output.
 
 Phase 1 outputs                Phase 5 parallel fleet + disruption configs
 ---------------                -----------------------------------------
-schedule.csv  (250 trips)      rakes_phase5.csv   (25 rakes + 2 columns)
+schedule.csv  (255 trips)      rakes_phase5.csv   (25 rakes + 2 columns)
                                scenario_a.json    (R008 @ 18:00)
-                               scenario_b.json    (5 rakes @ 07:00)
+                               scenario_b.json    (4 rakes @ 07:00: R008, R013, R015, R002)
        \                                   |
         \                                  |
          \                                 v

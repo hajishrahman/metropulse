@@ -55,64 +55,107 @@ def _group_by_driver(rows: list[dict]) -> dict[str, list[dict]]:
 
 
 # ==== checks ====
+
+def _need_sec(stop_a: str, stop_b: str) -> int:
+    """
+    Mirror of crew_constraints._need_sec — kept independent so a bug in
+    the solver constraint cannot hide in the validator.
+
+    - Same stop                         -> 300 s
+    - MUTT <-> ALVA/TPHT                -> 480 s
+    - ALVA <-> TPHT, KVTR, unknown      -> 900 s
+    """
+    if stop_a == stop_b:
+        return CFG.SAME_STOP_TURNAROUND_SEC
+
+    if "MUTT" in (stop_a, stop_b) and ({stop_a, stop_b} & {"ALVA", "TPHT"}):
+        return CFG.MUTTOM_TO_TERMINAL_DEADHEAD_SEC
+
+    return CFG.DEFAULT_UNKNOWN_STOP_DEADHEAD_SEC
+
+
 def check_c1_no_overlap(rows: list[dict]) -> dict:
     """
-    C1: for each driver, no two assigned trips may overlap.
+    C1: no overlap, AND terminal continuity (Phase 1 R6 deadhead rules).
 
     crew_schedule.csv does NOT carry per-trip departure/arrival times --
     sign_on / sign_off are the driver's DAILY values, constant across all
-    rows for the same driver. So we join each row with schedule.csv via
-    trip_id to get the actual per-trip departure/arrival times, then check
-    consecutive trips per driver in departure order.
+    rows for the same driver. We join each row with schedule.csv via
+    trip_id to get per-trip departure/arrival, and ALSO pull first_stop
+    and last_stop for the terminal continuity check.
     """
-    trip_truth = {r["trip_id"]: r for r in read_csv(
-        SCHEDULE_CSV, {"trip_id", "departure", "arrival"})}
+    trip_truth = {
+        r["trip_id"]: r
+        for r in read_csv(
+            SCHEDULE_CSV,
+            {"trip_id", "departure", "arrival", "first_stop", "last_stop"}
+        )
+    }
 
-    # Group by driver, but sort by actual trip departure (from schedule.csv)
     by_driver: dict[str, list[dict]] = defaultdict(list)
+
     for r in rows:
         t = trip_truth.get(r["trip_id"])
+
         if t is None:
-            # Unknown trip_id -- treat as a hard failure; C4 will also catch it
             by_driver[r["driver_id"]].append({
-                "trip_id": r["trip_id"], "dep": None, "arr": None,
+                "trip_id": r["trip_id"],
+                "dep": None,
+                "arr": None,
+                "first_stop": None,
+                "last_stop": None,
             })
             continue
+
         by_driver[r["driver_id"]].append({
             "trip_id": r["trip_id"],
             "dep": hhmmss_to_sec(t["departure"]),
             "arr": hhmmss_to_sec(t["arrival"]),
+            "first_stop": t["first_stop"],
+            "last_stop": t["last_stop"],
         })
 
     failures = []
+
     for d, drs in by_driver.items():
-        # Filter out any unknown-trip rows for the sort; they cause failures
         valid = [r for r in drs if r["dep"] is not None]
         unknown = [r for r in drs if r["dep"] is None]
+
         for r in unknown:
-            failures.append({"driver_id": d, "trip_id": r["trip_id"],
-                             "issue": "unknown_trip_in_schedule"})
+            failures.append({
+                "driver_id": d,
+                "trip_id": r["trip_id"],
+                "issue": "unknown_trip_in_schedule",
+            })
 
         valid.sort(key=lambda r: r["dep"])
+
         for i in range(len(valid) - 1):
             a = valid[i]
             b = valid[i + 1]
-            if b["dep"] < a["arr"] + CFG.MIN_TURNAROUND_SEC:
+
+            required = _need_sec(a["last_stop"], b["first_stop"])
+
+            if b["dep"] < a["arr"] + required:
                 failures.append({
                     "driver_id": d,
                     "a_trip": a["trip_id"],
                     "b_trip": b["trip_id"],
-                    "a_arr": a["arr"],
-                    "b_dep": b["dep"],
+                    "a_last_stop": a["last_stop"],
+                    "b_first_stop": b["first_stop"],
                     "gap_sec": b["dep"] - a["arr"],
-                    "required_sec": CFG.MIN_TURNAROUND_SEC,
+                    "required_sec": required,
                 })
 
     return {
         "check": "C1_no_overlap",
         "status": "PASS" if not failures else "FAIL",
-        "details": {"failures": failures[:20], "total": len(failures)},
+        "details": {
+            "failures": failures[:20],
+            "total": len(failures),
+        },
     }
+
 
 
 def check_c2_max_duty(rows: list[dict]) -> dict:

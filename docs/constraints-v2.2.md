@@ -1,8 +1,8 @@
-# MetroPulse — Constraint Specification v2.2
+# MetroPulse — Constraint Specification v2.3
 
-**Status:** Locked for V1 implementation (rebuilt on real GTFS trips)
-**Date:** 2026-11-12
-**Supersedes:** v2 (2026-11-08) — updates R6, R11, trip input, per-trip durations, validator coverage
+**Status:** Locked for V1 implementation (255-trip model, rebuilt on real GTFS trips)
+**Date:** 2026-11-15
+**Supersedes:** v2.2 (2026-11-12) — updates trip count (250→255), operating window (06:00–23:00 → 04:40–24:00), fleet split (9/7/2 → 9/9/0), R6 per-pair deadhead, R11 KVTR rule, R8/R12 removed from validator scope, R9 and direction check added, objective 4800 → 900, home-lock removed
 **Scope:** Real-data train scheduling (GTFS + Annual Report), train layer only
 
 ---
@@ -30,7 +30,7 @@ Every parameter in this specification is tagged with one of:
 - Uses **KMRL Annual Report 2024-25** for route length, fleet, and service hours.
 - Uses **news article 2026** for fleet breakdown (18 operating + 7 maintenance).
 - Single-line metro (Aluva → Tripunithura).
-- (4:40, 24:00) — 19.3-hour window `[EXTERNAL — Annual Report]`.
+- Operating window **04:40–24:00** `[EXTERNAL — GTFS 2024-25 WK trips]`. Extended from the earlier 06:00–23:00 Annual Report window to include 5 real positioning/depot movements (WK_4, WK_256, WK_18, WK_12, WK_253).
 - Solver uses **real GTFS trip records**, not hourly counts and not synthetic `T0000` trips.
 - **Deadhead IS modeled** (see §3.5).
 - No crew scheduling in V1.
@@ -54,7 +54,7 @@ Every parameter in this specification is tagged with one of:
 **The solver input is `data/trips_all.csv` (255 real GTFS trips).** It is the merge of:
 
 - `data/trips_full_route.csv` — **232** full-route ALVA↔TPHT trips
-- `data/trips_partial.csv` — **18** partial trips (Muttom ↔ terminals)
+- `data/trips_partial.csv` — **23** partial trips (Muttom/KVTR ↔ terminals)
 
 Schema:
 
@@ -79,7 +79,7 @@ Reconciliation only: `data/hourly_service.csv` is kept on disk as an independent
 | Per-trip running time | Real GTFS duration | `[EXTERNAL — GTFS]` — used by solver |
 | Terminal turnaround | 5 min | `[SYNTHETIC]` |
 | Stations | 25 | `[EXTERNAL — Annual Report]` |
-| Operating window | 06:00 ≤ departure < 23:00 | `[EXTERNAL — Annual Report]` |
+| Operating window | 04:40 ≤ departure < 24:00 | `[EXTERNAL — GTFS 2024-25 WK trips]` |
 
 The 50.47-min median is not a model input. The solver uses each trip's own GTFS duration.
 
@@ -97,9 +97,10 @@ Initial position split (fixed, not solver choice):
 | Location | Service rakes | Source |
 |---|---:|---|
 | ALVA | 9 | `[SYNTHETIC]` |
-| TPHT | 7 | `[SYNTHETIC]` |
-| MUTTOM | 2 | `[SYNTHETIC]` |
+| TPHT | 9 | `[SYNTHETIC]` |
+| MUTTOM | 0 service (7 maintenance only) | `[SYNTHETIC]` |
 
+The 9/9/0 split is **verified feasible** on the 255-trip schedule (OPTIMAL, objective 900.0, ~60 s). Earlier versions claimed MUTT-home service rakes were required; that was an artifact of a home-lock pruning rule (see §10) that has been removed.
 ### 3.4 Depot / Stabling
 
 | Location | Capacity | Source |
@@ -107,10 +108,9 @@ Initial position split (fixed, not solver choice):
 | Info Park-2 | 2 | `[SYNTHETIC]` |
 | Muttom Depot | UNBOUNDED_FOR_V1 | `[MODEL LIMITATION]` |
 
-R8 (depot capacity) is SKIPPED in V1 — no stabling assignment exists.
+**R8 (depot capacity) is removed from validator scope in V1** — no stabling assignment exists. The implicit capacity is enforced by the 9/9/0 split in `rakes.csv`.
 
 ### 3.5 Deadhead `[SYNTHETIC]`
-add KVTR rule
 
 Two values, both used by R6 and R11:
 
@@ -120,6 +120,8 @@ Two values, both used by R6 and R11:
 | `MUTTOM_TO_TERMINAL_DEADHEAD_MIN` | 8 min | MUTTOM ↔ ALVA, MUTTOM ↔ TPHT |
 
 Both tagged `[SYNTHETIC]`. No verified KMRL source.
+
+**KVTR rule:** deadhead is **undefined** for any pair where one endpoint is a non-terminal, non-MUTT stop (e.g., KVTR, EMKM). A trip starting at KVTR can only be taken by a rake whose **previous trip ends at KVTR**. With the current 255-trip schedule, WK_12 (KVTR → ALVA) is the only such trip; WK_256 (MUTT → KVTR) is its only valid predecessor. The solver enforces the WK_256 → WK_12 chain on a single rake.
 
 ### 3.6 Maintenance Threshold
 
@@ -133,13 +135,18 @@ Both tagged `[SYNTHETIC]`. No verified KMRL source.
 
 ### 4.1 GTFS Filtering
 
-GTFS has 255 weekday trips in `trips.txt` (WK service). Of those:
+GTFS has 255 weekday trips in `trips.txt` (WK service). **All 255 are included in the model** under the [04:40, 24:00) window:
 
-- 232 trips are full-route (ALVA↔TPHT).
-- 23 trips are partial (Muttom/KVTR ↔ terminals).
-- 5 trips depart from  04:40–23:30  (WK_253, WK_4, WK_256, WK_12, WK_18) — included by policy as non-passenger movements.
+- **232** trips are full-route (ALVA↔TPHT).
+- **23** trips are partial (Muttom/KVTR ↔ terminals).
+- **5** of the partial trips are real positioning/depot movements that would have been excluded under the earlier 06:00–23:00 window:
+  - WK_4 (departs MUTT at 05:00) — pre-service positioning
+  - WK_256 (departs MUTT at 05:20) — pre-service positioning
+  - WK_18 (departs MUTT at 05:45) — pre-service positioning
+  - WK_12 (departs KVTR at 05:57) — pre-service positioning
+  - WK_253 (departs TPHT at 23:22:54, arrives MUTT at 24:03:45) — late-night return-to-depot
 
-232 + 18 = 250 trips in the V1 model.
+**232 + 23 = 255 trips in the V1 model.** None excluded by policy. All 5 are real train movements that use rakes.
 
 ### 4.2 Direction Determination
 
@@ -148,11 +155,11 @@ Direction is determined by station index from stop order (ALVA = 0 … TPHT = 24
 - `UP` = last station index > first station index
 - `DOWN` = last station index < first station index
 
-No fallback to `trips.txt direction_id`. Verified by `data/verify_gtfs_trips.py` (232 + 18 all consistent with `direction_id`, but the model uses stop order).
+No fallback to `trips.txt direction_id`. Verified by `data/verify_gtfs_trips.py` (all 255 consistent with `direction_id`, but the model uses stop order).
 
 ### 4.3 Window Boundary
 
-Departure must satisfy `06:00:00 ≤ departure < 23:00:00`. A departure at exactly `23:00:00` is excluded (locked decision).
+Departure must satisfy `04:40:00 ≤ departure < 24:00:00`. A departure at exactly `24:00:00` is excluded (locked decision). Arrivals may exceed 24:00 (WK_253 arrives at 24:03:45 — GTFS-valid).
 
 ---
 
@@ -177,11 +184,8 @@ The earlier R2 (moving departure times to fit a headway target) was only meaning
 
 ### R3 — Operating Window `[EXTERNAL]`
 
-```python
-06:00:00 <= departure < 23:00:00
-```
-
-Arrivals may extend past 23:00.
+04:40:00 <= departure < 24:00:00
+Arrivals may extend past 24:00. WK_253 (arrival 24:03:45) is GTFS-valid.
 
 Validator check: Every departure is in `[OPERATING_START_SEC, OPERATING_END_SEC)`.
 
@@ -227,11 +231,13 @@ No 50-min constant. No 50.47-min constant.
 
 Validator check: For each row in `schedule.csv`, `arrival − departure` equals the `duration` of that `trip_id` in `trips_all.csv`.
 
-### R8 — Depot Capacity `[SYNTHETIC]`
+### R8 — Depot Capacity (removed from V1)
 
 Info Park-2 capacity = 2. Muttom = unbounded.
 
-Not enforced in V1 (no stabling assignment exists). Validator: SKIPPED.
+R8 is not modelled in V1 and not in the validator scope. There is no stabling assignment decision for the model to constrain. The implicit capacity is enforced by the 9/9/0 split in rakes.csv.
+
+
 
 ### R9 — Maintenance Exclusivity `[SYNTHETIC]`
 
@@ -243,14 +249,14 @@ A rake with `initial_mileage_km >= 1,000,000` is blocked from trips.
 
 Validator check: No trip in `schedule.csv` is assigned to a rake over the threshold.
 
-### R11 — Terminal Continuity `[SYNTHETIC — first-trip home rule with deadhead]`
+### R11 — Terminal Continuity `[SYNTHETIC — first-trip home rule with deadhead + KVTR rule]`
 
-A rake whose home terminal is `H` may take a trip starting at `S` as its first trip of the day if:
+A rake whose home terminal is H may take a trip starting at S as its first trip of the day if:
 
 - `S == H`, or
-- the trip's departure is no earlier than `earliest_departure_of_day_from_H + deadhead(H, S)`.
+- `deadhead(H, S)` is defined AND the trip's departure is no earlier than `OPERATING_START_SEC + deadhead(H, S)`.
 
-This models a rake leaving its depot and deadheading to a terminal before the first trip. It is `[SYNTHETIC]` because no verified KMRL depot-dispatch data exists.
+KVTR rule: if deadhead(H, S) is undefined (any pair where one stop is a non-terminal, non-MUTT stop such as KVTR), the trip can only be taken as a first trip if a previous trip ends at S. With the current 255-trip schedule, WK_12 (KVTR → ALVA) requires a predecessor ending at KVTR; only WK_256 (MUTT → KVTR) qualifies. The solver enforces the WK_256 → WK_12 chain on a single rake.
 
 Pair gaps between consecutive trips are enforced by R6, not R11.
 
@@ -261,9 +267,7 @@ Validator check:
 
 ### R12 — Non-Service Window `[EXTERNAL]`
 
-No departure before 06:00. Arrivals may extend past 23:00 (covered by R3).
-
-Validator check: Every departure is ≥ 06:00.
+R12 is subsumed by R3 (R3 already enforces 04:40 ≤ departure < 24:00). R12 is removed from the validator scope as a redundant check.
 
 ---
 
@@ -286,15 +290,16 @@ All weights are `[SYNTHETIC — INITIAL TUNING PARAMETERS]`.
 
 **Formulation:**
 
-- Target per rake: `floor(num_trips / num_rakes) = loor(255 / 18) = 14`.
-- For each rake, `dev[r] = |trips_assigned[r] − 13|`.
+- Target per rake: `floor(num_trips / num_rakes) = floor(255 / 18) = 14`.
+- For each rake, `dev[r] = |trips_assigned[r] − 14|`.
 - Objective: `Minimize(W_RAKE_BALANCE × OBJ_SCALE × Σ dev[r]) = Minimize(3 × 100 × Σ dev)`.
 
-**Result (2026-11-12):** OPTIMAL, objective = 900 (Σ dev = 3), best bound = 900, gap = 0.0%, solve time 11.77s. Rake distribution: 3 rakes × 15 trips, 15 rakes × 14 trips = 255.
+**Result (2026-11-15):** OPTIMAL, objective = 900.0
+ (Σ dev = 3), best bound = 900.0, gap = 0.0%, solve time ~60 s. Rake distribution: 3 rakes × 15 trips, 15 rakes × 14 trips = 255.
 
-The minimum achievable deviation under floor-target 14 is 3 (since `255 − 14×18 = 3`). The solver achieves this minimum, which is why gap = 0%.
+The minimum achievable deviation under floor-target 14 is 3 (since 255 − 14×18 = 3). The solver achieves this minimum, which is why gap = 0%.
 
-**Note on target choice:** the floor target (13) produces a minimum deviation of 3. A under floor-target 14 a different. The current V1 uses the floor target consistently; this is a design choice, not an error, and is documented so the objective value 4800 is interpretable.
+**Note on target choice:** the floor target (14) produces a minimum deviation of 3 (since 255 − 14×18 = 3). A ceiling target (ceil(255/18) = 15) would require 3 rakes × 14 + 15 rakes × 15 = 255, giving Σ dev = 15 × 0 + 3 × 1 = 3 as well, but with a different distribution. The current V1 uses the floor target consistently; this is a design choice, not an error, and is documented ...so the objective value 900 is interpretable...
 
 **Multi-objective extension:** O1–O5 and O7 are declared in `config.py` as `W_*` constants but not active in the current objective. Restoring the full multi-term objective is future work.
 
@@ -324,7 +329,7 @@ Current shape (O6 rake balance active):
 ```json
 {
   "status": "OPTIMAL",
-  "elapsed_sec": 11.77,
+  "elapsed_sec": 60.0,
   "objective": 900.0,
   "best_bound": 900.0,
   "gap_pct": 0.0,
@@ -356,7 +361,7 @@ Per-check PASS / FAIL / SKIPPED with details.
 
 Independent of CP-SAT's own status. Every applicable hard constraint is rechecked from `schedule.csv`.
 
-Current coverage (10 PASS + 1 SKIPPED of 11 applicable):
+Current coverage (**10 PASS, 0 SKIPPED**):
 
 | Rule | Status |
 |---|---|
@@ -364,14 +369,14 @@ Current coverage (10 PASS + 1 SKIPPED of 11 applicable):
 | R3 operating window | PASS |
 | R4 fleet availability | PASS |
 | R5 rake non-overlap | PASS |
-| R6 turnaround + deadhead | PASS |
+| R6 turnaround + deadhead (per-pair 5/8/15) | PASS |
 | R7 per-trip running time | PASS |
-| R8 depot capacity | SKIPPED (no stabling in V1) |
+| R9 maintenance exclusivity | PASS (trivially while `maintenance.csv` empty) |
 | R10 maintenance threshold | PASS |
-| R11 terminal continuity | PASS |
-| R12 non-service window | PASS |
+| R11 terminal continuity (KVTR-aware) | PASS |
+| D direction consistency | PASS |
 
-R2 is not applicable (fixed trip times). R9 is vacuous (empty `maintenance.csv`).
+R2 is not applicable (fixed trip times). **R8 (depot capacity) and R12 (non-service window) are removed from validator scope.** R9 and D are added.
 
 Overall result (Phase 1, 255 trips): PASS, 10 PASS, 0 SKIPPED.
 
@@ -399,30 +404,32 @@ Overall result (Phase 1, 255 trips): PASS, 10 PASS, 0 SKIPPED.
 
 -**[FINDING]** R6 must compute per-order gap values. The v2 wording used one gap per pair (5 min if either order was same-terminal). This allowed cross-terminal switches (ALVA↔MUTT, TPHT↔MUTT) with gaps between 5 and 15 min. Validator caught 4 such violations on 250 trips. Fixed by computing `gap_ab` and `gap_ba` independently and enforcing each in the correct order.
 
--**[FINDING]** Fleet-size behaviour: 232 trips, 18 rakes, 9/9 split → OPTIMAL; 250 trips, 18 rakes, 9/9 split → INFEASIBLE (insufficient MUTT coverage); 250 trips, 18 rakes, 9/7/2 split → OPTIMAL. Adding more rakes (20, 22) does not fix the 250 case if the split does not include MUTTOM-origin rakes.
+-**[FINDING — corrected 2026-11-15]** Fleet-size behaviour revisited. Earlier versions of this document claimed that 250 trips with 18 rakes in a 9/9 split was INFEASIBLE, and that MUTTOM-origin rakes were required. That claim was an artifact of an **undocumented home-lock pruning rule** in `create_rake_assignment_variables` that blocked all 18 rakes from the earliest opposite-terminal trip of the day. With the home-lock removed, the **255-trip case is OPTIMAL at 9/9/0** (no MUTT-home service rakes) — objective 900.0, gap 0.0%, ~60 s. Verified by `probes/probe_9_9.py` and by the current committed solve. MUTT-home service rakes are **not required**; the current split is 9 ALVA / 9 TPHT / 0 service MUTTOM (7 maintenance rakes at MUTTOM).
 
 ---
 
 ## 11. Scenario Roadmap
 
-| Scenario | Status | Focus |
-|---|---|---|
+| **Scenario** | **Status** | **Focus** |
+| :--- | :--- | :--- |
 | A — 232-trip feasibility baseline | OPTIMAL (feasibility only, 2026-11-12) | 232 trips, 18 rakes, 9/9 split — pre-objective debugging baseline |
-| A' — Full GTFS service (250) | Proven OPTIMAL (2026-11-12) | 250 trips, 18 rakes, 9/7/2 split |
+| A' — Full GTFS service (255) | Proven OPTIMAL (2026-11-15) | 255 trips, 18 rakes, 9/9/0 split, objective 900.0, ~60 s |
 | B — Peak-stress | Planned | Higher hourly demand |
 | C — Maintenance-stress | Planned | Non-empty maintenance windows |
-| D — Delay stress | **Rebuilt 2026-11-12** | SimPy sweep on 250-trip real schedule (E1–E4 + 100 seeds) |
+| D — Delay stress | Regenerated 2026-11-15 | SimPy sweep on 255-trip real schedule (E1–E4 + 100 seeds) |
 
 ---
 
 ## 12. Sign-Off
 
-This specification is **v2.2**, dated 2026-11-12 (rebuilt on real GTFS trips). It supersedes v2 (2026-11-08).
+This specification is v2.3, dated 2026-11-15 (rebuilt on 255-trip GTFS model). It supersedes v2.2 (2026-11-12).
 
-**Note:** an earlier revision of this file was labelled v2.1 in this section while the header said v2.2. That inconsistency was corrected on 2026-11-13; the correct label is **v2.2** (matches the file header and the Phase 1 rebuild date).
+Changes from v2.2: trip count 250 → 255 (all WK trips now included, window extended to 04:40–24:00), fleet split 9/7/2 → 9/9/0, R6 per-pair deadhead (5/8/15 min), R11 KVTR rule, home-lock removal, R8 and R12 removed from validator scope, R9 and direction check added, objective 4800 → 900, validator 10 PASS + 0 SKIPPED.
 
 Any change to constraints, parameters, or architecture requires:
 
-1. Update to this document.
-2. Version bump (v2.2 → v2.3 → v3).
-3. Explicit re-approval.
+- Update to this document.
+
+- Version bump (v2.3 → v2.4 → v3).
+
+- Explicit re-approval.

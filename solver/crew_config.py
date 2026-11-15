@@ -32,6 +32,20 @@ TOTAL_DEPOT_CEILING_SEC = 30_600 # [DERIVED]  8h30m = 8h active + 15m + 15m
 MIN_TURNAROUND_SEC = 300         # [SYNTHETIC] 5 min between arrival and next departure (C1)
 
 # ===========================================================================
+# TERMINAL CONTINUITY  [DERIVED from Phase 1 R6]
+# ===========================================================================
+# A driver moving from a trip ending at stop_a to a trip starting at stop_b
+# needs a physical deadhead gap. These rules mirror Phase 1 R6 so the crew
+# roster is physically drivable — not just time-feasible.
+#
+# Without these rules, a driver could move ALVA -> TPHT (~28 km apart) in
+# 5 minutes, which is impossible on the corridor.
+SAME_STOP_TURNAROUND_SEC          = 300   # [DERIVED from C1] same-stop turnaround
+MUTTOM_TO_TERMINAL_DEADHEAD_SEC   = 480   # [DERIVED from Phase 1 R6] 8 min MUTT<->terminal
+TERMINAL_TO_TERMINAL_DEADHEAD_SEC = 900   # [DERIVED from Phase 1 R6] 15 min ALVA<->TPHT
+DEFAULT_UNKNOWN_STOP_DEADHEAD_SEC = 900   # [DERIVED] conservative default (KVTR/unknown)
+
+# ===========================================================================
 # CONTINUOUS DRIVING  [SYNTHETIC — typical Indian metro practice]
 # ===========================================================================
 MAX_CONTINUOUS_PREFERRED_SEC = 18_000   # [SYNTHETIC] 5 h preferred (C6 soft)

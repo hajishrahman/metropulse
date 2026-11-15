@@ -32,13 +32,19 @@ from solver import crew_config as CFG
 # PREP
 # ===========================================================================
 def build_trips(data) -> list[dict]:
-    """Compact per-trip records, sorted by departure."""
+    """Compact per-trip records, sorted by departure.
+
+    Includes first_stop / last_stop so C1 can enforce terminal continuity
+    (Phase 1 R6 deadhead rules).
+    """
     rows = []
     for _, r in data.trips.iterrows():
         rows.append({
             "trip_id": str(r["trip_id"]),
             "dep": int(r["dep_sec"]),
             "arr": int(r["arr_sec"]),
+            "first_stop": str(r["first_stop"]),
+            "last_stop": str(r["last_stop"]),
         })
     rows.sort(key=lambda x: (x["dep"], x["trip_id"]))
     return rows
@@ -99,32 +105,50 @@ def add_c4_full_coverage(model: cp_model.CpModel,
         model.Add(sum(x[(d, t["trip_id"])] for d in driver_ids) == 1)
 
 
+def _need_sec(stop_a: str, stop_b: str) -> int:
+    """
+    Minimum gap required between a trip ending at stop_a and a trip
+    starting at stop_b for the same driver.
+
+    - Same stop                         -> 300 s
+    - MUTT <-> ALVA/TPHT                -> 480 s
+    - ALVA <-> TPHT, KVTR, unknown      -> 900 s
+    """
+    if stop_a == stop_b:
+        return CFG.SAME_STOP_TURNAROUND_SEC
+
+    if "MUTT" in (stop_a, stop_b) and ({stop_a, stop_b} & {"ALVA", "TPHT"}):
+        return CFG.MUTTOM_TO_TERMINAL_DEADHEAD_SEC
+
+    return CFG.DEFAULT_UNKNOWN_STOP_DEADHEAD_SEC
+
+
 def add_c1_no_overlap(model: cp_model.CpModel,
                       trips: list[dict],
                       driver_ids: list[str],
                       x: dict) -> None:
     """
-    C1: for each driver, no two assigned trips may overlap.
+    C1: For each driver, no two assigned trips may overlap, and the
+    gap between trips must satisfy the physical deadhead requirement.
 
-    Trips are sorted by departure, so for pair (i, j) with i < j:
-        trips[i].dep <= trips[j].dep
-    The pair is non-overlapping (turnaround respected) iff:
-        trips[i].arr + MIN_TURNAROUND_SEC <= trips[j].dep
-    If that holds, they may share a driver. Otherwise they cannot:
-        x[d, i] + x[d, j] <= 1
+    Trips are sorted by departure.
     """
     n = len(trips)
+
     for d in driver_ids:
         for i in range(n):
             a = trips[i]
+
             for j in range(i + 1, n):
                 b = trips[j]
-                if a["arr"] + CFG.MIN_TURNAROUND_SEC > b["dep"]:
+
+                required = _need_sec(a["last_stop"], b["first_stop"])
+
+                if a["arr"] + required > b["dep"]:
                     model.Add(
                         x[(d, a["trip_id"])] + x[(d, b["trip_id"])] <= 1
                     )
-
-
+                    
 def add_c2_max_duty(model: cp_model.CpModel,
                     driver_ids: list[str],
                     active: dict,
