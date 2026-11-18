@@ -19,7 +19,7 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 1 — Train Scheduling (CP-SAT) ✅ COMPLETE (rebuilt on real GTFS trips)
+## Phase 1 — Train Scheduling (CP-SAT)  COMPLETE (rebuilt on real GTFS trips)
 
 ### Source of Truth
 - Real data from **GTFS** (2024-25 feed) + **KMRL Annual Report 2024-25** + **news article 2026**
@@ -90,7 +90,7 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 2 — SimPy Validation ✅ COMPLETE (rebuilt 2026-11-12)
+## Phase 2 — SimPy Validation  COMPLETE (rebuilt 2026-11-12)
 
 ### Code
 - [x] `src/simulation/__init__.py`
@@ -142,7 +142,7 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 3 — Crew Scheduling ✅ COMPLETE (2026-11-13)
+## Phase 3 — Crew Scheduling  COMPLETE (2026-11-13)
 
 ### Code (new files only — Phase 1 and Phase 2 untouched)
 - [x] `data/generate_drivers.py` — generates 55 synthetic drivers `[SYNTHETIC]`
@@ -196,7 +196,7 @@ Progress tracker for the project. Update as phases complete.
 - Do not reintroduce DPR values (10.715 km, 18.91 min, 408 trips, 3-min turnaround) — none present in Phase 3.
 ---
 
-## Phase 4 — Explainability ✅ COMPLETE (2026-11-13)
+## Phase 4 — Explainability  COMPLETE (2026-11-13)
 
 ### What Phase 4 is (and is not)
 - A **reporting layer** that reads Phase 1/2/3 outputs and generates one Markdown report. Not an optimizer, not a simulator, not a per-trip "reasoning engine."
@@ -239,7 +239,7 @@ Progress tracker for the project. Update as phases complete.
 
 ---
 
-## Phase 5 — Disruption Response ✅ COMPLETE (2026-11-14)
+## Phase 5 — Disruption Response  COMPLETE (2026-11-14)
 
 ### What Phase 5 is (and is not)
 - A **planned disruption response engine** that re-optimizes the Phase 1 schedule when rakes become unavailable. Not a real-time control system, not a passenger-flow simulator, not a warm-start optimizer.

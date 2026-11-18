@@ -56,3 +56,11 @@ data/processed/gtfs_validation.json
 # Local AI instructions (kept in repo so it can be read by the next AI)
 # AGENTS.md is tracked — no ignore rule for it.
 # ============================================================
+# Local AI skills & specs (do not push)
+.agents/
+AGENTS.md
+agents.md
+DESIGN.md
+design.md
+PRODUCT.md
+product.md
