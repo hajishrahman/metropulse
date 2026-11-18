@@ -127,3 +127,19 @@ def load_utilization_stats() -> dict:
     # require that the file parses as JSON. No key checks — a missing key here
     # must not stop the page.
     return _load_json(_PROCESSED / 'utilization_stats.json', required_keys=())
+
+# ----------------------------------------------------------------------------
+# Public Phase-2 loaders
+# ----------------------------------------------------------------------------
+def load_simulation_kpis() -> dict:
+    return _load_json(
+        _PROCESSED / 'simulation_kpis.json',
+        required_keys=('headline_seed_run', 'monte_carlo_aggregate'),
+    )
+
+
+def load_simulation_timeline() -> dict:
+    return _load_csv(
+        _PROCESSED / 'simulation_timeline.csv',
+        required_columns=('experiment', 'trip_id', 'actual_dep_sec', 'actual_arr_sec'),
+    )

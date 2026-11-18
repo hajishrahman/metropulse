@@ -175,7 +175,6 @@ def _natural_key(value):
     return tuple(int(p) if p.isdigit() else p
                  for p in re.split(r'(\d+)', s) if p != '')
 
-
 def _render_gantt_legend() -> None:
     with ui.row().classes('items-center gap-4'):
         for label, color in (('Full route', '#1E3A5F'),
@@ -224,14 +223,18 @@ def _render_limitations() -> None:
         )
 
 
+
+ 
 def render() -> None:
-    with ui.column().classes('w-full min-w-0'):
+    from components.navigation import create_sidebar
+    main = create_sidebar(active_phase='phase1')
+    main.classes('p-6')
+
+    with main:
         with ui.row().classes('w-full items-center justify-between mb-4'):
             with ui.column().classes('gap-2'):
-                ui.label('Phase 1 — Train Scheduling').classes(
-                    'text-[24px] leading-7 font-semibold text-[#1E293B]')
-                ui.label('Frozen backend output · read-only dashboard').classes(
-                    'text-[14px] leading-5 text-[#64748B]')
+                ui.label('Phase 1 — Train Scheduling').classes('text-[24px] leading-7 font-semibold text-[#1E293B]')
+                ui.label('Frozen backend output · read-only dashboard').classes('text-[14px] leading-5 text-[#64748B]')
             scenario_tag('FROZEN OUTPUT')
 
         schedule = load_schedule()
