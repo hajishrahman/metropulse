@@ -9,6 +9,7 @@ def create_sidebar(active_phase: str = None):
         ('home', 'Home', '/'),
         ('dashboard', 'Phase 1 — Scheduling', '/phase1'),
         ('insights', 'Phase 2 — Simulation', '/phase2'),
+        ('assignment_ind', 'Phase 3 — Crew', '/phase3'),
     ]
     
     with ui.row().classes('w-full h-screen flex-nowrap items-stretch gap-0'):

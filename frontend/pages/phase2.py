@@ -136,18 +136,14 @@ def render():
         colors = ['#1B7A43', '#2196F3', '#FF9800', '#B3261E']
 
         # 2. Header
-        with ui.row().classes('w-full justify-between items-center mb-2'):
-            with ui.column().classes('gap-1'):
-                ui.label('Phase 2 — Operational Simulation').classes("text-[28px] font-bold text-[#181d1f] font-['IBM_Plex_Sans',_sans-serif]")
-                ui.label('Monte Carlo delay propagation analysis across 100 seeds and 4 experiments.').classes("text-[14px] text-[#181d1f]/70 font-['IBM_Plex_Sans',_sans-serif]")
-            ui.label('SYNTHETIC').classes("bg-[#f4f6f8] text-[#181d1f] rounded-[6px] px-3 py-1 text-[12px] font-medium uppercase tracking-wider border border-[#e2e8f0] font-['IBM_Plex_Sans',_sans-serif]")
+        with ui.column().classes('gap-1 mb-2'):
+            ui.label('Phase 2 — Operational Simulation').classes("text-[28px] font-bold text-[#181d1f] font-['IBM_Plex_Sans',_sans-serif]")
+            ui.label('Monte Carlo delay propagation analysis across 100 seeds and 4 experiments.').classes("text-[14px] text-[#181d1f]/70 font-['IBM_Plex_Sans',_sans-serif]")
 
         # Experiment key
         ui.label('Experiments: E1 = Low · E2 = Moderate · E3 = High · E4 = Stress (increasing delay injection)').classes("text-[12px] text-[#181d1f]/60 mb-4 font-['IBM_Plex_Sans',_sans-serif]")
 
-        # 3. Synthetic Banner
-        with ui.row().classes('w-full mb-6'):
-            ui.label('Results describe model behaviour under a synthetic delay assumption, not real KMRL performance.').classes("w-full bg-[#FFF8E1] text-[#8A6100] border-l-4 border-[#8A6100] p-3 rounded-[6px] text-[13px] font-medium font-['IBM_Plex_Sans',_sans-serif]")
+        # 3. Synthetic Banner (moved to bottom, see end of render)
 
         # Shared experiment selector — drives KPIs + Gantt
         head_exps = kpis_data['headline_seed_run']
@@ -248,3 +244,9 @@ def render():
                     '**±5 On-Time Model Property:** ±5 on-time = 100% is a model property '
                     '(own-delay cap 300s + inclusive ±5 threshold), not an operational guarantee.'
                 ).classes("text-[13px] text-[#181d1f]/80 font-['IBM_Plex_Sans',_sans-serif]")
+
+        # Footer: synthetic badge + banner
+        with ui.row().classes('w-full items-center gap-3 mb-2'):
+            ui.label('SYNTHETIC').classes("bg-[#f4f6f8] text-[#181d1f] rounded-[6px] px-3 py-1 text-[12px] font-medium uppercase tracking-wider border border-[#e2e8f0] font-['IBM_Plex_Sans',_sans-serif]")
+        with ui.row().classes('w-full mb-6'):
+            ui.label('Results describe model behaviour under a synthetic delay assumption, not real KMRL performance.').classes("w-full bg-[#FFF8E1] text-[#8A6100] border-l-4 border-[#8A6100] p-3 rounded-[6px] text-[13px] font-medium font-['IBM_Plex_Sans',_sans-serif]")

@@ -143,3 +143,36 @@ def load_simulation_timeline() -> dict:
         _PROCESSED / 'simulation_timeline.csv',
         required_columns=('experiment', 'trip_id', 'actual_dep_sec', 'actual_arr_sec'),
     )
+
+# ----------------------------------------------------------------------------
+# Public Phase-3 loaders
+# ----------------------------------------------------------------------------
+_SYNTHETIC = _ROOT / 'data' / 'synthetic'
+
+
+def load_crew_solution() -> dict:
+    return _load_json(
+        _PROCESSED / 'crew_solution.json',
+        required_keys=('45', '50', '55'),
+    )
+
+
+def load_crew_validation() -> dict:
+    return _load_json(
+        _PROCESSED / 'crew_validation.json',
+        required_keys=('pools',),
+    )
+
+
+def load_crew_schedule() -> dict:
+    return _load_csv(
+        _PROCESSED / 'crew_schedule.csv',
+        required_columns=('trip_id', 'driver_id', 'sign_on', 'sign_off', 'pool_size'),
+    )
+
+
+def load_drivers() -> dict:
+    return _load_csv(
+        _SYNTHETIC / 'drivers.csv',
+        required_columns=('driver_id',),
+    )
