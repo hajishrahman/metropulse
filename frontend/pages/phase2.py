@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 from nicegui import ui
 from data import registry
-from components.ui_elements import kpi_card, state_card
+from components.ui_elements import analytics_card, kpi_card, scenario_tag, state_card, status_badge
 from components.time_utils import hhmmss_to_sec, sec_to_hhmmss
 
 ui.add_head_html('<style>.modebar-container { display: none !important; }</style>', shared=True)
@@ -11,18 +11,41 @@ def hex_to_rgba(hex_color: str, alpha: float = 0.2) -> str:
     r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
     return f'rgba({r},{g},{b},{alpha})'
 
+
+def _chart_legend(items: list[tuple[str, str]]) -> None:
+    with ui.row().classes('items-center gap-3 flex-wrap'):
+        for label, color in items:
+            with ui.row().classes('items-center gap-2'):
+                ui.element('span').classes('inline-block w-2 h-2 rounded-full').style(
+                    f'background-color: {color}'
+                )
+                ui.label(label).classes('text-[11px] leading-4 text-[#64748B]')
+
 def build_line_chart(title: str, yaxis_title: str, traces_data: list) -> go.Figure:
     fig = go.Figure()
     for t in traces_data:
         fig.add_trace(go.Scatter(x=t['x'], y=t['y_p95'], mode='lines', line=dict(width=0, color=t['color']), showlegend=False, hoverinfo='skip'))
         fig.add_trace(go.Scatter(x=t['x'], y=t['y_p5'], mode='lines', line=dict(width=0, color=t['color']), fill='tonexty', fillcolor=hex_to_rgba(t['color'], 0.2), name=f"{t['name']} (p5-p95)", showlegend=False, hoverinfo='skip'))
-        fig.add_trace(go.Scatter(x=t['x'], y=t['y_mean'], mode='lines+markers', line=dict(color=t['color'], width=2.5), name=t['name']))
-    fig.update_layout(title=title, xaxis_title='Experiment', yaxis_title=yaxis_title, autosize=True, template='plotly_white', margin=dict(t=80, b=40, l=40, r=20), font=dict(family='IBM Plex Sans, sans-serif', color='#181d1f'), legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1))
+        fig.add_trace(go.Scatter(x=t['x'], y=t['y_mean'], mode='lines+markers', line=dict(color=t['color'], width=2.5), name=t['name'], showlegend=False))
+    fig.update_layout(title=None, xaxis_title='Experiment', yaxis_title=yaxis_title, autosize=True, template='plotly_white', margin=dict(t=16, b=52, l=56, r=28), font=dict(family='IBM Plex Sans, sans-serif', color='#1E293B'), legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1), plot_bgcolor='white', paper_bgcolor='white')
+    fig.update_xaxes(gridcolor='#E2E8F0', zeroline=False, automargin=True)
+    fig.update_yaxes(gridcolor='#E2E8F0', zeroline=False, automargin=True)
     return fig
 
 def build_on_time_traces(mc_agg: dict, exps: list, colors: list) -> list:
-    metrics = [('on_time_5min', '±5 On-Time', colors[0]), ('on_time_3min', '±3 On-Time', colors[1]), ('on_time_1min', '±1 On-Time', colors[2])]
-    return [{'name': name, 'x': exps, 'y_mean': [mc_agg[exp][key]['mean'] for exp in exps], 'y_p5': [mc_agg[exp][key]['p5'] for exp in exps], 'y_p95': [mc_agg[exp][key]['p95'] for exp in exps], 'color': color} for key, name, color in metrics]
+    metrics = [
+        ('on_time_5min', '±5 min On-Time', colors[0]),
+        ('on_time_3min', '±3 min On-Time', colors[1]),
+        ('on_time_1min', '±1 min On-Time', colors[2]),
+    ]
+    return [{
+        'name': name,
+        'x': exps,
+        'y_mean': [mc_agg[exp][key]['mean'] for exp in exps],
+        'y_p5': [mc_agg[exp][key]['p5'] for exp in exps],
+        'y_p95': [mc_agg[exp][key]['p95'] for exp in exps],
+        'color': color,
+    } for key, name, color in metrics]
 
 def build_single_trace(mc_agg: dict, exps: list, metric_key: str, name: str, color: str) -> list:
     return [{'name': name, 'x': exps, 'y_mean': [mc_agg[exp][metric_key]['mean'] for exp in exps], 'y_p5': [mc_agg[exp][metric_key]['p5'] for exp in exps], 'y_p95': [mc_agg[exp][metric_key]['p95'] for exp in exps], 'color': color}]
@@ -31,10 +54,6 @@ def build_single_trace(mc_agg: dict, exps: list, metric_key: str, name: str, col
 def build_headway_chart(traces_data: list) -> go.Figure:
     fig = build_line_chart('Actual Headway Violations', 'Violations', traces_data)
     fig.update_yaxes(rangemode='tozero')
-    fig.add_hline(y=3, line=dict(color='#94A3B8', width=1, dash='dash'),
-                  annotation_text='GTFS source baseline (3)',
-                  annotation_position='top right',
-                  annotation_font=dict(size=11, color='#64748B'))
     return fig
 
 
@@ -62,8 +81,10 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
         arr = hhmmss_to_sec(row['arrival'])
         fig.add_trace(go.Scatter(
             x=[dep, arr], y=[y, y], mode='lines',
-            line=dict(color="#5B7C99", width=14),
-            showlegend=False, hoverinfo='skip',
+        line=dict(color="#94A3B8", width=14),
+            showlegend=False,
+            hovertemplate=(f"Trip: {row['trip_id']}<br>Rake: {r}<br>Scheduled: "
+                           f"{sec_to_hhmmss(dep)}â€“{sec_to_hhmmss(arr)}<extra></extra>"),
         ))
 
     # Actual bars (overlay)
@@ -75,7 +96,13 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
         dep = int(row['actual_dep_sec'])
         arr = int(row['actual_arr_sec'])
         delay_min = float(row['dep_delay_sec']) / 60.0
-        color = '#B3261E' if delay_min > 1 else '#1B7A43'
+        delay_min = float(row['dep_delay_sec']) / 60.0
+        if delay_min > 1:
+            color = '#B3261E'
+            status = 'DELAYED'
+        else:
+            color = '#0D9488'
+            status = 'ON TIME'
         fig.add_trace(go.Scatter(
             x=[dep, arr], y=[y, y], mode='lines',
             line=dict(color=color, width=6),
@@ -83,21 +110,32 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
             hovertemplate=(
                 f"<b>{row['trip_id']}</b><br>"
                 f"Rake: {r}<br>"
-                f"Sched dep: {sec_to_hhmmss(int(row['sched_dep_sec']))}<br>"
-                f"Actual dep: {sec_to_hhmmss(dep)}<br>"
-                f"Delay: {delay_min:.1f} min<extra></extra>"
+                f"Scheduled: {sec_to_hhmmss(int(row['sched_dep_sec']))}â€“{sec_to_hhmmss(int(row['sched_arr_sec']))}<br>"
+                f"Simulated: {sec_to_hhmmss(dep)}â€“{sec_to_hhmmss(arr)}<br>"
+                f"Delta: {delay_min:.1f} min<br>Status: {status}<extra></extra>"
             ),
         ))
 
-    tick_secs = list(range(5 * 3600, 25 * 3600 + 1, 2 * 3600))
+    observed_times = (
+        [hhmmss_to_sec(value) for value in sched['departure'].tolist() + sched['arrival'].tolist()]
+        + actual['actual_dep_sec'].astype(int).tolist()
+        + actual['actual_arr_sec'].astype(int).tolist()
+    )
+    tick_start = (min(observed_times) // 7200) * 7200
+    tick_end = ((max(observed_times) + 7199) // 7200) * 7200
+    tick_secs = list(range(tick_start, tick_end + 1, 7200))
     fig.update_layout(
         showlegend=False,
+        font=dict(family='IBM Plex Mono, monospace', color='#334155'),
+        hoverlabel=dict(font=dict(family='IBM Plex Mono, monospace')),
         xaxis=dict(
             tickvals=tick_secs,
             ticktext=[sec_to_hhmmss(s)[:5] for s in tick_secs],
+            range=[tick_start, tick_end],
             title='Time (IST)',
             gridcolor='#E2E8F0',
             zeroline=False,
+            automargin=True,
         ),
         yaxis=dict(
             tickvals=list(rake_y.values()),
@@ -106,8 +144,9 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
             autorange='reversed',
             gridcolor='#E2E8F0',
             zeroline=False,
+            automargin=True,
         ),
-        margin=dict(l=60, r=20, t=20, b=60),
+        margin=dict(l=72, r=28, t=20, b=60),
         plot_bgcolor='white',
         paper_bgcolor='white',
     )
@@ -117,7 +156,7 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
 def render():
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='phase2')
-    main.classes('p-6')
+    main.classes('w-full min-w-0 p-6')
 
     kpis_res = registry.load_simulation_kpis()
     timeline_res = registry.load_simulation_timeline()
@@ -125,70 +164,68 @@ def render():
     with main:
         if kpis_res['status'] != 'ok' or timeline_res['status'] != 'ok':
             msg = kpis_res['message'] if kpis_res['status'] != 'ok' else timeline_res['message']
-            state_card(kpis_res['status'] if kpis_res['status'] != 'ok' else timeline_res['status'], 'Data', msg)
+            state_card(kpis_res['status'] if kpis_res['status'] != 'ok' else timeline_res['status'], 'Data', msg).props('flat').classes('shadow-none')
             return
 
         kpis_data = kpis_res['data']
         timeline_df = timeline_res['data']
         # (removed: KPIs now read from head_exps inside refresh_kpis)
         mc_agg = kpis_data['monte_carlo_aggregate']
-        exps = ['E1', 'E2', 'E3', 'E4']
-        colors = ['#1B7A43', '#2196F3', '#FF9800', '#B3261E']
+        exps = list(mc_agg)
+        colors = ['#1E3A5F', '#0D9488', '#94A3B8']
 
-        # 2. Header
-        with ui.column().classes('gap-1 mb-2'):
-            ui.label('Phase 2 — Operational Simulation').classes("text-[28px] font-bold text-[#181d1f] font-['IBM_Plex_Sans',_sans-serif]")
-            ui.label('Monte Carlo delay propagation analysis across 100 seeds and 4 experiments.').classes("text-[14px] text-[#181d1f]/70 font-['IBM_Plex_Sans',_sans-serif]")
-
+        # Header
+        with ui.column().classes('w-full min-w-0 gap-1 mb-2'):
+            ui.label('Phase 2 - Operational Simulation').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
+            ui.label(f"Monte Carlo delay propagation across {kpis_data['metadata']['n_seeds_monte_carlo']} seeds and {len(exps)} experiments.").classes("text-[14px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]")
         # Experiment key
-        ui.label('Experiments: E1 = Low · E2 = Moderate · E3 = High · E4 = Stress (increasing delay injection)').classes("text-[12px] text-[#181d1f]/60 mb-4 font-['IBM_Plex_Sans',_sans-serif]")
+        ui.label('Experiments: ' + ', '.join(exps) + ' (increasing delay injection)').classes('text-[12px] leading-4 text-[#64748B] mb-4')
 
         # 3. Synthetic Banner (moved to bottom, see end of render)
 
-        # Shared experiment selector — drives KPIs + Gantt
+        # Shared experiment selector â€” drives KPIs + Gantt
         head_exps = kpis_data['headline_seed_run']
-        exp_selector = ui.select(
-            {
-                'E1': 'E1 — Low (baseline)',
-                'E2': 'E2 — Moderate',
-                'E3': 'E3 — High',
-                'E4': 'E4 — Stress',
-            },
-            value='E4',
-            label='Experiment',
-        ).props('outlined dense options-dense').classes(
-            'w-[240px] bg-white rounded-[6px] mb-2'
+        exp_selector = ui.select({exp: exp for exp in exps}, value=exps[-1], label='Experiment').props('outlined dense options-dense').classes(
+            'w-full max-w-[240px] bg-white rounded-[4px] border border-[#E2E8F0] shadow-none mb-2'
         )
 
-        # 4. Headline KPIs — live
-        kpi_row = ui.grid(columns=3).classes('w-full gap-4 mb-6')
+        # 4. Headline KPIs â€” live
+        kpi_row = ui.grid(columns=3).classes('w-full min-w-0 tabular-nums gap-4 mb-4')
         def refresh_kpis():
             kpi_row.clear()
             key = exp_selector.value
             h = head_exps[key]
+            seed = kpis_data['metadata']['headline_seed']
             with kpi_row:
-                kpi_card('±1 On-Time', f"{h['on_time_1min']['on_time_pct']}%", footnote=f'{key} · seed 42')
-                kpi_card('±3 On-Time', f"{h['on_time_3min']['on_time_pct']}%", footnote=f'{key} · seed 42')
-                kpi_card('Total Propagated Delay', f"{h['total_propagated_delay']['total_propagated_delay_min']} min", footnote=f'{key} · seed 42')
+                kpi_card('±1 min On-Time', f"{h['on_time_1min']['on_time_pct']}%", footnote=f'{key} | seed {seed}').props('flat').classes('shadow-none')
+                kpi_card('±3 min On-Time', f"{h['on_time_3min']['on_time_pct']}%", footnote=f'{key} | seed {seed}').props('flat').classes('shadow-none')
+                kpi_card('Total Propagated Delay', f"{h['total_propagated_delay']['total_propagated_delay_min']} min", footnote=f'{key} | seed {seed}').props('flat').classes('shadow-none')
         refresh_kpis()
 
         # 5. 2x2 Chart Grid
-        fig1 = build_line_chart('On-Time Performance by Threshold', 'On-Time %', build_on_time_traces(mc_agg, exps, colors))
+        on_time_traces = build_on_time_traces(mc_agg, exps, colors)
+        fig1 = build_line_chart('On-Time Performance by Threshold', 'On-Time %', on_time_traces)
         fig2 = build_line_chart('Delay Propagation Rate', 'Propagation %', build_single_trace(mc_agg, exps, 'propagation_pct', 'Propagation %', colors[1]))
-        fig3 = build_headway_chart(build_single_trace(mc_agg, exps, 'headway_actual_violations', 'Headway Violations', colors[3]))
-        fig4 = build_line_chart('Total Propagated Delay', 'Delay (min)', build_single_trace(mc_agg, exps, 'total_propagated_delay_min', 'Total Propagated Delay', colors[2]))
+        fig3 = build_headway_chart(build_single_trace(mc_agg, exps, 'headway_actual_violations', 'Headway Violations', colors[2]))
+        fig4 = build_line_chart('Total Propagated Delay', 'Delay (min)', build_single_trace(mc_agg, exps, 'total_propagated_delay_min', 'Total Propagated Delay', colors[1]))
 
-        with ui.grid(columns=2).classes('w-full gap-4 mb-6'):
-            with ui.card().classes("bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] p-4"):
-                ui.plotly(fig1).classes('w-full h-[400px] md:h-[400px] h-[320px]')
-            with ui.card().classes("bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] p-4"):
-                ui.plotly(fig2).classes('w-full h-[400px] md:h-[400px] h-[320px]')
-            with ui.card().classes("bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] p-4"):
-                ui.plotly(fig3).classes('w-full h-[400px] md:h-[400px] h-[320px]')
-            with ui.card().classes("bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] p-4"):
-                ui.plotly(fig4).classes('w-full h-[400px] md:h-[400px] h-[320px]')
+        with ui.grid(columns=2).classes('w-full min-w-0 gap-4 mb-4'):
+            with analytics_card('On-Time Performance by Threshold', header_content=lambda: _chart_legend([
+                (trace['name'], trace['color']) for trace in on_time_traces
+            ])) as panel:
+                panel.props('flat').classes('shadow-none')
+                ui.plotly(fig1).classes('w-full min-w-0 h-[400px]')
+            with analytics_card('Delay Propagation Rate', header_content=lambda: _chart_legend([('Propagation', colors[1])])) as panel:
+                panel.props('flat').classes('shadow-none')
+                ui.plotly(fig2).classes('w-full min-w-0 h-[400px]')
+            with analytics_card('Actual Headway Violations', header_content=lambda: _chart_legend([('Violations', colors[2])])) as panel:
+                panel.props('flat').classes('shadow-none')
+                ui.plotly(fig3).classes('w-full min-w-0 h-[400px]')
+            with analytics_card('Total Propagated Delay', header_content=lambda: _chart_legend([('Propagated delay', colors[1])])) as panel:
+                panel.props('flat').classes('shadow-none')
+                ui.plotly(fig4).classes('w-full min-w-0 h-[400px]')
 
-        # 6. Gantt — overlay ghost bars
+        # 6. Gantt â€” overlay ghost bars
         gantt_container = None
         def refresh_gantt(e=None):
             if gantt_container is None:
@@ -196,57 +233,53 @@ def render():
             gantt_container.clear()
             with gantt_container:
                 ui.plotly(build_gantt_overlay(exp_selector.value, timeline_df)).classes(
-                    'w-full h-[600px] md:h-[600px] h-[480px]'
+                    'w-full min-w-0 h-[600px]'
                 )
-        with ui.card().classes("w-full bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] p-4 mb-6"):
-            with ui.row().classes('w-full items-center justify-between mb-1'):
-                ui.label('Gantt — Scheduled (ghost) vs Actuals (colored)').classes(
-                    "text-[16px] font-semibold text-[#181d1f] font-['IBM_Plex_Sans',_sans-serif]"
-                )
-            with ui.row().classes('items-center gap-4 mb-4'):
+        with analytics_card('Gantt - Scheduled vs Simulated') as panel:
+            panel.props('flat').classes('shadow-none')
+            with ui.row().classes('w-full items-center gap-4 mb-4'):
                 with ui.row().classes('items-center gap-2'):
-                    ui.element('span').classes('inline-block w-3 h-3 rounded-full').style('background-color: #5B7C99')
+                    ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #94A3B8')
                     ui.label('Scheduled (ghost)').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
                 with ui.row().classes('items-center gap-2'):
-                    ui.element('span').classes('inline-block w-3 h-3 rounded-full').style('background-color: #1B7A43')
+                    ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #0D9488')
                     ui.label('Actual — on time').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
                 with ui.row().classes('items-center gap-2'):
-                    ui.element('span').classes('inline-block w-3 h-3 rounded-full').style('background-color: #B3261E')
+                    ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #B3261E')
                     ui.label('Actual — delayed > 1 min').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
             ui.label('Ghost bars show the Phase 1 schedule; colored bars show simulated actuals for the selected experiment.').classes(
                 "text-[11px] text-[#181d1f]/60 mb-3 font-['IBM_Plex_Sans',_sans-serif]"
             )
-            gantt_container = ui.column().classes('w-full')
+            gantt_container = ui.column().classes('w-full min-w-0')
             with gantt_container:
                 ui.plotly(build_gantt_overlay(exp_selector.value, timeline_df)).classes(
-                    'w-full h-[600px] md:h-[600px] h-[480px]'
+                    'w-full min-w-0 h-[600px]'
                 )
 
         exp_selector.on_value_change(lambda e: (refresh_kpis(), refresh_gantt()))
 
-        # 7. Methodology & Limitations
+        # Methodology & Limitations
         with ui.expansion('Methodology & Honest Limitations', value=False).classes(
-            "w-full bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] mb-6"
+            "w-full min-w-0 bg-white rounded-[6px] shadow-none border border-[#E2E8F0] mb-4"
         ):
-            with ui.column().classes('p-4 gap-2'):
+            with analytics_card('Simulation methodology') as panel:
+                panel.props('flat').classes('shadow-none')
                 ui.markdown(
-                    '**GTFS headway note:** The GTFS timetable contains 3 same-direction adjacent '
-                    'departure pairs with 0s separation. These are source-data facts, not simulation '
-                    'artifacts. Actual violations rising above 3 is the legitimate simulation signal.'
-                ).classes("text-[13px] text-[#181d1f]/80 font-['IBM_Plex_Sans',_sans-serif]")
+                    '**Source headways:** Timetable headways are source-data facts; observed increases in actual violations are simulation results.'
+                ).classes("text-[14px] leading-5 text-[#334155]")
                 ui.markdown(
-                    '**300s Floor Caveat:** The propagation recurrence uses a flat 300-second turnaround '
-                    'and is not deadhead-aware. It is physically feasible for the current schedule because '
-                    'all 237 consecutive-trip pairs satisfy R6 deadhead requirements. This limitation '
-                    'should be reconsidered if Phase 1 is re-solved with tighter cross-terminal gaps.'
-                ).classes("text-[13px] text-[#181d1f]/80 font-['IBM_Plex_Sans',_sans-serif]")
+                    '**Turnaround caveat:** Propagation uses a flat turnaround and is not deadhead-aware. Feasibility depends on the loaded schedule and observed slack.'
+                ).classes("text-[14px] leading-5 text-[#334155]")
                 ui.markdown(
-                    '**±5 On-Time Model Property:** ±5 on-time = 100% is a model property '
-                    '(own-delay cap 300s + inclusive ±5 threshold), not an operational guarantee.'
-                ).classes("text-[13px] text-[#181d1f]/80 font-['IBM_Plex_Sans',_sans-serif]")
-
+                    '**On-time model property:** The displayed threshold result is a model property, not an operational guarantee.'
+                ).classes("text-[14px] leading-5 text-[#334155]")
         # Footer: synthetic badge + banner
         with ui.row().classes('w-full items-center gap-3 mb-2'):
-            ui.label('SYNTHETIC').classes("bg-[#f4f6f8] text-[#181d1f] rounded-[6px] px-3 py-1 text-[12px] font-medium uppercase tracking-wider border border-[#e2e8f0] font-['IBM_Plex_Sans',_sans-serif]")
-        with ui.row().classes('w-full mb-6'):
-            ui.label('Results describe model behaviour under a synthetic delay assumption, not real KMRL performance.').classes("w-full bg-[#FFF8E1] text-[#8A6100] border-l-4 border-[#8A6100] p-3 rounded-[6px] text-[13px] font-medium font-['IBM_Plex_Sans',_sans-serif]")
+            scenario_tag('SYNTHETIC').style('border-radius: 4px; border: 1px solid #E2E8F0;')
+        with analytics_card('Synthetic model limitation') as panel:
+            panel.props('flat').classes('shadow-none')
+            with ui.row().classes('w-full items-start gap-2'):
+                status_badge('WARNING').style('border-radius: 4px; border: 1px solid #E2E8F0;')
+                ui.label('Results describe model behaviour under a synthetic delay assumption, not real KMRL performance.').classes(
+                    'min-w-0 text-[14px] leading-5 text-[#334155]'
+                )
