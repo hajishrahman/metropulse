@@ -27,16 +27,9 @@ _BACKGROUND_HEAD = '''
 @ui.page('/')
 def index():
     ui.add_head_html(_BACKGROUND_HEAD)
-    with ui.column().classes('w-full h-screen overflow-hidden flex items-center justify-center gap-6'):
-        ui.label('MetroPulse').classes('text-[28px] font-bold text-[#111111]')
-        ui.label('Read-only dashboard over frozen backend output.').classes('text-[14px] text-[#6B6B6B]')
-        
-        with ui.row().classes('gap-4 mt-4'):
-            ui.button('Train Scheduling', on_click=lambda: ui.navigate.to('/phase1')).props('unelevated').classes(
-                'bg-[#7138F5] text-white rounded-[12px] px-6 py-2 font-medium uppercase tracking-wider')
-            ui.button('Operational Simulation', on_click=lambda: ui.navigate.to('/phase2')).props('unelevated').classes(
-                'bg-[#1B7A43] text-white rounded-[12px] px-6 py-2 font-medium uppercase tracking-wider')
-
+    from pages.home import render as render_home
+    render_home()
+    
 @ui.page('/phase1')
 def phase1_page():
     ui.add_head_html(_BACKGROUND_HEAD)

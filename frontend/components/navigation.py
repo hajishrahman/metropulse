@@ -4,7 +4,7 @@ def create_sidebar(active_phase: str = None):
     """Collapsible left rail + main content, side-by-side (no overlay)."""
     
     expanded = {'value': False}    
-    
+
     nav_items = [
         ('home', 'Home', '/'),
         ('dashboard', 'Train Scheduling', '/phase1'),
@@ -33,7 +33,7 @@ def create_sidebar(active_phase: str = None):
             labels = []
             nav_rows = []
             for idx, (icon, label_text, route) in enumerate(nav_items):
-                is_active = (active_phase == route.strip('/'))
+                is_active = (active_phase == (route.strip('/') or 'home'))
                 color = 'text-[#1E3A5F]' if is_active else 'text-[#475569]'
                 bg = 'bg-[#F1F5F9]' if is_active else ''
                 
