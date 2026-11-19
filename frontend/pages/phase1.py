@@ -233,7 +233,7 @@ def render() -> None:
     with main:
         with ui.row().classes('w-full items-center justify-between mb-4'):
             with ui.column().classes('gap-2'):
-                ui.label('Phase 1 — Train Scheduling').classes('text-[24px] leading-7 font-semibold text-[#1E293B]')
+                ui.label('Train Scheduling').classes('text-[24px] leading-7 font-semibold text-[#1E293B]')
                 ui.label('Frozen backend output · read-only dashboard').classes('text-[14px] leading-5 text-[#64748B]')
             scenario_tag('FROZEN OUTPUT')
 

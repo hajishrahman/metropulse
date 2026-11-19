@@ -176,7 +176,7 @@ def render():
 
         # Header
         with ui.column().classes('w-full min-w-0 gap-1 mb-2'):
-            ui.label('Phase 2 - Operational Simulation').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
+            ui.label('Operational Simulation').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
             ui.label(f"Monte Carlo delay propagation across {kpis_data['metadata']['n_seeds_monte_carlo']} seeds and {len(exps)} experiments.").classes("text-[14px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]")
         # Experiment key
         ui.label('Experiments: ' + ', '.join(exps) + ' (increasing delay injection)').classes('text-[12px] leading-4 text-[#64748B] mb-4')

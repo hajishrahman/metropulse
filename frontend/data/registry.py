@@ -176,3 +176,27 @@ def load_drivers() -> dict:
         _SYNTHETIC / 'drivers.csv',
         required_columns=('driver_id',),
     )
+
+# ----------------------------------------------------------------------------
+# Public Phase-4 loaders
+# ----------------------------------------------------------------------------
+def load_explainability_report() -> dict:
+    """Read explainability_report.md as raw text. Not JSON, not CSV."""
+    path = _PROCESSED / 'explainability_report.md'
+    path_str = str(path)
+    mtime = os.path.getmtime(path_str) if os.path.exists(path_str) else 0.0
+    return _load_text_cached(path_str, mtime)
+
+
+@functools.lru_cache(maxsize=None)
+def _load_text_cached(path: str, mtime: float) -> dict:
+    if not os.path.exists(path):
+        return _result(None, 'not_generated', 'File not generated yet.', path, mtime)
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            text = f.read()
+    except Exception as exc:  # noqa: BLE001
+        return _result(None, 'invalid', f'Parse error: {exc}', path, mtime)
+    if not text.strip():
+        return _result(None, 'invalid', 'File parsed but is empty.', path, mtime)
+    return _result(text, 'ok', '', path, mtime)

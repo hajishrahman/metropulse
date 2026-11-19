@@ -66,7 +66,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
             # Reserve row - dashed track
             fig.add_trace(go.Scatter(
                 x=[X_MIN, X_MAX], y=[y, y], mode='lines',
-                line=dict(color='#94A3B8', width=4, dash='dash'),
+                line=dict(color="#191715", width=2.5, dash='dash'),
                 showlegend=False,
                 hovertemplate=f"{did} - Reserve / Standby<extra></extra>",
             ))
@@ -83,7 +83,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
         if merged.empty:
             fig.add_trace(go.Scatter(
                 x=[X_MIN, X_MAX], y=[y, y], mode='lines',
-                line=dict(color='#CBD5E1', width=2, dash='dash'),
+                line=dict(color="#191715", width=2, dash='dash'),
                 showlegend=False,
                 hovertemplate=f"{did} - Reserve / Standby<extra></extra>",
             ))
@@ -93,13 +93,13 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
         last_arr = int(merged['arr_sec'].iloc[-1])
         shift_hover = (
             f"<b>{did}</b> - Pool {pool}<br>"
-            f"Shift: {sec_to_hhmmss(sign_on_sec)}â€“{sec_to_hhmmss(sign_off_sec)}<extra></extra>"
+            f"Shift: {sec_to_hhmmss(sign_on_sec)} - {sec_to_hhmmss(sign_off_sec)}<extra></extra>"
         )
         trip_hover = (
             f"<b>{did}</b> - Pool {pool}<br>"
-            f"Duty: {sec_to_hhmmss(first_dep)}â€“{sec_to_hhmmss(last_arr)}<br>"
+            f"Duty: {sec_to_hhmmss(first_dep)} - {sec_to_hhmmss(last_arr)}<br>"
             f"Trip: %{{customdata[0]}}<br>Rake: %{{customdata[1]}}<br>"
-            f"Trip time: %{{customdata[2]}}â€“%{{customdata[3]}}<extra></extra>"
+            f"Trip time: %{{customdata[2]}} - %{{customdata[3]}}<extra></extra>"
         )
 
         # Sign-on buffer
@@ -127,7 +127,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
         showlegend=False,
         height=550,
         font=dict(family='IBM Plex Mono, monospace', color='#334155'),
-        hoverlabel=dict(font=dict(family='IBM Plex Mono, monospace')),
+        hoverlabel=dict(bgcolor='#0F172A', font=dict(color='#FFFFFF', family='IBM Plex Mono, monospace')),
         xaxis=dict(
             tickvals=tick_secs,
             ticktext=[sec_to_hhmmss(s)[:5] for s in tick_secs],
@@ -192,7 +192,7 @@ def render():
         # Header
         with ui.row().classes('w-full min-w-0 justify-between items-center mb-2'):
             with ui.column().classes('min-w-0 gap-1'):
-                ui.label('Phase 3 - Crew Scheduling').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
+                ui.label('Crew Scheduling').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
                 ui.label('CP-SAT optimized single-day crew rostering respecting duty limits and reserve buffers.').classes(
                     "text-[14px] text-[#181d1f]/70 font-['IBM_Plex_Sans',_sans-serif]"
                 )
@@ -236,8 +236,8 @@ def render():
                         ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #1E3A5F')
                         ui.label('Revenue trip').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
                     with ui.row().classes('items-center gap-2'):
-                        ui.element('span').classes('inline-block w-3 h-3 rounded-sm border border-dashed border-[#94A3B8]').style('background-color: #F8FAFC')
-                        ui.label('Reserve / Standby').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
+                        ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: transparent; border: 2px dashed #191715')
+                        ui.label('Reserv line=dict(color / Standby').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
                 roster_container = ui.row().classes('w-full min-w-0 gap-3 flex-wrap')
 
         # Validation panel

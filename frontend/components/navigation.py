@@ -7,9 +7,10 @@ def create_sidebar(active_phase: str = None):
     
     nav_items = [
         ('home', 'Home', '/'),
-        ('dashboard', 'Phase 1 - Scheduling', '/phase1'),
-        ('insights', 'Phase 2 - Simulation', '/phase2'),
-        ('assignment_ind', 'Phase 3 - Crew', '/phase3'),
+        ('dashboard', 'Scheduling', '/phase1'),
+        ('insights', 'Simulation', '/phase2'),
+        ('assignment_ind', 'Crew Scheduling ', '/phase3'),
+        ('description', 'Explainability', '/phase4'),
     ]
     
     with ui.row().classes('w-full min-w-0 h-screen flex-nowrap items-stretch gap-0'):

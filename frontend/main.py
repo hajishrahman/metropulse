@@ -5,6 +5,7 @@
 
 from nicegui import ui
 
+from pages import phase1
 from pages.phase1 import render as render_phase1
 from pages.phase2 import render as render_phase2
 
@@ -31,9 +32,9 @@ def index():
         ui.label('Read-only dashboard over frozen backend output.').classes('text-[14px] text-[#6B6B6B]')
         
         with ui.row().classes('gap-4 mt-4'):
-            ui.button('Phase 1 Dashboard', on_click=lambda: ui.navigate.to('/phase1')).props('unelevated').classes(
+            ui.button('Train Scheduling', on_click=lambda: ui.navigate.to('/phase1')).props('unelevated').classes(
                 'bg-[#7138F5] text-white rounded-[12px] px-6 py-2 font-medium uppercase tracking-wider')
-            ui.button('Phase 2 Simulation', on_click=lambda: ui.navigate.to('/phase2')).props('unelevated').classes(
+            ui.button('Operational Simulation', on_click=lambda: ui.navigate.to('/phase2')).props('unelevated').classes(
                 'bg-[#1B7A43] text-white rounded-[12px] px-6 py-2 font-medium uppercase tracking-wider')
 
 @ui.page('/phase1')
@@ -51,5 +52,11 @@ def phase3_page():
     ui.add_head_html(_BACKGROUND_HEAD)
     from pages.phase3 import render as render_phase3
     render_phase3()
+
+@ui.page('/phase4')
+def phase4_page():
+    ui.add_head_html(_BACKGROUND_HEAD)
+    from pages.phase4 import render as render_phase4
+    render_phase4()
 
 ui.run(title='MetroPulse', favicon='🚆', reload=True)
