@@ -200,3 +200,50 @@ def _load_text_cached(path: str, mtime: float) -> dict:
     if not text.strip():
         return _result(None, 'invalid', 'File parsed but is empty.', path, mtime)
     return _result(text, 'ok', '', path, mtime)
+
+# ----------------------------------------------------------------------------
+# Public Disruption Response loaders
+# ----------------------------------------------------------------------------
+_DISRUPTIONS = _ROOT / 'data' / 'disruptions'
+
+
+def load_reschedule_diff() -> dict:
+    return _load_json(
+        _PROCESSED / 'reschedule_diff.json',
+        required_keys=('scenario_a', 'scenario_b'),
+    )
+
+
+def load_sensitivity_analysis() -> dict:
+    return _load_json(
+        _PROCESSED / 'sensitivity_analysis.json',
+        required_keys=('scenarios',),
+    )
+
+
+def _load_reschedule_csv(letter: str) -> dict:
+    return _load_csv(
+        _PROCESSED / f'reschedule_scenario_{letter}.csv',
+        required_columns=('trip_id', 'rake_id', 'departure', 'arrival'),
+    )
+
+
+def load_reschedule_scenario_a() -> dict: return _load_reschedule_csv('a')
+def load_reschedule_scenario_b() -> dict: return _load_reschedule_csv('b')
+def load_reschedule_scenario_c() -> dict: return _load_reschedule_csv('c')
+def load_reschedule_scenario_d() -> dict: return _load_reschedule_csv('d')
+def load_reschedule_scenario_e() -> dict: return _load_reschedule_csv('e')
+
+
+def _load_disruption_json(letter: str) -> dict:
+    return _load_json(
+        _DISRUPTIONS / f'scenario_{letter}.json',
+        required_keys=('scenario_id', 'rakes_down', 'disruption_time'),
+    )
+
+
+def load_disruption_scenario_a() -> dict: return _load_disruption_json('a')
+def load_disruption_scenario_b() -> dict: return _load_disruption_json('b')
+def load_disruption_scenario_c() -> dict: return _load_disruption_json('c')
+def load_disruption_scenario_d() -> dict: return _load_disruption_json('d')
+def load_disruption_scenario_e() -> dict: return _load_disruption_json('e')

@@ -59,4 +59,10 @@ def phase4_page():
     from pages.phase4 import render as render_phase4
     render_phase4()
 
+@ui.page('/phase5')
+def phase5_page():
+    ui.add_head_html(_BACKGROUND_HEAD)
+    from pages.phase5 import render as render_phase5
+    render_phase5()
+
 ui.run(title='MetroPulse', favicon='🚆', reload=True)

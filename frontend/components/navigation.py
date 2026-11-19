@@ -3,14 +3,15 @@ from nicegui import ui
 def create_sidebar(active_phase: str = None):
     """Collapsible left rail + main content, side-by-side (no overlay)."""
     
-    expanded = {'value': False}
+    expanded = {'value': False}    
     
     nav_items = [
         ('home', 'Home', '/'),
-        ('dashboard', 'Scheduling', '/phase1'),
-        ('insights', 'Simulation', '/phase2'),
-        ('assignment_ind', 'Crew Scheduling ', '/phase3'),
+        ('dashboard', 'Train Scheduling', '/phase1'),
+        ('insights', 'Operational Simulation', '/phase2'),
+        ('assignment_ind', 'Crew Scheduling', '/phase3'),
         ('description', 'Explainability', '/phase4'),
+        ('alt_route', 'Disruption Response', '/phase5'),
     ]
     
     with ui.row().classes('w-full min-w-0 h-screen flex-nowrap items-stretch gap-0'):

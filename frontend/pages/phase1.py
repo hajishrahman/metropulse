@@ -290,7 +290,6 @@ def render() -> None:
 
             sv = sol['status']
             kpi_card('Status', sv, badge_status=sv,
-                     footnote='Under configured objective (O6) only',
                      warning=f'Expected {EXPECTED_STATUS}, found {sv}.' if sv != EXPECTED_STATUS else None)
 
             obj = float(sol['objective'])

@@ -23,7 +23,7 @@ _STATUS_MAP: dict[str, tuple[str, str]] = {
     'PASS':    ('#E8F5E9', '#1B7A43'),
     'OK':      ('#E8F5E9', '#1B7A43'),
     # Neutral or restrained operational states.
-    'FEASIBLE': ('#F1F5F9', '#475569'),
+    'FEASIBLE': ('#FFF8E1', '#8A6100'),
     'WARNING':  ('#FFF4E5', '#9A6700'),
     'PARTIAL':  ('#EFF6FF', '#475569'),
     # red
