@@ -6,11 +6,15 @@ from __future__ import annotations
 import re
 from nicegui import ui
 
+from components import tokens
+
 from components.ui_elements import (
     analytics_card,
+    page_content,
     scenario_tag,
     state_card,
     provenance_footer,
+    status_badge,
 )
 from data.registry import load_explainability_report, load_utilization_stats
 
@@ -181,34 +185,34 @@ def _render_html_table(headers, rows, scroll=False):
     def _cell(c):
         c = _clean_cell(c)
         if c == 'PASS':
-            return '<span class="bg-[#E8F5E9] text-[#1B7A43] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">PASS</span>'
+            return f'<span class="{tokens.BADGE_PASS}">PASS</span>'
         if c in ('WARN', 'WARNING'):
-            return '<span class="bg-[#FFF8E1] text-[#8A6100] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">WARN</span>'
+            return f'<span class="{tokens.BADGE_WARNING}">WARN</span>'
         if c in ('FAIL', 'INVALID'):
-            return '<span class="bg-[#FFEBEE] text-[#B3261E] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">FAIL</span>'
+            return f'<span class="{tokens.BADGE_FAIL}">FAIL</span>'
         return c
 
     header_html = ''.join(
-        f'<th class="px-2 py-1 text-left text-[11px] font-semibold text-[#1e3a5f] uppercase tracking-wider bg-[#f4f6f8] border-b border-[#e2e8f0] sticky top-0 z-10">{h}</th>'
+        f'<th class="{tokens.TABLE_HEADER}">{h}</th>'
         for h in headers
     )
     rows_html = ''
     for r in rows:
         cells = ''.join(
-            f'<td class="px-2 py-1 text-[12px] text-[#334155] border-b border-[#e2e8f0]">{_cell(c)}</td>'
+            f'<td class="{tokens.TABLE_CELL}">{_cell(c)}</td>'
             for c in r
         )
-        rows_html += f'<tr class="hover:bg-[#f4f6f8]">{cells}</tr>'
+        rows_html += f'<tr class="{tokens.TABLE_ROW_HOVER}">{cells}</tr>'
 
     table = (
-        '<table class="w-full text-left border-collapse table-fixed">'
+        f'<table class="{tokens.TABLE_BASE_FIXED} min-w-0">'
         f'<thead>{header_html}</thead>'
         f'<tbody>{rows_html}</tbody>'
         '</table>'
     )
     if scroll:
-        return f'<div class="w-full max-h-[360px] overflow-y-auto block">{table}</div>'
-    return f'<div class="w-full overflow-x-auto block">{table}</div>'
+        return f'<div class="{tokens.TABLE_WRAP_SCROLL} min-w-0">{table}</div>'
+    return f'<div class="{tokens.TABLE_WRAP} min-w-0">{table}</div>'
 
 
 def _render_body_with_tables(body: str, scroll_tables: bool = False):
@@ -223,7 +227,7 @@ def _render_body_with_tables(body: str, scroll_tables: bool = False):
             text = '\n'.join(md_buffer).strip()
             if text:
                 ui.markdown(_escape_underscores(text)).classes(
-                    "text-[13px] leading-6 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D
                 )
             md_buffer.clear()
 
@@ -238,7 +242,7 @@ def _render_body_with_tables(body: str, scroll_tables: bool = False):
             parsed = _parse_table(lines[i:j])
             if parsed:
                 headers, rows = parsed
-                ui.html(_render_html_table(headers, rows, scroll=scroll_tables)).classes('w-full block')
+                ui.html(_render_html_table(headers, rows, scroll=scroll_tables)).classes(tokens.TW_W_FULL_BLOCK_954D40 + ' min-w-0')
             i = j
             continue
         md_buffer.append(line)
@@ -252,7 +256,7 @@ def _render_body_with_tables(body: str, scroll_tables: bool = False):
 def render():
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='phase4')
-    main.classes('w-full min-w-0 p-6')
+    page_content(main)
 
     report_res = load_explainability_report()
     util_res = load_utilization_stats()
@@ -263,30 +267,30 @@ def render():
             ('utilization_stats.json', util_res),
         ):
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
 
         md_text = report_res['data']
 
         # Header
-        with ui.row().classes('w-full min-w-0 justify-between items-center mb-2'):
-            with ui.column().classes('min-w-0 gap-1'):
+        with ui.row().classes(tokens.TW_W_FULL_MIN_W_0_29D4FF):
+            with ui.column().classes(tokens.TW_MIN_W_0_GAP_1_6364F0 + ' w-full'):
                 ui.label('Explainability').classes(
-                    "text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_22PX_LEADING_7_FONT_4694EF
                 )
                 ui.label('Transparent reporting and utilization metrics across all phases.').classes(
-                    "text-[14px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_AE0775
                 )
             scenario_tag('REPORT').style('border-radius: 4px;')
 
         # Audit statement banner
         with ui.card().classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] border border-[#e2e8f0] p-4 mb-4"
+            tokens.TW_W_FULL_MIN_W_0_FBFB4B
         ):
             ui.label(
                 "Every number cites its source file. No values are hardcoded or 'audited' post-hoc."
             ).classes(
-                "text-[14px] leading-5 font-medium text-[#1e3a5f] font-['IBM_Plex_Sans',_sans-serif]"
+                tokens.TW_TEXT_14PX_LEADING_5_FONT_814421
             )
 
         # Report sections
@@ -305,26 +309,16 @@ def render():
                     # Intro (before first pool) rendered as its own card or above
                     with analytics_card(display_title) as card:
                         card.props('flat').classes(
-                            'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
+                            tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_00AA57
                         )
                         # Pools 45 + 50 side by side
-                        with ui.grid(columns=2).classes('w-full gap-3 mb-3'):
+                        with ui.grid(columns=2).classes(tokens.TW_W_FULL_GAP_3_MB_66A243 + ' min-w-0'):
                             for pool_title, pool_body in pools[:2]:
-                                with ui.card().classes(
-                                    'w-full bg-white rounded-[6px] border border-[#e2e8f0] p-3'
-                                ):
-                                    ui.label(pool_title).classes(
-                                        "text-[14px] font-semibold text-[#1e3a5f] mb-2 font-['IBM_Plex_Sans',_sans-serif]"
-                                    )
+                                with analytics_card(pool_title):
                                     _render_body_with_tables(pool_body, scroll_tables=True)
                         # Pool 55 below
                         for pool_title, pool_body in pools[2:]:
-                            with ui.card().classes(
-                                'w-full bg-white rounded-[6px] border border-[#e2e8f0] p-3'
-                            ):
-                                ui.label(pool_title).classes(
-                                    "text-[14px] font-semibold text-[#1e3a5f] mb-2 font-['IBM_Plex_Sans',_sans-serif]"
-                                )
+                            with analytics_card(pool_title):
                                 _render_body_with_tables(pool_body, scroll_tables=True)
                     continue
 
@@ -348,7 +342,7 @@ def render():
 
                     with analytics_card(display_title) as card:
                         card.props('flat').classes(
-                            'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
+                            tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_00AA57
                         )
                         # Intro
                         intro_title, intro_body = subs[0]
@@ -357,16 +351,12 @@ def render():
 
                         # 2-column grid — tables only
                         after_blocks: list[str] = []
-                        with ui.grid(columns=2).classes('w-full gap-4 mt-3'):
+                        with ui.grid(columns=2).classes(tokens.TW_W_FULL_GAP_4_MT_93EBB8 + ' min-w-0'):
                             for sub_title, sub_body in subs[1:3]:
                                 table_chunk, after = _split_table_from_after(sub_body)
-                                with ui.card().classes(
-                                    'w-full bg-white rounded-[6px] border border-[#e2e8f0] p-3'
-                                ):
+                                with ui.card().classes(tokens.TW_W_FULL_BG_WHITE_ROUNDED_7EAC46 + ' min-w-0'):
                                     if sub_title:
-                                        ui.label(sub_title).classes(
-                                            "text-[14px] font-semibold text-[#1e3a5f] mb-2 font-['IBM_Plex_Sans',_sans-serif]"
-                                        )
+                                        ui.label(sub_title).classes(tokens.TW_TEXT_14PX_FONT_SEMIBOLD_TEXT_F9F1EE)
                                     _render_body_with_tables(table_chunk, scroll_tables=True)
                                 if after:
                                     after_blocks.append(after)
@@ -384,21 +374,24 @@ def render():
             scroll = title.startswith('4.')
             with analytics_card(display_title) as card:
                 card.props('flat').classes(
-                    'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
+                    tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_00AA57
                 )
                 _render_body_with_tables(body, scroll_tables=scroll)
 
         # Utilization Formulas (moved to bottom)
-        with analytics_card('Utilization Formulas') as card:
-            card.props('flat').classes(
-                'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
-            )
-            ui.label('utilization_pct = busy_sec / span_sec × 100').classes(
-                "font-mono text-[14px] leading-6 text-[#334155]"
-            )
-            ui.label('total_depot_hours = (max sign_off − min sign_on) / 3600').classes(
-                "font-mono text-[14px] leading-6 text-[#334155]"
-            )
+        formulas = ui.expansion('', value=False).classes(tokens.TW_W_FULL_MIN_W_0_1C8ED6)
+        with formulas.add_slot('header'):
+            with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A0250D + ' min-w-0'):
+                ui.label('Utilization Formulas').classes(tokens.TW_TEXT_16PX_LEADING_5_FONT_50EC06)
+                status_badge('observed')
+        with formulas:
+            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_47E22F):
+                ui.label('utilization_pct = busy_sec / span_sec × 100').classes(
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D + ' font-mono'
+                )
+                ui.label('total_depot_hours = (max sign_off − min sign_on) / 3600').classes(
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D + ' font-mono'
+                )
 
         # Both Source: lines grouped at bottom
         provenance_footer(report_res['path'], report_res['mtime'])

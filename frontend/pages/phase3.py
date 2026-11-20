@@ -6,13 +6,16 @@ from __future__ import annotations
 import plotly.graph_objects as go
 from nicegui import ui
 
-from components.ui_elements import analytics_card, kpi_card, scenario_tag, state_card, status_badge
+from components import tokens
+
+from components.ui_elements import analytics_card, kpi_strip, page_content, plotly_chart, plotly_gridlines, scenario_tag, state_card, status_badge
 from components.time_utils import sec_to_hhmmss, hhmmss_to_sec
 
 ui.add_head_html(
-    '<style>'
-    '.q-tab--active { background-color: #1E3A5F !important; color: #ffffff !important; }'
-    '.q-tab--active .q-tab__label { color: #ffffff !important; }'
+    '<style>' + tokens.TAB_ACTIVE_STYLE +
+    '.q-tab--active { background-color: transparent !important; color: ' + tokens.NAVY + ' !important; }'
+    '.q-tab--active .q-tab__label { color: ' + tokens.NAVY + ' !important; }'
+    '.q-tab__indicator { height: 3px !important; background-color: ' + tokens.NAVY + ' !important; }'
     '</style>',
     shared=True,
 )
@@ -25,9 +28,9 @@ from data.registry import (
     load_schedule,
 )
 
-_TRIPS_COLOR = '#1E3A5F'
-_BUFFER_FILL = '#CBD5E1'
-_BUFFER_BORDER = '#94A3B8'
+_TRIPS_COLOR = tokens.NAVY
+_BUFFER_FILL = tokens.BORDER_STRONG
+_BUFFER_BORDER = tokens.COOL_GREY
 
 
 def _reserve_ids(pool: str, drivers_df, crew_df) -> list[str]:
@@ -66,7 +69,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
             # Reserve row - dashed track
             fig.add_trace(go.Scatter(
                 x=[X_MIN, X_MAX], y=[y, y], mode='lines',
-                line=dict(color="#191715", width=2.5, dash='dash'),
+                line=dict(color=tokens.TEXT_SECONDARY, width=2.5, dash='dash'),
                 showlegend=False,
                 hovertemplate=f"{did} - Reserve / Standby<extra></extra>",
             ))
@@ -83,7 +86,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
         if merged.empty:
             fig.add_trace(go.Scatter(
                 x=[X_MIN, X_MAX], y=[y, y], mode='lines',
-                line=dict(color="#191715", width=2, dash='dash'),
+                line=dict(color=tokens.TEXT_SECONDARY, width=2, dash='dash'),
                 showlegend=False,
                 hovertemplate=f"{did} - Reserve / Standby<extra></extra>",
             ))
@@ -97,7 +100,7 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
         )
         trip_hover = (
             f"<b>{did}</b> - Pool {pool}<br>"
-            f"Duty: {sec_to_hhmmss(first_dep)} - {sec_to_hhmmss(last_arr)}<br>"
+            f"Duty window: {sec_to_hhmmss(sign_on_sec)} - {sec_to_hhmmss(sign_off_sec)}<br>"
             f"Trip: %{{customdata[0]}}<br>Rake: %{{customdata[1]}}<br>"
             f"Trip time: %{{customdata[2]}} - %{{customdata[3]}}<extra></extra>"
         )
@@ -125,28 +128,29 @@ def _build_fleet_gantt(driver_list, pool: str, crew_df, sched_df) -> tuple[go.Fi
 
     fig.update_layout(
         showlegend=False,
-        height=550,
-        font=dict(family='IBM Plex Mono, monospace', color='#334155'),
-        hoverlabel=dict(bgcolor='#0F172A', font=dict(color='#FFFFFF', family='IBM Plex Mono, monospace')),
+        height=max(320, n_rows * 36 + 100),
+        font=dict(family=tokens.FONT_MONO, color=tokens.TEXT_SECONDARY),
+        hoverlabel=dict(bgcolor=tokens.TEXT_PRIMARY, font=dict(color=tokens.WHITE, family=tokens.FONT_MONO)),
         xaxis=dict(
             tickvals=tick_secs,
             ticktext=[sec_to_hhmmss(s)[:5] for s in tick_secs],
-            range=[X_MIN, X_MAX], automargin=True,
+            range=[X_MIN, X_MAX], automargin=True, dtick=7200,
             title='Time (IST)',
-            gridcolor='#E2E8F0',
+            gridcolor=tokens.BORDER,
             zeroline=False,
         ),
         yaxis=dict(
             tickvals=list(range(n_rows)), range=[-0.5, max(n_rows - 0.5, 0.5)], automargin=True,
             ticktext=list(reversed(driver_list)),
-            gridcolor='#E2E8F0',
+            gridcolor=tokens.BORDER,
             zeroline=False,
             tickfont=dict(size=10),
         ),
-        margin=dict(l=60, r=10, t=10, b=40),
-        plot_bgcolor='white',
-        paper_bgcolor='white',
+        margin=dict(l=100, r=10, t=10, b=40),
+        plot_bgcolor=tokens.PANEL,
+        paper_bgcolor=tokens.PANEL,
     )
+    plotly_gridlines(fig, tokens.BORDER)
     return fig, n_rows
 
 def _check_label(name: str) -> str:
@@ -163,7 +167,7 @@ def _check_label(name: str) -> str:
 def render():
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='phase3')
-    main.classes('w-full min-w-0 p-6')
+    page_content(main)
 
     sol_res = load_crew_solution()
     val_res = load_crew_validation()
@@ -180,7 +184,7 @@ def render():
             ('schedule.csv', sched_res),
         ):
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
 
         sol = sol_res['data']
@@ -190,81 +194,80 @@ def render():
         sched_df = sched_res['data']
 
         # Header
-        with ui.row().classes('w-full min-w-0 justify-between items-center mb-2'):
-            with ui.column().classes('min-w-0 gap-1'):
-                ui.label('Crew Scheduling').classes("text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]")
+        with ui.row().classes(tokens.TW_W_FULL_MIN_W_0_29D4FF):
+            with ui.column().classes(tokens.TW_MIN_W_0_GAP_1_6364F0 + ' w-full'):
+                ui.label('Crew Scheduling').classes(tokens.TW_TEXT_22PX_LEADING_7_FONT_4694EF)
                 ui.label('CP-SAT optimized single-day crew rostering respecting duty limits and reserve buffers.').classes(
-                    "text-[14px] text-[#181d1f]/70 font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_14PX_TEXT_181D1F_70_ED2ACD
                 )
-            solver_badge = ui.row().classes('items-center')
+            solver_badge = ui.row().classes(tokens.TW_ITEMS_CENTER_3960FF)
 
         # Pool summary strip
         pool_summary = ui.row().classes(
-            'w-full min-w-0 tabular-nums items-center gap-4 mb-2 p-3 rounded-[6px] ' +
-            'bg-[#F8FAFC] border border-[#E2E8F0]'
+            tokens.TW_W_FULL_MIN_W_0_2F723F
         )
 
         # Pool tabs
         pool_ids = list(sol)
         with ui.tabs(value=pool_ids[0]).props('dense no-caps align=left active-color=white indicator-color=white').classes(
-            'w-full min-w-0 mb-2 bg-[#F8FAFC] rounded-[6px] p-1 border border-[#E2E8F0] shadow-none'
+            tokens.TW_W_FULL_MIN_W_0_B8C2ED
         ) as tabs:
             for pool_id in pool_ids:
-                ui.tab(pool_id).classes('text-[12px] font-medium rounded-[4px]')
+                ui.tab(pool_id).classes(tokens.TW_TEXT_12PX_FONT_MEDIUM_ROUNDED_ACE678 + ' w-full min-w-0')
         ui.label(
             f"Reserve-compliance check across {len(pool_ids)} configured caps, not a driver-count tradeoff."
-        ).classes("text-[12px] text-[#181d1f]/60 mb-4 font-['IBM_Plex_Sans',_sans-serif]")
+        ).classes(tokens.TW_TEXT_12PX_TEXT_181D1F_60_9A9C51)
 
         # Pool state
         pool_state = {'value': pool_ids[0]}
 
         # KPI container (re-rendered on tab change)
-        kpi_container = ui.grid(columns=3).classes('w-full min-w-0 tabular-nums gap-4 mb-4')
+        kpi_container = ui.grid(columns=3).classes(tokens.TW_W_FULL_MIN_W_0_DB4F2F)
 
         # Fleet Crew Roster (2-column, all drivers)
         roster_exp = ui.expansion('Fleet Crew Roster', value=True).classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-none border border-[#E2E8F0] mb-4"
+            tokens.TW_W_FULL_MIN_W_0_1C8ED6
         )
         with roster_exp:
-            with ui.column().classes('p-4 w-full min-w-0'):
+            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_47E22F):
                 # Shared legend
-                with ui.row().classes('items-center gap-4 mb-3 flex-wrap'):
-                    with ui.row().classes('items-center gap-2'):
-                        ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #CBD5E1; border: 1px solid #94A3B8')
-                        ui.label('Sign-on / Sign-off buffer').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
-                    with ui.row().classes('items-center gap-2'):
-                        ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: #1E3A5F')
-                        ui.label('Revenue trip').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
-                    with ui.row().classes('items-center gap-2'):
-                        ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style('background-color: transparent; border: 2px dashed #191715')
-                        ui.label('Reserv line=dict(color / Standby').classes("text-[11px] text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]")
-                roster_container = ui.row().classes('w-full min-w-0 gap-3 flex-wrap')
+                with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_4_MB_1E6237):
+                    with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
+                        ui.element('span').classes(tokens.TW_INLINE_BLOCK_W_3_H_6755F2).style(tokens.BUFFER_MARKER)
+                        ui.label('Sign-on / Sign-off buffer').classes(tokens.TW_TEXT_11PX_TEXT_64748B_FONT_709A50)
+                    with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
+                        ui.element('span').classes(tokens.TW_INLINE_BLOCK_W_3_H_6755F2).style('background-color: ' + tokens.NAVY)
+                        ui.label('Revenue trip').classes(tokens.TW_TEXT_11PX_TEXT_64748B_FONT_709A50)
+                    with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
+                        ui.element('span').classes(tokens.TW_INLINE_BLOCK_W_3_H_6755F2).style(tokens.RESERVE_MARKER)
+                        ui.label('Reserve / Standby').classes(tokens.TW_TEXT_11PX_TEXT_64748B_FONT_709A50)
+                roster_container = ui.row().classes(tokens.TW_W_FULL_MIN_W_0_A7F597)
 
         # Validation panel
         with ui.expansion('Independent Validator Results', value=False).classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-none border border-[#E2E8F0] mb-4"
+            tokens.TW_W_FULL_MIN_W_0_1C8ED6
         ):
-            with ui.column().classes('p-4 w-full min-w-0 gap-3'):
-                val_container = ui.column().classes('w-full min-w-0 gap-3')
+            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_2A7C77):
+                val_container = ui.column().classes(tokens.TW_W_FULL_MIN_W_0_6E3805)
 
         # Methodology & Honest Limitations
         with ui.expansion('Methodology & Honest Limitations', value=False).classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-none border border-[#E2E8F0] mb-4"
+            tokens.TW_W_FULL_MIN_W_0_1C8ED6
         ):
             with analytics_card('Crew scheduling methodology') as panel:
-                panel.props('flat').classes('shadow-none')
+                panel.props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 ui.markdown(
                     '**Crew coverage**\n\n'
                     'The loaded schedule defines required trips. C4 checks that each trip is assigned once per pool.'
-                ).classes("text-[14px] leading-5 text-[#334155]")
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
                 ui.markdown(
                     '**Duty and terminal continuity**\n\n'
                     'Sign-on and sign-off bound each shift. C1 checks each trip sequence against the configured terminal connection rules.'
-                ).classes("text-[14px] leading-5 text-[#334155]")
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
                 ui.markdown(
                     '**Reserve and objective**\n\n'
                     'C7 evaluates reserve requirements. The objective is a configured penalty sum, not a quality score. Objective, bound, gap, and status come from the selected pool loaded solver output.'
-                ).classes("text-[14px] leading-5 text-[#334155]")
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
         # ----- inner refresh functions -----
 
         def refresh_kpis():
@@ -274,40 +277,28 @@ def render():
             entry = sol[p]
             with pool_summary:
                 ui.label(f"Pool {p}").classes(
-                    "text-[13px] font-semibold text-[#181d1f] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_13PX_FONT_SEMIBOLD_TEXT_06A1B0
                 )
                 ui.label(f"Total drivers: {entry['pool_size']}").classes(
-                    "text-[12px] text-[#181d1f]/80 font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_12PX_TEXT_181D1F_80_39CC56
                 )
                 ui.label(f"Active: {entry['num_active_drivers']}").classes(
-                    "text-[12px] text-[#334155] font-medium tabular-nums font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_12PX_TEXT_334155_FONT_CAD0CA
                 )
                 ui.label(f"Reserve: {entry['reserve']}").classes(
-                    "text-[12px] text-[#64748B] font-medium tabular-nums font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_12PX_TEXT_64748B_FONT_145E61
                 )
 
             kpi_container.clear()
-            with kpi_container:
-                kpi_card(
-                    'Active Drivers',
-                    str(entry['num_active_drivers']),
-                    footnote=f"Reserve: {entry['reserve']}",
-                ).props('flat').classes('shadow-none')
-                kpi_card(
-                    'Solver Status',
-                    entry['status'],
-                    badge_status=entry['status'],
-                    footnote=f"Gap: {entry['gap_pct']}%",
-                ).props('flat').classes('shadow-none')
-                kpi_card(
-                    'Solve Time',
-                    f"{entry['elapsed_sec']:.2f} s",
-                    footnote=f"For {entry['num_trips']} trips",
-                ).props('flat').classes('shadow-none')
+            kpi_strip(3, [
+                (('Active Drivers', str(entry['num_active_drivers']),), {'footnote': f"Reserve: {entry['reserve']}"}),
+                (('Solver Status', entry['status']), {'badge_status': entry['status'], 'footnote': f"Gap: {entry['gap_pct']}%"}),
+                (('Solve Time', f"{entry['elapsed_sec']:.2f} s"), {'footnote': f"For {entry['num_trips']} trips"}),
+            ], classes='w-full min-w-0 tabular-nums gap-4 mb-4', flat=True, container=kpi_container)
 
             solver_badge.clear()
             with solver_badge:
-                status_badge(entry['status']).style('border-radius: 4px; border: 1px solid #E2E8F0;')
+                status_badge(entry['status'])
                 scenario_tag('OPTIMIZED - CONFIGURED MODEL').style('border-radius: 4px;')
 
         def refresh_drivers():
@@ -320,12 +311,12 @@ def render():
             right_drivers = pool_drivers[half:]
 
             with roster_container:
-                with ui.column().classes('flex-1 min-w-0'):
+                with ui.column().classes(tokens.TW_FLEX_1_MIN_W_0_5D5142 + ' w-full'):
                     fig_l, _ = _build_fleet_gantt(left_drivers, p, crew_df, sched_df)
-                    ui.plotly(fig_l).classes('w-full min-w-0 h-[550px]')
-                with ui.column().classes('flex-1 min-w-0'):
+                    plotly_chart(fig_l, tokens.PLOTLY_CONTAINER)
+                with ui.column().classes(tokens.TW_FLEX_1_MIN_W_0_5D5142 + ' w-full'):
                     fig_r, _ = _build_fleet_gantt(right_drivers, p, crew_df, sched_df)
-                    ui.plotly(fig_r).classes('w-full min-w-0 h-[550px]')
+                    plotly_chart(fig_r, tokens.PLOTLY_CONTAINER)
 
         _KEY_LABEL = {
             'failures': 'Failures',
@@ -349,17 +340,17 @@ def render():
             p = pool_state['value']
             pool_val = val['pools'][p]
             with val_container:
-                with ui.grid(columns=2).classes('w-full min-w-0 gap-2'):
+                with ui.grid(columns=2).classes(tokens.TW_W_FULL_MIN_W_0_97DB31):
                     for check in pool_val['checks']:
-                        with ui.row().classes('w-full min-w-0 items-start gap-2'):
-                            status_badge(check['status']).style('border-radius: 4px; border: 1px solid #E2E8F0;')
+                        with ui.row().classes(tokens.TW_W_FULL_MIN_W_0_3D7184):
+                            status_badge(check['status'])
                             with ui.expansion(_check_label(check['check']), value=False).classes(
-                                'flex-1 min-w-0 bg-[#F8FAFC] rounded-[6px] border border-[#E2E8F0] shadow-none'
+                                tokens.TW_FLEX_1_MIN_W_0_9FE364
                             ):
-                                with ui.column().classes('w-full min-w-0 p-3 gap-1'):
+                                with ui.column().classes(tokens.TW_W_FULL_MIN_W_0_7C581E):
                                     for k, v in check['details'].items():
                                         ui.label(_fmt_detail(k, v)).classes(
-                                            "text-[12px] leading-5 tabular-nums text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                                            tokens.TW_TEXT_12PX_LEADING_5_TABULAR_376296
                                         )
 
         def on_pool_change(e):

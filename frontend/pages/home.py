@@ -7,8 +7,11 @@ import re
 from pathlib import Path
 from nicegui import ui
 
+from components import tokens
+
 from components.ui_elements import (
-    kpi_card,
+    kpi_strip,
+    page_content,
     scenario_tag,
     state_card,
     status_badge,
@@ -50,7 +53,7 @@ _BOUNDARIES = [
 def render():
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='home')
-    main.classes('w-full min-w-0 p-6')
+    page_content(main)
 
     sched_res = load_schedule()
     sol_res = load_solution()
@@ -75,7 +78,7 @@ def render():
             ('reschedule_diff.json', diff_res),
         ):
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
 
         sched = sched_res['data']
@@ -125,53 +128,42 @@ def render():
         hi = max(drops_high) if drops_high else 0
 
         # ---- HEADER ----
-        with ui.row().classes('w-full min-w-0 justify-between items-start mb-4'):
-            with ui.column().classes('min-w-0 gap-1'):
+        with ui.row().classes(tokens.TW_W_FULL_MIN_W_0_39E197):
+            with ui.column().classes(tokens.TW_MIN_W_0_GAP_1_6364F0):
                 ui.label('MetroPulse').classes(
-                    "text-[28px] leading-8 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_28PX_LEADING_8_FONT_C384E7
                 )
                 ui.label('Kochi Metro Operations Optimizer').classes(
-                    "text-[14px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_AE0775
                 )
             scenario_tag(_GTFS_BADGE).style('border-radius: 4px;')
 
         # ---- KPI ROW ----
-        with ui.grid(columns=4).classes('w-full gap-4 mb-4'):
-            kpi_card(
-                'Scheduled Trips', str(n_trips),
-                footnote=f"{n_full} full-route, {n_partial} partial, {n_positioning} positioning",
-            ).props('flat').classes('shadow-none')
-            kpi_card(
-                'Active Fleet', f'{n_rakes} Rakes',
-                footnote=f"R001–R{n_rakes:03d} | {p1_status} (Gap {sol['gap_pct']:.1f}%)",
-            ).props('flat').classes('shadow-none')
-            kpi_card(
-                'Crew Pools', ' / '.join(pools_sorted),
-                footnote=f"{', '.join(str(a) for a in actives)} active drivers + {reserve} reserve",
-            ).props('flat').classes('shadow-none')
-            kpi_card(
-                'Delay Tolerance', f'{on_time_5:.0f}%',
-                footnote=f"On-time rate at ±5 min across {n_seeds} seeds",
-            ).props('flat').classes('shadow-none')
+        kpi_strip(4, [
+            (('Scheduled Trips', str(n_trips)), {'footnote': f'{n_full} full-route, {n_partial} partial, {n_positioning} positioning'}),
+            (('Active Fleet', f'{n_rakes} Rakes'), {'footnote': f"R001–R{n_rakes:03d} | {p1_status} (Gap {sol['gap_pct']:.1f}%)"}),
+            (('Crew Pools', ' / '.join(pools_sorted)), {'footnote': f"{', '.join(str(a) for a in actives)} active drivers + {reserve} reserve"}),
+            (('Delay Tolerance', f'{on_time_5:.0f}%'), {'footnote': f'On-time rate at ±5 min across {n_seeds} seeds'}),
+        ], 'w-full gap-4 mb-4', flat=True)
 
         # ---- SPLIT HERO BANNER (Photo + System Pipeline) ----
         img_path = Path(__file__).resolve().parent.parent / 'assets' / 'kochi_metro.jpg'
         with ui.card().classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] border border-[#e2e8f0] p-4 mb-4"
+            tokens.TW_W_FULL_MIN_W_0_FBFB4B
         ):
-            with ui.element('div').classes('grid grid-cols-1 md:grid-cols-12 gap-6 items-center w-full'):
+            with ui.element('div').classes(tokens.TW_GRID_GRID_COLS_1_MD_0A4D27):
                 # Left: image (4 of 12 cols)
-                with ui.element('div').classes('md:col-span-4 w-full'):
+                with ui.element('div').classes(tokens.TW_MD_COL_SPAN_4_W_CE3D94):
                     if img_path.exists():
-                        ui.image(img_path).classes('w-full h-52 rounded-lg object-cover')
+                        ui.image(img_path).classes(tokens.TW_W_FULL_H_52_ROUNDED_5CA770)
                     else:
                         ui.label('assets/kochi_metro.jpg not found').classes(
-                            "text-[12px] text-[#B3261E] font-['IBM_Plex_Sans',_sans-serif]"
+                            tokens.TW_TEXT_12PX_TEXT_B91C1C_FONT_69A0F3
                         )
                 # Right: pipeline (8 of 12 cols)
-                with ui.element('div').classes('md:col-span-8 flex flex-col justify-center'):
+                with ui.element('div').classes(tokens.TW_MD_COL_SPAN_8_FLEX_8F7200):
                     ui.label('System Pipeline').classes(
-                        "text-[16px] font-semibold text-[#1e3a5f] mb-3 font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_TEXT_16PX_FONT_SEMIBOLD_TEXT_2BD4D8
                     )
                     pipeline = [
                         ('Train Scheduling', f'reads open GTFS data and schedules {n_trips} trips across {n_rakes} rakes.'),
@@ -182,11 +174,11 @@ def render():
                     ]
                     for i, (name, desc) in enumerate(pipeline, start=1):
                         ui.label(f'{i}. {name} — {desc}').classes(
-                            "text-[13px] leading-6 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                            tokens.TW_TEXT_13PX_LEADING_6_TEXT_6562C0
                         )
 
         # ---- PHASE CARDS ----
-        with ui.grid(columns=5).classes('w-full gap-3 mb-4'):
+        with ui.grid(columns=5).classes(tokens.TW_W_FULL_GAP_3_MB_717AD5):
             phases = [
                 ('Train Scheduling', 'OPTIMAL', 'badge',
                  f'Assigns {n_rakes} rakes to {n_trips} daily trips under the O6 rake-balance objective',
@@ -208,52 +200,49 @@ def render():
 
             for (title, badge_text, badge_kind, desc, m1, m2), route in zip(phases, routes):
                 with ui.card().classes(
-                    "w-full bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] border border-[#e2e8f0] p-3"
+                    tokens.TW_W_FULL_BG_WHITE_ROUNDED_2BA02B
                 ):
-                    with ui.row().classes('w-full items-center justify-between mb-2'):
+                    with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A5A4FF):
                         ui.label(title).classes(
-                            "text-[14px] font-semibold text-[#1e3a5f] font-['IBM_Plex_Sans',_sans-serif]"
+                            tokens.TW_TEXT_14PX_FONT_SEMIBOLD_TEXT_137D25
                         )
                         if badge_kind == 'badge':
                             status_badge(badge_text).style('border-radius: 4px;')
                         else:
                             scenario_tag(badge_text).style('border-radius: 4px;')
                     ui.label(desc).classes(
-                        "text-[12px] leading-5 text-[#334155] mb-2 font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_TEXT_12PX_LEADING_5_TEXT_0AEEC5
                     )
                     ui.label(m1).classes(
-                        "text-[11px] leading-4 text-[#64748B] font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_TEXT_11PX_LEADING_4_TEXT_DFA007
                     )
                     ui.label(m2).classes(
-                        "text-[11px] leading-4 text-[#64748B] mb-3 font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_TEXT_11PX_LEADING_4_TEXT_84060D
                     )
                     ui.button('Open', on_click=lambda r=route: ui.navigate.to(r)).props('flat dense no-caps').classes(
-                        "w-full bg-[#1e3a5f] text-white rounded-[4px] text-[12px] font-medium py-1"
+                        tokens.TW_W_FULL_BG_1E3A5F_TEXT_242F90
                     )
 
         # ---- COMPACT FOOTER (boundaries + data sources) ----
         with ui.card().classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] border border-[#e2e8f0] p-4 mb-4"
+            tokens.TW_W_FULL_MIN_W_0_FBFB4B
         ):
             # Row 1 — System Boundaries
             ui.label('System Boundaries').classes(
-                "text-[12px] font-semibold text-[#1e3a5f] uppercase tracking-wider mb-2 font-['IBM_Plex_Sans',_sans-serif]"
+                tokens.TW_TEXT_12PX_FONT_SEMIBOLD_TEXT_C96D24
             )
-            with ui.row().classes('items-center gap-2 flex-wrap mb-4'):
+            with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_FLEX_420812):
                 for b in _BOUNDARIES:
                     ui.label(b).classes(
-                        "bg-[#f4f6f8] text-[#334155] rounded-[6px] px-2 py-1 "
-                        "text-[11px] font-medium border border-[#e2e8f0] "
-                        "font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_BG_F4F6F8_TEXT_334155_ROUNDED_9411B3
                     )
 
             # Row 2 — Data Sources
             ui.label('Processed Data Files').classes(
-                "text-[12px] font-semibold text-[#1e3a5f] uppercase tracking-wider mb-2 font-['IBM_Plex_Sans',_sans-serif]"
+                tokens.TW_TEXT_12PX_FONT_SEMIBOLD_TEXT_C96D24
             )
-            with ui.row().classes('items-center gap-2 flex-wrap'):
+            with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_FLEX_3530D1):
                 for f in _DATA_FILES:
                     ui.label(f).classes(
-                        "bg-[#f4f6f8] text-[#334155] rounded-[4px] px-2 py-1 "
-                        "text-[11px] border border-[#e2e8f0] font-mono"
+                        tokens.TW_BG_F4F6F8_TEXT_334155_ROUNDED_8318B1
                     )

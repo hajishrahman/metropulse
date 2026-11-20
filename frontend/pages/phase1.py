@@ -9,14 +9,21 @@ import math
 import plotly.graph_objects as go
 from nicegui import ui
 
+from components import tokens
+
 from components.trip_category import derive_trip_category
 from components.ui_elements import (
     analytics_card,
-    kpi_card,
+    data_grid,
+    kpi_strip,
+    page_content,
+    plotly_chart,
+    plotly_base_layout,
+    plotly_hovertemplate,
     provenance_footer,
     scenario_tag,
     state_card,
-    status_badge,
+    validation_accordion,
 )
 from components.time_utils import IST_LABEL, hhmmss_to_sec, sec_to_hhmmss
 from data.registry import load_schedule, load_solution, load_validation
@@ -30,9 +37,9 @@ EXPECTED_OBJECTIVE = 900.0
 EXPECTED_GAP_PCT = 0.0
 
 _TRACE_STYLE = {
-    'full_route':   dict(color="#1E3A5F", dash='solid', label='Full route'),
-    'partial':      dict(color="#0D9488", dash='dash',  label='Partial'),
-    'positioning':  dict(color="#94A3B8", dash='dot',   label='Positioning'),
+    'full_route':   dict(color=tokens.NAVY, dash='solid', label='Full route'),
+    'partial':      dict(color=tokens.BLUE, dash='dash',  label='Partial'),
+    'positioning':  dict(color=tokens.COOL_GREY, dash='dot',   label='Positioning'),
 }
 
 # Exact sentence from the spec's clarification. Do not paraphrase.
@@ -128,18 +135,16 @@ def _gantt_figure(df) -> go.Figure:
             x=xs, y=ys, mode='lines', name=style['label'],
             line=dict(color=style['color'], dash=style['dash'], width=10),
             customdata=cd,
-            hovertemplate=(
-                '<b>%{customdata[0]}</b><br>'
-                'Rake: %{customdata[1]}<br>'
-                '%{customdata[2]} → %{customdata[3]}<br>'
-                '%{customdata[4]}–%{customdata[5]}<br>'
-                'Trip category: %{customdata[6]}'
-                '<extra></extra>'
+            hovertemplate=plotly_hovertemplate(
+                '<b>%{customdata[0]}</b>', 'Rake: %{customdata[1]}',
+                '%{customdata[2]} → %{customdata[3]}',
+                '%{customdata[4]}–%{customdata[5]}',
+                'Trip category: %{customdata[6]}',
             ),
         ))
 
     tick_secs = list(range(5 * 3600, 25 * 3600 + 1, 2 * 3600))
-    fig.update_layout(
+    plotly_base_layout(fig,
         showlegend=False,
         xaxis=dict(
             tickvals=tick_secs,
@@ -147,8 +152,7 @@ def _gantt_figure(df) -> go.Figure:
             tick0=5 * 3600,
             dtick=2 * 3600,
             title='Time (IST)',
-            gridcolor='#E2E8F0',
-            gridwidth=1,
+            gridcolor=tokens.BORDER, gridwidth=1,
             zeroline=False,
         ),
         yaxis=dict(
@@ -158,13 +162,10 @@ def _gantt_figure(df) -> go.Figure:
             range=[len(rake_y) - 0.5, -0.5],
             tick0=0,
             dtick=1,
-            gridcolor='#E2E8F0',
-            gridwidth=1,
+            gridcolor=tokens.BORDER, gridwidth=1,
             zeroline=False,
         ),
         margin=dict(l=60, r=20, t=20, b=40),
-        plot_bgcolor='white',
-        paper_bgcolor='white',
     )
     return fig
 
@@ -176,40 +177,18 @@ def _natural_key(value):
                  for p in re.split(r'(\d+)', s) if p != '')
 
 def _render_gantt_legend() -> None:
-    with ui.row().classes('items-center gap-4'):
-        for label, color in (('Full route', '#1E3A5F'),
-                             ('Partial', '#0D9488'),
-                             ('Positioning', '#94A3B8')):
-            with ui.row().classes('items-center gap-2'):
-                ui.element('span').classes('inline-block w-3 h-3 rounded-full').style(
+    with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_4_45A68C):
+        for label, color in (('Full route', tokens.NAVY),
+                             ('Partial', tokens.BLUE),
+                             ('Positioning', tokens.COOL_GREY)):
+            with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
+                ui.element('span').classes(tokens.TW_INLINE_BLOCK_W_3_H_12A685).style(
                     f'background-color: {color}')
-                ui.label(label).classes('text-[12px] text-[#6B6B6B]')
-
-
-def _render_validation(v: dict) -> None:
-    for check in v['checks']:
-        label = check['check'].replace('_', ' ').title().replace(' ', ' — ', 1)
-        expansion = ui.expansion('', value=False).classes('w-full')
-        with expansion.add_slot('header'):
-            with ui.row().classes('w-full items-center justify-between'):
-                ui.label(label).classes('text-[14px] font-medium text-[#111111]')
-                with ui.row().classes('items-center gap-2'):
-                    status_badge(check['status'])
-                    ui.icon('expand_more').classes('text-[#6B6B6B]')
-        with expansion:
-            for k, val in check['details'].items():
-                if isinstance(val, list) and val:
-                    ui.label(f'{k}:').classes('text-[13px] leading-5 font-medium')
-                    for item in val:
-                        ui.label(f'  • {item}').classes('text-[13px] leading-5')
-                elif isinstance(val, list):
-                    ui.label(f'{k}: (none)').classes('text-[13px] leading-5')
-                else:
-                    ui.label(f'{k}: {val}').classes('text-[13px] leading-5')
+                ui.label(label).classes(tokens.TW_TEXT_12PX_TEXT_64748B_C9195F)
 
 
 def _render_limitations() -> None:
-    with ui.expansion('Limitations & methodology').classes('w-full'):
+    with ui.expansion('Limitations & methodology').classes(tokens.TW_W_FULL_6DA6A3):
         ui.markdown(
             '- **Objective 900.0 is rake-balance deviation**, not an '
             'optimisation "score".\n'
@@ -219,7 +198,7 @@ def _render_limitations() -> None:
             'extended HH:MM:SS form; hours do not wrap at 24.\n'
             f'- **Timezone:** All times in {IST_LABEL}. No UTC conversion applied.\n'
             '- FEASIBLE is never shown as OPTIMAL.\n'
-            '- Schedule and validation values are observed; they are not stated as proven.'
+            '- Schedule and validation values are observed outputs.'
         )
 
 
@@ -228,13 +207,13 @@ def _render_limitations() -> None:
 def render() -> None:
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='phase1')
-    main.classes('p-6')
+    page_content(main)
 
     with main:
-        with ui.row().classes('w-full items-center justify-between mb-4'):
-            with ui.column().classes('gap-2'):
-                ui.label('Train Scheduling').classes('text-[24px] leading-7 font-semibold text-[#1E293B]')
-                ui.label('Frozen backend output · read-only dashboard').classes('text-[14px] leading-5 text-[#64748B]')
+        with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_BDEEFE):
+            with ui.column().classes(tokens.TW_GAP_2_77A2A2):
+                ui.label('Train Scheduling').classes(tokens.TW_TEXT_24PX_LEADING_7_FONT_C8DEAA)
+                ui.label('Frozen backend output · read-only dashboard').classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_69208B)
             scenario_tag('FROZEN OUTPUT')
 
         schedule = load_schedule()
@@ -271,59 +250,43 @@ def render() -> None:
         n_rakes = int(df['rake_id'].nunique())
         rakes = sorted(df['rake_id'].unique(), key=_natural_key)
 
-        with ui.grid(columns=4).classes('w-full gap-4'):
-            w = None
-            if n_trips != EXPECTED_TRIPS:
-                w = f'Expected {EXPECTED_TRIPS}, found {n_trips}.'
-            if n_positioning != EXPECTED_POSITIONING:
-                extra = f'Positioning: expected {EXPECTED_POSITIONING}, found {n_positioning}.'
-                w = f'{w} {extra}' if w else extra
-            kpi_card('Trips', str(n_trips),
-                     footnote=f'{n_full} full-route + {n_partial} partial '
-                              f'(incl. {n_positioning} positioning)',
-                     warning=w)
-
-            rw = f'Expected {EXPECTED_RAKES}, found {n_rakes}.' if n_rakes != EXPECTED_RAKES else None
-            kpi_card('Rakes', str(n_rakes),
-                     footnote=f'{rakes[0]}–{rakes[-1]}' if rakes else None,
-                     warning=rw)
-
-            sv = sol['status']
-            kpi_card('Status', sv, badge_status=sv,
-                     warning=f'Expected {EXPECTED_STATUS}, found {sv}.' if sv != EXPECTED_STATUS else None)
-
-            obj = float(sol['objective'])
-            gap = float(sol['gap_pct'])
-            ow = None if math.isclose(obj, EXPECTED_OBJECTIVE, abs_tol=0.01) \
-                 else f'Expected {EXPECTED_OBJECTIVE}, found {obj}.'
-            fn = f'rake-balance deviation, not a score. Gap {gap:.1f}%'
-            if not math.isclose(gap, EXPECTED_GAP_PCT, abs_tol=0.01):
-                fn += f' — gap drifted: expected {EXPECTED_GAP_PCT}, found {gap}'
-            kpi_card('Objective', f'{obj:.1f}', footnote=fn, warning=ow)
+        w = None
+        if n_trips != EXPECTED_TRIPS:
+            w = f'Expected {EXPECTED_TRIPS}, found {n_trips}.'
+        if n_positioning != EXPECTED_POSITIONING:
+            extra = f'Positioning: expected {EXPECTED_POSITIONING}, found {n_positioning}.'
+            w = f'{w} {extra}' if w else extra
+        rw = f'Expected {EXPECTED_RAKES}, found {n_rakes}.' if n_rakes != EXPECTED_RAKES else None
+        sv = sol['status']
+        obj = float(sol['objective'])
+        gap = float(sol['gap_pct'])
+        ow = None if math.isclose(obj, EXPECTED_OBJECTIVE, abs_tol=0.01) \
+             else f'Expected {EXPECTED_OBJECTIVE}, found {obj}.'
+        fn = f'rake-balance deviation, not a score. Gap {gap:.1f}%'
+        if not math.isclose(gap, EXPECTED_GAP_PCT, abs_tol=0.01):
+            fn += f' — gap drifted: expected {EXPECTED_GAP_PCT}, found {gap}'
+        kpi_strip(4, [
+            (('Trips', str(n_trips)), {'footnote': f'{n_full} full-route + {n_partial} partial (incl. {n_positioning} positioning)', 'warning': w}),
+            (('Rakes', str(n_rakes)), {'footnote': f'{rakes[0]}–{rakes[-1]}' if rakes else None, 'warning': rw}),
+            (('Status', sv), {'badge_status': sv, 'warning': f'Expected {EXPECTED_STATUS}, found {sv}.' if sv != EXPECTED_STATUS else None}),
+            (('Objective', f'{obj:.1f}'), {'footnote': fn, 'warning': ow}),
+        ])
 
         with analytics_card('Rake Schedule (Gantt)', header_content=_render_gantt_legend):
-            ui.plotly(_gantt_figure(df)).classes('w-full h-[620px]')
+            plotly_chart(_gantt_figure(df), tokens.PLOTLY_H_620)
 
         cols = ['trip_id', 'rake_id', 'direction', 'first_stop',
                 'last_stop', 'departure', 'arrival', 'trip_category']
-        with ui.element('div').classes('w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start'):
+        with ui.element('div').classes(tokens.TW_W_FULL_GRID_GRID_COLS_0EADA3):
             with analytics_card('Schedule', category='frozen') as card:
-                card.classes('lg:col-span-8 min-w-0')
-                ui.aggrid.from_pandas(
-                    df[cols], options={
-                        'columnDefs': [
-                            {'field': col, 'minWidth': 128 if col == 'trip_category' else 96}
-                            for col in cols
-                        ],
-                        'defaultColDef': {'flex': 1},
-                    }
-                ).classes('w-full min-w-0')
+                card.classes(tokens.TW_LG_COL_SPAN_8_MIN_6AEAD7)
+                data_grid(df[cols], cols)
 
             with analytics_card('Validation Checks', category='frozen') as card:
-                card.classes('lg:col-span-4 min-w-0')
-                _render_validation(val)
+                card.classes(tokens.TW_LG_COL_SPAN_4_MIN_D5150C)
+                validation_accordion(val['checks'])
 
         _render_limitations()
-        with ui.row().classes('w-full flex-wrap gap-x-4 gap-y-2 mt-4'):
+        with ui.row().classes(tokens.TW_W_FULL_FLEX_WRAP_GAP_BB092F):
             for res in (schedule, solution, validation):
                 provenance_footer(res['path'], res['mtime'])

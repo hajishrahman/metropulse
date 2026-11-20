@@ -4,23 +4,24 @@
 # ui.expansion exists in both. No deprecated APIs used.
 
 from nicegui import ui
+from components import tokens
 
 from pages import phase1
 from pages.phase1 import render as render_phase1
 from pages.phase2 import render as render_phase2
 
-_BACKGROUND_HEAD = '''
+_BACKGROUND_HEAD = f'''
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap');
-  html, body, .q-page, .nicegui-content {
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-  code, pre, .tabular-nums {
-    font-family: 'Roboto Mono', monospace;
-  }
-  body, .q-page, .nicegui-content {
-    background-color: #F4F6F8 !important;
-  }
+  html, body, .q-page, .nicegui-content {{
+    font-family: {tokens.FONT_FAMILY};
+  }}
+  code, pre, .tabular-nums {{
+    font-family: {tokens.FONT_MONO};
+  }}
+  body, .q-page, .nicegui-content {{
+    background-color: {tokens.CANVAS} !important;
+  }}
 </style>
 '''
 
@@ -29,7 +30,7 @@ def index():
     ui.add_head_html(_BACKGROUND_HEAD)
     from pages.home import render as render_home
     render_home()
-    
+
 @ui.page('/phase1')
 def phase1_page():
     ui.add_head_html(_BACKGROUND_HEAD)

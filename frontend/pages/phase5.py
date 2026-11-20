@@ -6,13 +6,16 @@ from __future__ import annotations
 import plotly.graph_objects as go
 from nicegui import ui
 
+from components import tokens
+
 from components.ui_elements import (
     analytics_card,
-    kpi_card,
+    page_content,
+    plotly_chart,
+    plotly_gridlines,
     scenario_tag,
     state_card,
     status_badge,
-    provenance_footer,
 )
 from components.time_utils import hhmmss_to_sec, sec_to_hhmmss
 from data.registry import (
@@ -27,32 +30,24 @@ from data.registry import (
     load_schedule,
 )
 
-_HEADLINE = (
-    "Observed result: 0 drops at 17 active rakes; 7 drops at 16; 16 at 15. "
-    "Not a proven mathematical threshold."
-)
-
 _COLORS = {
-    'unchanged': '#1E3A5F',
-    'forced': '#D97706',
-    'rebalanced': '#94A3B8',
-    'dropped': '#B3261E',
+    'unchanged': tokens.NAVY,
+    'forced': tokens.BLUE,
+    'rebalanced': tokens.COOL_GREY,
+    'dropped': tokens.RED_TEXT,
 }
 
 _SCEN_ORDER = ['a', 'b', 'c', 'd', 'e']
-
-
-def _fmt_drops_with_variance(scen_letter, drops):
-    if scen_letter == 'b':
-        return f"{drops} (7–8 across runs)"
-    return str(drops)
 
 
 def _build_sensitivity_chart(rows):
     """rows = list of dicts with 'rakes_down', 'drops', 'status'."""
     x = [r['rakes_down'] for r in rows]
     y = [r['drops'] for r in rows]
-    colors = ['#1B7A43' if r['drops'] == 0 else '#D97706' for r in rows]
+    colors = [tokens.NAVY if r['drops'] == 0 else tokens.RED_TEXT for r in rows]
+    tick_labels = {}
+    for row in rows:
+        tick_labels.setdefault(row['rakes_down'], []).append(row['letter'].upper())
     fig = go.Figure(go.Bar(
         x=x, y=y,
         marker_color=colors,
@@ -63,28 +58,28 @@ def _build_sensitivity_chart(rows):
     fig.update_layout(
         height=340,
         showlegend=False,
+        font=dict(family=tokens.FONT_MONO, color=tokens.TEXT_SECONDARY),
         xaxis=dict(
             title='Rakes Down',
             tickmode='array',
-            tickvals=[1, 2, 3, 4, 5],
-            ticktext=['1 (A)', '2 (C)', '3 (D)', '4 (B)', '5 (E)'],
-            showline=True, linewidth=1, linecolor='#CBD5E1',
-            ticks='outside', ticklen=5, tickcolor='#94A3B8',
-            gridcolor='#F1F5F9',
+            tickvals=sorted(tick_labels),
+            ticktext=[f'{value} ({", ".join(tick_labels[value])})' for value in sorted(tick_labels)],
+            showline=True, linewidth=1, linecolor=tokens.BORDER_STRONG,
+            ticks='outside', ticklen=5, tickcolor=tokens.COOL_GREY,
+            gridcolor=tokens.BORDER,
         ),
         yaxis=dict(
             title='Dropped Trips',
-            range=[0, 18],
-            dtick=2,
-            showline=True, linewidth=1, linecolor='#CBD5E1',
-            ticks='outside', ticklen=5, tickcolor='#94A3B8',
-            showgrid=True, gridcolor='#F1F5F9',
+            showline=True, linewidth=1, linecolor=tokens.BORDER_STRONG,
+            ticks='outside', ticklen=5, tickcolor=tokens.COOL_GREY,
+            showgrid=True, gridcolor=tokens.BORDER,
         ),
         margin=dict(l=60, r=20, t=20, b=60),
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        hoverlabel=dict(bgcolor='#0F172A', font=dict(color='#FFFFFF')),
+        plot_bgcolor=tokens.PANEL,
+        paper_bgcolor=tokens.PANEL,
+        hoverlabel=dict(bgcolor=tokens.TEXT_PRIMARY, font=dict(color=tokens.WHITE)),
     )
+    plotly_gridlines(fig, tokens.BORDER)
     return fig
 
 
@@ -216,7 +211,7 @@ def _build_gantt(scen_letter, reschedule_df, base_sched_df, disruption, diff_ent
             orientation='h',
             marker=dict(
                 color=_COLORS['dropped'],
-                pattern=dict(shape='/', fgcolor='#FFFFFF', fillmode='overlay'),
+                pattern=dict(shape='/', fgcolor=tokens.WHITE, fillmode='overlay'),
             ),
             customdata=bar_hover,
             hovertemplate='%{customdata}',
@@ -226,7 +221,7 @@ def _build_gantt(scen_letter, reschedule_df, base_sched_df, disruption, diff_ent
             x=dropped_xs,
             y=dropped_ys,
             mode='markers',
-            marker=dict(symbol='x', size=10, color='#FFFFFF',
+            marker=dict(symbol='x', size=10, color=tokens.WHITE,
                         line=dict(color=_COLORS['dropped'], width=2)),
             customdata=dropped_hover,
             hovertemplate='%{customdata}',
@@ -237,12 +232,13 @@ def _build_gantt(scen_letter, reschedule_df, base_sched_df, disruption, diff_ent
     fig.update_layout(
         height=600,
         showlegend=False,
+        font=dict(family=tokens.FONT_MONO, color=tokens.TEXT_SECONDARY),
         xaxis=dict(
             tickvals=tick_secs,
             ticktext=[sec_to_hhmmss(s)[:5] for s in tick_secs],
             range=[17400, 86400],
             title='Time (IST)',
-            gridcolor='#E2E8F0',
+            gridcolor=tokens.BORDER,
             zeroline=False,
             automargin=True,
         ),
@@ -251,15 +247,15 @@ def _build_gantt(scen_letter, reschedule_df, base_sched_df, disruption, diff_ent
             ticktext=list(rake_y.keys()) + ['  CANCELLED'],
             title='Rake',
             autorange='reversed',
-            gridcolor='#E2E8F0',
+            gridcolor=tokens.BORDER,
             zeroline=False,
             automargin=True,
             ticklabelposition='outside left',
         ),
         margin=dict(l=80, r=20, t=20, b=60),
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        hoverlabel=dict(bgcolor='#0F172A', font=dict(color='#FFFFFF')),
+        plot_bgcolor=tokens.PANEL,
+        paper_bgcolor=tokens.PANEL,
+        hoverlabel=dict(bgcolor=tokens.TEXT_PRIMARY, font=dict(color=tokens.WHITE)),
     )
     return fig
 
@@ -268,36 +264,34 @@ def _render_html_table(headers, rows, status_cols=()):
     def _cell(c, idx):
         if idx in status_cols:
             key = str(c).strip().upper()
-            if key in ('OPTIMAL', 'PASS'):
-                return f'<span class="bg-[#E8F5E9] text-[#1B7A43] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">{c}</span>'
-            if key in ('FEASIBLE', 'WARN', 'WARNING'):
-                return f'<span class="bg-[#FFF8E1] text-[#8A6100] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">{c}</span>'
-            if key in ('FAIL', 'INVALID', 'DROPPED'):
-                return f'<span class="bg-[#FFEBEE] text-[#B3261E] rounded-[6px] px-2 py-0.5 text-[11px] font-medium">{c}</span>'
+            if key in tokens.STATUS_BADGE_CLASSES:
+                return f'<span class="{tokens.STATUS_BADGE_CLASSES[key]}">{c}</span>'
+            if key in ('WARN', 'WARNING'):
+                return f'<span class="{tokens.BADGE_WARNING}">{c}</span>'
         return str(c)
 
     header_html = ''.join(
-        f'<th class="px-3 py-2 text-left text-[11px] font-semibold text-[#1e3a5f] uppercase tracking-wider bg-[#f4f6f8] border-b border-[#e2e8f0]">{h}</th>'
+        f'<th class="{tokens.TABLE_HEADER_WIDE}">{h}</th>'
         for h in headers
     )
     rows_html = ''
     for r in rows:
         cells = ''.join(
-            f'<td class="px-3 py-2 text-[12px] text-[#334155] border-b border-[#e2e8f0]">{_cell(c, i)}</td>'
+            f'<td class="{tokens.TABLE_CELL_WIDE}">{_cell(c, i)}</td>'
             for i, c in enumerate(r)
         )
-        rows_html += f'<tr class="hover:bg-[#f4f6f8]">{cells}</tr>'
+        rows_html += f'<tr class="{tokens.TABLE_ROW_HOVER}">{cells}</tr>'
     table = (
-        '<table class="w-full text-left border-collapse">'
+        f'<table class="{tokens.TABLE_BASE} min-w-0">'
         f'<thead>{header_html}</thead><tbody>{rows_html}</tbody></table>'
     )
-    return f'<div class="w-full overflow-x-auto">{table}</div>'
+    return f'<div class="{tokens.TABLE_WRAP_WIDE} min-w-0">{table}</div>'
 
 
 def render():
     from components.navigation import create_sidebar
     main = create_sidebar(active_phase='phase5')
-    main.classes('w-full min-w-0 p-6')
+    page_content(main)
 
     diff_res = load_reschedule_diff()
     sens_res = load_sensitivity_analysis()
@@ -324,15 +318,15 @@ def render():
             ('schedule.csv', sched_res),
         ):
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), name, res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
         for letter, res in scen_res.items():
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), f'reschedule_scenario_{letter}.csv', res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), f'reschedule_scenario_{letter}.csv', res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
         for letter, res in disrupt_res.items():
             if res['status'] != 'ok':
-                state_card(res['status'].replace('_', ' ').upper(), f'scenario_{letter}.json', res['message']).props('flat').classes('shadow-none')
+                state_card(res['status'].replace('_', ' ').upper(), f'scenario_{letter}.json', res['message']).props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
                 return
 
         diff = diff_res['data']
@@ -342,26 +336,19 @@ def render():
         disruptions = {k: v['data'] for k, v in disrupt_res.items()}
 
         # Header
-        with ui.row().classes('w-full min-w-0 justify-between items-center mb-2'):
-            with ui.column().classes('min-w-0 gap-1'):
+        with ui.row().classes(tokens.TW_W_FULL_MIN_W_0_29D4FF):
+            with ui.column().classes(tokens.TW_MIN_W_0_GAP_1_6364F0 + ' w-full'):
                 ui.label('Disruption Response').classes(
-                    "text-[22px] leading-7 font-bold text-[#0F172A] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_22PX_LEADING_7_FONT_4694EF
                 )
                 ui.label('Counterfactual rescheduling under fleet capacity constraints.').classes(
-                    "text-[14px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_14PX_LEADING_5_TEXT_AE0775
                 )
             scenario_tag('COUNTERFACTUAL').style('border-radius: 4px;')
 
-        # Resilience headline
-        with ui.card().classes(
-            "w-full min-w-0 bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] border border-[#e2e8f0] p-4 mb-4"
-        ):
-            ui.label(_HEADLINE).classes(
-                "text-[14px] leading-6 font-medium text-[#1e3a5f] font-['IBM_Plex_Sans',_sans-serif]"
-            )
-
         # Build consolidated scenario rows for chart + table
         sens_by_letter = {s['id']: s for s in sens}
+        base_rake_count = base_sched['rake_id'].nunique()
         a = diff['scenario_a']
         b = diff['scenario_b']
         scenario_rows = [
@@ -387,29 +374,39 @@ def render():
                 'gap_pct': s['gap_pct'],
                 'recovery_pct': s['recovery_pct'],
                 'disruption_time': s['disruption_time'],
-                'active_rakes': 18 - s['rakes_failed'],
+                'active_rakes': base_rake_count - s['rakes_failed'],
             })
         scenario_rows.sort(key=lambda r: r['letter'])
+
+        observed_summary = '; '.join(
+            f"{row['drops']} drops at {row['active_rakes']} active rakes"
+            for row in sorted(scenario_rows, key=lambda row: row['active_rakes'], reverse=True)
+        )
+        with analytics_card('Observed model output'):
+            ui.label(
+                f'{observed_summary}. This is not a mathematical threshold.'
+            ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D + ' tabular-nums')
 
         # Sensitivity chart
         chart_rows = sorted(scenario_rows, key=lambda r: r['rakes_down'])
         with analytics_card('Fleet Resilience Sensitivity') as card:
             card.props('flat').classes(
-                'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
+                tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_00AA57
             )
-            ui.plotly(_build_sensitivity_chart(chart_rows)).classes('w-full h-[320px]')
+            plotly_chart(_build_sensitivity_chart(chart_rows), tokens.PLOTLY_H_320)
             ui.label(
-                "Note: Scenario A (1 rake down) is an evening disruption (18:00), while "
-                "Scenarios C, D, B, and E are morning disruptions (07:00). It is included "
-                "for completeness but is not directly comparable in severity."
+                'Observed disruption times: ' + '; '.join(
+                    f"Scenario {row['letter'].upper()} ({row['disruption_time']})"
+                    for row in scenario_rows
+                ) + '. Compare results with disruption time in mind.'
             ).classes(
-                "text-[12px] leading-5 text-[#64748B] mt-2 font-['IBM_Plex_Sans',_sans-serif]"
+                tokens.TW_TEXT_12PX_LEADING_5_TEXT_C90136
             )
 
         # Comparison table
-        with analytics_card('5-Scenario Comparison') as card:
+        with analytics_card('Scenario Comparison') as card:
             card.props('flat').classes(
-                'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4 mb-4'
+                tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_00AA57
             )
             table_rows = []
             for r in scenario_rows:
@@ -418,7 +415,7 @@ def render():
                     str(r['rakes_down']),
                     r['status'],
                     f"{r['gap_pct']:.2f}%",
-                    _fmt_drops_with_variance(r['letter'], r['drops']),
+                    str(r['drops']),
                     f"{r['recovery_pct']:.2f}%",
                     r['disruption_time'],
                 ])
@@ -426,7 +423,7 @@ def render():
                 ['Scenario', 'Rakes Down', 'Status', 'Gap %', 'Drops', 'Recovery %', 'Disruption Time'],
                 table_rows,
                 status_cols=(2,),
-            )).classes('w-full block')
+            )).classes(tokens.TW_W_FULL_BLOCK_954D40 + ' min-w-0')
 
         # Scenario A & B detail cards side by side
         # Helper: compute E's dropped IDs from CSV vs schedule
@@ -442,41 +439,43 @@ def render():
         def render_scenario_card(letter, s, extra_note=None, dropped_ids=None):
             with analytics_card(f'Scenario {letter.upper()}') as card:
                 card.props('flat').classes(
-                    'shadow-none bg-white border border-[#e2e8f0] rounded-[6px] p-4'
+                    tokens.TW_SHADOW_NONE_BG_WHITE_BORDER_9ACBE0
                 )
-                with ui.row().classes('items-center gap-2 mb-2'):
+                with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_MB_866593 + ' w-full min-w-0'):
                     ui.label(f'Scenario {letter.upper()}').classes(
-                        "text-[16px] font-semibold text-[#1e3a5f] font-['IBM_Plex_Sans',_sans-serif]"
+                        tokens.TW_TEXT_16PX_FONT_SEMIBOLD_TEXT_D60850
                     )
                     status_badge(s['status'])
+                    if letter == 'b' and s['drops'] != b_rescheduled_drops:
+                        status_badge('WARNING')
                 ui.label(f"Rakes failed: {', '.join(s['rake_ids'])}").classes(
-                    "text-[12px] leading-5 text-[#334155] mt-1"
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_A5AACA
                 )
                 ui.label(f"Disruption time: {s['disruption_time']}").classes(
-                    "text-[12px] leading-5 text-[#334155]"
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_988CBF + ' tabular-nums'
                 )
                 ui.label(f"Active fleet: {s['active_rakes']} rakes").classes(
-                    "text-[12px] leading-5 text-[#334155]"
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_988CBF + ' tabular-nums'
                 )
                 ui.label(f"Drops: {s['drops']}").classes(
-                    "text-[14px] font-semibold text-[#181d1f] mt-1"
+                    tokens.TW_TEXT_14PX_FONT_SEMIBOLD_TEXT_490C57 + ' tabular-nums'
                 )
-                ui.label(f"Recovery: {s['recovery_pct']:.2f}%").classes(
-                    "text-[12px] leading-5 text-[#334155]"
+                ui.label(f"Observed recovery: {s['recovery_pct']:.2f}%").classes(
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_988CBF + ' tabular-nums'
                 )
                 ui.label(f"Gap: {s['gap_pct']:.2f}%").classes(
-                    "text-[12px] leading-5 text-[#334155]"
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_988CBF + ' tabular-nums'
                 )
                 if dropped_ids:
                     ui.label('Dropped trip IDs:').classes(
-                        "text-[12px] font-semibold text-[#334155] mt-2"
+                        tokens.TW_TEXT_12PX_FONT_SEMIBOLD_TEXT_52C4A7
                     )
                     ui.label(', '.join(dropped_ids)).classes(
-                        "font-mono text-[12px] leading-5 text-[#B3261E]"
+                        tokens.TW_FONT_MONO_TEXT_12PX_LEADING_A3D745 + ' tabular-nums'
                     )
                 if extra_note:
                     ui.label(extra_note).classes(
-                        "text-[12px] leading-5 text-[#334155] mt-2"
+                        tokens.TW_TEXT_12PX_LEADING_5_TEXT_7EA866 + ' tabular-nums'
                     )
 
         # Build row data for each scenario (unified shape)
@@ -501,7 +500,7 @@ def render():
                 'letter': entry['id'],
                 'rake_ids': entry['rake_ids'],
                 'disruption_time': entry['disruption_time'],
-                'active_rakes': 18 - entry['rakes_failed'],
+                'active_rakes': base_rake_count - entry['rakes_failed'],
                 'drops': entry['drops'],
                 'recovery_pct': entry['recovery_pct'],
                 'gap_pct': entry['gap_pct'],
@@ -517,33 +516,26 @@ def render():
         }
 
         # Top row: A, B
-        with ui.grid(columns=2).classes('w-full gap-4 mb-4'):
-            render_scenario_card(
-                'a', card_rows['a'],
-                extra_note="In-progress R008=WK_181 completes normally. OPTIMAL.",
-            )
+        b_rescheduled_drops = len(
+            set(base_sched['trip_id'].astype(str).str.strip())
+            - set(scen_dfs['b']['trip_id'].astype(str).str.strip())
+        )
+        with ui.grid(columns=2).classes(tokens.TW_W_FULL_GAP_4_MB_5C549B + ' min-w-0'):
+            render_scenario_card('a', card_rows['a'])
             render_scenario_card(
                 'b', card_rows['b'],
-                extra_note="FEASIBLE 21.92% gap. Variance: 7 drops (7–8 across runs).",
+                extra_note=(
+                    f"Observed drops - comparison: {b['trips_dropped']}; "
+                    f"rescheduled file: {b_rescheduled_drops}."
+                ),
                 dropped_ids=b['dropped_trip_ids'],
             )
 
         # Bottom row: C, D, E
-        with ui.grid(columns=3).classes('w-full gap-4 mb-4'):
+        with ui.grid(columns=3).classes(tokens.TW_W_FULL_GAP_4_MB_5C549B + ' min-w-0'):
             render_scenario_card('c', card_rows['c'])
             render_scenario_card('d', card_rows['d'])
-            render_scenario_card(
-                'e', card_rows['e'],
-                extra_note="Severe: 16 trips dropped at 15 active rakes (FEASIBLE, not proven optimal)",
-                dropped_ids=sorted(e_resched_dropped),
-            )
-            ui.label(
-                            "Severe: 16 trips dropped at 15 active rakes "
-                            "(FEASIBLE, not proven optimal)"
-                        ).classes(
-                            "text-[12px] leading-5 text-[#8A6100] mt-2 font-medium"
-                        )
-
+            render_scenario_card('e', card_rows['e'], dropped_ids=sorted(e_resched_dropped))
         # B ∩ E overlap note
         b_dropped = set(b['dropped_trip_ids'])
         # E drops aren't in sensitivity json individually — infer from diff of CSV vs schedule
@@ -552,41 +544,38 @@ def render():
         e_dropped = base_trip_ids - e_resched_ids
         overlap = b_dropped & e_dropped
         if overlap:
-            with ui.card().classes(
-                "w-full bg-white rounded-[6px] border border-[#e2e8f0] p-3 mb-4"
-            ):
+            with analytics_card('Observed B/E dropped-trip overlap'):
                 ui.label(
-                    f"B ∩ E dropped-trip overlap: {len(overlap)} trips "
+                    f"B/E dropped-trip overlap: {len(overlap)} trips "
                     f"({', '.join(sorted(overlap))})"
                 ).classes(
-                    "text-[12px] leading-5 text-[#334155] font-['IBM_Plex_Sans',_sans-serif]"
+                    tokens.TW_TEXT_12PX_LEADING_5_TEXT_15C65E + ' tabular-nums'
                 )
-
         # Gantt
         gantt_exp = ui.expansion('Rescheduled Timeline', value=True).classes(
-            "w-full bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] mb-4"
+            tokens.TW_W_FULL_BG_WHITE_ROUNDED_0B600A + ' min-w-0'
         )
         with gantt_exp:
-            with ui.column().classes('p-4 w-full'):
+            with ui.column().classes(tokens.TW_P_4_W_FULL_DDD10D + ' min-w-0'):
                 sel = ui.select(
                     {'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D', 'e': 'E'},
                     value='a', label='Scenario',
-                ).props('outlined dense options-dense').classes('w-[140px] bg-white rounded-[6px] mb-2')
-                with ui.row().classes('items-center gap-4 mb-2 flex-wrap'):
+                ).props('outlined dense options-dense').classes(tokens.TW_W_140PX_BG_WHITE_ROUNDED_DC251F)
+                with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_4_MB_31342C + ' w-full min-w-0'):
                     for cat, color, label in (
                         ('unchanged', _COLORS['unchanged'], 'Unchanged (same rake)'),
                         ('forced', _COLORS['forced'], 'Forced recovery (was on failed rake)'),
                         ('rebalanced', _COLORS['rebalanced'], 'Shifted by rebalancing'),
                         ('dropped', _COLORS['dropped'], 'CANCELLED'),
                     ):
-                        with ui.row().classes('items-center gap-2'):
-                            ui.element('span').classes('inline-block w-3 h-3 rounded-sm').style(f'background-color: {color}')
-                            ui.label(label).classes("text-[11px] text-[#64748B]")
+                        with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735 + ' w-full min-w-0'):
+                            ui.element('span').classes(tokens.TW_INLINE_BLOCK_W_3_H_6755F2).style('background-color: ' + color)
+                            ui.label(label).classes(tokens.TW_TEXT_11PX_TEXT_64748B_CDF71A)
                 ui.label(
                     "The re-solve rebalances the whole schedule, so most trips changed rake; "
                     "only amber trips were forced by the failure."
-                ).classes("text-[11px] text-[#64748B] mb-3")
-                gantt_container = ui.column().classes('w-full')
+                ).classes(tokens.TW_TEXT_11PX_TEXT_64748B_MB_E556F6)
+                gantt_container = ui.column().classes(tokens.TW_W_FULL_6DA6A3 + ' min-w-0')
 
                 def refresh_gantt():
                     gantt_container.clear()
@@ -598,28 +587,31 @@ def render():
                                 letter, scen_dfs[letter], base_sched,
                                 disruptions[letter], diff_entry,
                             )
-                            ui.plotly(fig).classes('w-full h-[600px]')
+                            plotly_chart(fig, tokens.PLOTLY_H_600)
                         except Exception as exc:
                             import logging
                             logging.exception('Gantt build failed')
                             ui.label(f'Chart failed to render: {exc}').classes(
-                                "text-[12px] text-[#B3261E] font-['IBM_Plex_Sans',_sans-serif]"
+                                tokens.TW_TEXT_12PX_TEXT_B91C1C_FONT_69A0F3
                             )
 
                 sel.on_value_change(lambda e: refresh_gantt())
                 refresh_gantt()
 
         # Methodology
-        with ui.expansion('Methodology', value=True).classes(
-            "w-full bg-white rounded-[6px] shadow-[0_1px_5px_rgba(0,0,0,0.2),0_2px_2px_rgba(0,0,0,0.14),0_3px_1px_-2px_rgba(0,0,0,0.12)] mb-4"
-        ):
-            with ui.column().classes('p-4 gap-1'):
+        methodology = ui.expansion('', value=False).classes(tokens.TW_W_FULL_MIN_W_0_1C8ED6)
+        with methodology.add_slot('header'):
+            with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A0250D + ' min-w-0'):
+                ui.label('Methodology').classes(tokens.TW_TEXT_16PX_LEADING_5_FONT_50EC06)
+                status_badge('observed')
+        with methodology:
+            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_47E22F):
                 ui.markdown(
                     '**What Disruption Response does**\n\n'
                     'For each scenario, a set of rakes is removed from service at a chosen time. '
                     'The model re-solves the trip-to-rake assignment under the same Train Scheduling constraints, '
                     'with the reduced fleet. Trips that cannot be reassigned are marked CANCELLED.'
-                ).classes("text-[13px] leading-6 text-[#334155]")
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
                 ui.markdown(
                     '**Constraints enforced during re-solve**\n\n'
                     '- **R1 — Service Coverage:** every surviving trip assigned to exactly one rake.\n'
@@ -629,12 +621,12 @@ def render():
                     '- **R6 — Turnaround:** required gap between trips on the same rake.\n'
                     '- **R7 — Running Time:** each trip keeps its scheduled duration.\n'
                     '- **R11 — Terminal Continuity:** consecutive trips must connect via deadhead.'
-                ).classes("text-[13px] leading-6 text-[#334155]")
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
                 ui.markdown(
                     '**What is NOT modeled**\n\n'
                     '- Crew is not rescheduled — driver assignments stay as in Crew Scheduling.\n'
                     '- No mid-trip abort: an in-progress trip completes normally.\n'
                     '- No cascading delay propagation — this is a reschedule, not a simulation.\n'
-                    '- Scenarios B and E are FEASIBLE, not OPTIMAL — the solver hit its time limit.\n'
-                    '- Re-solve time: 185–300 s depending on scenario complexity.'
-                ).classes("text-[13px] leading-6 text-[#334155]")
+                    '- FEASIBLE is never shown as OPTIMAL. The solver hit its time limit.\n'
+                    '- Solve time depends on scenario complexity.'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)

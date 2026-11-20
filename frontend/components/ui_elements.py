@@ -16,32 +16,7 @@ from typing import Callable, Iterator, Optional
 
 from nicegui import ui
 
-# STRICT status -> (bg, text) map. Keys are uppercased before lookup.
-_STATUS_MAP: dict[str, tuple[str, str]] = {
-    # Green is reserved for pass/optimal states.
-    'OPTIMAL': ('#E8F5E9', '#1B7A43'),
-    'PASS':    ('#E8F5E9', '#1B7A43'),
-    'OK':      ('#E8F5E9', '#1B7A43'),
-    # Neutral or restrained operational states.
-    'FEASIBLE': ('#FFF8E1', '#8A6100'),
-    'WARNING':  ('#FFF4E5', '#9A6700'),
-    'PARTIAL':  ('#EFF6FF', '#475569'),
-    # red
-    'DROPPED':    ('#FFEBEE', '#B3261E'),
-    'CANCELLED':  ('#FFEBEE', '#B3261E'),
-    'FAIL':       ('#FFEBEE', '#B3261E'),
-    'INVALID':    ('#FFEBEE', '#B3261E'),
-    # grey
-    'DEFERRED':      ('#F5F5F5', '#5C5C5C'),
-    'INACTIVE':      ('#F5F5F5', '#5C5C5C'),
-    'NOT GENERATED': ('#F5F5F5', '#5C5C5C'),
-}
-_UNKNOWN = ('#F5F5F5', '#5C5C5C')
-
-_CARD_CLASSES = (
-    'w-full min-w-0 bg-white border border-[#E2E8F0] rounded-[6px] p-4 mb-4'
-)
-
+from components import tokens
 
 def status_badge(text: str) -> ui.label:
     """Return a label styled as a badge with the design-system colour.
@@ -51,23 +26,16 @@ def status_badge(text: str) -> ui.label:
     """
     raw = '' if text is None else str(text)
     key = raw.strip().upper()
-    bg, fg = _STATUS_MAP.get(key, _UNKNOWN)
     return (
         ui.label(raw or 'UNKNOWN')
-        .classes(
-            f'bg-[{bg}] text-[{fg}] rounded-[6px] px-2 py-1 '
-            f'text-[11px] leading-5 font-medium'
-        )
+        .classes(tokens.STATUS_BADGE_CLASSES.get(key, tokens.BADGE_NEUTRAL))
     )
 
 
 def scenario_tag(text: str) -> ui.label:
     return (
         ui.label(text.upper())
-        .classes(
-            'bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] rounded-[6px] px-2 py-1 '
-            'text-[11px] leading-5 font-medium'
-        )
+        .classes(tokens.SCENARIO_TAG)
     )
 
 
@@ -78,25 +46,96 @@ def kpi_card(
     footnote: Optional[str] = None,
     warning: Optional[str] = None,
 ) -> ui.card:
-    card = ui.card().classes(_CARD_CLASSES)
+    card = ui.card().classes(tokens.CARD_PANEL)
     with card:
         ui.label(label.upper()).classes(
-            'text-[12px] leading-5 font-medium text-[#64748B]'
+            tokens.TW_TEXT_12PX_LEADING_5_FONT_147900
         )
-        with ui.row().classes('items-center gap-2 mt-2'):
+        with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_MT_9F4AAA):
             ui.label(str(value)).classes(
-                'text-[28px] leading-8 font-semibold text-[#1E293B]'
+                tokens.TW_TEXT_28PX_LEADING_8_FONT_7CC1E3
             ).style('font-variant-numeric: tabular-nums;')
             if badge_status is not None:
                 status_badge(badge_status)
         if footnote:
-            ui.label(footnote).classes('text-[11px] leading-5 text-[#64748B] mt-1')
+            ui.label(footnote).classes(tokens.TW_TEXT_11PX_LEADING_5_TEXT_21AFE4)
         if warning:
             ui.label(warning).classes(
-                'bg-[#FFF8E1] text-[#8A6100] rounded-[6px] '
-                'px-2 py-1 text-[11px] leading-5 mt-1'
+                tokens.TW_BG_FFFBEB_TEXT_B45309_ROUNDED_9DBC2C
             )
     return card
+
+
+def kpi_strip(
+    columns: int,
+    items: list[tuple],
+    classes: str = tokens.KPI_STRIP,
+    flat: bool = False,
+    container=None,
+) -> None:
+    grid = container if container is not None else ui.grid(columns=columns).classes(classes)
+    with grid:
+        for args, kwargs in items:
+            card = kpi_card(*args, **kwargs)
+            if flat:
+                card.props('flat').classes(tokens.TW_SHADOW_NONE_AD47D1)
+
+
+def plotly_gridlines(fig, color: str = tokens.BORDER):
+    fig.update_xaxes(gridcolor=color, gridwidth=1, zeroline=False)
+    fig.update_yaxes(gridcolor=color, gridwidth=1, zeroline=False)
+    return fig
+
+
+def plotly_base_layout(fig, **layout):
+    layout.setdefault('plot_bgcolor', tokens.PANEL)
+    layout.setdefault('paper_bgcolor', tokens.PANEL)
+    fig.update_layout(**layout)
+    return fig
+
+
+def plotly_hovertemplate(*lines: str) -> str:
+    return '<br>'.join(lines) + '<extra></extra>'
+
+
+def data_grid(data, columns: list[str]) -> ui.element:
+    return ui.aggrid.from_pandas(data, options={
+        'columnDefs': [
+            {'field': col, 'minWidth': 128 if col == 'trip_category' else 96}
+            for col in columns
+        ],
+        'defaultColDef': {'flex': 1},
+    }).classes(tokens.PLOTLY_CONTAINER)
+
+
+def page_content(container) -> None:
+    container.classes(tokens.PAGE_CONTENT)
+
+
+def plotly_chart(fig, classes: str = tokens.PLOTLY_CONTAINER):
+    return ui.plotly(fig).classes(classes)
+
+
+def validation_accordion(checks: list[dict]) -> None:
+    for check in checks:
+        label = check['check'].replace('_', ' ').title().replace(' ', ' — ', 1)
+        expansion = ui.expansion('', value=False).classes(tokens.TW_W_FULL_6DA6A3)
+        with expansion.add_slot('header'):
+            with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A0250D):
+                ui.label(label).classes(tokens.TW_TEXT_14PX_FONT_MEDIUM_TEXT_D551FB)
+                with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
+                    status_badge(check['status'])
+                    ui.icon('expand_more').classes(tokens.TW_TEXT_64748B_B562FF)
+        with expansion:
+            for key, value in check['details'].items():
+                if isinstance(value, list) and value:
+                    ui.label(f'{key}:').classes(tokens.TW_TEXT_13PX_LEADING_5_FONT_115083)
+                    for item in value:
+                        ui.label(f'  • {item}').classes(tokens.TW_TEXT_13PX_LEADING_5_0E02BC)
+                elif isinstance(value, list):
+                    ui.label(f'{key}: (none)').classes(tokens.TW_TEXT_13PX_LEADING_5_0E02BC)
+                else:
+                    ui.label(f'{key}: {value}').classes(tokens.TW_TEXT_13PX_LEADING_5_0E02BC)
 
 
 @contextmanager
@@ -111,15 +150,15 @@ def analytics_card(
     a @contextmanager that also accepted a builder was dead code that would
     silently render nothing if called the obvious way (i.e. without `with`).
     """
-    card = ui.card().classes(_CARD_CLASSES)
+    card = ui.card().classes(tokens.CARD_PANEL)
     with card:
-        with ui.row().classes('w-full items-center justify-between mb-4'):
-            ui.label(title).classes('text-[16px] leading-5 font-semibold text-[#1E293B]')
+        with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_BDEEFE):
+            ui.label(title).classes(tokens.TW_TEXT_16PX_LEADING_5_FONT_50EC06)
             if header_content:
                 header_content()
             elif category:
                 ui.label(category.upper()).classes(
-                    'text-[11px] leading-5 font-medium text-[#64748B]'
+                    tokens.TW_TEXT_11PX_LEADING_5_FONT_5FAE9F
                 )
         yield card
 
@@ -127,17 +166,17 @@ def analytics_card(
 def provenance_footer(path: str, mtime: float) -> None:
     stamp = 'missing' if not mtime else f'{mtime:.0f}'
     ui.label(f'Source: {path} · mtime {stamp}').classes(
-        'text-[12px] leading-5 text-[#64748B]'
+        tokens.TW_TEXT_12PX_LEADING_5_TEXT_0F6875
     )
 
 
 def state_card(status: str, filename: str, message: str) -> ui.card:
-    card = ui.card().classes(_CARD_CLASSES)
+    card = ui.card().classes(tokens.CARD_PANEL)
     with card:
-        with ui.row().classes('items-center gap-3'):
+        with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_3_A8B1B5):
             status_badge(status)
-            ui.label(filename).classes('text-[14px] font-semibold text-[#111111]')
+            ui.label(filename).classes(tokens.TW_TEXT_14PX_FONT_SEMIBOLD_TEXT_C1D1CD)
         ui.label(message or status.replace('_', ' ').title()).classes(
-            'text-[13px] leading-5 text-[#64748B] mt-2'
+            tokens.TW_TEXT_13PX_LEADING_5_TEXT_BB5519
         )
     return card
