@@ -1087,7 +1087,7 @@ pip freeze > requirements.txt
 - [x] **Phase 3** — Crew scheduling
 - [x] **Phase 4** — Explainability report
 - [x] **Phase 5** — Disruption response
-- [ ] **Phase 6** — ML delay prediction (optional; not implemented)
+- [ ] **Phase 6** — ML delay prediction (Future works)
 - [x] **Phase 7** — NiceGUI frontend dashboard
 
 **Project completion:** All implemented project phases and the frontend are complete. Phase 6 remains optional and was not implemented.
