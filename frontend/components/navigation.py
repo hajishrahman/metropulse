@@ -16,11 +16,11 @@ def create_sidebar(active_phase: str = None):
     ]
 
     drawer = ui.left_drawer(value=True, fixed=True, bordered=True, elevated=False)
-    drawer.props('mini mini-width=64 width=240').classes(tokens.NAV_DRAWER)
+    drawer.props('width=64').classes(tokens.NAV_DRAWER)
     labels = []
     rows = []
     with drawer:
-        with ui.column().classes(tokens.SIDEBAR_CONTENT):
+        with ui.column().classes(tokens.SIDEBAR_CONTENT + ' overflow-visible'):
             with ui.row().classes(tokens.NAV_TOGGLE_ROW):
                 toggle_btn = ui.button(icon='chevron_right').props(
                     'flat round size=sm aria-label="Expand navigation"'
@@ -46,7 +46,10 @@ def create_sidebar(active_phase: str = None):
 
     def toggle():
         expanded['value'] = not expanded['value']
-        drawer.props('mini=false' if expanded['value'] else 'mini')
+        if expanded['value']:
+            drawer.props('width=240', remove='mini')
+        else:
+            drawer.props('mini mini-width=64 width=64')
         for label in labels:
             label.set_visibility(expanded['value'])
         for row in rows:

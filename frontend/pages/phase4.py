@@ -42,25 +42,25 @@ _SECTION_RETITLE = {
 # Constraint ID → human label
 # ----------------------------------------------------------------------------
 _CONSTRAINT_LABELS = {
-    # Phase 1
-    'R1_service_coverage': 'R1 — Service Coverage',
-    'R3_operating_window': 'R3 — Operating Window',
-    'R4_fleet_availability': 'R4 — Fleet Availability',
-    'R5_rake_non_overlap': 'R5 — Rake Non-Overlap',
-    'R6_turnaround': 'R6 — Turnaround',
-    'R7_running_time': 'R7 — Running Time',
-    'R9_maintenance_exclusivity': 'R9 — Maintenance Exclusivity',
-    'R10_maintenance_threshold': 'R10 — Maintenance Threshold',
-    'R11_terminal_continuity': 'R11 — Terminal Continuity',
-    'D_direction_consistency': 'D — Direction Consistency',
-    # Phase 3
-    'C1_no_overlap': 'C1 — No Overlapping Trips',
-    'C2_max_duty': 'C2 — Max Duty',
-    'C3_sign_buffers': 'C3 — Sign-On / Sign-Off Buffers',
-    'C4_coverage': 'C4 — Trip Coverage',
-    'C5_rest': 'C5 — Rest (Deferred)',
-    'C6_continuous_driving': 'C6 — Continuous Driving (Inactive)',
-    'C7_reserve': 'C7 — Reserve',
+    # Train Scheduling
+    'R1_service_coverage': 'Service Coverage',
+    'R3_operating_window': 'Operating Window',
+    'R4_fleet_availability': 'Fleet Availability',
+    'R5_rake_non_overlap': 'Rake Non-Overlap',
+    'R6_turnaround': 'Turnaround',
+    'R7_running_time': 'Running Time',
+    'R9_maintenance_exclusivity': 'Maintenance Exclusivity',
+    'R10_maintenance_threshold': 'Maintenance Threshold',
+    'R11_terminal_continuity': 'Terminal Continuity',
+    'D_direction_consistency': 'Direction Consistency',
+    # Crew Scheduling
+    'C1_no_overlap': 'No Overlapping Trips',
+    'C2_max_duty': 'Max Duty',
+    'C3_sign_buffers': 'Sign-On / Sign-Off Buffers',
+    'C4_coverage': 'Trip Coverage',
+    'C5_rest': 'Rest (Deferred)',
+    'C6_continuous_driving': 'Continuous Driving (Inactive)',
+    'C7_reserve': 'Reserve',
 }
 
 _MD_ESCAPE = re.compile(r'(?<!\\)_')  # underscores not already escaped
@@ -69,6 +69,16 @@ _MD_ESCAPE = re.compile(r'(?<!\\)_')  # underscores not already escaped
 def _escape_underscores(text: str) -> str:
     """Escape unescaped underscores outside backtick code spans."""
     text = text.replace('legal R6-legal', 'R6-legal')
+    # Replace verbose rule-code note with plain version
+    _note_re = re.compile(
+        r'\*\*Notes\.\*\*\s*This section reflects exactly the checks.*?direction-consistency check\.',
+        re.DOTALL,
+    )
+    text = _note_re.sub(
+        '**Notes.** This section reflects all active schedule validation checks '
+        'from `validation.json` for the current run (GTFS stop timings are treated as given).',
+        text,
+    )
     text = re.sub(r'\bPhase\s+1/2/3\b',
                   'Train Scheduling / Operational Simulation / Crew Scheduling', text)
     text = re.sub(r'\bPhase\s+1\b', 'Train Scheduling', text)
@@ -385,13 +395,63 @@ def render():
                 ui.label('Utilization Formulas').classes(tokens.TW_TEXT_16PX_LEADING_5_FONT_50EC06)
                 status_badge('observed')
         with formulas:
-            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_47E22F):
+            with ui.column().classes(tokens.TW_P_4_W_FULL_MIN_47E22F + ' gap-3'):
+                # Formulas
                 ui.label('utilization_pct = busy_sec / span_sec × 100').classes(
                     tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D + ' font-mono'
                 )
                 ui.label('total_depot_hours = (max sign_off − min sign_on) / 3600').classes(
                     tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D + ' font-mono'
                 )
+
+                # Definitions
+                ui.markdown(
+                    '**Definitions (computed before the table):**\n\n'
+                    '- **`span_sec`** = last_arrival_sec − first_departure_sec per rake '
+                    '(the rake\'s active day).\n'
+                    '- **`busy_sec`** = Σ(arrival_sec − departure_sec) over all trips assigned '
+                    'to that rake (running time only).\n'
+                    '- **`utilization_pct`** = busy_sec / span_sec × 100 (null if span_sec = 0).\n'
+                    '- **`peak_simultaneous_rakes`** = maximum count of distinct rakes '
+                    'simultaneously running at any integer second, computed by an event-sweep '
+                    'over departure/arrival times.'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
+
+                # Flags
+                ui.markdown(
+                    '**Flags:** Turnaround and deadhead are **not** added to `span_sec` — no '
+                    'invented parameters. Busy time is running time only; terminal idling is the '
+                    'gap, not counted as busy. Spans are single-day and per-rake, not fleet-wide '
+                    'utilization.'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
+
+                # Rake aggregate metrics
+                ui.markdown(
+                    '**Rake aggregate metrics:**\n\n'
+                    '- Trips per rake — min = 14, mean = 14.17, max = 15\n'
+                    '- Peak simultaneous rakes = 15\n'
+                    '- Mean utilization = 70.7%'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
+
+                # Driver depot per pool
+                ui.markdown(
+                    '**Driver depot hours per pool:**\n\n'
+                    '- Pool 45 — min = 6.25, mean = 7.93, max = 8.49  \n'
+                    '  Rows in `crew_schedule.csv` for pool 45: 255 '
+                    '(assignments listed in `crew_solution.json` pool 45: 255)\n'
+                    '- Pool 50 — min = 3.71, mean = 7.70, max = 8.50  \n'
+                    '  Rows in `crew_schedule.csv` for pool 50: 255 '
+                    '(assignments listed in `crew_solution.json` pool 50: 255)\n'
+                    '- Pool 55 — min = 1.34, mean = 7.16, max = 8.50  \n'
+                    '  Rows in `crew_schedule.csv` for pool 55: 255 '
+                    '(assignments listed in `crew_solution.json` pool 55: 255)'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
+
+                # Delay model
+                ui.markdown(
+                    '**Delay model:** `clipped_normal`, pre-clip mean = −48.0 s, '
+                    'std sweep = [0.0, 60.0, 120.0, 300.0] s, clip = [0.0, 300.0] s.'
+                ).classes(tokens.TW_TEXT_14PX_LEADING_5_TEXT_400C9D)
 
         # Both Source: lines grouped at bottom
         provenance_footer(report_res['path'], report_res['mtime'])

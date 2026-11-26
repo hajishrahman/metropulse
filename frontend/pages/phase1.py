@@ -277,13 +277,14 @@ def render() -> None:
 
         cols = ['trip_id', 'rake_id', 'direction', 'first_stop',
                 'last_stop', 'departure', 'arrival', 'trip_category']
-        with ui.element('div').classes(tokens.TW_W_FULL_GRID_GRID_COLS_0EADA3):
+        with ui.element('div').classes(tokens.TW_W_FULL_GRID_GRID_COLS_0EADA3 + ' items-stretch'):
             with analytics_card('Schedule', category='frozen') as card:
-                card.classes(tokens.TW_LG_COL_SPAN_8_MIN_6AEAD7)
-                data_grid(df[cols], cols)
+                card.classes(tokens.TW_LG_COL_SPAN_8_MIN_6AEAD7 + ' h-full flex flex-col')
+                with ui.column().classes('flex-1 min-h-0 w-full'):
+                    data_grid(df[cols], cols)
 
             with analytics_card('Validation Checks', category='frozen') as card:
-                card.classes(tokens.TW_LG_COL_SPAN_4_MIN_D5150C)
+                card.classes(tokens.TW_LG_COL_SPAN_4_MIN_D5150C + ' h-full flex flex-col')
                 validation_accordion(val['checks'])
 
         _render_limitations()

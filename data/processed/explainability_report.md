@@ -92,12 +92,6 @@ C5 deferred to V2. C6 is a soft objective, not a validator check — Phase 3 rep
 
 ## 4. Rake Utilization (Phase 1)
 
-**Definitions (computed before the table):**
-
-- **span_sec** = `last_arrival_sec − first_departure_sec` per rake (the rake's active day).
-- **busy_sec** = `Σ(arrival_sec − departure_sec)` over all trips assigned to that rake (running time only).
-- **utilization_pct** = `busy_sec / span_sec × 100` (null if span_sec = 0).
-- **peak_simultaneous_rakes** = maximum count of distinct rakes simultaneously running at any integer second, computed by an event-sweep over departure/arrival times.
 
 **Flags.** Turnaround and deadhead are **not** added to `span_sec` — no invented parameters. Busy time is running time only; terminal idling is the gap, not counted as busy. Spans are single-day and per-rake, not fleet-wide utilization.
 
@@ -138,17 +132,10 @@ Row count: **255** data rows in `schedule.csv` (file line count is data + 1 head
 
 ## 5. Driver Utilization (Phase 3)
 
-**Definitions (computed before the tables):**
-
-- **Total depot hours** = `(max sign_off − min sign_on) / 3600` per driver per pool.
-- Because Phase 3 sets `sign_on = first_departure − 900 s` and `sign_off = last_arrival + 900 s`, this equals `(last_arrival − first_departure)/3600 + 0.5 h`. It is **total depot time including sign-on/sign-off buffers**, not the C2 `duty` variable (which is `last_arrival − first_departure` and is validated separately as C2 in `crew_validation.json`).
-- **Reserve** = `pool_size − num_active_drivers`, both read from `crew_solution.json`. Cross-checked against `crew_validation.json` C7.
 
 ### Pool 45
 
 - pool_size = **45**, active drivers = **40**, reserve = **5**
-- Total depot hours — min = 6.25, mean = 7.93, max = 8.49
-- Rows in `crew_schedule.csv` for pool 45: 255 (assignments listed in `crew_solution.json` pool 45: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
@@ -196,8 +183,6 @@ Row count: **255** data rows in `schedule.csv` (file line count is data + 1 head
 ### Pool 50
 
 - pool_size = **50**, active drivers = **45**, reserve = **5**
-- Total depot hours — min = 3.71, mean = 7.70, max = 8.50
-- Rows in `crew_schedule.csv` for pool 50: 255 (assignments listed in `crew_solution.json` pool 50: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
@@ -250,8 +235,6 @@ Row count: **255** data rows in `schedule.csv` (file line count is data + 1 head
 ### Pool 55
 
 - pool_size = **55**, active drivers = **50**, reserve = **5**
-- Total depot hours — min = 1.34, mean = 7.16, max = 8.50
-- Rows in `crew_schedule.csv` for pool 55: 255 (assignments listed in `crew_solution.json` pool 55: 255)
 
 | Driver | Trips | First sign-on | Last sign-off | Duty hours (depot span) |
 |---|---|---|---|---|
@@ -313,7 +296,6 @@ Row count: **255** data rows in `schedule.csv` (file line count is data + 1 head
 ## 6. Simulation Results (Phase 2)
 
 - Headline seed: **42**; Monte Carlo seeds: **100**
-- Delay model: `clipped_normal`, pre-clip mean = -48.0 s, std sweep = [0.0, 60.0, 120.0, 300.0] s, clip = [0.0, 300.0] s
 
 **Headline seed run — on-time % by tolerance:**
 
@@ -380,3 +362,4 @@ The table is presented as-is; no recommendation is drawn from it.
 - Phase 1 OPTIMAL (OPTIMAL, gap = 0.0%) is under the O6 rake-balance objective only; other objectives in `config.py` are declared but disabled in V1.
 - No per-trip solver explanations: CP-SAT returns a global solution, not per-assignment reasons. Assignments in `schedule.csv` are consistent with the active objective and the passing constraints — they are not "chosen because" of any per-trip criterion.
 - Phase 2 delay model is `synthetic` (see `simulation_kpis.json.metadata.provenance_note`).
+

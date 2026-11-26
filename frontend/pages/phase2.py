@@ -86,8 +86,8 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
             x=[dep, arr], y=[y, y], mode='lines',
         line=dict(color=tokens.COOL_GREY, width=14),
             showlegend=False,
-            hovertemplate=(f"Trip: {row['trip_id']}<br>Rake: {r}<br>Scheduled: "
-                           f"{sec_to_hhmmss(dep)}â€“{sec_to_hhmmss(arr)}<extra></extra>"),
+                    hovertemplate=(f"Trip: {row['trip_id']}<br>Rake: {r}<br>Scheduled: "
+                       f"{sec_to_hhmmss(dep)} - {sec_to_hhmmss(arr)}<extra></extra>"),
         ))
 
     # Actual bars (overlay)
@@ -112,8 +112,8 @@ def build_gantt_overlay(experiment: str, timeline_df) -> go.Figure:
             hovertemplate=(
                 f"<b>{row['trip_id']}</b><br>"
                 f"Rake: {r}<br>"
-                f"Scheduled: {sec_to_hhmmss(int(row['sched_dep_sec']))}â€“{sec_to_hhmmss(int(row['sched_arr_sec']))}<br>"
-                f"Simulated: {sec_to_hhmmss(dep)}â€“{sec_to_hhmmss(arr)}<br>"
+                f"Scheduled: {sec_to_hhmmss(int(row['sched_dep_sec']))} - {sec_to_hhmmss(int(row['sched_arr_sec']))}<br>"
+                f"Simulated: {sec_to_hhmmss(dep)} - {sec_to_hhmmss(arr)}<br>"
                 f"Delta: {delay_min:.1f} min<br>Status: {status}<extra></extra>"
             ),
         ))

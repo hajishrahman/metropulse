@@ -105,7 +105,8 @@ def data_grid(data, columns: list[str]) -> ui.element:
             for col in columns
         ],
         'defaultColDef': {'flex': 1},
-    }).classes(tokens.PLOTLY_CONTAINER)
+        'domLayout': 'normal',
+    }).classes(tokens.PLOTLY_CONTAINER + ' h-full').style('min-height: 500px;')
 
 
 def page_content(container) -> None:
@@ -117,15 +118,19 @@ def plotly_chart(fig, classes: str = tokens.PLOTLY_CONTAINER):
 
 
 def validation_accordion(checks: list[dict]) -> None:
+    prefixes = {'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'D'}
     for check in checks:
-        label = check['check'].replace('_', ' ').title().replace(' ', ' — ', 1)
+        raw = check['check']
+        # strip leading rule code (R1_, R11_, D_) and humanize
+        parts = raw.split('_', 1)
+        friendly = parts[1] if len(parts) > 1 and parts[0] in prefixes else raw
+        label = friendly.replace('_', ' ').title()
         expansion = ui.expansion('', value=False).classes(tokens.TW_W_FULL_6DA6A3)
         with expansion.add_slot('header'):
             with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A0250D):
                 ui.label(label).classes(tokens.TW_TEXT_14PX_FONT_MEDIUM_TEXT_D551FB)
                 with ui.row().classes(tokens.TW_ITEMS_CENTER_GAP_2_145735):
                     status_badge(check['status'])
-                    ui.icon('expand_more').classes(tokens.TW_TEXT_64748B_B562FF)
         with expansion:
             for key, value in check['details'].items():
                 if isinstance(value, list) and value:

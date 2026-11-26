@@ -178,7 +178,7 @@ def render():
                         )
 
         # ---- PHASE CARDS ----
-        with ui.grid(columns=5).classes(tokens.TW_W_FULL_GAP_3_MB_717AD5):
+        with ui.grid(columns=5).classes(tokens.TW_W_FULL_GAP_3_MB_717AD5 + ' items-stretch'):
             phases = [
                 ('Train Scheduling', 'OPTIMAL', 'badge',
                  f'Assigns {n_rakes} rakes to {n_trips} daily trips under the O6 rake-balance objective',
@@ -200,7 +200,7 @@ def render():
 
             for (title, badge_text, badge_kind, desc, m1, m2), route in zip(phases, routes):
                 with ui.card().classes(
-                    tokens.TW_W_FULL_BG_WHITE_ROUNDED_2BA02B
+                    tokens.TW_W_FULL_BG_WHITE_ROUNDED_2BA02B + ' h-full flex flex-col'
                 ):
                     with ui.row().classes(tokens.TW_W_FULL_ITEMS_CENTER_JUSTIFY_A5A4FF):
                         ui.label(title).classes(
@@ -220,7 +220,7 @@ def render():
                         tokens.TW_TEXT_11PX_LEADING_4_TEXT_84060D
                     )
                     ui.button('Open', on_click=lambda r=route: ui.navigate.to(r)).props('flat dense no-caps').classes(
-                        tokens.TW_W_FULL_BG_1E3A5F_TEXT_242F90
+                        tokens.TW_W_FULL_BG_1E3A5F_TEXT_242F90 + ' mt-auto'
                     )
 
         # ---- COMPACT FOOTER (boundaries + data sources) ----

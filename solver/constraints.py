@@ -34,6 +34,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
+
 from ortools.sat.python import cp_model
 
 from solver import config
